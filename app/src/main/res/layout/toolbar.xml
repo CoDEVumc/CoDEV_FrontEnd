@@ -10,8 +10,8 @@
     app:titleTextColor="?attr/colorPrimary"
     android:theme="@style/ToolBar"
     app:titleTextAppearance="@style/ToolBarText"
-    android:paddingStart="15dp"
-    android:paddingEnd="10dp">
+    android:paddingStart="24dp"
+    android:paddingEnd="12dp">
 
     <ImageButton
         android:id="@+id/toolbar_extend"
