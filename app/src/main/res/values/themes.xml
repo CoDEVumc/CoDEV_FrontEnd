@@ -1,0 +1,38 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.CODEV" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <!-- BottomNavigation -->
+    <style name="BottomNavigationView">
+        <item name="itemTextAppearanceActive">@style/BottomNavigationViewText</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavigationViewText</item>
+    </style>
+
+    <style name="BottomNavigationViewText">
+        <item name="android:fontFamily">@font/font_bold</item>
+        <item name="android:textSize">8sp</item>
+    </style>
+
+    <!-- ToolBar -->
+    <style name="ToolBar">
+
+    </style>
+
+    <style name="ToolBarText">
+        <item name="android:fontFamily">@font/font_logo</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+</resources>

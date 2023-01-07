@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">CO+DEV</string>
+    <string name="menu_recruit">모집</string>
+    <string name="menu_community">커뮤니티</string>
+    <string name="menu_home">홈</string>
+    <string name="menu_chat">채팅</string>
+    <string name="menu_my">내 정보</string>
+</resources>
