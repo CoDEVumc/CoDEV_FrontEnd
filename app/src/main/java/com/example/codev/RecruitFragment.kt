@@ -29,8 +29,8 @@ class RecruitFragment:Fragment() {
         val temp = viewBinding.toolbarRecruit.toolbar
         viewBinding.toolbarRecruit.toolbar.inflateMenu(R.menu.menu_toolbar_2)
         viewBinding.toolbarRecruit.toolbar.title = "프로젝트"
-        viewBinding.toolbarRecruit.toolbarExtend.setImageResource(R.drawable.down2)
-        viewBinding.toolbarRecruit.toolbarExtend.setOnClickListener {
+        viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.down2)
+        viewBinding.toolbarRecruit.toolbarImg.setOnClickListener {
             var popupMenu = PopupMenu(mainAppActivity, temp)
             popupMenu.inflate(R.menu.menu_recruit_project)
             popupMenu.show()

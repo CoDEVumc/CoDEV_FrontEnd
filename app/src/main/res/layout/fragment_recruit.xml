@@ -8,7 +8,7 @@
     <!-- Toolbar -->
     <include
         android:id="@+id/toolbar_recruit"
-        layout="@layout/toolbar"/>
+        layout="@layout/toolbar1"/>
 
     <TextView
         android:layout_width="wrap_content"

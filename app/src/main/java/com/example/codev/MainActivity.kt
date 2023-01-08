@@ -1,9 +1,11 @@
 package com.example.codev
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
+import android.util.Log
+import android.view.MenuItem
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.codev.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -13,11 +15,28 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
+        viewBinding.toolbarLogin.toolbar2.title = ""
 
-        viewBinding.login.setOnClickListener {
+        setSupportActionBar(viewBinding.toolbarLogin.toolbar2)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.left2)
+        }
+
+        viewBinding.btnLogin.setOnClickListener {
             val intent = Intent(this,MainAppActivity::class.java)
             startActivity(intent)
             finish()
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            android.R.id.home ->{
+                Toast.makeText(this, "뒤로가기",Toast.LENGTH_SHORT).show()
+                //finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
