@@ -17,6 +17,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
         viewBinding.toolbarLogin.toolbar2.title = ""
 
+        //가운데 정렬 글 작성 예시
+        viewBinding.toolbarLogin.toolbarText.text = "툴바의 가운데 정렬 글 작성 예시"
+
         setSupportActionBar(viewBinding.toolbarLogin.toolbar2)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
