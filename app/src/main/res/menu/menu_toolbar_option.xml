@@ -2,9 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_alarm"
+        android:id="@+id/menu_option"
         android:enabled="true"
-        android:title="@string/menu_alarm"
-        android:icon="@drawable/bell"
+        android:title="@string/menu_option"
         app:showAsAction="always"/>
 </menu>

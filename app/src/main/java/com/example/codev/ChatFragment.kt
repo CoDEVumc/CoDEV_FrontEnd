@@ -25,8 +25,8 @@ class ChatFragment:Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewBinding = FragmentChatBinding.inflate(layoutInflater)
-        viewBinding.toolbarChat.toolbar.inflateMenu(R.menu.menu_toolbar_1)
-        viewBinding.toolbarChat.toolbar.title = "채팅"
+        viewBinding.toolbarChat.toolbar1.inflateMenu(R.menu.menu_toolbar_1)
+        viewBinding.toolbarChat.toolbar1.title = "채팅"
 
         return viewBinding.root
     }

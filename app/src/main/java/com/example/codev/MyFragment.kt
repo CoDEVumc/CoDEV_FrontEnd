@@ -25,8 +25,8 @@ class MyFragment:Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewBinding = FragmentMyBinding.inflate(layoutInflater)
-        viewBinding.toolbarMy.toolbar.inflateMenu(R.menu.menu_toolbar_1)
-        viewBinding.toolbarMy.toolbar.title = "내 정보"
+        viewBinding.toolbarMy.toolbar1.inflateMenu(R.menu.menu_toolbar_1)
+        viewBinding.toolbarMy.toolbar1.title = "내 정보"
 
         return viewBinding.root
     }

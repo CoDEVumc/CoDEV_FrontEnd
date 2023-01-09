@@ -2,6 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/menu_search"
+        android:enabled="true"
+        android:title="@string/menu_search"
+        android:icon="@drawable/search"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_mark"
+        android:enabled="true"
+        android:title="@string/menu_mark"
+        app:showAsAction="always"/>
+    <item
         android:id="@+id/menu_alarm"
         android:enabled="true"
         android:title="@string/menu_alarm"

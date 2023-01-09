@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/toolbar"
+    android:id="@+id/toolbar1"
     android:background="?attr/colorOnPrimary"
     app:title="@string/app_name"
     app:titleTextColor="?attr/colorPrimary"

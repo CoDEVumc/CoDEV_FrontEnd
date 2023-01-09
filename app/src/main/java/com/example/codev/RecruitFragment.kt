@@ -26,9 +26,9 @@ class RecruitFragment:Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewBinding = FragmentRecruitBinding.inflate(layoutInflater)
-        val temp = viewBinding.toolbarRecruit.toolbar
-        viewBinding.toolbarRecruit.toolbar.inflateMenu(R.menu.menu_toolbar_2)
-        viewBinding.toolbarRecruit.toolbar.title = "프로젝트"
+        val temp = viewBinding.toolbarRecruit.toolbar1
+        viewBinding.toolbarRecruit.toolbar1.inflateMenu(R.menu.menu_toolbar_2)
+        viewBinding.toolbarRecruit.toolbar1.title = "프로젝트"
         viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.down2)
         viewBinding.toolbarRecruit.toolbarImg.setOnClickListener {
             var popupMenu = PopupMenu(mainAppActivity, temp)
@@ -36,7 +36,7 @@ class RecruitFragment:Fragment() {
             popupMenu.show()
             Toast.makeText(mainAppActivity,"확장",Toast.LENGTH_SHORT).show()
         }
-        viewBinding.toolbarRecruit.toolbar.setOnMenuItemClickListener {
+        viewBinding.toolbarRecruit.toolbar1.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_search ->{
                     Toast.makeText(mainAppActivity, "검색", Toast.LENGTH_SHORT).show()

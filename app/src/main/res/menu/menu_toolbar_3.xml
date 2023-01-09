@@ -8,6 +8,12 @@
         android:icon="@drawable/search"
         app:showAsAction="always"/>
     <item
+        android:id="@+id/menu_heart"
+        android:enabled="true"
+        android:title="@string/menu_heart"
+        android:icon="@drawable/heart"
+        app:showAsAction="always"/>
+    <item
         android:id="@+id/menu_alarm"
         android:enabled="true"
         android:title="@string/menu_alarm"

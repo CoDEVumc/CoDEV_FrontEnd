@@ -25,7 +25,7 @@ class HomeFragment:Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewBinding = FragmentHomeBinding.inflate(layoutInflater)
-        viewBinding.toolbarHome.toolbar.inflateMenu(R.menu.menu_toolbar_1)
+        viewBinding.toolbarHome.toolbar1.inflateMenu(R.menu.menu_toolbar_1)
 
         return viewBinding.root
     }

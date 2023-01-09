@@ -5,4 +5,11 @@
     <string name="menu_home">홈</string>
     <string name="menu_chat">채팅</string>
     <string name="menu_my">내 정보</string>
+    <string name="menu_modify">수정하기</string>
+    <string name="menu_delete">삭제하기</string>
+    <string name="menu_alarm">알람</string>
+    <string name="menu_search">검색</string>
+    <string name="menu_heart">찜</string>
+    <string name="menu_mark">북마크</string>
+    <string name="menu_option">옵션</string>
 </resources>

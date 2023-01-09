@@ -25,8 +25,8 @@ class CommunityFragment:Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewBinding = FragmentCommunityBinding.inflate(layoutInflater)
-        viewBinding.toolbarCommunity.toolbar.inflateMenu(R.menu.menu_toolbar_1)
-        viewBinding.toolbarCommunity.toolbar.title = "커뮤니티"
+        viewBinding.toolbarCommunity.toolbar1.inflateMenu(R.menu.menu_toolbar_1)
+        viewBinding.toolbarCommunity.toolbar1.title = "커뮤니티"
 
         return viewBinding.root
     }
