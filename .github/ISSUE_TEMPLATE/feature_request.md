@@ -8,6 +8,7 @@ assignees: ''
 ---
 
 ## 🛠 Issue
+이슈 작성
 
 ## 📝 To-do
 - [ ] todo1
