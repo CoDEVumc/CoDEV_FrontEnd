@@ -2,7 +2,7 @@
     <h2>CoDEV : 같이 개발해요! </h2>
 </div>
 
-# CoDEV_FrontEnd
+# KYJ's CoDEV_FrontEnd
 
 ## 커밋 컨벤션
 `Feat` : 새로운 기능 추가
