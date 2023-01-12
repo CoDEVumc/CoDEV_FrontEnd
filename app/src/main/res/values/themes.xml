@@ -15,76 +15,90 @@
     </style>
 
     <!-- App Fonts -->
-    <style name="Text.Logo" parent="android:TextAppearance">
-        <item name="android:fontFamily">@font/halogen_black</item>
-    </style>
     <style name="Text.Heading1" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/pretendard_semibold</item>
         <item name="android:textSize">24sp</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
     </style>
     <style name="Text.Heading2" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/pretendard_semibold</item>
         <item name="android:textSize">20sp</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
     </style>
     <style name="Text.Heading3" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/pretendard_bold</item>
         <item name="android:textSize">18sp</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
     </style>
     <style name="Text.Heading4" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/pretendard_bold</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
     </style>
     <style name="Text.Body1" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/pretendard_semibold</item>
         <item name="android:textSize">20sp</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
     </style>
     <style name="Text.Body2" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/pretendard_semibold</item>
         <item name="android:textSize">18sp</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
     </style>
     <style name="Text.Body3.Medium" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
     </style>
     <style name="Text.Body3.SemiBold" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/pretendard_semibold</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
     </style>
     <style name="Text.Body3.Bold" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/pretendard_bold</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
     </style>
     <style name="Text.Body4.Medium" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
     </style>
     <style name="Text.Body4.SemiBold" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/pretendard_semibold</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
     </style>
     <style name="Text.Body4.Regular" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
     </style>
     <style name="Text.Body5.Medium" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">12sp</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
     </style>
     <style name="Text.Body5.SemiBold" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/pretendard_semibold</item>
         <item name="android:textSize">12sp</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
     </style>
     <style name="Text.Body5.Regular" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">12sp</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
     </style>
     <style name="Text.Body6.Medium" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">11sp</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
     </style>
     <style name="Text.Body6.SemiBold" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/pretendard_semibold</item>
         <item name="android:textSize">11sp</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
     </style>
 
     <!-- BottomNavigation -->
@@ -96,16 +110,6 @@
     <style name="BottomNavigationViewText">
         <item name="android:fontFamily">@font/pretendard_bold</item>
         <item name="android:textSize">8sp</item>
-    </style>
-
-    <!-- ToolBar -->
-    <style name="ToolBar">
-
-    </style>
-
-    <style name="ToolBarText">
-        <item name="android:fontFamily">@font/halogen_black</item>
-        <item name="android:textSize">18sp</item>
     </style>
 
 </resources>

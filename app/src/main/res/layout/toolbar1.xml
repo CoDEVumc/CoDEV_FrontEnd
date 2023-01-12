@@ -5,19 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/toolbar1"
-    android:background="?attr/colorOnPrimary"
     app:title="@string/app_name"
-    app:titleTextColor="?attr/colorPrimary"
-    android:theme="@style/ToolBar"
-    app:titleTextAppearance="@style/ToolBarText"
+    android:background="?attr/colorOnPrimary"
+    app:titleTextColor="@color/black"
     android:paddingStart="24dp"
-    android:paddingEnd="12dp">
+    android:paddingEnd="12dp"
+    app:titleTextAppearance="@style/Text.Heading3">
 
     <ImageView
         android:id="@+id/toolbar_img"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"/>
-
+        android:layout_height="wrap_content"/>
 
 </androidx.appcompat.widget.Toolbar>
