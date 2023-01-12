@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import com.example.codev.databinding.FragmentRecruitBinding
 
@@ -28,8 +27,8 @@ class RecruitFragment:Fragment() {
         viewBinding = FragmentRecruitBinding.inflate(layoutInflater)
         val temp = viewBinding.toolbarRecruit.toolbar1
         viewBinding.toolbarRecruit.toolbar1.inflateMenu(R.menu.menu_toolbar_2)
-        viewBinding.toolbarRecruit.toolbar1.title = "프로젝트"
-        viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.down2)
+        viewBinding.toolbarRecruit.toolbar1.title = ""
+        viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_project)
         viewBinding.toolbarRecruit.toolbarImg.setOnClickListener {
             var popupMenu = PopupMenu(mainAppActivity, temp)
             popupMenu.inflate(R.menu.menu_recruit_project)

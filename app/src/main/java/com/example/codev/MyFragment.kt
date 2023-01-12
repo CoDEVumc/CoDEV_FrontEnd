@@ -26,7 +26,8 @@ class MyFragment:Fragment() {
     ): View? {
         viewBinding = FragmentMyBinding.inflate(layoutInflater)
         viewBinding.toolbarMy.toolbar1.inflateMenu(R.menu.menu_toolbar_1)
-        viewBinding.toolbarMy.toolbar1.title = "내 정보"
+        viewBinding.toolbarMy.toolbar1.title = ""
+        viewBinding.toolbarMy.toolbarImg.setImageResource(R.drawable.logo_my)
 
         return viewBinding.root
     }
