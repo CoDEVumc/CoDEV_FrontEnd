@@ -26,7 +26,8 @@ class CommunityFragment:Fragment() {
     ): View? {
         viewBinding = FragmentCommunityBinding.inflate(layoutInflater)
         viewBinding.toolbarCommunity.toolbar1.inflateMenu(R.menu.menu_toolbar_1)
-        viewBinding.toolbarCommunity.toolbar1.title = "커뮤니티"
+        viewBinding.toolbarCommunity.toolbar1.title = ""
+        viewBinding.toolbarCommunity.toolbarImg.setImageResource(R.drawable.logo_community)
 
         return viewBinding.root
     }

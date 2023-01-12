@@ -19,7 +19,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:text="Recruit Fragment"
         android:textSize="30dp"
-        android:fontFamily="@font/font_logo"
+        android:fontFamily="@font/halogen_black"
         android:textColor="@color/black"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

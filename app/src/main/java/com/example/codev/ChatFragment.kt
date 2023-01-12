@@ -26,7 +26,8 @@ class ChatFragment:Fragment() {
     ): View? {
         viewBinding = FragmentChatBinding.inflate(layoutInflater)
         viewBinding.toolbarChat.toolbar1.inflateMenu(R.menu.menu_toolbar_1)
-        viewBinding.toolbarChat.toolbar1.title = "채팅"
+        viewBinding.toolbarChat.toolbar1.title = ""
+        viewBinding.toolbarChat.toolbarImg.setImageResource(R.drawable.logo_chat)
 
         return viewBinding.root
     }
