@@ -28,9 +28,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewBinding.btnLogin.setOnClickListener {
-            val intent = Intent(this,MainAppActivity::class.java)
+//            val intent = Intent(this,MainAppActivity::class.java) TODO: testing code
+            val intent = Intent(this,AddNewProjectActivity::class.java)
             startActivity(intent)
-            finish()
+//            finish() TODO: Testing code
         }
     }
 

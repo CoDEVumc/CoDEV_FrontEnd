@@ -12,4 +12,14 @@
     <string name="menu_heart">찜</string>
     <string name="menu_mark">북마크</string>
     <string name="menu_option">옵션</string>
+    <string name="add_new_project">프로젝트 모집하기</string>
+    <string name="add_new_title">제목</string>
+    <string name="add_new_des">프로젝트에 대한 설명과 진행 기간 등을 자유롭게 작성해 주세요.</string>
+    <string name="add_image_text">사진 첨부</string>
+    <string name="add_part_text">모집 분야</string>
+    <string name="add_part_pm_text">기획</string>
+    <string name="add_part_pm_text">디자인</string>
+    <string name="add_part_pm_text">프론트엔드</string>
+    <string name="add_part_pm_text">백엔드</string>
+    <string name="add_part_pm_text">기타</string>
 </resources>

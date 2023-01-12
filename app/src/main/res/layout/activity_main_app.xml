@@ -6,17 +6,19 @@
     android:layout_height="match_parent">
 
     <!-- Content -->
+
+    <!-- 하단 네비게이션바 -->
     <FrameLayout
         android:id="@+id/content"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-    </FrameLayout>
+        app:layout_constraintVertical_bias="0.0"></FrameLayout>
 
-    <!-- 하단 네비게이션바 -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_bottom"
         android:layout_width="0dp"

@@ -4,12 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/toolbar2"
+    android:id="@+id/toolbar_add_page_toolbar"
     android:background="?attr/colorOnPrimary"
     app:title="@string/app_name"
     app:titleTextColor="?attr/colorPrimary"
     android:theme="@style/ToolBar"
     app:titleTextAppearance="@style/ToolBarText"
+    android:contentInsetLeft="16dp"
+    android:contentInsetStart="16dp"
+    app:contentInsetLeft="16dp"
+    app:contentInsetStart="16dp"
+    android:contentInsetRight="16dp"
+    android:contentInsetEnd="16dp"
+    app:contentInsetRight="16dp"
+    app:contentInsetEnd="16dp"
     >
 
     <TextView
@@ -17,6 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textStyle=""/>
+        android:gravity="center"
+        android:textStyle=""
+        />
 
 </androidx.appcompat.widget.Toolbar>
