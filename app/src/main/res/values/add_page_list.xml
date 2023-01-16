@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pm_stack">
+        <item>pm_1</item>
+        <item>pm_2</item>
+        <item>pm_3</item>
+        <item>pm_4</item>
+        <item>pm_5</item>
+        <item>pm_6</item>
+        <item>pm_7</item>
+        <item>pm_8</item>
+        <item>pm_9</item>
+    </string-array>
+
+    <string-array name="design_stack">
+        <item>design_1</item>
+        <item>design_2</item>
+        <item>design_3</item>
+        <item>design_4</item>
+        <item>design_5</item>
+        <item>design_6</item>
+        <item>design_7</item>
+        <item>design_8</item>
+    </string-array>
+
+    <string-array name="front_stack">
+        <item>front_1</item>
+        <item>front_2</item>
+        <item>front_3</item>
+        <item>front_4</item>
+        <item>front_5</item>
+        <item>front_6</item>
+        <item>front_7</item>
+    </string-array>
+
+    <string-array name="back_stack">
+        <item>back_1</item>
+        <item>back_2</item>
+        <item>back_3</item>
+        <item>back_4</item>
+        <item>back_5</item>
+        <item>back_6</item>
+    </string-array>
+
+    <string-array name="etc_stack">
+        <item>etc_1</item>
+        <item>etc_2</item>
+        <item>etc_3</item>
+        <item>etc_4</item>
+        <item>etc_5</item>
+    </string-array>
+
+    <string-array name="location_list">
+        <item>a</item>
+        <item>b</item>
+        <item>c</item>
+        <item>d</item>
+        <item>e</item>
+        <item>f</item>
+        <item>g</item>
+        <item>h</item>
+        <item>i</item>
+    </string-array>
+</resources>

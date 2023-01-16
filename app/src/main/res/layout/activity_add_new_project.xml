@@ -13,13 +13,14 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/toolbar_title"
+        app:layout_constraintBottom_toBottomOf="parent"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/add_page_title"
@@ -54,15 +55,62 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginStart="30dp"
                 android:text="@string/add_image_text"
-                android:textColor="@color/black"
-                android:textSize="11sp"/>
+                android:textColor="@color/black_900"
+                style="@style/Text.Body6.Medium"/>
 
+            <HorizontalScrollView
+                android:id="@+id/add_image_section"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/add_image_text"
+                android:layout_marginTop="8dp"
+                app:layout_constraintLeft_toLeftOf="@id/add_image_text"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+
+                    <ImageButton
+                        android:id="@+id/add_image_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:background="@drawable/add_image_icon"
+                        />
+
+                    <TextView
+                        android:id="@+id/add_image_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="@id/add_image_button"
+                        android:layout_marginTop="37dp"
+                        app:layout_constraintLeft_toLeftOf="@id/add_image_button"
+                        app:layout_constraintRight_toRightOf="@id/add_image_button"
+                        android:text="0/5"
+                        android:textColor="@color/black_700"
+                        style="@style/Text.Body5.SemiBold"/>
+
+                    <LinearLayout
+                        android:id="@+id/selected_images"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toRightOf="@id/add_image_button"
+                        android:layout_marginStart="10dp"
+                        android:orientation="horizontal"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </HorizontalScrollView>
 
             <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/image_divider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/add_image_text"
+                app:layout_constraintTop_toBottomOf="@id/add_image_section"
                 android:layout_marginTop="20dp"
                 android:layout_marginHorizontal="24dp"
                 />
@@ -77,25 +125,277 @@
                 android:layout_marginStart="24dp"
                 android:text="@string/add_part_text"
                 android:textColor="@color/black"
-                android:textSize="14sp"/>
+                style="@style/Text.Body4.SemiBold"/>
 
+
+            <!--            기획 파트-->
             <TextView
-                android:id="@+id/"
+                android:id="@+id/pm_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/add_part_people"
+                android:layout_marginTop="19dp"
+                app:layout_constraintLeft_toLeftOf="@id/add_part_people"
+                android:layout_marginStart="12dp"
+                android:text="@string/add_part_pm_text"
+                android:textColor="@color/black_700"
+                style="@style/Text.Body4.Medium"/>
+
+            <include
+                android:id="@+id/pm_section"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/pm_text"
+                app:layout_constraintBottom_toBottomOf="@id/pm_text"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginEnd="24dp"
+                layout="@layout/add_sub_section"/>
+
+            <!--            디자인 파트-->
+            <TextView
+                android:id="@+id/design_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/pm_text"
+                android:layout_marginTop="22dp"
+                app:layout_constraintLeft_toLeftOf="@id/add_part_people"
+                android:layout_marginStart="12dp"
+                android:text="@string/add_part_design_text"
+                android:textColor="@color/black_700"
+                style="@style/Text.Body4.Medium"/>
+
+            <include
+                android:id="@+id/design_section"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/design_text"
+                app:layout_constraintBottom_toBottomOf="@id/design_text"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginEnd="24dp"
+                layout="@layout/add_sub_section"/>
+
+            <!--            프론트 파트-->
+            <TextView
+                android:id="@+id/front_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/design_text"
+                android:layout_marginTop="22dp"
+                app:layout_constraintLeft_toLeftOf="@id/add_part_people"
+                android:layout_marginStart="12dp"
+                android:text="@string/add_part_front_text"
+                android:textColor="@color/black_700"
+                style="@style/Text.Body4.Medium"/>
+
+            <include
+                android:id="@+id/front_section"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/front_text"
+                app:layout_constraintBottom_toBottomOf="@id/front_text"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginEnd="24dp"
+                layout="@layout/add_sub_section"/>
+
+            <!--            백엔드 파트-->
+            <TextView
+                android:id="@+id/back_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/front_text"
+                android:layout_marginTop="22dp"
+                app:layout_constraintLeft_toLeftOf="@id/add_part_people"
+                android:layout_marginStart="12dp"
+                android:text="@string/add_part_back_text"
+                android:textColor="@color/black_700"
+                style="@style/Text.Body4.Medium"/>
+
+            <include
+                android:id="@+id/back_section"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/back_text"
+                app:layout_constraintBottom_toBottomOf="@id/back_text"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginEnd="24dp"
+                layout="@layout/add_sub_section"/>
+
+            <!--            기타 파트-->
+            <TextView
+                android:id="@+id/etc_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/back_text"
+                android:layout_marginTop="22dp"
+                app:layout_constraintLeft_toLeftOf="@id/add_part_people"
+                android:layout_marginStart="12dp"
+                android:text="@string/add_part_etc_text"
+                android:textColor="@color/black_700"
+                style="@style/Text.Body4.Medium"/>
+
+            <include
+                android:id="@+id/etc_section"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/etc_text"
+                app:layout_constraintBottom_toBottomOf="@id/etc_text"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginEnd="24dp"
+                layout="@layout/add_sub_section"/>
+
+            <TextView
+                android:id="@+id/stack_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/etc_text"
+                android:layout_marginTop="31dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginStart="24dp"
+                android:text="@string/add_page_stack_text"
+                android:textColor="@color/black_900"
+                style="@style/Text.Body4.SemiBold"
+                />
 
 
+            <include
+                android:id="@+id/stack_dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                layout="@layout/dropdown_layout"
+                app:layout_constraintTop_toBottomOf="@id/stack_text"
+                android:layout_marginTop="12dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginHorizontal="24dp" />
+
+            <LinearLayout
+                android:id="@+id/stack_1_section"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/stack_dropdown"
+                android:layout_marginTop="-5dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginHorizontal="24dp"
+                android:orientation="vertical"/>
 
 
+            <include
+                android:id="@+id/stack_dropdown2"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                layout="@layout/dropdown_layout"
+                app:layout_constraintTop_toBottomOf="@id/stack_1_section"
+                android:layout_marginTop="13dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginHorizontal="24dp"/>
+
+            <LinearLayout
+                android:id="@+id/stack_2_section"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/stack_dropdown2"
+                android:layout_marginTop="-8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginHorizontal="24dp"
+                android:orientation="vertical">
+            </LinearLayout>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/stack_chip_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/stack_2_section"
+                android:layout_marginTop="12dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginHorizontal="24dp"
+                />
+
+            <TextView
+                android:id="@+id/location_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/stack_chip_group"
+                android:layout_marginTop="24dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginStart="24dp"
+                android:text="@string/add_page_location_text"
+                android:textColor="@color/black_900"
+                style="@style/Text.Body4.SemiBold"
+                />
+
+
+            <include
+                android:id="@+id/location_dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                layout="@layout/dropdown_layout"
+                app:layout_constraintTop_toBottomOf="@id/location_text"
+                android:layout_marginTop="12dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginHorizontal="24dp"/>
+
+            <LinearLayout
+                android:id="@+id/location_section"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/location_dropdown"
+                android:layout_marginTop="-8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginHorizontal="24dp"
+                android:orientation="vertical">
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/deadline_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/location_section"
+                android:layout_marginTop="32dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginStart="24dp"
+                android:text="@string/add_page_deadline_text"
+                android:textColor="@color/black_900"
+                style="@style/Text.Body4.SemiBold"
+                />
+
+
+            <include
+                android:id="@+id/deadline_dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                layout="@layout/dropdown_layout"
+                app:layout_constraintTop_toBottomOf="@id/deadline_text"
+                android:layout_marginTop="12dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginHorizontal="24dp"/>
+
+
+            <Button
+                android:id="@+id/submit_button"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                app:layout_constraintTop_toBottomOf="@id/deadline_dropdown"
+                android:layout_marginTop="52dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="12dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginHorizontal="24dp"
+                android:text="@string/add_page_submit_text"
+                android:background="@drawable/write_button"
+                style="@style/Text.Body4.SemiBold"
+                android:textColor="#ffffff"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     </ScrollView>
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

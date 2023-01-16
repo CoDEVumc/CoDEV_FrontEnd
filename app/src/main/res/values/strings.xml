@@ -18,8 +18,12 @@
     <string name="add_image_text">사진 첨부</string>
     <string name="add_part_text">모집 분야</string>
     <string name="add_part_pm_text">기획</string>
-    <string name="add_part_pm_text">디자인</string>
-    <string name="add_part_pm_text">프론트엔드</string>
-    <string name="add_part_pm_text">백엔드</string>
-    <string name="add_part_pm_text">기타</string>
+    <string name="add_part_design_text">디자인</string>
+    <string name="add_part_front_text">프론트엔드</string>
+    <string name="add_part_back_text">백엔드</string>
+    <string name="add_part_etc_text">기타</string>
+    <string name="add_page_stack_text">기술</string>
+    <string name="add_page_location_text">지역</string>
+    <string name="add_page_deadline_text">마감 일자</string>
+    <string name="add_page_submit_text">작성하기</string>
 </resources>
