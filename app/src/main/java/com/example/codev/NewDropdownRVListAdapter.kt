@@ -1,13 +1,15 @@
-package com.example.codev
+package com.example.codev;
 
-import android.content.Context
+import android.content.Context;
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.codev.databinding.ListItemBinding
 
-class stack2Adapter(private var context: Context, private var itemList: ArrayList<addListItem>):  RecyclerView.Adapter<stack2Adapter.stack2ViewHolder>(){
+import java.util.ArrayList;
+
+class NewDropdownRVListAdapter(private var context: Context, private var itemList: ArrayList<addListItem>): RecyclerView.Adapter<NewDropdownRVListAdapter.NewStackViewHolder>(){
 
     interface OnItemClickListener {
         fun onItemClick(v: View?, item: addListItem, pos: Int)
@@ -19,8 +21,7 @@ class stack2Adapter(private var context: Context, private var itemList: ArrayLis
         mListener = listener
     }
 
-
-    inner class stack2ViewHolder(private val viewBinding: ListItemBinding): RecyclerView.ViewHolder(viewBinding.root){
+    inner class NewStackViewHolder(private val viewBinding: ListItemBinding): RecyclerView.ViewHolder(viewBinding.root){
         fun bind(item: addListItem){
             if(item.isSelected){
                 viewBinding.checkIcon.setImageResource(R.drawable.select_yes_icon)
@@ -28,26 +29,19 @@ class stack2Adapter(private var context: Context, private var itemList: ArrayLis
                 viewBinding.checkIcon.setImageResource(R.drawable.select_no_icon)
             }
             viewBinding.stackName.text = item.name
-
             viewBinding.root.setOnClickListener {
                 val pos = adapterPosition
                 mListener?.onItemClick(itemView,item,pos)
-                item.isSelected = !item.isSelected
-                if(item.isSelected){
-                    viewBinding.checkIcon.setImageResource(R.drawable.select_yes_icon)
-                }else{
-                    viewBinding.checkIcon.setImageResource(R.drawable.select_no_icon)
-                }
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): stack2ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewStackViewHolder {
         val viewBinding = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return stack2ViewHolder(viewBinding)
+        return NewStackViewHolder(viewBinding)
     }
 
-    override fun onBindViewHolder(holder: stack2ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: NewStackViewHolder, position: Int) {
         holder.bind(itemList[position])
     }
 

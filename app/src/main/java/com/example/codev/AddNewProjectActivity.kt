@@ -14,7 +14,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.allViews
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.codev.databinding.ActivityAddNewProjectBinding
 import com.example.codev.databinding.AddSubSectionBinding
@@ -22,6 +21,7 @@ import com.example.codev.databinding.DropdownListBinding
 import com.example.codev.databinding.ImageItemBinding
 import com.google.android.material.chip.Chip
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
@@ -78,6 +78,44 @@ class AddNewProjectActivity : AppCompatActivity() {
 
         //set stack list
 
+
+        // START-setNewStack1
+//        var newStack1String = getResources().getStringArray(R.array.stack1_list);
+//        var newStack1List = ArrayList<addListItem>()
+//        for(i in newStack1String) newStack1List.add(addListItem(false, i))
+//        var selectedNewStack1Index = -1
+//        viewBinding.stackDropdown.dropdownTitle.text = "분야를 선택하세요"
+//
+//        var newStack1ListView = DropdownListBinding.inflate(layoutInflater)
+//        var isStack1ListOpen = false
+//        var newStack1RVListAdapter = NewDropdownRVListAdapter(this, newStack1List)
+//        newStack1RVListAdapter.setOnItemClickListener(object: NewDropdownRVListAdapter.OnItemClickListener{
+//            override fun onItemClick(v: View?, item: addListItem, pos: Int) {
+//                if(pos != selectedNewStack1Index){
+//                    if(selectedNewStack1Index != -1){
+//                        newStack1List.get(selectedNewStack1Index).isSelected = false
+//                        newStack1RVListAdapter.notifyItemChanged(selectedNewStack1Index)
+//                    }
+//                    newStack1List.get(pos).isSelected = true
+//                    newStack1RVListAdapter.notifyItemChanged(pos)
+//                    selectedNewStack1Index = pos
+////                    viewBinding.stackDropdown.dropdownTitle.text = newStack1List.get(selectedNewStack1Index).name
+//                }
+//            }
+//        })
+//        viewBinding.stackDropdown.dropdownRound.setOnClickListener {
+//            if(!isStack1ListOpen){
+//                var addStack1ListView = newStack1ListView.rvList
+//                addStack1ListView.adapter = newStack1RVListAdapter;
+//                addStack1ListView.layoutManager = LinearLayoutManager(this)
+//                viewBinding.locationSection.addView(addStack1ListView.rootView)
+//                isStack1ListOpen = true
+//            }else{
+//                viewBinding.locationSection.removeAllViews()
+//                isStack1ListOpen = false
+//            }
+//        }
+        // END-setNewStack1
 
         //set stack1 -> pm==0, design==1, front==2, back==3, etc==4
         var allPartList = listOf<addListItem>(addListItem(false, "계획"), addListItem(false,"디자인"), addListItem(false, "프론트엔드"), addListItem(false, "백엔드"), addListItem(false, "기타"))
@@ -205,46 +243,45 @@ class AddNewProjectActivity : AppCompatActivity() {
             }
         }
 
-
-        //setLocation
-        var allLocationString = getResources().getStringArray(R.array.location_list);
-        var allLocationList = listOf<addListItem>()
-        for(i in allLocationString) allLocationList += addListItem(false, i)
-        allLocationList[0].isSelected = true
-
-        var locationView = DropdownListBinding.inflate(layoutInflater)
-        var isLocationOpen = false
-        var locationRVAdapter = stack1Adapter(this, allLocationList)
-        var selectedLocationIndex = 0
-
+        // START-setLocationNew
+        var newLocationString = getResources().getStringArray(R.array.location_list);
+        var newLocationList = ArrayList<addListItem>()
+        for(i in newLocationString) newLocationList.add(addListItem(false, i))
+        var selectedNewLocationIndex = -1
         viewBinding.locationDropdown.dropdownTitle.text = "지역을 선택하세요"
-        viewBinding.locationDropdown.dropdownRound.setOnClickListener {
-            if(!isLocationOpen){
-                locationRVAdapter.setOnItemClickListener(object: stack1Adapter.OnItemClickListener{
-                    override fun onItemClick(v: View?, item: addListItem, pos: Int) {
-                        if (selectedLocationIndex != pos){
-                            allLocationList[selectedLocationIndex].isSelected = false
-                            selectedLocationIndex = pos
-                            viewBinding.locationDropdown.dropdownTitle.text = item.name
-                        }else{
-                            allLocationList[selectedLocationIndex].isSelected = !allLocationList[selectedLocationIndex].isSelected
-                        }
-                        locationRVAdapter.notifyDataSetChanged()
 
+        var newLocationListView = DropdownListBinding.inflate(layoutInflater)
+        var isLocationListOpen = false
+        var newLocationRVAdapter = NewDropdownRVListAdapter(this, newLocationList)
+        newLocationRVAdapter.setOnItemClickListener(object: NewDropdownRVListAdapter.OnItemClickListener{
+            override fun onItemClick(v: View?, item: addListItem, pos: Int) {
+                if(pos != selectedNewLocationIndex){
+                    if(selectedNewLocationIndex != -1){
+                        newLocationList.get(selectedNewLocationIndex).isSelected = false
+                        newLocationRVAdapter.notifyItemChanged(selectedNewLocationIndex)
                     }
-                })
+                    newLocationList.get(pos).isSelected = true
+                    newLocationRVAdapter.notifyItemChanged(pos)
+                    selectedNewLocationIndex = pos
+                    viewBinding.locationDropdown.dropdownTitle.text = newLocationList.get(selectedNewLocationIndex).name
 
-                locationView.rvList.adapter = locationRVAdapter
-                locationView.rvList.layoutManager = LinearLayoutManager(this)
-                viewBinding.locationSection.addView(locationView.root)
-                isLocationOpen = true
-
+                }
+            }
+        })
+        viewBinding.locationDropdown.dropdownRound.setOnClickListener {
+            if(!isLocationListOpen){
+                var addLocationListView = newLocationListView.rvList
+                addLocationListView.adapter = newLocationRVAdapter;
+                addLocationListView.layoutManager = LinearLayoutManager(this)
+                viewBinding.locationSection.addView(addLocationListView.rootView)
+                isLocationListOpen = true
             }else{
                 viewBinding.locationSection.removeAllViews()
-                isLocationOpen = false
+                isLocationListOpen = false
             }
-            Log.d("did", "clicked")
         }
+        // END-setLocationNew
+
         //setDeadLine
         viewBinding.deadlineDropdown.dropdownTitle.text = "마감 일자를 선택하세요"
         viewBinding.deadlineDropdown.dropdownRound.setOnClickListener {
