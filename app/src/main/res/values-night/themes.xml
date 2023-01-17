@@ -13,25 +13,4 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
-
-    <!-- BottomNavigation -->
-    <style name="BottomNavigationView">
-        <item name="itemTextAppearanceActive">@style/TextAppearance.BottomNavigationView.Active</item>
-        <item name="itemTextAppearanceInactive">@style/TextAppearance.BottomNavigationView.Inactive</item>
-    </style>
-
-    <style name="TextAppearance"/>
-    <style name="TextAppearance.BottomNavigationView">
-        <item name="android:fontFamily">@font/font_medium</item>
-    </style>
-
-    <!-- inactive tab icon style -->
-    <style name="TextAppearance.BottomNavigationView.Inactive">
-        <item name="android:textSize">11sp</item>
-    </style>
-
-    <!-- active tab icon style -->
-    <style name="TextAppearance.BottomNavigationView.Active">
-        <item name="android:textSize">11sp</item>
-    </style>
 </resources>

@@ -6,20 +6,42 @@
     android:layout_height="match_parent">
 
     <!-- Toolbar -->
+
+    <Button
+        android:id="@+id/btn_recruit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+    <!--frameLayout의 id 추가함-->
+
     <include
         android:id="@+id/toolbar_recruit"
         layout="@layout/toolbar1"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- 하단 네비게이션바 -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/nav_bottom"
+        style="@style/BottomNavigationView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/nav_bottom_background"
+        app:itemBackground="@android:color/transparent"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:text="Recruit Fragment"
-        android:textSize="30dp"
-        android:fontFamily="@font/font_logo"
-        android:textColor="@color/black"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/menu_nav_bottom" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/toolbar2"
-    app:title="@string/app_name"
+    android:id="@+id/toolbar_s"
+    app:title="@string/str_study"
     android:background="?attr/colorOnPrimary"
     app:titleTextColor="@color/black"
     app:titleTextAppearance="@style/Text.Heading3">
@@ -17,5 +17,16 @@
         android:layout_gravity="center"
         style="@style/Text.Heading4"
         android:textColor="@color/black"/>
+
+    <View
+        android:id="@+id/downSmall"
+        android:layout_width="14dp"
+        android:layout_height="6dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="5dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/down_big"
+        />
 
 </androidx.appcompat.widget.Toolbar>

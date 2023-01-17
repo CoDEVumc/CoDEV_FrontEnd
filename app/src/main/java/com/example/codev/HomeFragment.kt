@@ -26,6 +26,8 @@ class HomeFragment:Fragment() {
     ): View? {
         viewBinding = FragmentHomeBinding.inflate(layoutInflater)
         viewBinding.toolbarHome.toolbar1.inflateMenu(R.menu.menu_toolbar_1)
+        viewBinding.toolbarHome.toolbar1.title = ""
+        viewBinding.toolbarHome.toolbarImg.setImageResource(R.drawable.logo_home)
 
         return viewBinding.root
     }
