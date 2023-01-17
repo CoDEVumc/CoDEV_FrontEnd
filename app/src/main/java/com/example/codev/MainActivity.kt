@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity() {
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
+
+
         //가운데 정렬 글 작성 예시
         viewBinding.toolbarLogin.toolbar2.title = ""
         viewBinding.toolbarLogin.toolbarText.text = "툴바의 가운데 정렬 글 작성 예시"
@@ -30,6 +32,17 @@ class MainActivity : AppCompatActivity() {
         viewBinding.btnLogin.setOnClickListener {
 //            val intent = Intent(this,MainAppActivity::class.java) TODO: testing code
             val intent = Intent(this,AddNewProjectActivity::class.java)
+
+            intent.putExtra("abc", "edg");
+            intent.putExtra("xyz", "123");
+
+            startActivity(intent)
+//            finish() TODO: Testing code
+        }
+
+        viewBinding.btnGoogle.setOnClickListener {
+//            val intent = Intent(this,MainAppActivity::class.java) TODO: testing code
+            val intent = Intent(this,AddNewStudyActivity::class.java)
             startActivity(intent)
 //            finish() TODO: Testing code
         }

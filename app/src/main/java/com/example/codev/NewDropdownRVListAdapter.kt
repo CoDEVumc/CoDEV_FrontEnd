@@ -1,6 +1,7 @@
 package com.example.codev;
 
 import android.content.Context;
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +43,8 @@ class NewDropdownRVListAdapter(private var context: Context, private var itemLis
     }
 
     override fun onBindViewHolder(holder: NewStackViewHolder, position: Int) {
+        Log.d("list", "nowList: " + itemList.toString())
+        Log.d("list", "nowPosition: " + position)
         holder.bind(itemList[position])
     }
 

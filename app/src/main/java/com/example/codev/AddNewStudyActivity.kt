@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -13,32 +14,27 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.codev.databinding.ActivityAddNewProjectBinding
-import com.example.codev.databinding.AddSubSectionBinding
-import com.example.codev.databinding.DropdownListBinding
-import com.example.codev.databinding.ImageItemBinding
+import com.example.codev.databinding.*
 import com.google.android.material.chip.Chip
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
+class AddNewStudyActivity : AppCompatActivity() {
 
-class AddNewProjectActivity : AppCompatActivity() {
-
-    private lateinit var viewBinding: ActivityAddNewProjectBinding
-    private val pickImage = 100
-    private var imageUri: Uri? = null
-    private var imageList = ArrayList<ImageItemBinding>()
+    private lateinit var viewBinding: ActivityAddNewStudyBinding
     private var imageNum = 0
-    var dateString = ""
+    private val pickImage = 100
+    private var imageList = ArrayList<ImageItemBinding>()
+    private var imageUri: Uri? = null
     var allStackList = HashMap<Int, ArrayList<addListItem> >()
+    var dateString = ""
     var chipList = HashMap<String, View>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewBinding = ActivityAddNewProjectBinding.inflate(layoutInflater)
+        viewBinding = ActivityAddNewStudyBinding.inflate(layoutInflater)
 
         setContentView(viewBinding.root)
 
@@ -61,15 +57,8 @@ class AddNewProjectActivity : AppCompatActivity() {
         //=================================
 
         //setPartNumber
-        ////setPmNumber
+        ////setPartNumber
 
-        ////setDesignNumber
-
-        ////setFrontNumber
-
-        ////setBackNumber
-
-        ////setetcNumber
         //=================================
 
         //setChipGroup
@@ -78,11 +67,9 @@ class AddNewProjectActivity : AppCompatActivity() {
 
         //setDeadline
 
-
-
         //가운데 정렬 글 작성 예시
         viewBinding.toolbarTitle.toolbarAddPageToolbar.title = ""
-        viewBinding.toolbarTitle.toolbarText.text = getString(R.string.add_new_project)
+        viewBinding.toolbarTitle.toolbarText.text = getString(R.string.add_new_study)
         viewBinding.toolbarTitle.toolbarText.setTypeface(Typeface.DEFAULT_BOLD) //Text bold
         viewBinding.toolbarTitle.toolbarText.textSize = 16f //TextSixe = 16pt
         viewBinding.toolbarTitle.toolbarText.setTextColor(getColor(R.color.black))//TextColor = 900black
@@ -93,7 +80,6 @@ class AddNewProjectActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
-
         //add_image_section
         viewBinding.addImageButton.setOnClickListener {
             if(imageNum == 5){
@@ -103,18 +89,6 @@ class AddNewProjectActivity : AppCompatActivity() {
                 startActivityForResult(gallery, pickImage)
             }
         }
-
-
-        //add_sub_button_setting
-        setAddSubButton(viewBinding.pmSection)
-        setAddSubButton(viewBinding.designSection)
-        setAddSubButton(viewBinding.frontSection)
-        setAddSubButton(viewBinding.backSection)
-        setAddSubButton(viewBinding.etcSection)
-
-        //set stack list
-
-
 
         // START-setNewStack2
         allStackList[-1] = ArrayList<addListItem>()
@@ -163,6 +137,8 @@ class AddNewProjectActivity : AppCompatActivity() {
         }
         // END-setNewStack2
 
+        //add_sub_button_setting
+        setAddSubButton(viewBinding.peopleSection)
 
         // START-setNewStack1
         var newStack1String = getResources().getStringArray(R.array.stack1_list);
@@ -186,11 +162,11 @@ class AddNewProjectActivity : AppCompatActivity() {
 
                     //resetStack2Section
                     viewBinding.stack2Section.removeAllViews()
-                    newStack2RVListAdapter = NewDropdownRVListAdapter(this@AddNewProjectActivity, allStackList[selectedNewStack1Index]!!)
+                    newStack2RVListAdapter = NewDropdownRVListAdapter(this@AddNewStudyActivity, allStackList[selectedNewStack1Index]!!)
                     newStack2RVListAdapter = setStack2ClickEvent(newStack2RVListAdapter)
                     var addStack2ListView = newStack2ListView.rvList
                     addStack2ListView.adapter = newStack2RVListAdapter;
-                    addStack2ListView.layoutManager = LinearLayoutManager(this@AddNewProjectActivity)
+                    addStack2ListView.layoutManager = LinearLayoutManager(this@AddNewStudyActivity)
                     viewBinding.stack2Section.addView(addStack2ListView.rootView)
                     isStack2ListOpen = true
                     //resetStack2Section END
@@ -212,7 +188,6 @@ class AddNewProjectActivity : AppCompatActivity() {
             }
         }
         // END-setNewStack1
-
 
         // START-setLocationNew
         var newLocationString = getResources().getStringArray(R.array.location_list);
@@ -261,46 +236,10 @@ class AddNewProjectActivity : AppCompatActivity() {
                 dateString = "${year}/${month+1}/${dayOfMonth}"
                 viewBinding.deadlineDropdown.dropdownTitle.text = dateString
             }
-            var dpd = DatePickerDialog(this, dateSetListener, cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH))
+            var dpd = DatePickerDialog(this, dateSetListener, cal.get(Calendar.YEAR),cal.get(
+                Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH))
             dpd.datePicker.minDate = System.currentTimeMillis()
             dpd.show()
-        }
-
-        //setSubmitButton
-        viewBinding.submitButton.setOnClickListener {
-            val finalTitle = viewBinding.addPageTitle.text.toString()
-            Log.d("finalTitle", finalTitle)
-
-            val finalDes = viewBinding.addPageDes.text.toString()
-            Log.d("finalDes", finalDes)
-
-//            val finalImageList //TODO: 이미지 처리 방법 미정
-            val finalPmPeople = viewBinding.pmSection.peopleNum.text.toString().toInt()
-            Log.d("finalPmPeople", finalPmPeople.toString())
-
-            val finalDesignPeople = viewBinding.designSection.peopleNum.text.toString().toInt()
-            Log.d("finalDesignPeople", finalDesignPeople.toString())
-
-            val finalFrontPeople = viewBinding.frontSection.peopleNum.text.toString().toInt()
-            Log.d("finalFrontPeople", finalFrontPeople.toString())
-
-            val finalBackPeople = viewBinding.backSection.peopleNum.text.toString().toInt()
-            Log.d("finalBackPeople", finalBackPeople.toString())
-
-            val finalEtcPeople = viewBinding.etcSection.peopleNum.text.toString().toInt()
-            Log.d("finalEtcPeople", finalEtcPeople.toString())
-
-            val finalStackList = ArrayList<String>();
-            for(i in chipList.keys){
-                finalStackList.add(i)
-            }
-            Log.d("finalStackList", finalStackList.toString())
-
-            val finalLocation = viewBinding.locationDropdown.dropdownTitle.text.toString()
-            Log.d("finalLocation", finalLocation)
-
-        //            val finalDeadline //TODO: 마감일자 처리 방법 미정
-
         }
 
     }
@@ -326,6 +265,20 @@ class AddNewProjectActivity : AppCompatActivity() {
         }
     }
 
+    private fun addImageView(list: ArrayList<ImageItemBinding>, imageUri: Uri?){
+        val imageBinding = ImageItemBinding.inflate(layoutInflater)
+        imageBinding.selectedImage.setImageURI(imageUri)
+        imageBinding.cancelButton.setOnClickListener {
+            viewBinding.selectedImages.removeView(imageBinding.root)
+            list.remove(imageBinding)
+            viewBinding.addImageNum.text = (--imageNum).toString() + "/5"
+        }
+        viewBinding.selectedImages.addView(imageBinding.root)
+        list.add(imageBinding)
+        viewBinding.addImageNum.text = (++imageNum).toString() + "/5"
+    }
+
+
     private fun setAddSubButton(section: AddSubSectionBinding){
         //버튼
         section.subButton.setOnTouchListener(object : View.OnTouchListener {
@@ -343,8 +296,7 @@ class AddNewProjectActivity : AppCompatActivity() {
             var nowInt = Integer.parseInt(section.peopleNum.text.toString())
 
             if(nowInt > 0){
-                section.peopleNum.text = (nowInt - 1).toString()
-
+                section.peopleNum.text = "" + (nowInt - 1)
             }
             if(nowInt-1 == 0){
                 section.peopleNum.setTextColor(getColor(R.color.black_300))
@@ -366,7 +318,7 @@ class AddNewProjectActivity : AppCompatActivity() {
             var nowInt = Integer.parseInt(section.peopleNum.text.toString())
 
             if(nowInt >= 0){
-                section.peopleNum.text = (nowInt + 1).toString()
+                section.peopleNum.text = "" + (nowInt + 1)
             }
             if(nowInt+1 == 1){
                 section.peopleNum.setTextColor(getColor(R.color.black_900))
@@ -376,17 +328,23 @@ class AddNewProjectActivity : AppCompatActivity() {
 
     }
 
-    private fun addImageView(list: ArrayList<ImageItemBinding>, imageUri: Uri?){
-        val imageBinding = ImageItemBinding.inflate(layoutInflater)
-        imageBinding.selectedImage.setImageURI(imageUri)
-        imageBinding.cancelButton.setOnClickListener {
-            viewBinding.selectedImages.removeView(imageBinding.root)
-            list.remove(imageBinding)
-            viewBinding.addImageNum.text = (--imageNum).toString() + "/5"
-        }
-        viewBinding.selectedImages.addView(imageBinding.root)
-        list.add(imageBinding)
-        viewBinding.addImageNum.text = (++imageNum).toString() + "/5"
+
+    fun setStack2ClickEvent(adapter: NewDropdownRVListAdapter):NewDropdownRVListAdapter {
+        adapter.setOnItemClickListener(object: NewDropdownRVListAdapter.OnItemClickListener{
+            override fun onItemClick(v: View?, item: addListItem, pos: Int) {
+                if(!item.isSelected){
+                    chipList[item.name] = addChip(item.name, adapter)
+                    item.isSelected = true
+                }else{
+                    var removeChipView = chipList.get(item.name)
+                    viewBinding.stackChipGroup.removeView(removeChipView)
+                    chipList.remove(item.name)//remove from chipview
+                    item.isSelected = false
+                }
+                adapter.notifyItemChanged(pos)
+            }
+        })
+        return adapter
     }
 
     private fun addChip(name: String, adapter: NewDropdownRVListAdapter): Chip {
@@ -414,24 +372,6 @@ class AddNewProjectActivity : AppCompatActivity() {
         return chipView
     }
 
-    fun setStack2ClickEvent(adapter: NewDropdownRVListAdapter):NewDropdownRVListAdapter {
-        adapter.setOnItemClickListener(object: NewDropdownRVListAdapter.OnItemClickListener{
-            override fun onItemClick(v: View?, item: addListItem, pos: Int) {
-                if(!item.isSelected){
-                    chipList[item.name] = addChip(item.name, adapter)
-                    item.isSelected = true
-                }else{
-                    var removeChipView = chipList.get(item.name)
-                    viewBinding.stackChipGroup.removeView(removeChipView)
-                    chipList.remove(item.name)//remove from chipview
-                    item.isSelected = false
-                }
-                adapter.notifyItemChanged(pos)
-            }
-        })
-        return adapter
-    }
-
     fun dpToPx(context: Context, dp: Float): Float {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics)
     }
@@ -446,4 +386,5 @@ class AddNewProjectActivity : AppCompatActivity() {
             }
         }
     }
+
 }
