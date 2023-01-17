@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Toolbar -->
+    <include
+        android:id="@+id/toolbar_register"
+        layout="@layout/toolbar2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_register"
+        android:layout_marginTop="21dp"
+        android:layout_marginStart="24dp"
+        android:text="@string/register_profile_title"
+        style="@style/Text.Heading1"
+        android:textColor="@color/black_900"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_img"
+        android:layout_width="122dp"
+        android:layout_height="122dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_register"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="110dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/register_profile"/>
+
+    <ImageView
+        android:id="@+id/btn_change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_register"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="149dp"
+        android:src="@drawable/camera"/>
+
+    <EditText
+        android:id="@+id/et_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_register"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="252dp"
+        android:layout_marginEnd="24dp"
+        style="@style/Text.Body4.Medium"
+        android:textColor="@color/black_500"
+        android:background="@drawable/login_et_unfocused"
+        android:hint="@string/hint_password"
+        android:inputType="textPassword"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_register_next"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:text="다음"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_register"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="508dp"
+        style="@style/Text.Body4.SemiBold"
+        android:textColor="@color/black_500"
+        android:background="@drawable/register_button_unselected"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

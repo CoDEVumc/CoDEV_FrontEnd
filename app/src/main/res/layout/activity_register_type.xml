@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Toolbar -->
+    <include
+        android:id="@+id/toolbar_register"
+        layout="@layout/toolbar2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_register"
+        android:layout_marginTop="21dp"
+        android:layout_marginStart="24dp"
+        android:text="@string/register_type_title"
+        style="@style/Text.Heading1"
+        android:textColor="@color/black_900"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_individual"
+        android:layout_width="0dp"
+        android:layout_height="136dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_register"
+        app:layout_constraintEnd_toStartOf="@+id/btn_business"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="110dp"
+        android:layout_marginEnd="14dp"
+        android:text="개인 회원"
+        style="@style/Text.Body4.SemiBold"
+        android:textColor="@color/black_700"
+        android:background="@drawable/register_typebox"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_business"
+        android:layout_width="0dp"
+        android:layout_height="136dp"
+        app:layout_constraintStart_toEndOf="@+id/btn_individual"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_register"
+        android:layout_marginTop="110dp"
+        android:layout_marginEnd="24dp"
+        android:text="기업 회원"
+        style="@style/Text.Body4.SemiBold"
+        android:textColor="@color/black_700"
+        android:background="@drawable/register_typebox"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_register_next"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:text="다음"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_register"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="508dp"
+        style="@style/Text.Body4.SemiBold"
+        android:textColor="@color/black_500"
+        android:background="@drawable/register_button"
+        android:enabled="false"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
