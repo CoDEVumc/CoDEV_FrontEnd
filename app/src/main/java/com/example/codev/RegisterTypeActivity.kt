@@ -23,6 +23,18 @@ class RegisterTypeActivity:AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
+        viewBinding.btnBusiness.setOnClickListener {
+            viewBinding.btnBusiness.isSelected = true
+            viewBinding.btnIndividual.isSelected = false
+            nextBtnEnable(true)
+        }
+
+        viewBinding.btnIndividual.setOnClickListener {
+            viewBinding.btnBusiness.isSelected = false
+            viewBinding.btnIndividual.isSelected = true
+            nextBtnEnable(true)
+        }
+
         viewBinding.btnRegisterNext.setOnClickListener {
             val intent = Intent(this,RegisterEmailActivity::class.java)
             startActivity(intent)
@@ -37,6 +49,18 @@ class RegisterTypeActivity:AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun nextBtnEnable(boolean: Boolean){
+        if (viewBinding.btnRegisterNext.isSelected != boolean){
+            viewBinding.btnRegisterNext.isSelected = boolean
+            viewBinding.btnRegisterNext.isEnabled = boolean
+            if(boolean){
+                viewBinding.btnRegisterNext.setTextColor(getColor(R.color.white))
+            }else{
+                viewBinding.btnRegisterNext.setTextColor(getColor(R.color.black_500))
+            }
+        }
     }
 
 }

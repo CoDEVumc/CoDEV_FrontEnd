@@ -23,6 +23,42 @@ class RegisterTosActivity:AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
+        viewBinding.tosRdo1.setOnClickListener {
+            if (viewBinding.tosRdo1.isChecked){
+                viewBinding.tosRdo2.isChecked = true
+                viewBinding.tosRdo3.isChecked = true
+                viewBinding.tosRdo4.isChecked = true
+                viewBinding.tosRdo5.isChecked = true
+                viewBinding.tosRdo6.isChecked = true
+                viewBinding.tosRdo7.isChecked = true
+                nextBtnEnable(true)
+            }
+        }
+
+        viewBinding.tosRdo2.setOnClickListener {
+            if(viewBinding.tosRdo2.isChecked and viewBinding.tosRdo3.isChecked and viewBinding.tosRdo4.isChecked){
+                nextBtnEnable(true)
+            }else{
+                nextBtnEnable(false)
+            }
+        }
+
+        viewBinding.tosRdo3.setOnClickListener {
+            if(viewBinding.tosRdo2.isChecked and viewBinding.tosRdo3.isChecked and viewBinding.tosRdo4.isChecked){
+                nextBtnEnable(true)
+            }else{
+                nextBtnEnable(false)
+            }
+        }
+
+        viewBinding.tosRdo4.setOnClickListener {
+            if(viewBinding.tosRdo2.isChecked and viewBinding.tosRdo3.isChecked and viewBinding.tosRdo4.isChecked){
+                nextBtnEnable(true)
+            }else{
+                nextBtnEnable(false)
+            }
+        }
+
         viewBinding.btnRegisterNext.setOnClickListener {
             val intent = Intent(this,RegisterTypeActivity::class.java)
             startActivity(intent)
@@ -37,6 +73,18 @@ class RegisterTosActivity:AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun nextBtnEnable(boolean: Boolean){
+        if (viewBinding.btnRegisterNext.isSelected != boolean){
+            viewBinding.btnRegisterNext.isSelected = boolean
+            viewBinding.btnRegisterNext.isEnabled = boolean
+            if(boolean){
+                viewBinding.btnRegisterNext.setTextColor(getColor(R.color.white))
+            }else{
+                viewBinding.btnRegisterNext.setTextColor(getColor(R.color.black_500))
+            }
+        }
     }
 
 }

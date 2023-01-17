@@ -19,8 +19,8 @@ class RegisterDoneActivity:AppCompatActivity() {
 
         viewBinding.btnRegisterNext.setOnClickListener {
             val intent = Intent(this,MainActivity::class.java)
+            finishAffinity()
             startActivity(intent)
-            finish()
         }
     }
 }

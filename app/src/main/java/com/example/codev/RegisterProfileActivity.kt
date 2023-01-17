@@ -25,6 +25,7 @@ class RegisterProfileActivity:AppCompatActivity() {
 
         viewBinding.btnRegisterNext.setOnClickListener {
             val intent = Intent(this,RegisterDoneActivity::class.java)
+            finishAffinity()
             startActivity(intent)
         }
     }

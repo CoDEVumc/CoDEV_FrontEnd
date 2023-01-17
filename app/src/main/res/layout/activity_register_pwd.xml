@@ -44,7 +44,7 @@
         android:layout_marginTop="133dp"
         style="@style/Text.Body4.Medium"
         android:textColor="@color/black_500"
-        android:background="@drawable/login_et_unchecked"
+        android:background="@drawable/login_et_unfocused"
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
         android:enabled="false"/>
@@ -56,7 +56,7 @@
         app:layout_constraintEnd_toEndOf="@+id/et_email"
         app:layout_constraintBottom_toBottomOf="@+id/et_email"
         android:layout_marginEnd="14dp"
-        android:src="@drawable/register_checked"/>
+        android:src="@drawable/register_chk_checked"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -81,7 +81,7 @@
         android:layout_marginEnd="24dp"
         style="@style/Text.Body4.Medium"
         android:textColor="@color/black_500"
-        android:background="@drawable/login_et_unchecked"
+        android:background="@drawable/login_et_unfocused"
         android:hint="@string/hint_password"
         android:inputType="textPassword"/>
 
@@ -108,7 +108,7 @@
         android:layout_marginEnd="24dp"
         style="@style/Text.Body4.Medium"
         android:textColor="@color/black_500"
-        android:background="@drawable/login_et_unchecked"
+        android:background="@drawable/login_et_unfocused"
         android:hint="@string/hint_password"
         android:inputType="textPassword"/>
 
@@ -122,10 +122,10 @@
         android:layout_marginEnd="14dp"
         android:src="@drawable/register_unchecked"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_register_next"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="44dp"
         android:text="다음"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -134,7 +134,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginTop="508dp"
         style="@style/Text.Body4.SemiBold"
-        android:textColor="@color/white"
-        android:background="@drawable/login_button"/>
+        android:textColor="@color/black_500"
+        android:background="@drawable/register_button_unselected"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
