@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Toolbar -->
+    <include
+        android:id="@+id/toolbar_register"
+        layout="@layout/toolbar2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_register"
+        android:layout_marginTop="21dp"
+        android:layout_marginStart="24dp"
+        android:text="@string/register_pwd_title"
+        style="@style/Text.Heading1"
+        android:textColor="@color/black_900"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="이메일"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/et_email"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="6dp"
+        style="@style/Text.Body4.Medium"
+        android:textColor="@color/black_700"/>
+
+    <EditText
+        android:id="@+id/et_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_register"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="133dp"
+        style="@style/Text.Body4.Medium"
+        android:textColor="@color/black_500"
+        android:background="@drawable/login_et_unfocused"
+        android:hint="@string/hint_email"
+        android:inputType="textEmailAddress"
+        android:enabled="false"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/et_email"
+        app:layout_constraintEnd_toEndOf="@+id/et_email"
+        app:layout_constraintBottom_toBottomOf="@+id/et_email"
+        android:layout_marginEnd="14dp"
+        android:src="@drawable/register_chk_checked"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="비밀번호"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/et_password"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="6dp"
+        style="@style/Text.Body4.Medium"
+        android:textColor="@color/black_700"/>
+
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_email"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="43dp"
+        android:layout_marginEnd="24dp"
+        style="@style/Text.Body4.Medium"
+        android:textColor="@color/black_500"
+        android:background="@drawable/login_et_unfocused"
+        android:hint="@string/hint_password"
+        android:inputType="textPassword"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="비밀번호 확인"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/et_password_chk"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="6dp"
+        style="@style/Text.Body4.Medium"
+        android:textColor="@color/black_700"/>
+
+    <EditText
+        android:id="@+id/et_password_chk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_password"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="43dp"
+        android:layout_marginEnd="24dp"
+        style="@style/Text.Body4.Medium"
+        android:textColor="@color/black_500"
+        android:background="@drawable/login_et_unfocused"
+        android:hint="@string/hint_password"
+        android:inputType="textPassword"/>
+
+    <ImageView
+        android:id="@+id/et_password_chk_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/et_password_chk"
+        app:layout_constraintEnd_toEndOf="@+id/et_password_chk"
+        app:layout_constraintBottom_toBottomOf="@+id/et_password_chk"
+        android:layout_marginEnd="14dp"
+        android:src="@drawable/register_unchecked"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_register_next"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:text="다음"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_register"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="508dp"
+        style="@style/Text.Body4.SemiBold"
+        android:textColor="@color/black_500"
+        android:background="@drawable/register_button_unselected"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
