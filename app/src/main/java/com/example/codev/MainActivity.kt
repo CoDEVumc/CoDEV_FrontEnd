@@ -20,7 +20,6 @@ import retrofit2.Response
 import java.io.File
 import java.security.KeyStore
 
-
 class MainActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityMainBinding
 
@@ -62,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 response.body()?.let {
                     if(viewBinding.loginAuto.isChecked){
-                        UserSharedPreferences.setUserId(context,AndroidKeyStoreUtil.encrypt(email))
+                        UserSharedPreferences.setUserId(context,email)
                         UserSharedPreferences.setUserPwd(context,AndroidKeyStoreUtil.encrypt(pwd))
                     }
                     UserSharedPreferences.setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))

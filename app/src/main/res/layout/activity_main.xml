@@ -47,9 +47,10 @@
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="40dp"
             style="@style/Text.Body4.Medium"
-            android:textColor="@color/black_500"
+            android:textColor="@color/black_900"
             android:background="@drawable/login_et"
             android:hint="@string/hint_email"
+            android:textColorHint="@color/black_500"
             android:inputType="textEmailAddress"/>
 
         <TextView
@@ -73,9 +74,10 @@
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
             style="@style/Text.Body4.Medium"
-            android:textColor="@color/black_500"
+            android:textColor="@color/black_900"
             android:background="@drawable/login_et"
             android:hint="@string/hint_password"
+            android:textColorHint="@color/black_500"
             android:inputType="textPassword"/>
 
         <androidx.appcompat.widget.AppCompatCheckBox
