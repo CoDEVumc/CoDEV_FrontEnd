@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         viewBinding.btnLogin.setOnClickListener {
             getToken()
-            val intent = Intent(this,MainAppActivity::class.java)
+            val intent = Intent(this,AddNewProjectActivity::class.java)
             startActivity(intent)
 //            finish() TODO: Testing code
         }

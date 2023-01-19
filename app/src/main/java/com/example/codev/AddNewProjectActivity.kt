@@ -299,7 +299,8 @@ class AddNewProjectActivity : AppCompatActivity() {
             val finalLocation = viewBinding.locationDropdown.dropdownTitle.text.toString()
             Log.d("finalLocation", finalLocation)
 
-        //            val finalDeadline //TODO: 마감일자 처리 방법 미정
+            val finalDeadline = viewBinding.deadlineDropdown.dropdownTitle.text.toString()
+            Log.d("finalDeadline", finalDeadline)
 
         }
 
@@ -445,5 +446,9 @@ class AddNewProjectActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun postNewProject(){
+
     }
 }
