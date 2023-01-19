@@ -6,28 +6,16 @@ import android.content.SharedPreferences
 object UserSharedPreferences {
     private const val ACCOUNT : String = "account"
 
-    fun setUserId(context: Context, input: String) {
+    fun setAutoLogin(context: Context, input: String) {
         val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
         val editor : SharedPreferences.Editor = prefs.edit()
-        editor.putString("ID", input)
+        editor.putString("STATE", input)
         editor.commit()
     }
 
-    fun getUserId(context: Context): String {
+    fun getAutoLogin(context: Context): String {
         val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
-        return prefs.getString("ID", "").toString()
-    }
-
-    fun setUserPwd(context: Context, input: String) {
-        val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
-        val editor : SharedPreferences.Editor = prefs.edit()
-        editor.putString("PWD", input)
-        editor.commit()
-    }
-
-    fun getUserPwd(context: Context): String {
-        val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
-        return prefs.getString("PWD", "").toString()
+        return prefs.getString("STATE", "").toString()
     }
 
     fun setUserAccessToken(context: Context, input: String) {

@@ -42,10 +42,10 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="133dp"
-        style="@style/Text.Body4.Medium"
-        android:textColor="@color/black_500"
-        android:background="@drawable/login_et_unfocused"
-        android:hint="@string/hint_email"
+        style="@style/Text.Body4.SemiBold"
+        android:text="@string/hint_email"
+        android:textColor="@color/black_900"
+        android:background="@drawable/login_et"
         android:inputType="textEmailAddress"
         android:enabled="false"/>
 
@@ -79,10 +79,11 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="43dp"
         android:layout_marginEnd="24dp"
-        style="@style/Text.Body4.Medium"
-        android:textColor="@color/black_500"
-        android:background="@drawable/login_et_unfocused"
         android:hint="@string/hint_password"
+        android:textColorHint="@color/black_500"
+        style="@style/Text.Body4.Medium"
+        android:textColor="@color/black_900"
+        android:background="@drawable/login_et"
         android:inputType="textPassword"/>
 
     <TextView
@@ -106,10 +107,11 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="43dp"
         android:layout_marginEnd="24dp"
-        style="@style/Text.Body4.Medium"
-        android:textColor="@color/black_500"
-        android:background="@drawable/login_et_unfocused"
         android:hint="@string/hint_password"
+        android:textColorHint="@color/black_500"
+        style="@style/Text.Body4.Medium"
+        android:textColor="@color/black_900"
+        android:background="@drawable/login_et"
         android:inputType="textPassword"/>
 
     <ImageView
@@ -135,6 +137,6 @@
         android:layout_marginTop="508dp"
         style="@style/Text.Body4.SemiBold"
         android:textColor="@color/black_500"
-        android:background="@drawable/register_button_unselected"/>
+        android:background="@drawable/register_button"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

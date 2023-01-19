@@ -42,33 +42,33 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        if (UserSharedPreferences.getUserId(this).isNullOrBlank()){
-
-        }else{
+        // 자동로그인 확인
+        if(checkAutoLogin(this)) {
             val intent = Intent(this,MainAppActivity::class.java)
             startActivity(intent)
             finish()
         }
     }
 
-    private fun signUp(context:Context, email:String, pwd:String){
+    private fun signUp(context:Context, email:String, pwd:String) {
         RetrofitClient.service.signUp(ReqSignUp(email,pwd)).enqueue(object: Callback<ResSignUp>{
             override fun onResponse(call: Call<ResSignUp>, response: Response<ResSignUp>) {
                 if(response.isSuccessful.not()){
-                    Log.d("test",response.toString())
+                    Log.d("test: 로그인 실패",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
                     return
                 }
                 response.body()?.let {
+                    // 자동로그인 상태 값
                     if(viewBinding.loginAuto.isChecked){
-                        UserSharedPreferences.setUserId(context,email)
-                        UserSharedPreferences.setUserPwd(context,AndroidKeyStoreUtil.encrypt(pwd))
+                        UserSharedPreferences.setAutoLogin(context,"TRUE")
                     }
+                    // 토큰 암호화
                     UserSharedPreferences.setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))
                     UserSharedPreferences.setUserRefreshToken(context,AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
-                    Log.d("test", "\n${it.toString()}")
-                    Log.d("test",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)))
-                    Log.d("test",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken(context)))
+                    Log.d("test: 로그인 성공", "\n${it.toString()}")
+                    Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)))
+                    Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken(context)))
                 }
                 val intent = Intent(context,MainAppActivity::class.java)
                 startActivity(intent)
@@ -76,9 +76,15 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ResSignUp>, t: Throwable) {
-                Log.d("test", "[Fail]${t.toString()}")
+                Log.d("test: 로그인 실패", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
 
         })
+    }
+
+    // AutoLogin 값이 있다면 true, 없다면 false
+    private fun checkAutoLogin(context: Context): Boolean {
+        return !UserSharedPreferences.getAutoLogin(context).isNullOrBlank()
     }
 }
