@@ -29,6 +29,12 @@ class MyFragment:Fragment() {
         viewBinding.toolbarMy.toolbar1.title = ""
         viewBinding.toolbarMy.toolbarImg.setImageResource(R.drawable.logo_my)
 
+
+        var temp: ResPortFolio = ResPortFolio("temp","2021.10.11")
+        var templist = listOf<ResPortFolio>(temp,temp,temp,temp)
+        val Adapter = PortfolioAdapter(templist)
+        viewBinding.recyclePortfolio.adapter = Adapter
+
         return viewBinding.root
     }
 }
