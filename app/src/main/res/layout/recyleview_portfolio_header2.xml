@@ -67,7 +67,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginEnd="46dp"
-                android:background="@drawable/my_trash"/>
+                android:background="@drawable/my_trash"
+                android:enabled="false"/>
 
             <TextView
                 android:id="@+id/btn_delete_text"

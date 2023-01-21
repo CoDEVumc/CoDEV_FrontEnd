@@ -1,9 +1,11 @@
 package com.example.codev
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.example.codev.databinding.RecyleviewPortfolioFooter2Binding
@@ -11,7 +13,7 @@ import com.example.codev.databinding.RecyleviewPortfolioHeader2Binding
 import com.example.codev.databinding.RecyleviewPortfolioItem2Binding
 import java.util.*
 
-class PortfolioAdapter2(private val listData: List<ResPortFolio>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PortfolioAdapter2(private val context:Context, private val listData: List<ResPortFolio>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val HEADER = 0
     private val ITEM = 1
     private val FOOTER = 2
@@ -111,15 +113,15 @@ class PortfolioAdapter2(private val listData: List<ResPortFolio>) : RecyclerView
 
     //Header ViewHolder 객체
     inner class PortfolioHeaderViewHolder(private val binding: RecyleviewPortfolioHeader2Binding) : RecyclerView.ViewHolder(binding.root){
-        @SuppressLint("ResourceAsColor", "NotifyDataSetChanged")
+        @SuppressLint("NotifyDataSetChanged")
         fun bind(){
             binding.btnDelete.isGone = !binding.btnEditChk.isChecked
             if (DELETECOUNT>0){
-                binding.btnDeleteImg.isSelected = true
-                binding.btnDeleteText.setTextColor(R.color.black_700)
+                enableDelete(true)
+                binding.btnDeleteText.setTextColor(ContextCompat.getColor(context,R.color.black_700))
             }else{
-                binding.btnDeleteImg.isSelected = false
-                binding.btnDeleteText.setTextColor(R.color.black_300)
+                enableDelete(false)
+                binding.btnDeleteText.setTextColor(ContextCompat.getColor(context,R.color.black_300))
             }
 
             binding.btnEdit.setOnClickListener {
@@ -139,15 +141,30 @@ class PortfolioAdapter2(private val listData: List<ResPortFolio>) : RecyclerView
 
             //isChecked 된 항목들 삭제기능 필요
             binding.btnDelete.setOnClickListener {
-
+                Log.d("test", "삭제")
             }
+
+            //isChecked 된 항목들 삭제기능 필요
+            binding.btnDeleteImg.setOnClickListener {
+                Log.d("test", "삭제")
+            }
+        }
+
+        @SuppressLint("ResourceAsColor")
+        private fun enableDelete(boolean: Boolean){
+            binding.btnDelete.isEnabled = boolean
+            binding.btnDeleteImg.isEnabled = boolean
+            binding.btnDeleteImg.isSelected = boolean
         }
     }
 
     //Footer ViewHolder 객체
     inner class PortfolioFooterViewHolder(private val binding: RecyleviewPortfolioFooter2Binding) : RecyclerView.ViewHolder(binding.root){
         fun bind(){
-
+            //포트폴리오 추가 기능 필요
+            binding.addPortfolio.setOnClickListener {
+                Log.d("test", "포트폴리오 추가")
+            }
         }
     }
 

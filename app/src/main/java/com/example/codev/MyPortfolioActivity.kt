@@ -24,7 +24,7 @@ class MyPortfolioActivity:AppCompatActivity() {
 
         val temp: ResPortFolio = ResPortFolio("temp","2021.10.11")
         val templist = listOf<ResPortFolio>(temp,temp,temp,temp,temp,temp,temp,temp,temp,temp,temp,temp,temp,temp,temp,temp,temp,temp)
-        val adapter = PortfolioAdapter2(templist)
+        val adapter = PortfolioAdapter2(this,templist)
         viewBinding.recyclePortfolio.adapter = adapter
     }
 
