@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddNewStudyActivity">
+    tools:context=".addpage.AddNewStudyActivity">
 
     <!-- Toolbar -->
     <include
@@ -22,8 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/add_page_title"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/add_page_title_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
@@ -31,15 +31,26 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
-                android:textSize="16sp"
-                android:hint="@string/add_new_title"/>
+                app:boxBackgroundColor="#FFFFFF">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/add_page_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="16sp"
+                    android:hint="@string/add_new_title"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp"
+                    android:inputType="text"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <EditText
                 android:id="@+id/add_page_des"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:gravity="top"
-                app:layout_constraintTop_toBottomOf="@id/add_page_title"
+                app:layout_constraintTop_toBottomOf="@id/add_page_title_layout"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"

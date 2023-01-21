@@ -1,28 +1,25 @@
-package com.example.codev
+package com.example.codev.addpage
 
 import android.app.DatePickerDialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
-import android.util.TypedValue
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.codev.*
 import com.example.codev.databinding.ActivityAddNewProjectBinding
-import com.example.codev.databinding.AddSubSectionBinding
 import com.example.codev.databinding.DropdownListBinding
 import com.example.codev.databinding.ImageItemBinding
 import com.google.android.material.chip.Chip
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 class AddNewProjectActivity : AppCompatActivity() {
@@ -30,21 +27,23 @@ class AddNewProjectActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityAddNewProjectBinding
     private val pickImage = 100
     private var imageUri: Uri? = null
-    private var imageList = ArrayList<ImageItemBinding>()
+    private var imageList = ArrayList<String>()
     private var imageNum = 0
-    var dateString = ""
-    var allStackList = HashMap<Int, ArrayList<addListItem> >()
-    var chipList = HashMap<String, View>()
+    var allStackList = HashMap<Int, ArrayList<AddListItem> >()
+    var chipList = HashMap<AddListItem, View>()
+    private var dateJsonString: String = ""
+    var addPageFunction = AddPageFunction()
+    var project2Server = Project2Server()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityAddNewProjectBinding.inflate(layoutInflater)
-
         setContentView(viewBinding.root)
+        AndroidKeyStoreUtil.init(this)
 
         //setViewData
         val extras = intent.extras
-
+        //TODO: 객체가 존재하면 객체 내용을 페이지에 적용하고, toolbar과 제출하기의 text도 "수정하기"로 바꾸자
         //checkIsNew
 
 
@@ -93,6 +92,51 @@ class AddNewProjectActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
+        //TitleSection - Start
+        var isTitleOk = false
+        viewBinding.addPageTitleLayout.counterMaxLength = 30
+        viewBinding.addPageTitleLayout.isCounterEnabled = true
+
+        viewBinding.addPageTitle.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if(viewBinding.addPageTitle.text.toString().isEmpty() || viewBinding.addPageTitle.text.toString().replace(" ", "").length == 0) {
+                    viewBinding.addPageTitleLayout.error = "제목을 입력하세요."
+                    isTitleOk = false
+                }else if(count >= 30){
+                    viewBinding.addPageTitleLayout.error = "제목이 30자를 초과할 수 없습니다."
+                    isTitleOk = false
+                }else{
+                    viewBinding.addPageTitleLayout.error = null
+                    isTitleOk = true
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+        })
+        //TitleSection - End
+
+        //DesSection - Start
+        var isDesOk = false
+        viewBinding.addPageDes.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if(viewBinding.addPageDes.text.isEmpty() || viewBinding.addPageDes.text.toString().replace(" ", "").length == 0) {
+                    Log.d("desText", viewBinding.addPageDes.text.toString().replace(" ", "").length.toString())
+                    viewBinding.addPageDes.error = "상세 설명을 입력하세요."
+                    isDesOk = false
+                }else if(count >= 300){
+                    viewBinding.addPageDes.error = "상세설명이 300자를 초과할 수 없습니다."
+                    isDesOk = false
+                }else{
+                    viewBinding.addPageDes.error = null
+                    isDesOk = true
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+        //DesSection - End
 
         //add_image_section
         viewBinding.addImageButton.setOnClickListener {
@@ -106,43 +150,20 @@ class AddNewProjectActivity : AppCompatActivity() {
 
 
         //add_sub_button_setting
-        setAddSubButton(viewBinding.pmSection)
-        setAddSubButton(viewBinding.designSection)
-        setAddSubButton(viewBinding.frontSection)
-        setAddSubButton(viewBinding.backSection)
-        setAddSubButton(viewBinding.etcSection)
+        addPageFunction.setAddSubButton(this, viewBinding.pmSection)
+        addPageFunction.setAddSubButton(this, viewBinding.designSection)
+        addPageFunction.setAddSubButton(this, viewBinding.frontSection)
+        addPageFunction.setAddSubButton(this, viewBinding.backSection)
+        addPageFunction.setAddSubButton(this, viewBinding.etcSection)
 
         //set stack list
 
-
-
         // START-setNewStack2
-        allStackList[-1] = ArrayList<addListItem>()
+        var makeStackDropdown = MakeStackDropdown()
+        allStackList = makeStackDropdown.createAllStackHashMap(resources)
 
-        var pmStackStringList = getResources().getStringArray(R.array.pm_stack);
-        allStackList[0] = ArrayList<addListItem>()
-        for(i in pmStackStringList) allStackList[0]?.add(addListItem(false, i))
-
-        var designStackStringList = getResources().getStringArray(R.array.design_stack);
-        allStackList[1] = ArrayList<addListItem>()
-        for(i in designStackStringList) allStackList[1]?.add(addListItem(false, i))
-
-        var frontStackStringList = getResources().getStringArray(R.array.front_stack);
-        allStackList[2] = ArrayList<addListItem>()
-        for(i in frontStackStringList) allStackList[2]?.add(addListItem(false, i))
-
-        var backStackStringList = getResources().getStringArray(R.array.back_stack);
-        allStackList[3] = ArrayList<addListItem>()
-        for(i in backStackStringList) allStackList[3]?.add(addListItem(false, i))
-
-        var etcStackStringList = getResources().getStringArray(R.array.etc_stack);
-        allStackList[4] = ArrayList<addListItem>()
-        for(i in etcStackStringList) allStackList[4]?.add(addListItem(false, i))
-
-        var selectedNewStack2Index = -1
         var selectedNewStack1Index = -1
 
-        var newStack2List = allStackList.get(-1)!!
         viewBinding.stackDropdown2.dropdownTitle.text = "세부 기술을 선택하세요"
 
         var newStack2ListView = DropdownListBinding.inflate(layoutInflater)
@@ -165,22 +186,23 @@ class AddNewProjectActivity : AppCompatActivity() {
 
 
         // START-setNewStack1
-        var newStack1String = getResources().getStringArray(R.array.stack1_list);
-        var newStack1List = ArrayList<addListItem>()
-        for(i in newStack1String) newStack1List.add(addListItem(false, i))
+        var newStack1String = resources.getStringArray(R.array.stack1_list);
+        var newStack1List = ArrayList<AddListItem>()
+        for(i in newStack1String) newStack1List.add(AddListItem(false, i, 0))
         viewBinding.stackDropdown.dropdownTitle.text = "분야를 선택하세요"
 
         var newStack1ListView = DropdownListBinding.inflate(layoutInflater)
         var isStack1ListOpen = false
         var newStack1RVListAdapter = NewDropdownRVListAdapter(this, newStack1List)
-        newStack1RVListAdapter.setOnItemClickListener(object: NewDropdownRVListAdapter.OnItemClickListener{
-            override fun onItemClick(v: View?, item: addListItem, pos: Int) {
-                if(pos != selectedNewStack1Index){
-                    if(selectedNewStack1Index != -1){
-                        newStack1List.get(selectedNewStack1Index).isSelected = false
+        newStack1RVListAdapter.setOnItemClickListener(object:
+            NewDropdownRVListAdapter.OnItemClickListener {
+            override fun onItemClick(v: View?, item: AddListItem, pos: Int) {
+                if(pos != selectedNewStack1Index){ //클릭한 항목이 선택한 항목이 아니면
+                    if(selectedNewStack1Index != -1){ //직전에 선택한 항목이 있었을 때
+                        newStack1List[selectedNewStack1Index].isSelected = false
                         newStack1RVListAdapter.notifyItemChanged(selectedNewStack1Index)
                     }
-                    newStack1List.get(pos).isSelected = true
+                    newStack1List[pos].isSelected = true
                     newStack1RVListAdapter.notifyItemChanged(pos)
                     selectedNewStack1Index = pos
 
@@ -194,8 +216,6 @@ class AddNewProjectActivity : AppCompatActivity() {
                     viewBinding.stack2Section.addView(addStack2ListView.rootView)
                     isStack2ListOpen = true
                     //resetStack2Section END
-
-//                    viewBinding.stackDropdown.dropdownTitle.text = newStack1List.get(selectedNewStack1Index).name
                 }
             }
         })
@@ -215,27 +235,27 @@ class AddNewProjectActivity : AppCompatActivity() {
 
 
         // START-setLocationNew
-        var newLocationString = getResources().getStringArray(R.array.location_list);
-        var newLocationList = ArrayList<addListItem>()
-        for(i in newLocationString) newLocationList.add(addListItem(false, i))
+        var newLocationString = resources.getStringArray(R.array.location_list);
+        var newLocationList = ArrayList<AddListItem>()
+        for(i in newLocationString) newLocationList.add(AddListItem(false, i, 0))
         var selectedNewLocationIndex = -1
         viewBinding.locationDropdown.dropdownTitle.text = "지역을 선택하세요"
 
         var newLocationListView = DropdownListBinding.inflate(layoutInflater)
         var isLocationListOpen = false
         var newLocationRVAdapter = NewDropdownRVListAdapter(this, newLocationList)
-        newLocationRVAdapter.setOnItemClickListener(object: NewDropdownRVListAdapter.OnItemClickListener{
-            override fun onItemClick(v: View?, item: addListItem, pos: Int) {
-                if(pos != selectedNewLocationIndex){
-                    if(selectedNewLocationIndex != -1){
-                        newLocationList.get(selectedNewLocationIndex).isSelected = false
+        newLocationRVAdapter.setOnItemClickListener(object:
+            NewDropdownRVListAdapter.OnItemClickListener {
+            override fun onItemClick(v: View?, item: AddListItem, pos: Int) {
+                if(pos != selectedNewLocationIndex){ //직전 선택한 항목이 아니고
+                    if(selectedNewLocationIndex != -1){ // 직전에 선택한 항목이 있었을 때
+                        newLocationList[selectedNewLocationIndex].isSelected = false
                         newLocationRVAdapter.notifyItemChanged(selectedNewLocationIndex)
                     }
-                    newLocationList.get(pos).isSelected = true
+                    newLocationList[pos].isSelected = true
                     newLocationRVAdapter.notifyItemChanged(pos)
                     selectedNewLocationIndex = pos
-                    viewBinding.locationDropdown.dropdownTitle.text = newLocationList.get(selectedNewLocationIndex).name
-
+                    viewBinding.locationDropdown.dropdownTitle.text = newLocationList[selectedNewLocationIndex].name
                 }
             }
         })
@@ -258,8 +278,9 @@ class AddNewProjectActivity : AppCompatActivity() {
         viewBinding.deadlineDropdown.dropdownRound.setOnClickListener {
             val cal = Calendar.getInstance()    //캘린더뷰 만들기
             val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                dateString = "${year}/${month+1}/${dayOfMonth}"
-                viewBinding.deadlineDropdown.dropdownTitle.text = dateString
+                var dateShowString = "${year}/${month+1}/${dayOfMonth}"
+                dateJsonString = String.format("%d-%02d-%d", year, month+1, dayOfMonth)
+                viewBinding.deadlineDropdown.dropdownTitle.text = dateShowString
             }
             var dpd = DatePickerDialog(this, dateSetListener, cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH))
             dpd.datePicker.minDate = System.currentTimeMillis()
@@ -274,7 +295,9 @@ class AddNewProjectActivity : AppCompatActivity() {
             val finalDes = viewBinding.addPageDes.text.toString()
             Log.d("finalDes", finalDes)
 
-//            val finalImageList //TODO: 이미지 처리 방법 미정
+            val finalImageList = imageList
+            Log.d("finalImagePaths", finalImageList.toString())
+
             val finalPmPeople = viewBinding.pmSection.peopleNum.text.toString().toInt()
             Log.d("finalPmPeople", finalPmPeople.toString())
 
@@ -290,17 +313,67 @@ class AddNewProjectActivity : AppCompatActivity() {
             val finalEtcPeople = viewBinding.etcSection.peopleNum.text.toString().toInt()
             Log.d("finalEtcPeople", finalEtcPeople.toString())
 
-            val finalStackList = ArrayList<String>();
+            val finalStackList = ArrayList<Int>();
             for(i in chipList.keys){
-                finalStackList.add(i)
+                finalStackList.add(i.numberInServer)
             }
             Log.d("finalStackList", finalStackList.toString())
 
             val finalLocation = viewBinding.locationDropdown.dropdownTitle.text.toString()
             Log.d("finalLocation", finalLocation)
 
-            val finalDeadline = viewBinding.deadlineDropdown.dropdownTitle.text.toString()
+            val finalDeadline = dateJsonString
             Log.d("finalDeadline", finalDeadline)
+
+            var toastString = ""
+
+            if(!isTitleOk){
+                toastString += "제목, "
+            }
+
+            if(!isDesOk){
+                toastString += "상세 설명, "
+            }
+
+            var isPartPeopleOk: Boolean
+            if(finalPmPeople + finalDesignPeople + finalFrontPeople + finalBackPeople + finalEtcPeople == 0){
+                toastString += "총 모집 인원수, "
+                isPartPeopleOk = false
+            }else{
+                isPartPeopleOk = true
+            }
+
+            var isLocationOk: Boolean
+            if(finalLocation == "지역을 선택하세요"){
+                toastString += "지역, "
+                isLocationOk = false
+            }else{
+                isLocationOk = true
+            }
+
+            var isDeadlineOk: Boolean
+            if(dateJsonString.isEmpty()){
+                toastString+= "마감 시간, "
+                isDeadlineOk = false
+            }else{
+                isDeadlineOk = true
+            }
+
+            if(isTitleOk and isDesOk and isPartPeopleOk and isLocationOk and isDeadlineOk){
+                val finalNumOfPartList = project2Server.createPartNumList(finalPmPeople, finalDesignPeople, finalFrontPeople, finalBackPeople, finalEtcPeople)
+                Log.d("finalPartList", finalNumOfPartList.toString())
+
+                val imageMultiPartList = project2Server.createImageMultiPartList(imageList)
+                Log.d("finalImageMultiPartList", imageMultiPartList.toString())
+
+                project2Server.postNewProject(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList)
+            }else{
+                toastString = toastString.substring(0, toastString.length-2) + "을 확인하세요."
+                Log.d("string", toastString)
+                Toast.makeText(this, toastString, Toast.LENGTH_LONG).show()
+            }
+
+
 
         }
 
@@ -316,115 +389,43 @@ class AddNewProjectActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    //imageSection - Start
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == pickImage) {
             imageUri = data?.data
             addImageView(imageList, imageUri)
         }
-        for(i in imageList){
-            Log.d("image", i.selectedImage.drawable.toString())
-        }
     }
 
-    private fun setAddSubButton(section: AddSubSectionBinding){
-        //버튼
-        section.subButton.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                when (event?.action) {
-                    MotionEvent.ACTION_DOWN -> section.subButton.background = getDrawable(R.drawable.sub_button_press)
-                    MotionEvent.ACTION_UP -> section.subButton.background = getDrawable(R.drawable.sub_button)
-                }
-
-                return v?.onTouchEvent(event) ?: true
-            }
-        })
-
-        section.subButton.setOnClickListener {
-            var nowInt = Integer.parseInt(section.peopleNum.text.toString())
-
-            if(nowInt > 0){
-                section.peopleNum.text = (nowInt - 1).toString()
-
-            }
-            if(nowInt-1 == 0){
-                section.peopleNum.setTextColor(getColor(R.color.black_300))
-            }
-        }
-
-        section.addButton.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                when (event?.action) {
-                    MotionEvent.ACTION_DOWN -> section.addButton.background = getDrawable(R.drawable.add_button_press)
-                    MotionEvent.ACTION_UP -> section.addButton.background = getDrawable(R.drawable.add_button)
-                }
-
-                return v?.onTouchEvent(event) ?: true
-            }
-        })
-
-        section.addButton.setOnClickListener {
-            var nowInt = Integer.parseInt(section.peopleNum.text.toString())
-
-            if(nowInt >= 0){
-                section.peopleNum.text = (nowInt + 1).toString()
-            }
-            if(nowInt+1 == 1){
-                section.peopleNum.setTextColor(getColor(R.color.black_900))
-            }
-        }
-        //버튼 끝
-
-    }
-
-    private fun addImageView(list: ArrayList<ImageItemBinding>, imageUri: Uri?){
+    private fun addImageView(list: ArrayList<String>, imageUri: Uri?){
         val imageBinding = ImageItemBinding.inflate(layoutInflater)
         imageBinding.selectedImage.setImageURI(imageUri)
+        val imagePath = addPageFunction.getRealPathFromURI(this, imageUri)
         imageBinding.cancelButton.setOnClickListener {
             viewBinding.selectedImages.removeView(imageBinding.root)
-            list.remove(imageBinding)
+            list.remove(imagePath)
             viewBinding.addImageNum.text = (--imageNum).toString() + "/5"
         }
         viewBinding.selectedImages.addView(imageBinding.root)
-        list.add(imageBinding)
+        list.add(imagePath)
         viewBinding.addImageNum.text = (++imageNum).toString() + "/5"
     }
+    //imageSection - End
 
-    private fun addChip(name: String, adapter: NewDropdownRVListAdapter): Chip {
-        var chipView = Chip(this)
-        chipView.text = name
-        chipView.setChipBackgroundColorResource(R.color.green_300)
-        chipView.chipStrokeColor = getColorStateList(R.color.green_900)
-        chipView.chipStrokeWidth = dpToPx(this, 1f)
-        chipView.chipCornerRadius = dpToPx(this, 6f)
-        chipView.isCloseIconVisible = true
-        chipView.closeIcon = getDrawable(R.drawable.close_icon)
-        chipView.closeIcon?.setTint(getColor(R.color.green_900))
-        chipView.setTextColor(getColor(R.color.black_900))
-        chipView.setTextAppearance(R.style.Text_Body4_SemiBold)
 
-        chipView.setOnCloseIconClickListener {
-            changeItem2False(name)
-            viewBinding.stackChipGroup.removeView(chipView)
-            chipList.remove(name)
-//            checkedStack2[name]?.isSelected  = false
-            adapter.notifyDataSetChanged()
-        }
-        viewBinding.stackChipGroup.addView(chipView)
-        Log.d("did", "addDID")
-        return chipView
-    }
-
-    fun setStack2ClickEvent(adapter: NewDropdownRVListAdapter):NewDropdownRVListAdapter {
-        adapter.setOnItemClickListener(object: NewDropdownRVListAdapter.OnItemClickListener{
-            override fun onItemClick(v: View?, item: addListItem, pos: Int) {
+    //setStack2Section - Start
+    fun setStack2ClickEvent(adapter: NewDropdownRVListAdapter): NewDropdownRVListAdapter {
+        adapter.setOnItemClickListener(object: NewDropdownRVListAdapter.OnItemClickListener {
+            override fun onItemClick(v: View?, item: AddListItem, pos: Int) {
                 if(!item.isSelected){
-                    chipList[item.name] = addChip(item.name, adapter)
+                    chipList[item] = makeChip(item, adapter)
                     item.isSelected = true
                 }else{
-                    var removeChipView = chipList.get(item.name)
+                    var removeChipView = chipList[item]
+
                     viewBinding.stackChipGroup.removeView(removeChipView)
-                    chipList.remove(item.name)//remove from chipview
+                    chipList.remove(item)//remove from chipview
                     item.isSelected = false
                 }
                 adapter.notifyItemChanged(pos)
@@ -433,22 +434,20 @@ class AddNewProjectActivity : AppCompatActivity() {
         return adapter
     }
 
-    fun dpToPx(context: Context, dp: Float): Float {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics)
-    }
+    private fun makeChip(addItem: AddListItem, adapter: NewDropdownRVListAdapter): Chip {
+        var chipView = addPageFunction.setStackChip(this, addItem, adapter)
 
-    fun changeItem2False(name: String){
-        for(i in allStackList.values){
-            for(j in i){
-                if(j.name == name){
-                    j.isSelected = false
-                    return
-                }
-            }
+        chipView.setOnCloseIconClickListener {
+//            addPageFunction.changeItem2False(allStackList, name)'
+            addItem.isSelected = false
+            viewBinding.stackChipGroup.removeView(chipView)
+            chipList.remove(addItem)
+            adapter.notifyDataSetChanged()
         }
+        viewBinding.stackChipGroup.addView(chipView)
+        Log.d("did", "addDID")
+        return chipView
     }
+    //setStack2Section - End
 
-    private fun postNewProject(){
-
-    }
 }

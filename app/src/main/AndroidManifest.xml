@@ -4,8 +4,6 @@
 
     <!-- 인터넷 -->
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -24,11 +22,13 @@
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true">
         <activity
-            android:name=".AddNewStudyActivity"
-            android:exported="false" />
+            android:name=".addpage.AddNewStudyActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
-            android:name=".AddNewProjectActivity"
-            android:exported="false" />
+            android:name=".addpage.AddNewProjectActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

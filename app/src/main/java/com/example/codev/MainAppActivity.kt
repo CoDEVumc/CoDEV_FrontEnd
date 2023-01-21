@@ -1,7 +1,10 @@
 package com.example.codev
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.codev.addpage.AddNewProjectActivity
+import com.example.codev.addpage.AddNewStudyActivity
 import com.example.codev.databinding.ActivityMainAppBinding
 
 class MainAppActivity : AppCompatActivity() {
@@ -54,6 +57,11 @@ class MainAppActivity : AppCompatActivity() {
                 true
             }
             selectedItemId = R.id.menu_home
+        }
+
+        viewBinding.root.setOnClickListener {
+            val intent = Intent(this, AddNewProjectActivity::class.java)
+            startActivity(intent)
         }
     }
 }

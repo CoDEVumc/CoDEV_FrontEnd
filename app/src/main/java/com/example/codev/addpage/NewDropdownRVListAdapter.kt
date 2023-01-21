@@ -1,4 +1,4 @@
-package com.example.codev;
+package com.example.codev.addpage;
 
 import android.content.Context;
 import android.util.Log
@@ -6,14 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.codev.R
 import com.example.codev.databinding.ListItemBinding
 
 import java.util.ArrayList;
 
-class NewDropdownRVListAdapter(private var context: Context, private var itemList: ArrayList<addListItem>): RecyclerView.Adapter<NewDropdownRVListAdapter.NewStackViewHolder>(){
+class NewDropdownRVListAdapter(private var context: Context, private var itemList: ArrayList<AddListItem>): RecyclerView.Adapter<NewDropdownRVListAdapter.NewStackViewHolder>(){
 
     interface OnItemClickListener {
-        fun onItemClick(v: View?, item: addListItem, pos: Int)
+        fun onItemClick(v: View?, item: AddListItem, pos: Int)
     }
     // 리스너 객체 참조를 저장하는 변수
     private var mListener: OnItemClickListener? = null
@@ -23,7 +24,7 @@ class NewDropdownRVListAdapter(private var context: Context, private var itemLis
     }
 
     inner class NewStackViewHolder(private val viewBinding: ListItemBinding): RecyclerView.ViewHolder(viewBinding.root){
-        fun bind(item: addListItem){
+        fun bind(item: AddListItem){
             if(item.isSelected){
                 viewBinding.checkIcon.setImageResource(R.drawable.select_yes_icon)
             }else{

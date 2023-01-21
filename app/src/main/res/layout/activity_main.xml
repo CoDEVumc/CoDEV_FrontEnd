@@ -176,6 +176,11 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 style="@style/Text.Body5.Regular"
                 android:textColor="@color/black_900"/>
+
+            <FrameLayout
+                android:id="@+id/login_frame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -294,14 +299,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <FrameLayout
-        android:id="@+id/login_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

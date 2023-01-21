@@ -1,24 +1,17 @@
 package com.example.codev
 
-import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
+import com.example.codev.addpage.AddNewProjectActivity
+import com.example.codev.addpage.AddNewStudyActivity
 import com.example.codev.databinding.ActivityMainBinding
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.File
-import java.security.KeyStore
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityMainBinding
@@ -29,7 +22,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
         AndroidKeyStoreUtil.init(this)
         viewBinding.btnRegister.setOnClickListener {
-            val intent = Intent(this,RegisterTosActivity::class.java)
+//            val intent = Intent(this,RegisterTosActivity::class.java)
+            val intent = Intent(this, AddNewProjectActivity::class.java)
             startActivity(intent)
         }
 
@@ -51,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
         viewBinding.btnGoogle.setOnClickListener {
 //            val intent = Intent(this,MainAppActivity::class.java) TODO: testing code
-            val intent = Intent(this,AddNewStudyActivity::class.java)
+            val intent = Intent(this, AddNewStudyActivity::class.java)
             startActivity(intent)
 //            finish() TODO: Testing code
         }
