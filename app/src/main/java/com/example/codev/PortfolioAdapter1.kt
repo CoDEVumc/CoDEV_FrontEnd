@@ -66,6 +66,5 @@ class PortfolioAdapter1(private val listData: List<ResPortFolio>) : RecyclerView
         }
     }
 
-
 }
 
