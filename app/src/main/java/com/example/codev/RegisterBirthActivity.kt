@@ -23,6 +23,8 @@ class RegisterBirthActivity: AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
+        val reqSignUp = intent.getSerializableExtra("signUp") as ReqSignUp
+
         viewBinding.btnMale.setOnClickListener {
             viewBinding.btnMale.isSelected = true
             viewBinding.btnMale.setTextColor(getColor(R.color.green_900))
@@ -39,6 +41,7 @@ class RegisterBirthActivity: AppCompatActivity() {
 
         viewBinding.btnRegisterNext.setOnClickListener {
             val intent = Intent(this,RegisterEmailActivity::class.java)
+            intent.putExtra("signUp",reqSignUp)
             startActivity(intent)
         }
     }
