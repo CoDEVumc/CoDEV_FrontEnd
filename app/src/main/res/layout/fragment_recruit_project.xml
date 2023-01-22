@@ -67,6 +67,7 @@
                 android:layout_marginEnd="320dp"
                 android:background="@drawable/check_circle"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -151,11 +152,13 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="124dp"
                 android:layout_marginBottom="56dp"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
                 tools:layout_editor_absoluteX="0dp"
-                tools:listitem="@layout/projectList_item"></ListView>
+                tools:listitem="@layout/projectlist_item"
+                ></ListView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,29 +1,15 @@
 package com.example.codev
-import com.google.gson.JsonObject
+
 import com.google.gson.annotations.SerializedName
-import java.util.*
 
-
-data class ProjectData(
-    val ptitile: String,
-    val pdday: String,
-    val pheartnum: Int,
-    val pishearted: Boolean,
-    val pnum: Int,
-    val ppart: String,
-    val plangs: String,
-)
-/*
-data class ProjectData(
-    val code: Int,
+data class ProjectDataModel(
+    val code : Int,
     val result: Success
 )
-
-data class Success( //List
-    val success: Token
+data class Success(
+    val success: ArrayList<PData>
 )
-
-data class Token(
+data class PData(
     val co_projectId: Int,
     val co_email: String,
     val co_title: String,
@@ -43,10 +29,8 @@ data class Token(
     val co_photos: String, //null <-- data type???
     val co_partList: String, //null <-- data type???
     //partList 받아오면 ,로 슬라이싱 --> 글자 사이 간격 추가 --> textView로 지정 하면 될듯
-    val co_languageList: String //null <-- data type???
+    val co_languageList: String, //null <-- data type???
     //co_partList랑 마찬가지
 
     val co_totalnum: String
-
 )
-*/

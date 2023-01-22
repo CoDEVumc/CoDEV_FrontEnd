@@ -4,7 +4,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "http://semtle.catholic.ac.kr:8080/"
+    private const val BASE_URL = "http://semtle.catholic.ac.kr:8080/codev/"
     var service: RetrofitService
 
     init {

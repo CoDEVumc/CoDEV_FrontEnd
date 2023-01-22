@@ -19,7 +19,7 @@
         android:textColor="@color/black"/>
 
     <View
-        android:id="@+id/downSmall"
+        android:id="@+id/downBig2"
         android:layout_width="14dp"
         android:layout_height="6dp"
         android:layout_alignParentLeft="true"

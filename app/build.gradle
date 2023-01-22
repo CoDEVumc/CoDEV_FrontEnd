@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-android-extensions'
 }
 
 android {
@@ -38,6 +37,7 @@ android {
 }
 
 dependencies {
+    //popup menu
     implementation "com.google.android.material:material:1.2.0-alpha01"
 
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -51,4 +51,5 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0' // CircleImageView
     implementation("com.squareup.retrofit2:retrofit:2.9.0") // https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0' // gson converter
+
 }
