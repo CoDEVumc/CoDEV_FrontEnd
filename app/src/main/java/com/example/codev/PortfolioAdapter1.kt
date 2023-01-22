@@ -4,8 +4,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.codev.databinding.RecyleviewPortfolioHeader1Binding
-import com.example.codev.databinding.RecyleviewPortfolioItem1Binding
+import com.example.codev.databinding.RecylePortfolioHeader1Binding
+import com.example.codev.databinding.RecylePortfolioItem1Binding
 
 class PortfolioAdapter1(private val listData: List<ResPortFolio>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val HEADER = 0
@@ -15,9 +15,9 @@ class PortfolioAdapter1(private val listData: List<ResPortFolio>) : RecyclerView
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType){
             HEADER ->
-                PortfolioHeaderViewHolder(RecyleviewPortfolioHeader1Binding.inflate(LayoutInflater.from(parent.context), parent, false))
+                PortfolioHeaderViewHolder(RecylePortfolioHeader1Binding.inflate(LayoutInflater.from(parent.context), parent, false))
             else ->{
-                PortfolioItemViewHolder(RecyleviewPortfolioItem1Binding.inflate(LayoutInflater.from(parent.context), parent, false))
+                PortfolioItemViewHolder(RecylePortfolioItem1Binding.inflate(LayoutInflater.from(parent.context), parent, false))
             }
         }
     }
@@ -47,7 +47,7 @@ class PortfolioAdapter1(private val listData: List<ResPortFolio>) : RecyclerView
     }
 
     //Item의 ViewHolder 객체
-    inner class PortfolioItemViewHolder(private val binding: RecyleviewPortfolioItem1Binding): RecyclerView.ViewHolder(binding.root){
+    inner class PortfolioItemViewHolder(private val binding: RecylePortfolioItem1Binding): RecyclerView.ViewHolder(binding.root){
         fun bind(data: ResPortFolio, position: Int){
             binding.portfolioTitle.text = data.co_title
             binding.portfolioUpdatedAt.text = data.updatedAt
@@ -58,7 +58,7 @@ class PortfolioAdapter1(private val listData: List<ResPortFolio>) : RecyclerView
     }
 
     //Header ViewHolder 객체
-    inner class PortfolioHeaderViewHolder(private val binding: RecyleviewPortfolioHeader1Binding) : RecyclerView.ViewHolder(binding.root){
+    inner class PortfolioHeaderViewHolder(private val binding: RecylePortfolioHeader1Binding) : RecyclerView.ViewHolder(binding.root){
         fun bind(){
             binding.addPortfolio.setOnClickListener {
                 Log.d("test","포트폴리오 추가")
