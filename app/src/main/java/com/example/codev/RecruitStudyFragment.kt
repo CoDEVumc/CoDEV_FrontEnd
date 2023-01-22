@@ -23,7 +23,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class Recruit_StudyFragment : Fragment(){//, PopupMenu.OnMenuItemClickListener {
+class RecruitStudyFragment : Fragment(){//, PopupMenu.OnMenuItemClickListener {
     private lateinit var viewBinding: FragmentRecruitStudyBinding
     private var dataList: ArrayList<SData> = ArrayList()
 
