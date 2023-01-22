@@ -9,7 +9,7 @@
 
     <include
         android:id="@+id/toolbar_recruit"
-        layout="@layout/toolbar_s"/>
+        layout="@layout/toolbar1"/>
 
     <!-- Main Frame -->
     <FrameLayout
@@ -156,7 +156,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0"
                 tools:layout_editor_absoluteX="0dp"
-                tools:listitem="@layout/studylist_item"></ListView>
+                tools:listitem="@layout/recycle_recruit_study"></ListView>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

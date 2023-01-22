@@ -8,7 +8,7 @@
     <!-- Toolbar -->
     <include
         android:id="@+id/toolbar_recruit"
-        layout="@layout/toolbar_p" />
+        layout="@layout/toolbar1" />
 
     <!-- Main Frame -->
     <FrameLayout
@@ -146,19 +146,18 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ListView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/listview_main"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="124dp"
                 android:layout_marginBottom="56dp"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
-                tools:layout_editor_absoluteX="0dp"
-                tools:listitem="@layout/projectlist_item"
-                ></ListView>
+                tools:layout_editor_absoluteX="1dp"
+                tools:listitem="@layout/recycle_recruit_project"></androidx.recyclerview.widget.RecyclerView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

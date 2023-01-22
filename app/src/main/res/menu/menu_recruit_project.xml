@@ -2,5 +2,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/project1"
-        android:title="프로젝트" />
+        android:title="스터디" />
 </menu>

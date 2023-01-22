@@ -22,8 +22,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 //var studyFragment = Recruit_StudyFragment()
 
-class Recruit_ProjectFragment : Fragment()  { //PopupMenu.OnMenuItemClickListener
+class RecruitProjectFragment : Fragment()  { //PopupMenu.OnMenuItemClickListener
     private lateinit var viewBinding: FragmentRecruitProjectBinding
+    private var dataList: ArrayList<PData> = ArrayList()
 
     var mainAppActivity: MainAppActivity? = null
     override fun onAttach(context: Context) {
@@ -33,6 +34,7 @@ class Recruit_ProjectFragment : Fragment()  { //PopupMenu.OnMenuItemClickListene
         }
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = FragmentRecruitProjectBinding.inflate(layoutInflater)
@@ -41,13 +43,8 @@ class Recruit_ProjectFragment : Fragment()  { //PopupMenu.OnMenuItemClickListene
 
     }
 
-    private fun setAdapter(projectList: ProjectDataModel){
-        //val mAdapter = RecyclerAdapter(projectList.result.success, mainAppActivity)
-        //listview_main.adapter = mAdapter
 
-    }
-
-    private fun loadData(){
+    private fun loadData() {
         //Retrofit 사용하기
         //1. retrofit 객체 만들기
 
@@ -58,13 +55,19 @@ class Recruit_ProjectFragment : Fragment()  { //PopupMenu.OnMenuItemClickListene
                 if(response.isSuccessful.not()){
                     Log.d("test: 조회실패",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                    return
                 }else{
                     when(response.code()){
                         200->{
                             response.body()?.let {
                                 Log.d("test: 조회 성공", "\n${it.toString()}")
+                                Log.d("test: 조회 성공!!!!!!", "\n${it.result.success}")
+
+                                dataList = it.result.success
+
+                                Log.d("test: 조회 성공 dataList ", "\n${dataList}")
+
                             }
+
                         }
                     }
                 }
@@ -79,45 +82,23 @@ class Recruit_ProjectFragment : Fragment()  { //PopupMenu.OnMenuItemClickListene
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         viewBinding = FragmentRecruitProjectBinding.inflate(layoutInflater)
-        var temp = viewBinding.toolbarRecruit.toolbarP
-        viewBinding.toolbarRecruit.toolbarP.inflateMenu(R.menu.menu_recruit_study)
-        viewBinding.toolbarRecruit.toolbarP.title = ""
-        viewBinding.toolbarRecruit.toolbarP.toolbar_text.setOnClickListener {
+        var temp = viewBinding.toolbarRecruit.toolbar1
+        viewBinding.toolbarRecruit.toolbar1.inflateMenu(R.menu.menu_recruit_project)
+        viewBinding.toolbarRecruit.toolbar1.title = ""
+        viewBinding.toolbarRecruit.toolbar1.setOnClickListener {
             var popupMenu = PopupMenu(mainAppActivity, temp)
             popupMenu.inflate(R.menu.menu_recruit_project)
             popupMenu.show()
         }
-        viewBinding.toolbarRecruit.downBig.setOnClickListener {
-            var popupMenu = PopupMenu(mainAppActivity, temp)
-            popupMenu.inflate(R.menu.menu_recruit_project)
-            popupMenu.show()
-        }
+        viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_project)
 
-        viewBinding.toolbarRecruit.toolbarP.setOnMenuItemClickListener {
+        viewBinding.toolbarRecruit.toolbar1.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_search ->{
                     Toast.makeText(mainAppActivity, "검색", Toast.LENGTH_SHORT).show()
@@ -130,6 +111,14 @@ class Recruit_ProjectFragment : Fragment()  { //PopupMenu.OnMenuItemClickListene
                 else -> false
             }
         }
+
+        loadData()
+
+        val adapter = ProjectAdapter(dataList)
+        viewBinding.listviewMain.adapter = adapter
+
+        adapter.notifyDataSetChanged()
+
         //추가
         super.onCreateView(inflater, container, savedInstanceState)
 
@@ -137,6 +126,7 @@ class Recruit_ProjectFragment : Fragment()  { //PopupMenu.OnMenuItemClickListene
         //return inflater.inflate(R.layout.fragment_recruit_project, container, false)
         return viewBinding.root
     }
+
 
 //    //팝업 선택 메뉴 때문에 추가
 //    override fun onActivityCreated(savedInstanceState: Bundle?) {

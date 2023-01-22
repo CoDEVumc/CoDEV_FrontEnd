@@ -18,9 +18,6 @@
 //import com.example.codev.databinding.FragmentRecruitBinding
 //import com.example.codev.databinding.FragmentRecruitProjectBinding
 //import com.example.codev.databinding.FragmentRecruitStudyBinding
-//import kotlinx.android.synthetic.main.toolbar_p.view.*
-//import kotlinx.android.synthetic.main.toolbar_s.view.*
-//import kotlinx.android.synthetic.main.toolbar_s.view.toolbar_text
 //
 //
 //class Recruit_StudyFragment : Fragment(), PopupMenu.OnMenuItemClickListener {

@@ -23,7 +23,7 @@ class MainAppActivity : AppCompatActivity() {
                     R.id.menu_recruit->{
                         supportFragmentManager
                             .beginTransaction()
-                            .replace(viewBinding.content.id,Recruit_ProjectFragment())
+                            .replace(viewBinding.content.id,RecruitProjectFragment())
                             .commitAllowingStateLoss()
                     }
                     R.id.menu_community->{
