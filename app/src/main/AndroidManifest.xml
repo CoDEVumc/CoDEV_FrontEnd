@@ -55,6 +55,13 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".RegisterBirthActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".RegisterEmailActivity"
             android:exported="false">
             <meta-data
