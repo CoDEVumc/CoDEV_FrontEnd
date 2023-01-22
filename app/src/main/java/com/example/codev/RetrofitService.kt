@@ -12,6 +12,6 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 
 interface RetrofitService {
-    @POST("login")
+    @POST("user/login")
     fun signUp(@Body params: ReqSignUp) : Call<ResSignUp>
 }

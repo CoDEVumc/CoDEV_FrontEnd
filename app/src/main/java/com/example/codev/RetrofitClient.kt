@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
 object RetrofitClient {
-    private const val BASE_URL = "http://semtle.catholic.ac.kr:8080/"
+    private const val BASE_URL = "http://semtle.catholic.ac.kr:8080/codev/"
     var service: RetrofitService
 
     init {
