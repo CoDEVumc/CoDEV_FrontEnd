@@ -13,8 +13,8 @@
         <shape android:shape="rectangle">
             <stroke
                 android:width="0.5dp"
-                android:color="?attr/colorPrimary" />
-            <solid android:color="?attr/colorOnPrimary"/>
+                android:color="@color/black_300" />
+            <solid android:color="@color/white"/>
             <corners
                 android:topLeftRadius="20dp"
                 android:topRightRadius="20dp"/>
@@ -24,7 +24,7 @@
     <!-- 하단의 border 덮어씌우기 -->
     <item android:left="0.5dp" android:right="0.5dp" android:top="50dp">
         <shape android:shape="rectangle">
-            <solid android:color="?attr/colorOnPrimary" />
+            <solid android:color="@color/white" />
         </shape>
     </item>
 </layer-list>
