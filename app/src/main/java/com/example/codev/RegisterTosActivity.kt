@@ -36,27 +36,15 @@ class RegisterTosActivity:AppCompatActivity() {
         }
 
         viewBinding.tosRdo2.setOnClickListener {
-            if(viewBinding.tosRdo2.isChecked and viewBinding.tosRdo3.isChecked and viewBinding.tosRdo4.isChecked){
-                nextBtnEnable(true)
-            }else{
-                nextBtnEnable(false)
-            }
+            checkNextBtn()
         }
 
         viewBinding.tosRdo3.setOnClickListener {
-            if(viewBinding.tosRdo2.isChecked and viewBinding.tosRdo3.isChecked and viewBinding.tosRdo4.isChecked){
-                nextBtnEnable(true)
-            }else{
-                nextBtnEnable(false)
-            }
+            checkNextBtn()
         }
 
         viewBinding.tosRdo4.setOnClickListener {
-            if(viewBinding.tosRdo2.isChecked and viewBinding.tosRdo3.isChecked and viewBinding.tosRdo4.isChecked){
-                nextBtnEnable(true)
-            }else{
-                nextBtnEnable(false)
-            }
+            checkNextBtn()
         }
 
         viewBinding.btnRegisterNext.setOnClickListener {
@@ -84,6 +72,14 @@ class RegisterTosActivity:AppCompatActivity() {
             }else{
                 viewBinding.btnRegisterNext.setTextColor(getColor(R.color.black_500))
             }
+        }
+    }
+
+    private fun checkNextBtn() {
+        if(viewBinding.tosRdo2.isChecked and viewBinding.tosRdo3.isChecked and viewBinding.tosRdo4.isChecked){
+            nextBtnEnable(true)
+        }else{
+            nextBtnEnable(false)
         }
     }
 

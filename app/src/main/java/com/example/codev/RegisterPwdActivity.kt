@@ -23,6 +23,9 @@ class RegisterPwdActivity:AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
+        // 앞서서 인증한 이메일 설정 필요
+        // 비밀번호 같은지 확인 필요
+
         viewBinding.btnRegisterNext.setOnClickListener {
             val intent = Intent(this,RegisterProfileActivity::class.java)
             startActivity(intent)

@@ -23,6 +23,8 @@ class RegisterProfileActivity:AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
+        // 닉네임 8글자 미만 확인 필요
+
         viewBinding.btnRegisterNext.setOnClickListener {
             val intent = Intent(this,RegisterDoneActivity::class.java)
             finishAffinity()

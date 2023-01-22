@@ -23,6 +23,8 @@ class RegisterEmailActivity:AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
+        // 이메일 형식 확인 필요
+
         viewBinding.btnRegisterNext.setOnClickListener {
             val intent = Intent(this,RegisterCodeActivity::class.java)
             startActivity(intent)

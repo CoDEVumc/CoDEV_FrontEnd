@@ -18,6 +18,6 @@
     <color name="black_500">#999999</color>
     <color name="black_300">#D1D1D1</color>
     <color name="black_100">#E1E1E1</color>
-
+    <color name="black_50">#F8F8F8</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
