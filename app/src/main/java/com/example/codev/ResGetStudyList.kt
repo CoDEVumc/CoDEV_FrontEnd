@@ -1,17 +1,15 @@
 package com.example.codev
 
-import java.util.*
-
-data class ResGetProjectList(
+data class ResGetStudyList(
     val code : Int,
-    val result: ResponseOfGetProject
+    val result: ResponseOfGetStudy
 )
-data class ResponseOfGetProject(
+data class ResponseOfGetStudy(
     val co_page: Int,
-    val success: ArrayList<PData>
+    val success: ArrayList<SData>
 )
-data class PData(
-    val co_projectId: Int,
+data class SData(
+    val co_studyId: Int,
     val co_email: String,
     val co_title: String,
     val co_location: String,
@@ -25,12 +23,12 @@ data class PData(
     val co_heartCount: Int,
     val co_heart: Boolean,
     val co_parts: String,
+
+    val co_total: Int,
     val co_languages: String,
     val co_photos: String, //null <-- data type???
     val co_partList: String, //null <-- data type???
     //partList 받아오면 ,로 슬라이싱 --> 글자 사이 간격 추가 --> textView로 지정 하면 될듯
     val co_languageList: String, //null <-- data type???
-    //co_partList랑 마찬가지
 
-    val co_total: Int //총인원
 )

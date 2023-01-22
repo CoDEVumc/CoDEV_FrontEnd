@@ -26,7 +26,7 @@ class RecruitProjectFragment : Fragment()  { //PopupMenu.OnMenuItemClickListener
     private lateinit var viewBinding: FragmentRecruitProjectBinding
     private var dataList: ArrayList<PData> = ArrayList()
 
-    var mainAppActivity: MainAppActivity? = null
+    var mainAppActivity: Context? = null
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if(context is MainAppActivity){
@@ -38,47 +38,6 @@ class RecruitProjectFragment : Fragment()  { //PopupMenu.OnMenuItemClickListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = FragmentRecruitProjectBinding.inflate(layoutInflater)
-
-        loadData()
-
-    }
-
-
-    private fun loadData() {
-        //Retrofit 사용하기
-        //1. retrofit 객체 만들기
-
-        //2. api 호출하기
-        RetrofitClient.service.requestAllData("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QG5hdmVyLmNvbSIsImlhdCI6MTY3NDI5MzY3NSwiZXhwIjoxNjc0NDY2NDc1fQ.4-My4vE-zJRrHucOIY0_bWPJB3N6uhVZqChs8nztmZ4",
-        0,"","","","").enqueue(object: Callback<ProjectDataModel>{
-            override fun onResponse(call: Call<ProjectDataModel>, response: Response<ProjectDataModel>) {
-                if(response.isSuccessful.not()){
-                    Log.d("test: 조회실패",response.toString())
-                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }else{
-                    when(response.code()){
-                        200->{
-                            response.body()?.let {
-                                Log.d("test: 조회 성공", "\n${it.toString()}")
-                                Log.d("test: 조회 성공!!!!!!", "\n${it.result.success}")
-
-                                dataList = it.result.success
-
-                                Log.d("test: 조회 성공 dataList ", "\n${dataList}")
-
-                            }
-
-                        }
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<ProjectDataModel>, t: Throwable) {
-                Log.d("test: 조회실패2", "[Fail]${t.toString()}")
-                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-            }
-
-        })
 
     }
 
@@ -119,12 +78,45 @@ class RecruitProjectFragment : Fragment()  { //PopupMenu.OnMenuItemClickListener
 
         adapter.notifyDataSetChanged()
 
-        //추가
-        super.onCreateView(inflater, container, savedInstanceState)
-
-        // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_recruit_project, container, false)
         return viewBinding.root
+    }
+
+    private fun loadData() {
+        //Retrofit 사용하기
+        //1. retrofit 객체 만들기
+
+        //2. api 호출하기
+        RetrofitClient.service.requestPDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity!!)),
+            0,"","","","").enqueue(object: Callback<ResGetProjectList>{
+            override fun onResponse(call: Call<ResGetProjectList>, response: Response<ResGetProjectList>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 조회실패",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }else{
+                    when(response.code()){
+                        200->{
+                            response.body()?.let {
+                                Log.d("test: 조회 성공", "\n${it.toString()}")
+                                Log.d("test: 조회 성공!!!!!!", "\n${it.result.success}")
+
+                                dataList = it.result.success
+
+                                Log.d("test: 조회 성공 dataList ", "\n${dataList}")
+
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResGetProjectList>, t: Throwable) {
+                Log.d("test: 조회실패2", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
     }
 
 
