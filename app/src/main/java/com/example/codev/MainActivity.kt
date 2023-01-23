@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         AndroidKeyStoreUtil.init(this)
 
         // 자동 로그인 방지
-        // UserSharedPreferences.clearUser(this)
+        UserSharedPreferences.clearUser(this)
         val temp = "12345678"
         val temp2 = "12345678"
         val temp_en = AndroidKeyStoreUtil.encrypt(temp)
