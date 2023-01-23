@@ -23,20 +23,25 @@ class RegisterTypeActivity:AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
+        val reqSignUp = intent.getSerializableExtra("signUp") as ReqSignUp
+
         viewBinding.btnBusiness.setOnClickListener {
             viewBinding.btnBusiness.isSelected = true
             viewBinding.btnIndividual.isSelected = false
+            reqSignUp.role = "BUSINESS"
             nextBtnEnable(true)
         }
 
         viewBinding.btnIndividual.setOnClickListener {
             viewBinding.btnBusiness.isSelected = false
             viewBinding.btnIndividual.isSelected = true
+            reqSignUp.role = "USER"
             nextBtnEnable(true)
         }
 
         viewBinding.btnRegisterNext.setOnClickListener {
             val intent = Intent(this,RegisterBirthActivity::class.java)
+            intent.putExtra("signUp",reqSignUp)
             startActivity(intent)
         }
     }
