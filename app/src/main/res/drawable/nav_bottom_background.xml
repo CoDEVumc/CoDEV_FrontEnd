@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- 네비게이션바 뒷 배경 -->
-    <item>
-        <shape android:shape="rectangle">
-            <solid android:color="@android:color/transparent"/>
-        </shape>
-    </item>
 
     <!-- 네비게이션바 곡선 -->
     <item>
@@ -15,16 +9,6 @@
                 android:width="0.5dp"
                 android:color="@color/black_300" />
             <solid android:color="@color/white"/>
-            <corners
-                android:topLeftRadius="20dp"
-                android:topRightRadius="20dp"/>
-        </shape>
-    </item>
-
-    <!-- 하단의 border 덮어씌우기 -->
-    <item android:left="0.5dp" android:right="0.5dp" android:top="50dp">
-        <shape android:shape="rectangle">
-            <solid android:color="@color/white" />
         </shape>
     </item>
 </layer-list>
