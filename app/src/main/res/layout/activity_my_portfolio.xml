@@ -91,7 +91,9 @@
         android:layout_marginTop="52dp"
         android:orientation="vertical"
         tools:listitem="@layout/recyle_portfolio_item2"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:nestedScrollingEnabled="false"
+        android:overScrollMode="never">
     </androidx.recyclerview.widget.RecyclerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

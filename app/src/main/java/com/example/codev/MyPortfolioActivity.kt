@@ -1,6 +1,7 @@
 package com.example.codev
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -8,6 +9,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import com.example.codev.databinding.ActivityMyPortfolioBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 
 class MyPortfolioActivity:AppCompatActivity() {
@@ -27,50 +31,35 @@ class MyPortfolioActivity:AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
-        val temp = ResPortFolio("temp","2021.10.11")
-        val templist = listOf<ResPortFolio>(temp,temp,temp,temp,temp,temp,temp,temp,temp,temp,temp,temp,temp,temp,temp,temp,temp,temp)
-        val adapter = PortfolioAdapter2(templist){
-            Log.d("test","리콜받음")
-            if (it == 1){
-                enableDelete(true)
-            }else if (it == 0){
-                enableDelete(false)
-            }
-        }
-        viewBinding.recyclePortfolio.adapter = adapter
+        loadData(this,0)
         viewBinding.btnDelete.isGone = true
 
         viewBinding.btnEdit.setOnClickListener {
             viewBinding.btnEditChk.isChecked = !viewBinding.btnEditChk.isChecked
             viewBinding.btnDelete.isGone = !viewBinding.btnEditChk.isChecked
+            loadData(this,0)
             enableDelete(false)
-            adapter.setEdit(viewBinding.btnEditChk.isChecked)
-            adapter.setDeleteCount(0)
-            adapter.resetIsChecked()
-            adapter.notifyDataSetChanged()
         }
 
         viewBinding.btnEditChk.setOnClickListener {
             viewBinding.btnDelete.isGone = !viewBinding.btnEditChk.isChecked
+            loadData(this,0)
             enableDelete(false)
-            adapter.setEdit(viewBinding.btnEditChk.isChecked)
-            adapter.setDeleteCount(0)
-            adapter.resetIsChecked()
-            adapter.notifyDataSetChanged()
         }
 
         //isChecked 된 항목들 삭제기능 필요
         viewBinding.btnDelete.setOnClickListener {
             Log.d("test", "삭제")
-            Log.d("test",adapter.getIsChecked().toString())
+            //Log.d("test",adapter.getIsChecked().toString())
         }
 
         //isChecked 된 항목들 삭제기능 필요
         viewBinding.btnDeleteImg.setOnClickListener {
             Log.d("test", "삭제")
-            Log.d("test",adapter.getIsChecked().toString())
+            //Log.d("test",adapter.getIsChecked().toString())
         }
     }
+
     private fun enableDelete(boolean: Boolean){
         if (boolean != viewBinding.btnDelete.isEnabled){
             viewBinding.btnDelete.isEnabled = boolean
@@ -94,4 +83,42 @@ class MyPortfolioActivity:AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun setAdapter(dataList: ArrayList<PortFolio>){
+        val adapter = PortfolioAdapter2(dataList){
+            Log.d("test","리콜받음")
+            if (it == 1){
+                enableDelete(true)
+            }else if (it == 0){
+                enableDelete(false)
+            }
+        }
+        adapter.setEdit(viewBinding.btnEditChk.isChecked)
+        adapter.setDeleteCount(0)
+        adapter.resetIsChecked()
+        viewBinding.recyclePortfolio.adapter = adapter
+    }
+
+    private fun loadData(context: Context, int: Int){
+        RetrofitClient.service.getPortFolio(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),int).enqueue(object: Callback<ResPortFolioList> {
+            override fun onResponse(call: Call<ResPortFolioList>, response: Response<ResPortFolioList>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+                when(response.code()){
+                    200 -> {
+                        response.body()?.let {
+                            Log.d("test", "\n${it.toString()}")
+                            setAdapter(it.result)
+                        }
+                    }
+                }
+
+            }
+
+            override fun onFailure(call: Call<ResPortFolioList>, t: Throwable) {
+                Log.d("test", "[Fail]${t.toString()}")
+            }
+        })
+    }
 }

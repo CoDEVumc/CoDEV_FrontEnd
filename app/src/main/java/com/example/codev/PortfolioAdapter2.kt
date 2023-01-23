@@ -9,7 +9,7 @@ import com.example.codev.databinding.RecylePortfolioFooter2Binding
 import com.example.codev.databinding.RecylePortfolioItem2Binding
 import java.util.*
 
-class PortfolioAdapter2(private val listData: List<ResPortFolio>, private val returnDeleteCount: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PortfolioAdapter2(private val listData: ArrayList<PortFolio>, private val returnDeleteCount: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val ITEM = 1
     private val FOOTER = 2
     private var EDIT: Boolean = false
@@ -68,7 +68,7 @@ class PortfolioAdapter2(private val listData: List<ResPortFolio>, private val re
 
     //Item의 ViewHolder 객체
     inner class PortfolioItemViewHolder(private val binding: RecylePortfolioItem2Binding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: ResPortFolio, position: Int){
+        fun bind(data: PortFolio, position: Int){
             binding.portfolioTitle.text = data.co_title
             binding.portfolioUpdatedAt.text = data.updatedAt
             binding.chkDelete.isChecked = isChecked[position]
