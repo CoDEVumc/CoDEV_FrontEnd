@@ -1,5 +1,7 @@
 package com.example.codev
 
+import java.io.Serializable
+import java.lang.reflect.Constructor
 import java.sql.Timestamp
 
 data class ResPortFolioList(
@@ -23,4 +25,4 @@ data class Userinfo(
     val profileImg: String,
     val co_email: String,
     val co_name: String
-)
+) : Serializable

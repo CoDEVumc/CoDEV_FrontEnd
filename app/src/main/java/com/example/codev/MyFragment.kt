@@ -16,9 +16,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class MyFragment:Fragment() {
     private lateinit var viewBinding: FragmentMyBinding
     private lateinit var mainAppActivity: Context
+    private lateinit var userinfo: Userinfo
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -41,6 +44,7 @@ class MyFragment:Fragment() {
 
         viewBinding.profile.setOnClickListener {
             val intent = Intent(mainAppActivity, MyProfileActivity::class.java)
+            intent.putExtra("userinfo",userinfo)
             startActivity(intent)
         }
 
@@ -75,6 +79,7 @@ class MyFragment:Fragment() {
                                 .load(it.result.Complete.profileImg).circleCrop().fitCenter()
                                 .into(viewBinding.profileImg)
                             setAdapter(it.result.Portfolio)
+                            userinfo = Userinfo(it.result.Complete.co_nickName,it.result.Complete.profileImg,it.result.Complete.co_email,it.result.Complete.co_name)
                         }
                     }
                 }
