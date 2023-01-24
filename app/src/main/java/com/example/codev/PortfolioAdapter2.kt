@@ -1,5 +1,6 @@
 package com.example.codev
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +8,10 @@ import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.example.codev.databinding.RecylePortfolioFooter2Binding
 import com.example.codev.databinding.RecylePortfolioItem2Binding
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class PortfolioAdapter2(private val listData: ArrayList<PortFolio>, private val returnDeleteCount: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val ITEM = 1
@@ -15,6 +19,7 @@ class PortfolioAdapter2(private val listData: ArrayList<PortFolio>, private val 
     private var EDIT: Boolean = false
     private var DELETECOUNT: Int = 0
     private var isChecked: Array<Boolean> = Array(listData.size){false}
+    private var deleteList: ArrayList<Int> = arrayListOf()
 
     fun setEdit(boolean: Boolean){
         EDIT = boolean
@@ -30,6 +35,14 @@ class PortfolioAdapter2(private val listData: ArrayList<PortFolio>, private val 
 
     fun getIsChecked(): Array<Boolean>{
         return isChecked
+    }
+
+    fun resetDeleteList(){
+        deleteList.clear()
+    }
+
+    fun getDeleteList(): ArrayList<Int>{
+        return deleteList
     }
 
     //뷰 홀더 바인딩
@@ -70,13 +83,18 @@ class PortfolioAdapter2(private val listData: ArrayList<PortFolio>, private val 
     inner class PortfolioItemViewHolder(private val binding: RecylePortfolioItem2Binding): RecyclerView.ViewHolder(binding.root){
         fun bind(data: PortFolio, position: Int){
             binding.portfolioTitle.text = data.co_title
-            binding.portfolioUpdatedAt.text = data.updatedAt
+            binding.portfolioUpdatedAt.text = convertTimestampToDate(data.updatedAt)
             binding.chkDelete.isChecked = isChecked[position]
             binding.portfolio.isSelected = isChecked[position]
             changeEditMode(EDIT)
 
             binding.chkDelete.setOnClickListener {
                 isChecked[position] = binding.chkDelete.isChecked
+                if(binding.chkDelete.isChecked){
+                    deleteList.add(data.co_portfolioId)
+                }else{
+                    deleteList.remove(data.co_portfolioId)
+                }
                 deleteCounter()
                 notifyItemChanged(position)
             }
@@ -86,6 +104,11 @@ class PortfolioAdapter2(private val listData: ArrayList<PortFolio>, private val 
                 if (EDIT){
                     binding.chkDelete.isChecked = !binding.chkDelete.isChecked
                     isChecked[position] = binding.chkDelete.isChecked
+                    if(binding.chkDelete.isChecked){
+                        deleteList.add(data.co_portfolioId)
+                    }else{
+                        deleteList.remove(data.co_portfolioId)
+                    }
                     deleteCounter()
                     notifyItemChanged(position)
                 }else{
@@ -128,4 +151,12 @@ class PortfolioAdapter2(private val listData: ArrayList<PortFolio>, private val 
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
+    fun convertTimestampToDate(timestamp: Timestamp):String {
+        val sdf = SimpleDateFormat("yyyy.MM.dd")
+        val date = sdf.format(timestamp)
+        Log.d("TTT UNix Date -> ", sdf.format((System.currentTimeMillis())).toString())
+        Log.d("TTTT date -> ", date.toString())
+        return date.toString()
+    }
 }

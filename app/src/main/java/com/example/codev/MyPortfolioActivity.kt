@@ -41,6 +41,7 @@ class MyPortfolioActivity:AppCompatActivity() {
             adapter.setEdit(viewBinding.btnEditChk.isChecked)
             adapter.setDeleteCount(0)
             adapter.resetIsChecked()
+            adapter.resetDeleteList()
             adapter.notifyDataSetChanged()
             enableDelete(false)
         }
@@ -50,6 +51,7 @@ class MyPortfolioActivity:AppCompatActivity() {
             adapter.setEdit(viewBinding.btnEditChk.isChecked)
             adapter.setDeleteCount(0)
             adapter.resetIsChecked()
+            adapter.resetDeleteList()
             adapter.notifyDataSetChanged()
             enableDelete(false)
         }
@@ -58,12 +60,24 @@ class MyPortfolioActivity:AppCompatActivity() {
         viewBinding.btnDelete.setOnClickListener {
             Log.d("test", "삭제")
             Log.d("test",adapter.getIsChecked().toString())
+            Log.d("test",adapter.getDeleteList().size.toString())
+            for (i:Int in 0 until adapter.getDeleteList().size){
+                Log.d("test: 삭제 목록",adapter.getDeleteList()[i].toString())
+                deletePortfolio(this,adapter.getDeleteList()[i])
+            }
         }
 
         //isChecked 된 항목들 삭제기능 필요
         viewBinding.btnDeleteImg.setOnClickListener {
             Log.d("test", "삭제")
             Log.d("test",adapter.getIsChecked().toString())
+            Log.d("test",adapter.getDeleteList().size.toString())
+            for (i:Int in 0 until adapter.getDeleteList().size){
+                Log.d("test: 삭제 목록",adapter.getDeleteList()[i].toString())
+                deletePortfolio(this,adapter.getDeleteList()[i])
+            }
+            viewBinding.btnEditChk.isChecked = !viewBinding.btnEditChk.isChecked
+            viewBinding.btnDelete.isGone = !viewBinding.btnEditChk.isChecked
         }
     }
 
@@ -113,13 +127,36 @@ class MyPortfolioActivity:AppCompatActivity() {
                     200 -> {
                         response.body()?.let {
                             Log.d("test: 포트폴리오 불러오기 성공", "\n${it.toString()}")
-                            setAdapter(it.result.Complete)
+                            setAdapter(it.result.Portfolio)
                         }
                     }
                 }
             }
 
             override fun onFailure(call: Call<ResPortFolioList>, t: Throwable) {
+                Log.d("test", "[Fail]${t.toString()}")
+            }
+        })
+    }
+
+    private fun deletePortfolio(context: Context,coPortfolioId: Int){
+        RetrofitClient.service.deletePortFolio(coPortfolioId,AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).enqueue(object: Callback<ResDeletePortfolio>{
+            override fun onResponse(call: Call<ResDeletePortfolio>, response: Response<ResDeletePortfolio>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 포트폴리오 삭제 실패",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+                when(response.code()){
+                    200 -> {
+                        response.body()?.let {
+                            Log.d("test: 포트폴리오 삭제 성공", "\n${it}")
+                            loadData(context)
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResDeletePortfolio>, t: Throwable) {
                 Log.d("test", "[Fail]${t.toString()}")
             }
         })

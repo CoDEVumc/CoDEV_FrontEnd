@@ -1,11 +1,14 @@
 package com.example.codev
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.codev.databinding.RecylePortfolioHeader1Binding
 import com.example.codev.databinding.RecylePortfolioItem1Binding
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
 
 class PortfolioAdapter1(private val listData: ArrayList<PortFolio>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val HEADER = 0
@@ -49,7 +52,7 @@ class PortfolioAdapter1(private val listData: ArrayList<PortFolio>) : RecyclerVi
     inner class PortfolioItemViewHolder(private val binding: RecylePortfolioItem1Binding): RecyclerView.ViewHolder(binding.root){
         fun bind(data: PortFolio, position: Int){
             binding.portfolioTitle.text = data.co_title
-            binding.portfolioUpdatedAt.text = data.updatedAt
+            binding.portfolioUpdatedAt.text = convertTimestampToDate(data.updatedAt)
             binding.portfolio.setOnClickListener {
                 Log.d("test", "포트폴리오 클릭 $position")
             }
@@ -65,5 +68,13 @@ class PortfolioAdapter1(private val listData: ArrayList<PortFolio>) : RecyclerVi
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
+    fun convertTimestampToDate(timestamp: Timestamp):String {
+        val sdf = SimpleDateFormat("yyyy.MM.dd")
+        val date = sdf.format(timestamp)
+        Log.d("TTT UNix Date -> ", sdf.format((System.currentTimeMillis())).toString())
+        Log.d("TTTT date -> ", date.toString())
+        return date.toString()
+    }
 }
 

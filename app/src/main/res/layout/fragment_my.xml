@@ -18,26 +18,23 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar_my"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/profile_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:background="@android:color/transparent"
-            android:src="@drawable/my_profile"
             android:layout_marginStart="24dp"/>
 
         <TextView
-            android:id="@+id/nickname"
+            android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@+id/profile_img"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="12dp"
             android:layout_marginTop="25dp"
-            android:text="김민지 님"
             style="@style/Text.Heading4"
             android:textColor="@color/black_900"/>
 
@@ -49,7 +46,6 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="12dp"
             android:layout_marginTop="46dp"
-            android:text="abcde@email.com"
             style="@style/Text.Body6.SemiBold"
             android:textColor="@color/black_500"/>
         
