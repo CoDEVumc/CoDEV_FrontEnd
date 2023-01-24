@@ -2,6 +2,11 @@ package com.example.codev
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
+import android.widget.Toast
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 object UserSharedPreferences {
     private const val ACCOUNT : String = "account"
@@ -47,5 +52,35 @@ object UserSharedPreferences {
         val editor : SharedPreferences.Editor = prefs.edit()
         editor.clear()
         editor.commit()
+    }
+
+    fun refreshAccessToken(context: Context){
+        RetrofitClient.service.refreshToken(ReqRefreshToken(AndroidKeyStoreUtil.decrypt(getUserRefreshToken(context)))).enqueue(object:
+            Callback<ResRefreshToken> {
+            override fun onResponse(call: Call<ResRefreshToken>, response: Response<ResRefreshToken>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 토큰재발급 실패1",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    return
+                }else{
+                    when(response.code()){
+                        200->{
+                            // 토큰 암호화
+                            response.body()?.let {
+                                setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))
+                                Log.d("test: 토큰재발급 성공", "\n${it.toString()}")
+                                Log.d("test: 토큰재발급 성공",AndroidKeyStoreUtil.decrypt(getUserAccessToken(context)))
+                                Log.d("test: 토큰재발급 성공",AndroidKeyStoreUtil.decrypt(getUserRefreshToken(context)))
+                            }
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResRefreshToken>, t: Throwable) {
+                Log.d("test: 토큰재발급 실패2", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
