@@ -16,6 +16,7 @@ import java.util.*
 
 class MyPortfolioActivity:AppCompatActivity() {
     private lateinit var viewBinding: ActivityMyPortfolioBinding
+    private lateinit var adapter: PortfolioAdapter2
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,33 +32,49 @@ class MyPortfolioActivity:AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
-        loadData(this,0)
+        loadData(this)
         viewBinding.btnDelete.isGone = true
 
         viewBinding.btnEdit.setOnClickListener {
             viewBinding.btnEditChk.isChecked = !viewBinding.btnEditChk.isChecked
             viewBinding.btnDelete.isGone = !viewBinding.btnEditChk.isChecked
-            loadData(this,0)
+            adapter.setEdit(viewBinding.btnEditChk.isChecked)
+            adapter.setDeleteCount(0)
+            adapter.resetIsChecked()
+            adapter.notifyDataSetChanged()
             enableDelete(false)
         }
 
         viewBinding.btnEditChk.setOnClickListener {
             viewBinding.btnDelete.isGone = !viewBinding.btnEditChk.isChecked
-            loadData(this,0)
+            adapter.setEdit(viewBinding.btnEditChk.isChecked)
+            adapter.setDeleteCount(0)
+            adapter.resetIsChecked()
+            adapter.notifyDataSetChanged()
             enableDelete(false)
         }
 
         //isChecked 된 항목들 삭제기능 필요
         viewBinding.btnDelete.setOnClickListener {
             Log.d("test", "삭제")
-            //Log.d("test",adapter.getIsChecked().toString())
+            Log.d("test",adapter.getIsChecked().toString())
         }
 
         //isChecked 된 항목들 삭제기능 필요
         viewBinding.btnDeleteImg.setOnClickListener {
             Log.d("test", "삭제")
-            //Log.d("test",adapter.getIsChecked().toString())
+            Log.d("test",adapter.getIsChecked().toString())
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            android.R.id.home ->{
+                Toast.makeText(this, "뒤로가기", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun enableDelete(boolean: Boolean){
@@ -73,18 +90,8 @@ class MyPortfolioActivity:AppCompatActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
-            android.R.id.home ->{
-                Toast.makeText(this, "뒤로가기", Toast.LENGTH_SHORT).show()
-                finish()
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     private fun setAdapter(dataList: ArrayList<PortFolio>){
-        val adapter = PortfolioAdapter2(dataList){
+        adapter = PortfolioAdapter2(dataList){
             Log.d("test","리콜받음")
             if (it == 1){
                 enableDelete(true)
@@ -92,28 +99,24 @@ class MyPortfolioActivity:AppCompatActivity() {
                 enableDelete(false)
             }
         }
-        adapter.setEdit(viewBinding.btnEditChk.isChecked)
-        adapter.setDeleteCount(0)
-        adapter.resetIsChecked()
         viewBinding.recyclePortfolio.adapter = adapter
     }
 
-    private fun loadData(context: Context, int: Int){
-        RetrofitClient.service.getPortFolio(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),int).enqueue(object: Callback<ResPortFolioList> {
+    private fun loadData(context: Context){
+        RetrofitClient.service.getPortFolio(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).enqueue(object: Callback<ResPortFolioList> {
             override fun onResponse(call: Call<ResPortFolioList>, response: Response<ResPortFolioList>) {
                 if(response.isSuccessful.not()){
-                    Log.d("test",response.toString())
+                    Log.d("test: 포트폴리오 불러오기 실패",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
                 when(response.code()){
                     200 -> {
                         response.body()?.let {
-                            Log.d("test", "\n${it.toString()}")
-                            setAdapter(it.result)
+                            Log.d("test: 포트폴리오 불러오기 성공", "\n${it.toString()}")
+                            setAdapter(it.result.Complete)
                         }
                     }
                 }
-
             }
 
             override fun onFailure(call: Call<ResPortFolioList>, t: Throwable) {

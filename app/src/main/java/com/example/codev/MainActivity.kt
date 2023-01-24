@@ -29,6 +29,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
         AndroidKeyStoreUtil.init(this)
 
+        //UserSharedPreferences.clearUser(this)
+
         viewBinding.btnRegister.setOnClickListener {
             val intent = Intent(this,RegisterTosActivity::class.java)
             startActivity(intent)

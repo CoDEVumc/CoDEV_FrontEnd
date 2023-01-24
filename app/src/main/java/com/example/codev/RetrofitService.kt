@@ -17,7 +17,6 @@ interface RetrofitService {
     @POST("user/login")
     fun signUp(@Body params: ReqSignUp) : Call<ResSignUp>
 
-    @GET("my-page/portfolio/{coPortfolioId}")
-    fun getPortFolio(@Header("CoDev_Authorization") header: String,
-                     @Path("coPortfolioId") coPortfolioId: Int) : Call<ResPortFolioList>
+    @GET("my-page/portfolioList")
+    fun getPortFolio(@Header("CoDev_Authorization") header: String) : Call<ResPortFolioList>
 }

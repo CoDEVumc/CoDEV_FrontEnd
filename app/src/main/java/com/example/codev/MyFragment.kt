@@ -35,8 +35,7 @@ class MyFragment:Fragment() {
         viewBinding.toolbarMy.toolbar1.title = ""
         viewBinding.toolbarMy.toolbarImg.setImageResource(R.drawable.logo_my)
 
-
-        loadData(mainAppActivity,0)
+        loadData(mainAppActivity)
 
         viewBinding.btnMore.setOnClickListener {
             val intent = Intent(mainAppActivity, MyPortfolioActivity::class.java)
@@ -51,22 +50,21 @@ class MyFragment:Fragment() {
         viewBinding.recyclePortfolio.adapter = adapter
     }
 
-    private fun loadData(context: Context, int: Int){
-        RetrofitClient.service.getPortFolio(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),int).enqueue(object: Callback<ResPortFolioList>{
+    private fun loadData(context: Context){
+        RetrofitClient.service.getPortFolio(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).enqueue(object: Callback<ResPortFolioList>{
             override fun onResponse(call: Call<ResPortFolioList>, response: Response<ResPortFolioList>) {
                 if(response.isSuccessful.not()){
-                    Log.d("test",response.toString())
+                    Log.d("test: 포트폴리오 불러오기 실패",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
                 when(response.code()){
                     200 -> {
                         response.body()?.let {
-                            Log.d("test", "\n${it.toString()}")
-                            setAdapter(it.result)
+                            Log.d("test: 포트폴리오 불러오기 성공", "\n${it.toString()}")
+                            setAdapter(it.result.Complete)
                         }
                     }
                 }
-
             }
 
             override fun onFailure(call: Call<ResPortFolioList>, t: Throwable) {
