@@ -39,7 +39,10 @@ class RegisterBirthActivity: AppCompatActivity() {
             viewBinding.btnFemale.setTextColor(getColor(R.color.green_900))
         }
 
+        //이름과 생년월일 필수 체크
         viewBinding.btnRegisterNext.setOnClickListener {
+            reqSignUp.co_name = viewBinding.etName.text.toString()
+            reqSignUp.co_birth = viewBinding.etBrith.text.toString()
             val intent = Intent(this,RegisterEmailActivity::class.java)
             intent.putExtra("signUp",reqSignUp)
             startActivity(intent)

@@ -51,11 +51,16 @@ class RegisterEmailActivity:AppCompatActivity() {
         })
 
         viewBinding.btnRegisterNext.setOnClickListener {
-            sendEmailCode(this,viewBinding.etEmail.text.toString())
+            reqSignUp.co_email = viewBinding.etEmail.text.toString()
+            val intent = Intent(this,RegisterPwdActivity::class.java)
+            intent.putExtra("signUp",reqSignUp)
+            startActivity(intent)
+
+            //코드 인증 잠시 보류
+            //sendEmailCode(this,viewBinding.etEmail.text.toString())
         }
     }
 
-    // 이메일 형식 확인 필요
     private fun sendEmailCode(context: Context, email: String){
         RetrofitClient.service.getEmailCode(email).enqueue(object: Callback<ResGetEmailCode>{
             override fun onResponse(call: Call<ResGetEmailCode>, response: Response<ResGetEmailCode>) {

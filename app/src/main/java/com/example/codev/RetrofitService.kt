@@ -13,6 +13,9 @@ interface RetrofitService {
     @POST("user/login")
     fun signIn(@Body params: ReqSignIn) : Call<ResSignIn>
 
+    @POST("user/token/refresh")
+    fun refreshToken(@Body params: ReqRefreshToken) : Call<ResRefreshToken>
+
     @POST("user/join")
     fun signUp(@Body params: ReqSignUp) : Call<JsonObject>
 
