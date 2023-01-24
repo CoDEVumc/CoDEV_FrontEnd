@@ -36,10 +36,20 @@ class MyFragment:Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewBinding = FragmentMyBinding.inflate(layoutInflater)
-        viewBinding.toolbarMy.toolbar1.inflateMenu(R.menu.menu_toolbar_1)
+        viewBinding.toolbarMy.toolbar1.inflateMenu(R.menu.menu_toolbar_my)
         viewBinding.toolbarMy.toolbar1.title = ""
         viewBinding.toolbarMy.toolbarImg.setImageResource(R.drawable.logo_my)
-
+        viewBinding.toolbarMy.toolbar1.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menu_setting ->{
+                    Toast.makeText(mainAppActivity, "설정", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(mainAppActivity, MySettingActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                else -> false
+            }
+        }
         loadData(mainAppActivity)
 
         viewBinding.profile.setOnClickListener {
