@@ -79,4 +79,10 @@
         <item>백엔드</item>
         <item>기타</item>
     </string-array>
+
+    <string-array name="pf_level">
+        <item>새싹</item>
+        <item>가지</item>
+        <item>나무</item>
+    </string-array>
 </resources>

@@ -7,7 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.codev.addpage.AddNewProjectActivity
-import com.example.codev.addpage.AddNewStudyActivity
+//import com.example.codev.addpage.AddNewStudyActivity
 import com.example.codev.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
         viewBinding.btnGoogle.setOnClickListener {
 //            val intent = Intent(this,MainAppActivity::class.java) TODO: testing code
-            val intent = Intent(this, AddNewStudyActivity::class.java)
+//            val intent = Intent(this, AddNewStudyActivity::class.java)
             startActivity(intent)
 //            finish() TODO: Testing code
         }

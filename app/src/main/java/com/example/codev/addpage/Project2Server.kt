@@ -32,12 +32,11 @@ class Project2Server {
         return partList.toList()
     }
 
-    fun createImageMultiPartList(imagePathList: ArrayList<String>): List<MultipartBody.Part>{
+    fun createImageMultiPartList(imagePathList: ArrayList<File>): List<MultipartBody.Part>{
         var fileMultipartList = ArrayList<MultipartBody.Part>()
         for (i in imagePathList) {
-            var file = File(i)
-            var fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), file)
-            val filePart = MultipartBody.Part.createFormData("files", file.name, fileBody)
+            var fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), i)
+            val filePart = MultipartBody.Part.createFormData("files", i.name, fileBody)
             fileMultipartList.add(filePart)
         }
         return fileMultipartList.toList()

@@ -1,23 +1,23 @@
 package com.example.codev.addpage
 
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.codev.AndroidKeyStoreUtil
 import com.example.codev.R
 import com.example.codev.databinding.*
 import com.google.android.material.chip.Chip
+import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -25,9 +25,8 @@ import kotlin.collections.HashMap
 class AddNewStudyActivity : AppCompatActivity() {
 
     private lateinit var viewBinding: ActivityAddNewStudyBinding
-    private val pickImage = 100
-    private var imageUri: Uri? = null
-    private var imageList = ArrayList<String>()
+    private var imageFileList = ArrayList<File>()
+    private var tempFileList = java.util.ArrayList<String>()
     private var imageNum = 0
     var allStackList = HashMap<Int, ArrayList<AddListItem> >()
     var chipList = HashMap<AddListItem, View>()
@@ -134,8 +133,7 @@ class AddNewStudyActivity : AppCompatActivity() {
             if(imageNum == 5){
                 Toast.makeText(this, "사진은 최대 5개를 추가할 수 있습니다.", Toast.LENGTH_SHORT).show()
             }else {
-                val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-                startActivityForResult(gallery, pickImage)
+                getContent.launch("image/*")
             }
         }
 
@@ -277,8 +275,8 @@ class AddNewStudyActivity : AppCompatActivity() {
             val finalDes = viewBinding.addPageDes.text.toString()
             Log.d("finalDes", finalDes)
 
-            val finalImageList = imageList
-            Log.d("finalImagePaths", finalImageList.toString())
+            val finalImageList = imageFileList
+            Log.d("finalImageFiles", finalImageList.toString())
 
             val finalPartString: String
             //TODO: 스터디의 모집 분야 얘기가 끝나면 작성하자 -> 단일 선택인지, 필수 선택인지 등
@@ -336,7 +334,7 @@ class AddNewStudyActivity : AppCompatActivity() {
 //                val finalNumOfPartList = project2Server.createPartNumList(finalPeople, finalDesignPeople, finalFrontPeople, finalBackPeople, finalEtcPeople)
 //                Log.d("finalPartList", finalNumOfPartList.toString())
 
-                val imageMultiPartList = project2Server.createImageMultiPartList(imageList)
+                val imageMultiPartList = project2Server.createImageMultiPartList(imageFileList)
                 Log.d("finalImageMultiPartList", imageMultiPartList.toString())
 
 //                project2Server.postNewProject(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList)
@@ -350,6 +348,14 @@ class AddNewStudyActivity : AppCompatActivity() {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        for (i in imageFileList){
+            Log.d("delete", i.toString())
+            i.delete()
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
             android.R.id.home ->{
@@ -361,25 +367,28 @@ class AddNewStudyActivity : AppCompatActivity() {
     }
 
     //imageSection - Start
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && requestCode == pickImage) {
-            imageUri = data?.data
-            addImageView(imageList, imageUri)
+    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        if(uri != null){
+            addImageView(imageFileList, uri)
         }
     }
 
-    private fun addImageView(list: ArrayList<String>, imageUri: Uri?){
+    private fun addImageView(list: ArrayList<File>, imageUri: Uri){
         val imageBinding = ImageItemBinding.inflate(layoutInflater)
         imageBinding.selectedImage.setImageURI(imageUri)
-        val imagePath = addPageFunction.getRealPathFromURI(this, imageUri)
+        val imageInfo = addPageFunction.getInfoFromUri(this, imageUri)
+        val imageName = imageInfo[0]
+        val imageSize = imageInfo[1]
+        val imagePath = addPageFunction.createCopyAndReturnPath(this, imageUri, imageName)
+        val imageFile = File(imagePath)
         imageBinding.cancelButton.setOnClickListener {
             viewBinding.selectedImages.removeView(imageBinding.root)
-            list.remove(imagePath)
+            list.remove(imageFile)
+            imageFile.delete()
             viewBinding.addImageNum.text = String.format("%d/5", --imageNum)
         }
         viewBinding.selectedImages.addView(imageBinding.root)
-        list.add(imagePath)
+        list.add(imageFile)
         viewBinding.addImageNum.text = String.format("%d/5", ++imageNum)
     }
     //imageSection - End

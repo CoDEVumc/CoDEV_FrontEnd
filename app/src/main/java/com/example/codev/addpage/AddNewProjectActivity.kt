@@ -1,33 +1,46 @@
 package com.example.codev.addpage
 
+import android.Manifest
 import android.app.DatePickerDialog
-import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.codev.*
+import com.bumptech.glide.Glide
+import com.example.codev.AndroidKeyStoreUtil
+import com.example.codev.R
 import com.example.codev.databinding.ActivityAddNewProjectBinding
 import com.example.codev.databinding.DropdownListBinding
 import com.example.codev.databinding.ImageItemBinding
 import com.google.android.material.chip.Chip
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import java.io.File
+import java.net.URLDecoder
+import java.net.URLEncoder
 import java.util.*
 
 
 class AddNewProjectActivity : AppCompatActivity() {
 
     private lateinit var viewBinding: ActivityAddNewProjectBinding
-    private val pickImage = 100
-    private var imageUri: Uri? = null
-    private var imageList = ArrayList<String>()
+    private var imageFileList = ArrayList<File>()
     private var imageNum = 0
     var allStackList = HashMap<Int, ArrayList<AddListItem> >()
     var chipList = HashMap<AddListItem, View>()
@@ -35,11 +48,14 @@ class AddNewProjectActivity : AppCompatActivity() {
     var addPageFunction = AddPageFunction()
     var project2Server = Project2Server()
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityAddNewProjectBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         AndroidKeyStoreUtil.init(this)
+
+//        checkSelfPermission()
 
         //setViewData
         val extras = intent.extras
@@ -55,7 +71,23 @@ class AddNewProjectActivity : AppCompatActivity() {
 
         //=================================
 
-        //setImage
+//        //setImage
+//        val urlList = ArrayList<String>()
+//        urlList.add("http://semtle.catholic.ac.kr:8080/image?name=jpgSana20230123182825.jpg")
+//        urlList.add("http://semtle.catholic.ac.kr:8080/image?name=shot20230123182825.png")
+//        for(i in urlList){
+//            val imageBinding = ImageItemBinding.inflate(layoutInflater)
+//            Glide.with(this).asFile().load(i).submit().get()
+//            imageBinding.cancelButton.setOnClickListener {
+//                viewBinding.selectedImages.removeView(imageBinding.root)
+////                imageFileList.remove(nowFile)
+//                viewBinding.addImageNum.text = (--imageNum).toString() + "/5"
+//            }
+//            viewBinding.selectedImages.addView(imageBinding.root)
+//            imageFileList.add(nowFile)
+//            viewBinding.addImageNum.text = (++imageNum).toString() + "/5"
+//
+//        }
 
         //=================================
 
@@ -82,7 +114,7 @@ class AddNewProjectActivity : AppCompatActivity() {
         //가운데 정렬 글 작성 예시
         viewBinding.toolbarTitle.toolbarAddPageToolbar.title = ""
         viewBinding.toolbarTitle.toolbarText.text = getString(R.string.add_new_project)
-        viewBinding.toolbarTitle.toolbarText.setTypeface(Typeface.DEFAULT_BOLD) //Text bold
+        viewBinding.toolbarTitle.toolbarText.typeface = Typeface.DEFAULT_BOLD //Text bold
         viewBinding.toolbarTitle.toolbarText.textSize = 16f //TextSixe = 16pt
         viewBinding.toolbarTitle.toolbarText.setTextColor(getColor(R.color.black))//TextColor = 900black
 
@@ -119,6 +151,7 @@ class AddNewProjectActivity : AppCompatActivity() {
 
         //DesSection - Start
         var isDesOk = false
+//        viewBinding.addPageDes.inputType = TEXT
         viewBinding.addPageDes.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -143,8 +176,11 @@ class AddNewProjectActivity : AppCompatActivity() {
             if(imageNum == 5){
                 Toast.makeText(this, "사진은 최대 5개를 추가할 수 있습니다.", Toast.LENGTH_SHORT).show()
             }else {
-                val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-                startActivityForResult(gallery, pickImage)
+                getContent.launch(arrayOf(
+                    "image/png",
+                    "image/jpg",
+                    "image/jpeg"
+                ))
             }
         }
 
@@ -295,7 +331,17 @@ class AddNewProjectActivity : AppCompatActivity() {
             val finalDes = viewBinding.addPageDes.text.toString()
             Log.d("finalDes", finalDes)
 
-            val finalImageList = imageList
+            val finalDesUniCode = URLEncoder.encode(finalDes, "utf-8")
+            Log.d("finalDesUTF8", finalDesUniCode)
+
+            val finalUTF8ToString = URLDecoder.decode(finalDesUniCode, "utf-8")
+            Log.d("UTF-8 -> Text", finalUTF8ToString)
+
+
+
+
+
+            val finalImageList = imageFileList
             Log.d("finalImagePaths", finalImageList.toString())
 
             val finalPmPeople = viewBinding.pmSection.peopleNum.text.toString().toInt()
@@ -363,7 +409,7 @@ class AddNewProjectActivity : AppCompatActivity() {
                 val finalNumOfPartList = project2Server.createPartNumList(finalPmPeople, finalDesignPeople, finalFrontPeople, finalBackPeople, finalEtcPeople)
                 Log.d("finalPartList", finalNumOfPartList.toString())
 
-                val imageMultiPartList = project2Server.createImageMultiPartList(imageList)
+                val imageMultiPartList = project2Server.createImageMultiPartList(imageFileList)
                 Log.d("finalImageMultiPartList", imageMultiPartList.toString())
 
                 project2Server.postNewProject(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList)
@@ -379,6 +425,47 @@ class AddNewProjectActivity : AppCompatActivity() {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        for (i in imageFileList){
+            Log.d("delete", i.toString())
+            i.delete()
+        }
+    }
+
+    private fun checkSelfPermission() {
+        var temp = ""
+
+        //파일 읽기 권한 확인
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            temp += Manifest.permission.READ_EXTERNAL_STORAGE + " "
+        }
+
+//        //파일 쓰기 권한 확인
+//        if (ContextCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            temp += Manifest.permission.WRITE_EXTERNAL_STORAGE + " "
+//        }
+
+        if (!TextUtils.isEmpty(temp)) {
+            // 권한 요청
+            ActivityCompat.requestPermissions(
+                this,
+                temp.trim { it <= ' ' }.split(" ".toRegex()).dropLastWhile { it.isEmpty() }
+                    .toTypedArray(),
+                1)
+        } else {
+            Toast.makeText(this, "권한을 모두 허용", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
             android.R.id.home ->{
@@ -389,26 +476,28 @@ class AddNewProjectActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    //imageSection - Start
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && requestCode == pickImage) {
-            imageUri = data?.data
-            addImageView(imageList, imageUri)
+    private val getContent = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        if(uri != null){
+            addImageView(imageFileList, uri)
         }
     }
 
-    private fun addImageView(list: ArrayList<String>, imageUri: Uri?){
+    private fun addImageView(list: ArrayList<File>, imageUri: Uri){
         val imageBinding = ImageItemBinding.inflate(layoutInflater)
         imageBinding.selectedImage.setImageURI(imageUri)
-        val imagePath = addPageFunction.getRealPathFromURI(this, imageUri)
+        val imageInfo = addPageFunction.getInfoFromUri(this, imageUri)
+        val imageName = imageInfo[0]
+        val imageSize = imageInfo[1]
+        val imagePath = addPageFunction.createCopyAndReturnPath(this, imageUri, imageName)
+        val imageFile = File(imagePath)
         imageBinding.cancelButton.setOnClickListener {
             viewBinding.selectedImages.removeView(imageBinding.root)
-            list.remove(imagePath)
+            list.remove(imageFile)
+            imageFile.delete()
             viewBinding.addImageNum.text = (--imageNum).toString() + "/5"
         }
         viewBinding.selectedImages.addView(imageBinding.root)
-        list.add(imagePath)
+        list.add(imageFile)
         viewBinding.addImageNum.text = (++imageNum).toString() + "/5"
     }
     //imageSection - End

@@ -4,7 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.codev.addpage.AddNewProjectActivity
-import com.example.codev.addpage.AddNewStudyActivity
+//import com.example.codev.addpage.AddNewStudyActivity
+import com.example.codev.addpage.AddPfPageActivity
 import com.example.codev.databinding.ActivityMainAppBinding
 
 class MainAppActivity : AppCompatActivity() {

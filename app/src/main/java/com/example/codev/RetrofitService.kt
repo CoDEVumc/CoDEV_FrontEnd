@@ -19,7 +19,7 @@ interface RetrofitService {
     @POST("codev/project")
     @Multipart
     fun createNewProject(
-        @Header("Authorization") authToken: String
+        @Header("CoDev_Authorization") authToken: String
         ,@Part("project") project: RequestBody
         ,@Part files: List<MultipartBody.Part?>
     ): Call<ResCreateNewProject>
