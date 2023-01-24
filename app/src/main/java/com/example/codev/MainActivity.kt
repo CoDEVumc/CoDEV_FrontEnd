@@ -22,16 +22,6 @@ class MainActivity : AppCompatActivity() {
 
         // 자동 로그인 방지
         UserSharedPreferences.clearUser(this)
-        val temp = "12345678"
-        val temp2 = "12345678"
-        val temp_en = AndroidKeyStoreUtil.encrypt(temp)
-        val temp2_en = AndroidKeyStoreUtil.encrypt(temp2)
-        val temp_de = AndroidKeyStoreUtil.decrypt(temp_en)
-        val temp2_de = AndroidKeyStoreUtil.decrypt(temp2_en)
-        Log.d("test: 첫 번째 12345678 암호화",temp_en)
-        Log.d("test: 두 번째 12345678 암호화",temp2_en)
-        Log.d("test: 첫 번째 12345678 복호화",temp_de)
-        Log.d("test: 두 번째 12345678 복호화",temp2_de)
 
         viewBinding.btnRegister.setOnClickListener {
             val intent = Intent(this,RegisterTosActivity::class.java)
@@ -87,12 +77,41 @@ class MainActivity : AppCompatActivity() {
                 Log.d("test: 로그인 실패2", "[Fail]${t.toString()}")
                 Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
-
         })
     }
 
     // AutoLogin 값이 있다면 true, 없다면 false
     private fun checkAutoLogin(context: Context): Boolean {
         return !UserSharedPreferences.getAutoLogin(context).isNullOrBlank()
+    }
+
+    //토큰 재발급 코드
+    private fun refreshToken(context: Context){
+        RetrofitClient.service.refreshToken(ReqRefreshToken(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken(context)))).enqueue(object: Callback<ResRefreshToken>{
+            override fun onResponse(call: Call<ResRefreshToken>, response: Response<ResRefreshToken>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 토큰재발급 실패1",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    return
+                }else{
+                    when(response.code()){
+                        200->{
+                            // 토큰 암호화
+                            response.body()?.let {
+                                UserSharedPreferences.setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))
+                                Log.d("test: 토큰재발급 성공", "\n${it.toString()}")
+                                Log.d("test: 토큰재발급 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)))
+                                Log.d("test: 토큰재발급 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken(context)))
+                            }
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResRefreshToken>, t: Throwable) {
+                Log.d("test: 토큰재발급 실패2", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
