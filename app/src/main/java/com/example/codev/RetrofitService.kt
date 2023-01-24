@@ -1,22 +1,23 @@
 package com.example.codev
 
 
+import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.json.JSONObject
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.Header
-import retrofit2.http.Multipart
-import retrofit2.http.POST
-import retrofit2.http.Part
-import retrofit2.http.PartMap
+import retrofit2.http.*
 
 interface RetrofitService {
-    @POST("codev/user/login")
-    fun signUp(@Body params: ReqSignUp): Call<ResSignUp>
+    @POST("user/login")
+    fun signIn(@Body params: ReqSignIn) : Call<ResSignIn>
 
-    @POST("codev/project")
+    @POST("user/join")
+    fun signUp(@Body params: ReqSignUp) : Call<JsonObject>
+
+    @GET("user/code/mail")
+    fun getEmailCode(@Query("email") value1: String) : Call<ResGetEmailCode>
+
+    @POST("project")
     @Multipart
     fun createNewProject(
         @Header("CoDev_Authorization") authToken: String

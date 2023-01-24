@@ -23,6 +23,8 @@ class RegisterTosActivity:AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
+        val reqSignUp = ReqSignUp()
+
         viewBinding.tosRdo1.setOnClickListener {
             if (viewBinding.tosRdo1.isChecked){
                 viewBinding.tosRdo2.isChecked = true
@@ -36,31 +38,20 @@ class RegisterTosActivity:AppCompatActivity() {
         }
 
         viewBinding.tosRdo2.setOnClickListener {
-            if(viewBinding.tosRdo2.isChecked and viewBinding.tosRdo3.isChecked and viewBinding.tosRdo4.isChecked){
-                nextBtnEnable(true)
-            }else{
-                nextBtnEnable(false)
-            }
+            checkNextBtn()
         }
 
         viewBinding.tosRdo3.setOnClickListener {
-            if(viewBinding.tosRdo2.isChecked and viewBinding.tosRdo3.isChecked and viewBinding.tosRdo4.isChecked){
-                nextBtnEnable(true)
-            }else{
-                nextBtnEnable(false)
-            }
+            checkNextBtn()
         }
 
         viewBinding.tosRdo4.setOnClickListener {
-            if(viewBinding.tosRdo2.isChecked and viewBinding.tosRdo3.isChecked and viewBinding.tosRdo4.isChecked){
-                nextBtnEnable(true)
-            }else{
-                nextBtnEnable(false)
-            }
+            checkNextBtn()
         }
 
         viewBinding.btnRegisterNext.setOnClickListener {
             val intent = Intent(this,RegisterTypeActivity::class.java)
+            intent.putExtra("signUp",reqSignUp)
             startActivity(intent)
         }
     }
@@ -84,6 +75,14 @@ class RegisterTosActivity:AppCompatActivity() {
             }else{
                 viewBinding.btnRegisterNext.setTextColor(getColor(R.color.black_500))
             }
+        }
+    }
+
+    private fun checkNextBtn() {
+        if(viewBinding.tosRdo2.isChecked and viewBinding.tosRdo3.isChecked and viewBinding.tosRdo4.isChecked){
+            nextBtnEnable(true)
+        }else{
+            nextBtnEnable(false)
         }
     }
 

@@ -1,18 +1,18 @@
 package com.example.codev
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
-import com.example.codev.databinding.ActivityRegisterTypeBinding
+import androidx.appcompat.app.AppCompatActivity
+import com.example.codev.databinding.ActivityRegisterBirthBinding
 
-class RegisterTypeActivity:AppCompatActivity() {
-    private lateinit var viewBinding: ActivityRegisterTypeBinding
+class RegisterBirthActivity: AppCompatActivity() {
+    private lateinit var viewBinding: ActivityRegisterBirthBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewBinding = ActivityRegisterTypeBinding.inflate(layoutInflater)
+        viewBinding = ActivityRegisterBirthBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
         viewBinding.toolbarRegister.toolbar2.title = ""
@@ -25,22 +25,22 @@ class RegisterTypeActivity:AppCompatActivity() {
 
         val reqSignUp = intent.getSerializableExtra("signUp") as ReqSignUp
 
-        viewBinding.btnBusiness.setOnClickListener {
-            viewBinding.btnBusiness.isSelected = true
-            viewBinding.btnIndividual.isSelected = false
-            reqSignUp.role = "BUSINESS"
-            nextBtnEnable(true)
+        viewBinding.btnMale.setOnClickListener {
+            viewBinding.btnMale.isSelected = true
+            viewBinding.btnMale.setTextColor(getColor(R.color.green_900))
+            viewBinding.btnFemale.isSelected = false
+            viewBinding.btnFemale.setTextColor(getColor(R.color.black_500))
         }
 
-        viewBinding.btnIndividual.setOnClickListener {
-            viewBinding.btnBusiness.isSelected = false
-            viewBinding.btnIndividual.isSelected = true
-            reqSignUp.role = "USER"
-            nextBtnEnable(true)
+        viewBinding.btnFemale.setOnClickListener {
+            viewBinding.btnMale.isSelected = false
+            viewBinding.btnMale.setTextColor(getColor(R.color.black_500))
+            viewBinding.btnFemale.isSelected = true
+            viewBinding.btnFemale.setTextColor(getColor(R.color.green_900))
         }
 
         viewBinding.btnRegisterNext.setOnClickListener {
-            val intent = Intent(this,RegisterBirthActivity::class.java)
+            val intent = Intent(this,RegisterEmailActivity::class.java)
             intent.putExtra("signUp",reqSignUp)
             startActivity(intent)
         }
@@ -49,7 +49,7 @@ class RegisterTypeActivity:AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
             android.R.id.home ->{
-                Toast.makeText(this, "뒤로가기",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "뒤로가기", Toast.LENGTH_SHORT).show()
                 finish()
             }
         }
@@ -67,5 +67,4 @@ class RegisterTypeActivity:AppCompatActivity() {
             }
         }
     }
-
 }
