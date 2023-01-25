@@ -1,12 +1,15 @@
 package com.example.codev
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.codev.databinding.RecycleRecruitProjectBinding
 
-class AdapterProject(private val listData: ArrayList<PData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+import com.bumptech.glide.Glide
+
+class AdapterProject(private val listData: ArrayList<PData>, context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -32,6 +35,7 @@ class AdapterProject(private val listData: ArrayList<PData>) : RecyclerView.Adap
             binding.ptitle.text = data.co_title
 
             //프로젝트 디데이
+            //D-0 인거 0앞에 - 붙이기
             binding.pdday.text = "D" + data.co_deadLine
 
             //프로젝트 총 인원
@@ -41,16 +45,70 @@ class AdapterProject(private val listData: ArrayList<PData>) : RecyclerView.Adap
             binding.ppartlist.text = data.co_parts
 
             //하트 : co_heart : Boolean <-- true면 채운 하트 / false면 안채운 하트 && 하트 하트 자체는 Selector로 바꾸기
+            if (data.co_heart == false){
+                binding.pheart?.isSelected = binding.pheart?.isSelected!=true //state_selected
+                binding.pheart.setOnClickListener { //누르면 눌린 상태로 바꾸기
+                    binding.pheart?.isSelected = binding.pheart?.isSelected != true
+                }
+            }
+            else {
+                binding.pheart?.isSelected = binding.pheart?.isSelected!=false //state_selected
+                binding.pheart.setOnClickListener { //누르면 눌린 상태로 바꾸기
+                    binding.pheart?.isSelected = binding.pheart?.isSelected != false
+                }
+            }
 
-            //프로젝트 사용 스택
-//            val languages = data.co_languages
+
+
+            //프로젝트 사용 스택 이미지 5개
+//            val langs = data.co_languages
 //            val comma = ","
-//            val imageList = languages.split(comma)
-//            val img1 = imageList[0]
-//            val img2 = imageList[1]
-//            val img3 = imageList[2]
-//            val img4 = imageList[3]
-//            val img5 = imageList[4]
+//            val imgList = langs.split(comma)
+//            val defaultImage = R.drawable.profiles
+//            val img1 = imgList[0]
+//            val img2 = imgList[1]
+//            val img3 = imgList[2]
+//            val img4 = imgList[3]
+//            val img5 = imgList[4]
+
+
+            //.svg파일 띄우기
+//            Glide.with(context)
+//                .load(img1) //불러올 이미지 url
+//                .placeholder(defaultImage) //미리보기
+//                .error(defaultImage)
+//                .fallback(defaultImage)
+//                .circleCrop()
+//                .into(binding.pStackImg1)
+
+//            Glide.with(RecruitProjectFragment())
+//                .load(img2) //불러올 이미지 url
+//                .placeholder(defaultImage) //미리보기
+//                .error(defaultImage)
+//                .fallback(defaultImage)
+//                .circleCrop()
+//                .into(binding.pStackImg2)
+//            Glide.with(RecruitProjectFragment())
+//                .load(img3) //불러올 이미지 url
+//                .placeholder(defaultImage) //미리보기
+//                .error(defaultImage)
+//                .fallback(defaultImage)
+//                .circleCrop()
+//                .into(binding.pStackImg3)
+//            Glide.with(RecruitProjectFragment())
+//                .load(img4) //불러올 이미지 url
+//                .placeholder(defaultImage) //미리보기
+//                .error(defaultImage)
+//                .fallback(defaultImage)
+//                .circleCrop()
+//                .into(binding.pStackImg4)
+//            Glide.with(RecruitProjectFragment())
+//                .load(img5) //불러올 이미지 url
+//                .placeholder(defaultImage) //미리보기
+//                .error(defaultImage)
+//                .fallback(defaultImage)
+//                .circleCrop()
+//                .into(binding.pStackImg5)
 
 
 

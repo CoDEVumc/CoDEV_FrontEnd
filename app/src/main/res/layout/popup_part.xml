@@ -76,6 +76,7 @@
         android:layout_marginEnd="268dp"
         android:layout_marginBottom="355dp"
         android:text="분야"
+        android:textColor="@color/black_900"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.301"

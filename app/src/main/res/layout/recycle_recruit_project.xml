@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/projectItem"
-    android:layout_width="360dp"
+    android:layout_width="match_parent"
     android:layout_height="114dp">
 
     <LinearLayout
@@ -63,7 +63,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
-        android:layout_width="312dp"
+        android:layout_width="0dp"
         android:layout_height="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="18dp"
@@ -76,44 +76,44 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.013">
 
-        <TextView
-            android:id="@+id/ptitle"
-            android:layout_width="234dp"
-            android:layout_height="21dp"
-            android:layout_marginStart="44dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginEnd="34dp"
-            android:layout_marginBottom="2dp"
-            android:fontFamily="@font/pretendard_semibold"
-            android:text="프로젝트 제목"
-            android:textColor="#333333"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/pheart"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/pdday"
-            android:layout_width="38dp"
+            android:id="@+id/ptitle"
+            android:layout_width="0dp"
             android:layout_height="21dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="1dp"
-            android:layout_marginEnd="274dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="2dp"
+            android:ellipsize="end"
             android:fontFamily="@font/pretendard_semibold"
-            android:text="D-23"
-            android:textAppearance="@style/Text.Body3.SemiBold"
-            android:textColor="#09D687"
-            android:textSize="16sp"
+            android:maxLines="1"
+            android:text="프로젝트 제목"
+            android:textColor="#333333"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/pheart"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/pdday"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
-
+        <TextView
+            android:id="@+id/pdday"
+            android:layout_width="wrap_content"
+            android:layout_height="21dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="2dp"
+            android:fontFamily="@font/pretendard_semibold"
+            android:maxLength="5"
+            android:text="D-DAY"
+            android:textAppearance="@style/Text.Body3.SemiBold"
+            android:textColor="#09D687"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/pheart"
@@ -121,12 +121,11 @@
             android:layout_height="19dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="290dp"
             android:layout_marginTop="3dp"
             android:layout_marginBottom="2dp"
             android:background="@drawable/recruit_bookmark"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -135,7 +134,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        android:layout_width="312dp"
+        android:layout_width="0dp"
         android:layout_height="14dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="82dp"
@@ -150,27 +149,27 @@
 
         <TextView
             android:id="@+id/ppartlist"
-            android:layout_width="138dp"
+            android:layout_width="wrap_content"
             android:layout_height="13dp"
-            android:layout_marginEnd="148dp"
+            android:layout_marginEnd="200dp"
             android:layout_weight="1"
             android:text="파트"
             android:textSize="11sp"
-            app:layout_constraintEnd_toStartOf="@+id/profiles" />
+            app:layout_constraintEnd_toStartOf="@+id/profiles"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="1dp" />
 
         <TextView
             android:id="@+id/pNum"
-            android:layout_width="8dp"
+            android:layout_width="0dp"
             android:layout_height="14dp"
-            android:layout_marginStart="304dp"
             android:fontFamily="@font/pretendard_regular"
             android:text="n"
             android:textColor="#333333"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -180,13 +179,10 @@
             android:layout_height="14dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="286dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="4dp"
             android:background="@drawable/profiles"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/pNum"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 

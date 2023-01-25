@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
 import com.example.codev.databinding.FragmentRecruitProjectBinding
+import com.example.codev.databinding.RecycleRecruitProjectBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -64,7 +65,7 @@ class RecruitProjectFragment : Fragment() { //PopupMenu.OnMenuItemClickListener
                         //(parentFragment as RecruitFragment).r_project()
 
                         //Adatper 호출부분
-                        loadData_p(1)
+                        loadData_p(0)
                         viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_project)
                         true
                     }
@@ -100,13 +101,40 @@ class RecruitProjectFragment : Fragment() { //PopupMenu.OnMenuItemClickListener
             }
         }
 
-        loadData_p(1) //기본으로 PData 가져오기
+        //지역 버튼
+        viewBinding.loc.setOnClickListener {
+            val bottomSheetLoc = BottomSheetLoc()
+            bottomSheetLoc.show(childFragmentManager, bottomSheetLoc.tag)
+        }
+        viewBinding.filterLoc.setOnClickListener {
+            val bottomSheetLoc = BottomSheetLoc()
+            bottomSheetLoc.show(childFragmentManager, bottomSheetLoc.tag)
+        }
+
+        //분야 버튼
+        viewBinding.part.setOnClickListener {
+            val bottomSheetPart = BottomSheetPart()
+            bottomSheetPart.show(childFragmentManager, bottomSheetPart.tag)
+        }
+        viewBinding.filterPart.setOnClickListener {
+            val bottomSheetPart = BottomSheetPart()
+            bottomSheetPart.show(childFragmentManager, bottomSheetPart.tag)
+        }
+
+        //모집중 버튼
+        viewBinding.recruitingProjectBtn.setOnClickListener {
+            //state_selected false면 true로 바꾸기 / true면 false로 바꾸기
+            loadData_p_ing(0)
+        }
+
+        loadData_p(0) //기본으로 PData 가져오기
 
         return viewBinding.root
     }
 
 
 
+    //전체 프로젝트 조회
     private fun loadData_p(int: Int) {
         //Retrofit 사용하기
         //1. retrofit 객체 만들기 <-- RetrofitClinet에서 함
@@ -147,6 +175,7 @@ class RecruitProjectFragment : Fragment() { //PopupMenu.OnMenuItemClickListener
         })
 
     }
+    //전체 스터디 조회
     private fun loadData_s(int: Int) {
         //Retrofit 사용하기
         //1. retrofit 객체 만들기
@@ -183,16 +212,98 @@ class RecruitProjectFragment : Fragment() { //PopupMenu.OnMenuItemClickListener
 
     }
 
+    //모집중인 프로젝트만 조회
+    private fun loadData_p_ing(int: Int) {
+        //Retrofit 사용하기
+        //1. retrofit 객체 만들기 <-- RetrofitClinet에서 함
+
+        //2. api 호출하기
+        RetrofitClient.service.requestPDataList("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QG5hdmVyLmNvbSIsImlhdCI6MTY3NDU2MTk5NSwiZXhwIjoxNjc0NzM0Nzk1fQ.pcLLCZxM4_9MQoDqqn2KUvpuSBCm-B6yjbr2TLx1USw",
+            int,"","","","ING","").enqueue(object: Callback<ResGetProjectList>{
+            override fun onResponse(call: Call<ResGetProjectList>, response: Response<ResGetProjectList>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 조회실패",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }else{
+                    when(response.code()){
+                        200->{
+                            response.body()?.let {
+                                Log.d("test: 조회 성공", "\n${it.toString()}")
+                                Log.d("test: 조회 성공!!!!!!", "\n${it.result.success}")
+
+                                //dataList = it.result.success
+                                //Log.d("test: 조회 성공 dataList ", "\n${dataList}")
+
+                                //val adapter = ProjectAdapter(it.result.success)
+                                //viewBinding.listviewMain.adapter = adapter
+
+                                setAdapter_p(it.result.success) //projectAdapter
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResGetProjectList>, t: Throwable) {
+                Log.d("test: 조회실패2", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
+    }
+    //모집중인 스터디만 조회
+    private fun loadData_s_ing(int: Int) {
+        //Retrofit 사용하기
+        //1. retrofit 객체 만들기 <-- RetrofitClinet에서 함
+
+        //2. api 호출하기
+        RetrofitClient.service.requestPDataList("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QG5hdmVyLmNvbSIsImlhdCI6MTY3NDU2MTk5NSwiZXhwIjoxNjc0NzM0Nzk1fQ.pcLLCZxM4_9MQoDqqn2KUvpuSBCm-B6yjbr2TLx1USw",
+            int,"","","","ING","").enqueue(object: Callback<ResGetProjectList>{
+            override fun onResponse(call: Call<ResGetProjectList>, response: Response<ResGetProjectList>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 조회실패",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }else{
+                    when(response.code()){
+                        200->{
+                            response.body()?.let {
+                                Log.d("test: 조회 성공", "\n${it.toString()}")
+                                Log.d("test: 조회 성공!!!!!!", "\n${it.result.success}")
+
+                                //dataList = it.result.success
+                                //Log.d("test: 조회 성공 dataList ", "\n${dataList}")
+
+                                //val adapter = ProjectAdapter(it.result.success)
+                                //viewBinding.listviewMain.adapter = adapter
+
+                                setAdapter_p(it.result.success) //projectAdapter
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResGetProjectList>, t: Throwable) {
+                Log.d("test: 조회실패2", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
+    }
 
     private fun setAdapter_p(projectList: ArrayList<PData>){
         //val adapter = ProjectAdapter(it.result.success)
         //viewBinding.listviewMain.adapter = adapter
-        val adapter = AdapterProject(projectList)
+        val adapter = AdapterProject(projectList, mainAppActivity!!)
         viewBinding.listviewMain.adapter = adapter
     }
 
     private fun setAdapter_s(studyList: ArrayList<SData>){
-        val adapter = AdapterStudy(studyList)
+        val adapter = AdapterStudy(studyList, mainAppActivity!!)
         viewBinding.listviewMain.adapter = adapter
     }
 

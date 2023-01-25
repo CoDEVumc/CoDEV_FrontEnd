@@ -28,25 +28,25 @@
                 android:id="@+id/logo_swap2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="315dp"
                 android:layout_marginTop="108dp"
+                android:layout_marginEnd="24dp"
                 android:text="정렬"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <View
                 android:id="@+id/swap2"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:layout_marginStart="295dp"
                 android:layout_marginTop="108dp"
+                android:layout_marginEnd="4dp"
                 android:background="@drawable/swap"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/logo_swap2"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_fitering2"
-                android:layout_width="68dp"
+                android:layout_width="wrap_content"
                 android:layout_height="16dp"
                 android:layout_marginStart="44dp"
                 android:layout_marginTop="108dp"
@@ -58,24 +58,24 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <View
-                android:id="@+id/check_circle2"
+            <Button
+                android:id="@+id/recruiting_project_btn"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="108dp"
                 android:layout_marginEnd="320dp"
-                android:background="@drawable/check_circle"
+                android:background="@drawable/recruit_check"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="360dp"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="56dp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -83,14 +83,14 @@
                     android:id="@+id/part"
                     android:layout_width="25dp"
                     android:layout_height="18dp"
-                    android:layout_marginStart="77dp"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="11dp"
                     android:layout_marginBottom="11dp"
                     android:fontFamily="@font/pretendard_semibold"
                     android:text="분야"
                     android:textColor="#999999"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/filter_loc"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="1.0" />
 
@@ -99,7 +99,6 @@
                     android:id="@+id/loc"
                     android:layout_width="25dp"
                     android:layout_height="18dp"
-                    android:layout_marginStart="24dp"
                     android:layout_marginTop="11dp"
                     android:layout_marginBottom="11dp"
                     android:fontFamily="@font/pretendard_semibold"
@@ -115,15 +114,12 @@
                     android:layout_height="14dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginStart="51dp"
+                    android:layout_marginStart="2dp"
                     android:layout_marginTop="13dp"
-                    android:layout_marginEnd="295dp"
                     android:layout_marginBottom="13dp"
                     android:background="@drawable/down_small"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/loc"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <View
@@ -132,15 +128,12 @@
                     android:layout_height="14dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginStart="104dp"
+                    android:layout_marginStart="2dp"
                     android:layout_marginTop="13dp"
-                    android:layout_marginEnd="242dp"
                     android:layout_marginBottom="13dp"
                     android:background="@drawable/down_small"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/part"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="1.0" />
 
