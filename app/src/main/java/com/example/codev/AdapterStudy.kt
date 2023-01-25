@@ -31,11 +31,28 @@ class AdapterStudy(private val listData: ArrayList<SData>, context: Context) : R
     //Item의 ViewHolder 객체
     inner class StudyItemViewHolder(private val binding: RecycleRecruitStudyBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(data: SData, position: Int){
+            //스터디 제목
             binding.sTitle.text = data.co_title
-            binding.sDday.text = "D" + data.co_deadLine
+
+            //스터디 디데이
+            if(data.co_deadLine.toInt() == 0) {
+                binding.sDday.text = "D-Day"
+            }
+            else if(data.co_deadLine.toInt() < 0){ //기간 지남
+                val deadline = data.co_deadLine
+                val dday = deadline.substring(1,deadline.length)
+
+                binding.sDday.text = "D+" + dday
+            }
+            else {binding.sDday.text = "D-" + data.co_deadLine}
+
+            //스터디 총 인원
             binding.sNum.text = data.co_total.toString()
+
+            //스터디 분야
             binding.spartlist.text = data.co_parts
 
+            //스터디 스택
 //            val languages = data.co_languages
 //            val comma = ","
 //            val imageList = languages.split(comma)

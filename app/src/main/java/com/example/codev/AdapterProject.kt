@@ -35,8 +35,16 @@ class AdapterProject(private val listData: ArrayList<PData>, context: Context) :
             binding.ptitle.text = data.co_title
 
             //프로젝트 디데이
-            //D-0 인거 0앞에 - 붙이기
-            binding.pdday.text = "D" + data.co_deadLine
+            if(data.co_deadLine.toInt() == 0) {
+                binding.pdday.text = "D-Day"
+            }
+            else if(data.co_deadLine.toInt() < 0){ //기간 지남
+                val deadline = data.co_deadLine
+                val dday = deadline.substring(1,deadline.length)
+
+                binding.pdday.text = "D+" + dday
+            }
+            else {binding.pdday.text = "D-" + data.co_deadLine}
 
             //프로젝트 총 인원
             binding.pNum.text = data.co_total.toString()
