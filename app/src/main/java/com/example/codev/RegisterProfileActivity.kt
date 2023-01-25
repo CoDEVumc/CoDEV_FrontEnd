@@ -38,11 +38,12 @@ class RegisterProfileActivity:AppCompatActivity() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (viewBinding.etNickname.text.length < 8){
+                if (viewBinding.etNickname.text.length <= 8){
                     nextBtnEnable(true)
                 }else{
                     nextBtnEnable(false)
                 }
+                viewBinding.count.text = (8 - viewBinding.etNickname.text.length).toString()
             }
 
             override fun afterTextChanged(p0: Editable?) {

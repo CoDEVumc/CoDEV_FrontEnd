@@ -21,7 +21,7 @@
         style="@style/Text.Heading1"
         android:textColor="@color/black_900"/>
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:id="@+id/profile_img"
         android:layout_width="122dp"
         android:layout_height="122dp"
@@ -30,7 +30,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="110dp"
         android:background="@android:color/transparent"
-        android:src="@drawable/register_profile"/>
+        android:src="@drawable/register_profile"
+        app:tint="@color/opacity_black_900"
+        android:tintMode="src_atop"/>
 
     <ImageView
         android:id="@+id/btn_change"
@@ -57,7 +59,8 @@
         style="@style/Text.Body4.Medium"
         android:textColor="@color/black_900"
         android:background="@drawable/login_et"
-        android:inputType="text"/>
+        android:inputType="text"
+        android:maxLength="8"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_register_next"
@@ -74,5 +77,17 @@
         android:textColor="@color/black_500"
         android:background="@drawable/register_button"
         android:enabled="false"/>
+
+    <TextView
+        android:id="@+id/count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/et_nickname"
+        app:layout_constraintEnd_toEndOf="@+id/et_nickname"
+        app:layout_constraintBottom_toBottomOf="@+id/et_nickname"
+        android:layout_marginEnd="14dp"
+        android:text="8"
+        style="@style/Text.Body4.Medium"
+        android:textColor="@color/green_900"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
