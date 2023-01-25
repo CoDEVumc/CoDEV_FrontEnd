@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.codev.databinding.RecycleRecruitProjectBinding
 
-class ProjectAdapter(private val listData: ArrayList<PData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterProject(private val listData: ArrayList<PData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

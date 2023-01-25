@@ -5,18 +5,10 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.codev.databinding.FragmentRecruitBinding
 import com.example.codev.databinding.FragmentRecruitStudyBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -135,7 +127,7 @@ class RecruitStudyFragment : Fragment(){//, PopupMenu.OnMenuItemClickListener {
     private fun setAdapter(studyList: ArrayList<SData>){
         //val adapter = ProjectAdapter(it.result.success)
         //viewBinding.listviewMain.adapter = adapter
-        val adapter = StudyAdapter(studyList)
+        val adapter = AdapterStudy(studyList)
         viewBinding.listviewMain.adapter = adapter
     }
 

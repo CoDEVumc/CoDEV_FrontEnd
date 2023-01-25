@@ -115,7 +115,7 @@
 
 
 
-        <View
+        <Button
             android:id="@+id/pheart"
             android:layout_width="20dp"
             android:layout_height="19dp"

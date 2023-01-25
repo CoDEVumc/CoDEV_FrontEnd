@@ -5,21 +5,14 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.codev.databinding.FragmentRecruitProjectBinding
-import com.example.codev.databinding.RecycleRecruitProjectBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 class RecruitProjectFragment : Fragment() { //PopupMenu.OnMenuItemClickListener
@@ -194,12 +187,12 @@ class RecruitProjectFragment : Fragment() { //PopupMenu.OnMenuItemClickListener
     private fun setAdapter_p(projectList: ArrayList<PData>){
         //val adapter = ProjectAdapter(it.result.success)
         //viewBinding.listviewMain.adapter = adapter
-        val adapter = ProjectAdapter(projectList)
+        val adapter = AdapterProject(projectList)
         viewBinding.listviewMain.adapter = adapter
     }
 
     private fun setAdapter_s(studyList: ArrayList<SData>){
-        val adapter = StudyAdapter(studyList)
+        val adapter = AdapterStudy(studyList)
         viewBinding.listviewMain.adapter = adapter
     }
 

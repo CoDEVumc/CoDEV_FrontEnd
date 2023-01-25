@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 //import com.bumptech.glide.Glide
 import com.example.codev.databinding.RecycleRecruitStudyBinding
 
-class StudyAdapter(private val listData: ArrayList<SData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterStudy(private val listData: ArrayList<SData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
