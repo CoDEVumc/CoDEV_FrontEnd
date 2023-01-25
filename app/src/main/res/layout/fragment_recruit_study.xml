@@ -13,7 +13,7 @@
 
     <!-- Main Frame -->
     <FrameLayout
-        android:id="@+id/frameLayout2"
+        android:id="@+id/studyframe"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

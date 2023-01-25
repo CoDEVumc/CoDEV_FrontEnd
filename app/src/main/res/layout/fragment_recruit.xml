@@ -7,26 +7,16 @@
 
     <!-- Toolbar -->
 
-    <Button
-        android:id="@+id/btn_recruit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <include
+        android:id="@+id/toolbar_recruit"
+        layout="@layout/toolbar1" />
 
     <FrameLayout
-        android:id="@+id/frameLayout"
+        android:id="@+id/recruitframelayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     </FrameLayout>
     <!--frameLayout의 id 추가함-->
-
-    <include
-        android:id="@+id/toolbar_recruit"
-        layout="@layout/toolbar1"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

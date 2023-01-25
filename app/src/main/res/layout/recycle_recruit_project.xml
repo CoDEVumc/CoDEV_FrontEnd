@@ -113,6 +113,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
+
+
         <View
             android:id="@+id/pheart"
             android:layout_width="20dp"
@@ -122,7 +124,7 @@
             android:layout_marginStart="290dp"
             android:layout_marginTop="3dp"
             android:layout_marginBottom="2dp"
-            android:background="@drawable/filled_heart"
+            android:background="@drawable/recruit_bookmark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -152,7 +154,7 @@
             android:layout_height="13dp"
             android:layout_marginEnd="148dp"
             android:layout_weight="1"
-            android:text="TextView"
+            android:text="파트"
             android:textSize="11sp"
             app:layout_constraintEnd_toStartOf="@+id/profiles" />
 

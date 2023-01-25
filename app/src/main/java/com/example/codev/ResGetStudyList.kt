@@ -1,5 +1,7 @@
 package com.example.codev
 
+import java.util.*
+
 data class ResGetStudyList(
     val code : Int,
     val result: ResponseOfGetStudy

@@ -55,6 +55,21 @@ class RecruitStudyFragment : Fragment(){//, PopupMenu.OnMenuItemClickListener {
         viewBinding.toolbarRecruit.toolbar1.setOnClickListener {
             var popupMenu = PopupMenu(mainAppActivity, temp)
             popupMenu.inflate(R.menu.menu_recruit_study)
+            popupMenu.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.m_project -> {
+                        Toast.makeText(mainAppActivity, "프로젝트", Toast.LENGTH_SHORT).show()
+                        (parentFragment as RecruitFragment).r_project()
+                        true
+                    }
+                    R.id.m_study -> {
+                        Toast.makeText(mainAppActivity, "스터디", Toast.LENGTH_SHORT).show()
+                        (parentFragment as RecruitFragment).r_study()
+                        true
+                    }
+                    else -> false
+                }
+            }
             popupMenu.show()
         }
         viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_study)
@@ -78,13 +93,14 @@ class RecruitStudyFragment : Fragment(){//, PopupMenu.OnMenuItemClickListener {
         return viewBinding.root
     }
 
+
     private fun loadData() {
         //Retrofit 사용하기
         //1. retrofit 객체 만들기
 
         //2. api 호출하기
         RetrofitClient.service.requestSDataList("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QG5hdmVyLmNvbSIsImlhdCI6MTY3NDI5MzY3NSwiZXhwIjoxNjc0NDY2NDc1fQ.4-My4vE-zJRrHucOIY0_bWPJB3N6uhVZqChs8nztmZ4",
-            0,"","","","").enqueue(object: Callback<ResGetStudyList> {
+            0,"","","","","").enqueue(object: Callback<ResGetStudyList> {
             override fun onResponse(call: Call<ResGetStudyList>, response: Response<ResGetStudyList>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 조회실패",response.toString())
@@ -96,9 +112,9 @@ class RecruitStudyFragment : Fragment(){//, PopupMenu.OnMenuItemClickListener {
                                 Log.d("test: 조회 성공", "\n${it.toString()}")
                                 Log.d("test: 조회 성공!!!!!!", "\n${it.result.success}")
 
-                                dataList = it.result.success
+                                //dataList = it.result.success
 
-                                Log.d("test: 조회 성공 dataList ", "\n${dataList}")
+                                //Log.d("test: 조회 성공 dataList ", "\n${dataList}")
 
                             }
 
@@ -114,6 +130,13 @@ class RecruitStudyFragment : Fragment(){//, PopupMenu.OnMenuItemClickListener {
 
         })
 
+    }
+
+    private fun setAdapter(studyList: ArrayList<SData>){
+        //val adapter = ProjectAdapter(it.result.success)
+        //viewBinding.listviewMain.adapter = adapter
+        val adapter = StudyAdapter(studyList)
+        viewBinding.listviewMain.adapter = adapter
     }
 
 //
