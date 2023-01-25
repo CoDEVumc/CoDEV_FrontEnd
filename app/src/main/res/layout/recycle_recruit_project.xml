@@ -115,7 +115,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/pheart"
             android:layout_width="20dp"
             android:layout_height="19dp"
@@ -123,7 +123,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="3dp"
             android:layout_marginBottom="2dp"
-            android:background="@drawable/recruit_bookmark"
+            android:button="@drawable/recruit_bookmark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

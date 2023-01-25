@@ -52,7 +52,7 @@ class AdapterProject(private val listData: ArrayList<PData>, context: Context) :
             //프로젝트 모집 파트
             binding.ppartlist.text = data.co_parts
 
-            //하트 : co_heart : Boolean <-- true면 채운 하트 / false면 안채운 하트 && 하트 하트 자체는 Selector로 바꾸기
+            //북마크 : co_heart : Boolean <-- true면 채운 하트 / false면 안채운 하트 && 하트 하트 자체는 Selector로 바꾸기
             if (data.co_heart == false){
                 binding.pheart?.isSelected = binding.pheart?.isSelected!=true //state_selected
                 binding.pheart.setOnClickListener { //누르면 눌린 상태로 바꾸기
