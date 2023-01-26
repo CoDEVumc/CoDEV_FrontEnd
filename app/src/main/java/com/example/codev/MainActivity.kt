@@ -23,6 +23,10 @@ class MainActivity : AppCompatActivity() {
         // 자동 로그인 방지
         UserSharedPreferences.clearUser(this)
 
+        val gso: GoogleSignInOptions = Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+
         viewBinding.btnRegister.setOnClickListener {
             val intent = Intent(this,RegisterTosActivity::class.java)
             startActivity(intent)
@@ -36,12 +40,44 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // 자동로그인 확인
+        viewBinding.btnGoogle.setOnClickListener {
+            viewBinding.webView.loadUrl("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.email&access_type=offline&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=http://semtle.catholic.ac.kr:8080/codev/user/google/login&client_id=413806176191-5ubglt67tr3gdl7u45l4qmepgcj5h71k.apps.googleusercontent.com")
+//            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.email&access_type=offline&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=http://semtle.catholic.ac.kr:8080/codev/user/google/login&client_id=413806176191-5ubglt67tr3gdl7u45l4qmepgcj5h71k.apps.googleusercontent.com"))
+//            startActivity(intent)
+            //google(this)
+        }
+
+       // 자동로그인 확인
         if(checkAutoLogin(this)) {
             val intent = Intent(this,MainAppActivity::class.java)
             startActivity(intent)
             finish()
         }
+    }
+    private fun google(context: Context){
+        RetrofitClientForGoogle.service.googleSignIn().enqueue(object: Callback<ResGoogle>{
+            override fun onResponse(call: Call<ResGoogle>, response: Response<ResGoogle>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 로그인 실패1",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    return
+                }else{
+                    when(response.code()){
+                        200->{
+                            // 토큰 암호화
+                            response.body()?.let {
+                                Log.d("test: 로그인 성공", "\n${it.toString()}")
+                            }
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResGoogle>, t: Throwable) {
+                Log.d("test: 로그인 실패2", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun signIn(context:Context, email:String, pwd:String) {
