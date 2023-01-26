@@ -16,9 +16,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class RecruitProjectFragment : Fragment() { //PopupMenu.OnMenuItemClickListener
+class RecruitProjectFragment : Fragment() {
     private lateinit var viewBinding: FragmentRecruitProjectBinding
-    //private var dataList: ArrayList<PData> = ArrayList()
 
     private lateinit var mainAppActivity: Context
     override fun onAttach(context: Context) {
@@ -45,7 +44,6 @@ class RecruitProjectFragment : Fragment() { //PopupMenu.OnMenuItemClickListener
                 when (it.itemId) {
                     R.id.m_project -> {
                         Toast.makeText(mainAppActivity, "프로젝트", Toast.LENGTH_SHORT).show()
-                        //(parentFragment as RecruitFragment).r_project()
 
                         //Adatper 호출부분
                         loadData_p(0)
@@ -114,7 +112,7 @@ class RecruitProjectFragment : Fragment() { //PopupMenu.OnMenuItemClickListener
 
         return viewBinding.root
     }
-    
+
     //전체 프로젝트 조회
     private fun loadData_p(int: Int) {
         RetrofitClient.service.requestPDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
@@ -173,11 +171,7 @@ class RecruitProjectFragment : Fragment() { //PopupMenu.OnMenuItemClickListener
 
     //모집중인 프로젝트만 조회
     private fun loadData_p_ing(int: Int) {
-        //Retrofit 사용하기
-        //1. retrofit 객체 만들기 <-- RetrofitClinet에서 함
-
-        //2. api 호출하기
-        RetrofitClient.service.requestPDataList("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QG5hdmVyLmNvbSIsImlhdCI6MTY3NDU2MTk5NSwiZXhwIjoxNjc0NzM0Nzk1fQ.pcLLCZxM4_9MQoDqqn2KUvpuSBCm-B6yjbr2TLx1USw",
+        RetrofitClient.service.requestPDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
             int,"","","","ING","").enqueue(object: Callback<ResGetProjectList>{
             override fun onResponse(call: Call<ResGetProjectList>, response: Response<ResGetProjectList>) {
                 if(response.isSuccessful.not()){
@@ -189,13 +183,6 @@ class RecruitProjectFragment : Fragment() { //PopupMenu.OnMenuItemClickListener
                             response.body()?.let {
                                 Log.d("test: 조회 성공", "\n${it.toString()}")
                                 Log.d("test: 조회 성공!!!!!!", "\n${it.result.success}")
-
-                                //dataList = it.result.success
-                                //Log.d("test: 조회 성공 dataList ", "\n${dataList}")
-
-                                //val adapter = ProjectAdapter(it.result.success)
-                                //viewBinding.listviewMain.adapter = adapter
-
                                 setAdapter_p(it.result.success) //projectAdapter
                             }
 
@@ -214,11 +201,7 @@ class RecruitProjectFragment : Fragment() { //PopupMenu.OnMenuItemClickListener
     }
     //모집중인 스터디만 조회
     private fun loadData_s_ing(int: Int) {
-        //Retrofit 사용하기
-        //1. retrofit 객체 만들기 <-- RetrofitClinet에서 함
-
-        //2. api 호출하기
-        RetrofitClient.service.requestPDataList("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QG5hdmVyLmNvbSIsImlhdCI6MTY3NDU2MTk5NSwiZXhwIjoxNjc0NzM0Nzk1fQ.pcLLCZxM4_9MQoDqqn2KUvpuSBCm-B6yjbr2TLx1USw",
+        RetrofitClient.service.requestPDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
             int,"","","","ING","").enqueue(object: Callback<ResGetProjectList>{
             override fun onResponse(call: Call<ResGetProjectList>, response: Response<ResGetProjectList>) {
                 if(response.isSuccessful.not()){
@@ -230,16 +213,8 @@ class RecruitProjectFragment : Fragment() { //PopupMenu.OnMenuItemClickListener
                             response.body()?.let {
                                 Log.d("test: 조회 성공", "\n${it.toString()}")
                                 Log.d("test: 조회 성공!!!!!!", "\n${it.result.success}")
-
-                                //dataList = it.result.success
-                                //Log.d("test: 조회 성공 dataList ", "\n${dataList}")
-
-                                //val adapter = ProjectAdapter(it.result.success)
-                                //viewBinding.listviewMain.adapter = adapter
-
                                 setAdapter_p(it.result.success) //projectAdapter
                             }
-
                         }
                     }
                 }
@@ -249,20 +224,16 @@ class RecruitProjectFragment : Fragment() { //PopupMenu.OnMenuItemClickListener
                 Log.d("test: 조회실패2", "[Fail]${t.toString()}")
                 Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
-
         })
-
     }
 
     private fun setAdapter_p(projectList: ArrayList<PData>){
-        //val adapter = ProjectAdapter(it.result.success)
-        //viewBinding.listviewMain.adapter = adapter
-        val adapter = AdapterProject(projectList, mainAppActivity!!)
+        val adapter = AdapterProject(projectList, mainAppActivity)
         viewBinding.listviewMain.adapter = adapter
     }
 
     private fun setAdapter_s(studyList: ArrayList<SData>){
-        val adapter = AdapterStudy(studyList, mainAppActivity!!)
+        val adapter = AdapterStudy(studyList, mainAppActivity)
         viewBinding.listviewMain.adapter = adapter
     }
 
