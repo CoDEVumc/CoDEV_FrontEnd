@@ -41,4 +41,16 @@ interface RetrofitService {
         @Query("coSortingTag") coSortingTag: String
     ): Call<ResGetStudyList>
 
+    @PATCH("project/heart/{coProjectId}")
+    fun requestProjectBookMark(
+        @Header("CoDev_Authorization") header: String,
+        @Path("coProjectId") coProjectId: Int
+    ): Call<JsonObject>
+
+    @PATCH("project/study/{coStudyId}")
+    fun requestStudyBookMark(
+        @Header("CoDev_Authorization") header: String,
+        @Path("coStudyId") coStudyId: Int
+    ): Call<JsonObject>
+
 }

@@ -23,7 +23,7 @@ data class PData(
     val updatedAt: String,
     val status: Boolean,
     val co_heartCount: Int,
-    val co_heart: Boolean,
+    var co_heart: Boolean,
     val co_parts: String,
     val co_languages: String,
     val co_photos: String, //null <-- data type???

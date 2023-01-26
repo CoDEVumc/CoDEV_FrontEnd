@@ -4,12 +4,17 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.codev.databinding.RecycleRecruitProjectBinding
 
 import com.bumptech.glide.Glide
+import com.google.gson.JsonObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class AdapterProject(private val listData: ArrayList<PData>, context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterProject(private val listData: ArrayList<PData>, private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -53,19 +58,10 @@ class AdapterProject(private val listData: ArrayList<PData>, context: Context) :
             binding.ppartlist.text = data.co_parts
 
             //북마크 : co_heart : Boolean <-- true면 채운 하트 / false면 안채운 하트 && 하트 하트 자체는 Selector로 바꾸기
-            if (data.co_heart == false){
-                binding.pheart?.isSelected = binding.pheart?.isSelected!=true //state_selected
-                binding.pheart.setOnClickListener { //누르면 눌린 상태로 바꾸기
-                    binding.pheart?.isSelected = binding.pheart?.isSelected != true
-
-                    notifyDataSetChanged() //
-                }
-            }
-            else {
-                binding.pheart?.isSelected = binding.pheart?.isSelected!=false //state_selected
-                binding.pheart.setOnClickListener { //누르면 눌린 상태로 바꾸기
-                    binding.pheart?.isSelected = binding.pheart?.isSelected != false
-                }
+            binding.pheart.isChecked = listData[position].co_heart
+            binding.pheart.setOnClickListener {
+                listData[position].co_heart = binding.pheart.isChecked
+                request(data.co_projectId)
             }
 
 
@@ -123,5 +119,33 @@ class AdapterProject(private val listData: ArrayList<PData>, context: Context) :
 
 
         }
+    }
+
+
+    private fun request(co_projectId: Int){
+        RetrofitClient.service.requestProjectBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),co_projectId).enqueue(object:Callback<JsonObject>{
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 조회실패",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }else{
+                    when(response.code()){
+                        200->{
+                            response.body()?.let {
+                                Log.d("test: 조회 성공", "\n${it.toString()}")
+
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                Log.d("test: 조회실패2", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 }
