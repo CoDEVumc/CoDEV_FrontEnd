@@ -4,16 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.codev.databinding.ActivityRegisterCodeBinding
+import kotlin.properties.Delegates
 
 
 class RegisterCodeActivity:AppCompatActivity() {
     private lateinit var viewBinding: ActivityRegisterCodeBinding
+    private var code by Delegates.notNull<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +30,10 @@ class RegisterCodeActivity:AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.left2)
         }
+
+        val reqSignUp = intent.getSerializableExtra("signUp") as ReqSignUp
+        code = intent.getStringExtra("code")?.toInt()!!
+        Log.d("test",code.toString())
 
         viewBinding.etCode1.addTextChangedListener(object: TextWatcher{
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -102,9 +109,19 @@ class RegisterCodeActivity:AppCompatActivity() {
 
         // 인증 코드 검증 필요
         viewBinding.btnRegisterNext.setOnClickListener {
-            val intent = Intent(this,RegisterPwdActivity::class.java)
-            startActivity(intent)
+            if (checkCode()){
+                val intent = Intent(this,RegisterPwdActivity::class.java)
+                intent.putExtra("signUp",reqSignUp)
+                startActivity(intent)
+            }else{
+                Toast.makeText(this,"입력하신 코드가 알맞지 않습니다.",Toast.LENGTH_SHORT).show()
+            }
         }
+    }
+
+    private fun checkCode():Boolean{
+        val insertCode:Int = (viewBinding.etCode1.text.toString() + viewBinding.etCode2.text.toString() + viewBinding.etCode3.text.toString() + viewBinding.etCode4.text.toString() + viewBinding.etCode5.text.toString() + viewBinding.etCode6.text.toString()).toInt()
+        return code == insertCode
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -23,6 +23,8 @@ class RegisterBirthActivity: AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
+        val reqSignUp = intent.getSerializableExtra("signUp") as ReqSignUp
+
         viewBinding.btnMale.setOnClickListener {
             viewBinding.btnMale.isSelected = true
             viewBinding.btnMale.setTextColor(getColor(R.color.green_900))
@@ -37,8 +39,12 @@ class RegisterBirthActivity: AppCompatActivity() {
             viewBinding.btnFemale.setTextColor(getColor(R.color.green_900))
         }
 
+        //이름과 생년월일 필수 체크
         viewBinding.btnRegisterNext.setOnClickListener {
+            reqSignUp.co_name = viewBinding.etName.text.toString()
+            reqSignUp.co_birth = viewBinding.etBrith.text.toString()
             val intent = Intent(this,RegisterEmailActivity::class.java)
+            intent.putExtra("signUp",reqSignUp)
             startActivity(intent)
         }
     }

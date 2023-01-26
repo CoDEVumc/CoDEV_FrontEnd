@@ -57,6 +57,8 @@ class AdapterProject(private val listData: ArrayList<PData>, context: Context) :
                 binding.pheart?.isSelected = binding.pheart?.isSelected!=true //state_selected
                 binding.pheart.setOnClickListener { //누르면 눌린 상태로 바꾸기
                     binding.pheart?.isSelected = binding.pheart?.isSelected != true
+
+                    notifyDataSetChanged() //
                 }
             }
             else {

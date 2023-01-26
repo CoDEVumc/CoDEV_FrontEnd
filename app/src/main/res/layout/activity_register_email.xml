@@ -62,6 +62,7 @@
         android:layout_marginTop="508dp"
         style="@style/Text.Body4.SemiBold"
         android:textColor="@color/black_500"
-        android:background="@drawable/register_button"/>
+        android:background="@drawable/register_button"
+        android:enabled="false"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

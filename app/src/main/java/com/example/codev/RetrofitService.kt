@@ -1,11 +1,27 @@
 package com.example.codev
 
+import com.google.gson.JsonObject
 import retrofit2.Call
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 import retrofit2.http.*
 
 interface RetrofitService {
+
     @POST("user/login")
-    fun signUp(@Body params: ReqSignUp): Call<ResSignUp>
+    fun signIn(@Body params: ReqSignIn): Call<ResSignIn>
+
+    @POST("user/token/refresh")
+    fun refreshToken(@Body params: ReqRefreshToken): Call<ResRefreshToken>
+
+    @POST("user/join")
+    fun signUp(@Body params: ReqSignUp): Call<JsonObject>
+
+    @GET("user/code/mail")
+    fun getEmailCode(@Query("email") value1: String): Call<ResGetEmailCode>
 
     @GET("project/projects/{page}")
     fun requestPDataList(
@@ -24,6 +40,5 @@ interface RetrofitService {
         @Query("coProcessTag") coProcessTag: String,
         @Query("coSortingTag") coSortingTag: String
     ): Call<ResGetStudyList>
-
 
 }
