@@ -127,7 +127,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+            tools:ignore="TouchTargetSizeCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -151,6 +152,7 @@
             android:id="@+id/ppartlist"
             android:layout_width="wrap_content"
             android:layout_height="13dp"
+            android:layout_marginTop="1dp"
             android:layout_marginEnd="200dp"
             android:layout_weight="1"
             android:text="파트"
@@ -158,7 +160,7 @@
             app:layout_constraintEnd_toStartOf="@+id/profiles"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="1dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/pNum"

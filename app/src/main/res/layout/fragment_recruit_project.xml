@@ -52,7 +52,7 @@
                 android:layout_marginTop="108dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:lineSpacingExtra="12sp"
-                android:text="모집 중만 보기"
+                android:text="(프)모집 중만 보기"
                 android:textColor="#666666"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -69,7 +69,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"

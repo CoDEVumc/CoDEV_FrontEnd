@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import com.example.codev.databinding.FragmentRecruitProjectBinding
 import com.example.codev.databinding.RecycleRecruitProjectBinding
 import retrofit2.Call
@@ -18,6 +19,9 @@ import retrofit2.Response
 
 class RecruitProjectFragment : Fragment() {
     private lateinit var viewBinding: FragmentRecruitProjectBinding
+
+    //여기
+    private lateinit var dataList : ArrayList<ResponseOfGetProject>
 
     private lateinit var mainAppActivity: Context
     override fun onAttach(context: Context) {
@@ -36,6 +40,30 @@ class RecruitProjectFragment : Fragment() {
         var temp = viewBinding.toolbarRecruit.toolbar1
         viewBinding.toolbarRecruit.toolbar1.inflateMenu(R.menu.menu_toolbar_2)
         viewBinding.toolbarRecruit.toolbar1.title = ""
+
+
+        loadData_p(0) //기본으로 0page PData 가져오기
+        var page: Int = 0
+
+        //페이징 처리 부분
+        viewBinding.listviewMain.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                //**********************
+                if (!viewBinding.listviewMain.canScrollVertically(1)) {
+                    //스크롤 할 수 있으면 true, 못하면 false 반환
+                    Log.d("SCROLL", "last Position...")
+
+//                    page += 1
+//                    while (){ //success != [] 이면
+//                        loadData_p(page)
+//                    }
+
+                }
+                //**********************
+            }
+        })
+
 
         viewBinding.toolbarRecruit.toolbarImg.setOnClickListener {
             var popupMenu = PopupMenu(mainAppActivity, temp)
@@ -56,6 +84,8 @@ class RecruitProjectFragment : Fragment() {
 
                         loadData_s(0)
                         viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_study)
+
+                        //모집중 버튼이 (스)로 바껴야됨
 
                         true
                     }
@@ -102,13 +132,22 @@ class RecruitProjectFragment : Fragment() {
             bottomSheetPart.show(childFragmentManager, bottomSheetPart.tag)
         }
 
-        //모집중 버튼
+        //(프로젝트에서)모집중만 보기 버튼
+        var chk : Boolean = false //처음엔 버튼 안눌림
         viewBinding.recruitingProjectBtn.setOnClickListener {
             //state_selected false면 true로 바꾸기 / true면 false로 바꾸기
-            loadData_p_ing(0)
+            chk = viewBinding.recruitingProjectBtn.isChecked
+            if(chk == true) {
+                loadData_p_ing(0)
+            }
+            else{
+                loadData_p(0)
+            }
+            Log.d("test: RPF - 모집중인 플젝 조회실패",it.toString())
         }
 
-        loadData_p(0) //기본으로 PData 가져오기
+
+
 
         return viewBinding.root
     }
@@ -125,8 +164,9 @@ class RecruitProjectFragment : Fragment() {
                     when(response.code()){
                         200->{
                             response.body()?.let {
-                                Log.d("test: 조회 성공", "\n${it.toString()}")
-                                Log.d("test: 조회 성공!!!!!!", "\n${it.result.success}")
+                                Log.d("test: 플젝 전체 조회 성공! ", "\n${it.toString()}")
+
+                                Log.d("test: 플젝 전체 데이터 : ", "\n${it.result.success}")
                                 setAdapter_p(it.result.success) //projectAdapter
                             }
 
@@ -136,7 +176,7 @@ class RecruitProjectFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<ResGetProjectList>, t: Throwable) {
-                Log.d("test: 조회실패2", "[Fail]${t.toString()}")
+                Log.d("test: 조회실패 - RPF > loadData_p(플젝 전체조회): ", "[Fail]${t.toString()}")
                 Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
         })
@@ -153,8 +193,8 @@ class RecruitProjectFragment : Fragment() {
                     when(response.code()){
                         200->{
                             response.body()?.let {
-                                Log.d("test: 조회 성공", "\n${it.toString()}")
-                                Log.d("test: 조회 성공!!!!!!", "\n${it.result.success}")
+                                Log.d("test: 스터디 전체 조회 성공! ", "\n${it.toString()}")
+                                Log.d("test: 스터디 전체 데이터 :", "\n${it.result.success}")
                                 setAdapter_s(it.result.success) //projectAdapter
                             }
                         }
@@ -163,7 +203,7 @@ class RecruitProjectFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<ResGetStudyList>, t: Throwable) {
-                Log.d("test: 조회실패2", "[Fail]${t.toString()}")
+                Log.d("test: 조회실패 - RPF > loadData_s(스터디 전체조회)", "[Fail]${t.toString()}")
                 Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
         })
@@ -181,8 +221,8 @@ class RecruitProjectFragment : Fragment() {
                     when(response.code()){
                         200->{
                             response.body()?.let {
-                                Log.d("test: 조회 성공", "\n${it.toString()}")
-                                Log.d("test: 조회 성공!!!!!!", "\n${it.result.success}")
+                                Log.d("test: 모집중인 플젝 조회 성공! ", "\n${it.toString()}")
+                                Log.d("test: 모집중 플젝 데이터 : ", "\n${it.result.success}")
                                 setAdapter_p(it.result.success) //projectAdapter
                             }
 
@@ -192,7 +232,7 @@ class RecruitProjectFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<ResGetProjectList>, t: Throwable) {
-                Log.d("test: 조회실패2", "[Fail]${t.toString()}")
+                Log.d("test: 조회실패 - RPF > loadData_p_ing(모집중 플젝조회) : ", "[Fail]${t.toString()}")
                 Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
 
@@ -211,8 +251,8 @@ class RecruitProjectFragment : Fragment() {
                     when(response.code()){
                         200->{
                             response.body()?.let {
-                                Log.d("test: 조회 성공", "\n${it.toString()}")
-                                Log.d("test: 조회 성공!!!!!!", "\n${it.result.success}")
+                                Log.d("test: 모집중인 스터디 조회 성공! ", "\n${it.toString()}")
+                                Log.d("test: 모집중 스터디 데이터 : ", "\n${it.result.success}")
                                 setAdapter_p(it.result.success) //projectAdapter
                             }
                         }
@@ -221,7 +261,7 @@ class RecruitProjectFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<ResGetProjectList>, t: Throwable) {
-                Log.d("test: 조회실패2", "[Fail]${t.toString()}")
+                Log.d("test: 조회실패 - RPF > loadData_s_ing(모집중 스터디 조회): ", "[Fail]${t.toString()}")
                 Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
         })

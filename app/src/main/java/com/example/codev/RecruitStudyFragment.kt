@@ -17,10 +17,9 @@ import retrofit2.Response
 
 class RecruitStudyFragment : Fragment(){//, PopupMenu.OnMenuItemClickListener {
     private lateinit var viewBinding: FragmentRecruitStudyBinding
-    private var dataList: ArrayList<SData> = ArrayList()
 
-    var mainAppActivity: MainAppActivity? = null
 
+    private lateinit var mainAppActivity: Context
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if(context is MainAppActivity){
@@ -29,12 +28,6 @@ class RecruitStudyFragment : Fragment(){//, PopupMenu.OnMenuItemClickListener {
     }
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewBinding = FragmentRecruitStudyBinding.inflate(layoutInflater)
-
-
-    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,6 +37,12 @@ class RecruitStudyFragment : Fragment(){//, PopupMenu.OnMenuItemClickListener {
         var temp = viewBinding.toolbarRecruit.toolbar1
         viewBinding.toolbarRecruit.toolbar1.inflateMenu(R.menu.menu_recruit_study)
         viewBinding.toolbarRecruit.toolbar1.title = ""
+
+
+        loadData_s(0) //기본적으로 SData 가져오기
+
+
+
         viewBinding.toolbarRecruit.toolbar1.setOnClickListener {
             var popupMenu = PopupMenu(mainAppActivity, temp)
             popupMenu.inflate(R.menu.menu_recruit_study)
@@ -52,11 +51,17 @@ class RecruitStudyFragment : Fragment(){//, PopupMenu.OnMenuItemClickListener {
                     R.id.m_project -> {
                         Toast.makeText(mainAppActivity, "프로젝트", Toast.LENGTH_SHORT).show()
                         //(parentFragment as RecruitFragment).r_project()
+
+                        loadData_p(0)
+                        viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_project)
                         true
                     }
                     R.id.m_study -> {
                         Toast.makeText(mainAppActivity, "스터디", Toast.LENGTH_SHORT).show()
                         //(parentFragment as RecruitFragment).r_study()
+
+                        loadData_s(0)
+                        viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_study)
                         true
                     }
                     else -> false
@@ -80,25 +85,30 @@ class RecruitStudyFragment : Fragment(){//, PopupMenu.OnMenuItemClickListener {
             }
         }
 
-        //모집중 버튼
+
+
+        var chk : Boolean = false //처음엔 버튼 안눌림
+        //(스터디에서)모집중만 보기 버튼
         viewBinding.recruitingStudyBtn.setOnClickListener {
-            //
-            loadData_s_ing(0)
+            //state_selected false면 true로 바꾸기 / true면 false로 바꾸기
+            chk = viewBinding.recruitingStudyBtn.isChecked
+            if(chk == true) {
+                loadData_s_ing(0)
+            }
+            else{
+                loadData_s(0)
+            }
+            Log.d("test: RSF - 모집중인 스터디 조회실패",it.toString())
         }
 
-        loadData()
 
         return viewBinding.root
     }
 
-    //모집중인 스터디만 조회
-    private fun loadData_s_ing(int: Int) {
-        //Retrofit 사용하기
-        //1. retrofit 객체 만들기 <-- RetrofitClinet에서 함
-
-        //2. api 호출하기
-        RetrofitClient.service.requestPDataList("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QG5hdmVyLmNvbSIsImlhdCI6MTY3NDU2MTk5NSwiZXhwIjoxNjc0NzM0Nzk1fQ.pcLLCZxM4_9MQoDqqn2KUvpuSBCm-B6yjbr2TLx1USw",
-            int,"","","","ING","").enqueue(object: Callback<ResGetProjectList>{
+    //전체 프로젝트 조회
+    private fun loadData_p(int: Int) {
+        RetrofitClient.service.requestPDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
+            int,"","","","","").enqueue(object: Callback<ResGetProjectList>{
             override fun onResponse(call: Call<ResGetProjectList>, response: Response<ResGetProjectList>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 조회실패",response.toString())
@@ -107,15 +117,8 @@ class RecruitStudyFragment : Fragment(){//, PopupMenu.OnMenuItemClickListener {
                     when(response.code()){
                         200->{
                             response.body()?.let {
-                                Log.d("test: 조회 성공", "\n${it.toString()}")
-                                Log.d("test: 조회 성공!!!!!!", "\n${it.result.success}")
-
-                                //dataList = it.result.success
-                                //Log.d("test: 조회 성공 dataList ", "\n${dataList}")
-
-                                //val adapter = ProjectAdapter(it.result.success)
-                                //viewBinding.listviewMain.adapter = adapter
-
+                                Log.d("test: 플젝 전체 조회 성공! ", "\n${it.toString()}")
+                                Log.d("test: 플젝 전체 데이터 : ", "\n${it.result.success}")
                                 setAdapter_p(it.result.success) //projectAdapter
                             }
 
@@ -125,26 +128,15 @@ class RecruitStudyFragment : Fragment(){//, PopupMenu.OnMenuItemClickListener {
             }
 
             override fun onFailure(call: Call<ResGetProjectList>, t: Throwable) {
-                Log.d("test: 조회실패2", "[Fail]${t.toString()}")
+                Log.d("test: 조회실패 - RPF > loadData_p(플젝 전체조회): ", "[Fail]${t.toString()}")
                 Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
-
         })
-
     }
-    private fun setAdapter_p(projectList: ArrayList<PData>){
-        //val adapter = ProjectAdapter(it.result.success)
-        //viewBinding.listviewMain.adapter = adapter
-        val adapter = AdapterProject(projectList, mainAppActivity!!)
-        viewBinding.listviewMain.adapter = adapter
-    }
-    private fun loadData() {
-        //Retrofit 사용하기
-        //1. retrofit 객체 만들기
-
-        //2. api 호출하기
-        RetrofitClient.service.requestSDataList("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QG5hdmVyLmNvbSIsImlhdCI6MTY3NDI5MzY3NSwiZXhwIjoxNjc0NDY2NDc1fQ.4-My4vE-zJRrHucOIY0_bWPJB3N6uhVZqChs8nztmZ4",
-            0,"","","","","").enqueue(object: Callback<ResGetStudyList> {
+    //전체 스터디 조회
+    private fun loadData_s(int: Int) {
+        RetrofitClient.service.requestSDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
+            int,"","","","","").enqueue(object: Callback<ResGetStudyList> {
             override fun onResponse(call: Call<ResGetStudyList>, response: Response<ResGetStudyList>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 조회실패",response.toString())
@@ -153,13 +145,37 @@ class RecruitStudyFragment : Fragment(){//, PopupMenu.OnMenuItemClickListener {
                     when(response.code()){
                         200->{
                             response.body()?.let {
-                                Log.d("test: 조회 성공", "\n${it.toString()}")
-                                Log.d("test: 조회 성공!!!!!!", "\n${it.result.success}")
+                                Log.d("test: 스터디 전체 조회 성공! ", "\n${it.toString()}")
+                                Log.d("test: 스터디 전체 데이터 :", "\n${it.result.success}")
+                                setAdapter_s(it.result.success) //projectAdapter
+                            }
+                        }
+                    }
+                }
+            }
 
-                                //dataList = it.result.success
+            override fun onFailure(call: Call<ResGetStudyList>, t: Throwable) {
+                Log.d("test: 조회실패 - RPF > loadData_s(스터디 전체조회)", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
 
-                                //Log.d("test: 조회 성공 dataList ", "\n${dataList}")
-
+    //모집중인 프로젝트만 조회
+    private fun loadData_p_ing(int: Int) {
+        RetrofitClient.service.requestPDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
+            int,"","","","ING","").enqueue(object: Callback<ResGetProjectList>{
+            override fun onResponse(call: Call<ResGetProjectList>, response: Response<ResGetProjectList>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 조회실패",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }else{
+                    when(response.code()){
+                        200->{
+                            response.body()?.let {
+                                Log.d("test: 모집중인 플젝 조회 성공! ", "\n${it.toString()}")
+                                Log.d("test: 모집중 플젝 데이터 : ", "\n${it.result.success}")
+                                setAdapter_p(it.result.success) //projectAdapter
                             }
 
                         }
@@ -167,19 +183,49 @@ class RecruitStudyFragment : Fragment(){//, PopupMenu.OnMenuItemClickListener {
                 }
             }
 
-            override fun onFailure(call: Call<ResGetStudyList>, t: Throwable) {
-                Log.d("test: 조회실패2", "[Fail]${t.toString()}")
+            override fun onFailure(call: Call<ResGetProjectList>, t: Throwable) {
+                Log.d("test: 조회실패 - RPF > loadData_p_ing(모집중 플젝조회) : ", "[Fail]${t.toString()}")
                 Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
 
         })
 
     }
+    //모집중인 스터디만 조회
+    private fun loadData_s_ing(int: Int) {
+        RetrofitClient.service.requestPDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
+            int,"","","","ING","").enqueue(object: Callback<ResGetProjectList>{
+            override fun onResponse(call: Call<ResGetProjectList>, response: Response<ResGetProjectList>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 조회실패",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }else{
+                    when(response.code()){
+                        200->{
+                            response.body()?.let {
+                                Log.d("test: 모집중인 스터디 조회 성공! ", "\n${it.toString()}")
+                                Log.d("test: 모집중 스터디 데이터 : ", "\n${it.result.success}")
+                                setAdapter_p(it.result.success) //projectAdapter
+                            }
+                        }
+                    }
+                }
+            }
 
-    private fun setAdapter(studyList: ArrayList<SData>){
-        //val adapter = ProjectAdapter(it.result.success)
-        //viewBinding.listviewMain.adapter = adapter
-        val adapter = AdapterStudy(studyList, mainAppActivity!!)
+            override fun onFailure(call: Call<ResGetProjectList>, t: Throwable) {
+                Log.d("test: 조회실패 - RPF > loadData_s_ing(모집중 스터디 조회): ", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun setAdapter_p(projectList: ArrayList<PData>){
+        val adapter = AdapterProject(projectList, mainAppActivity)
+        viewBinding.listviewMain.adapter = adapter
+    }
+
+    private fun setAdapter_s(studyList: ArrayList<SData>){
+        val adapter = AdapterStudy(studyList, mainAppActivity)
         viewBinding.listviewMain.adapter = adapter
     }
 

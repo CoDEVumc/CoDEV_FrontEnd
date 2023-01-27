@@ -4,12 +4,17 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
 //import com.bumptech.glide.Glide
 import com.example.codev.databinding.RecycleRecruitStudyBinding
+import com.google.gson.JsonObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class AdapterStudy(private val listData: ArrayList<SData>, context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterStudy(private val listData: ArrayList<SData>, private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -50,7 +55,14 @@ class AdapterStudy(private val listData: ArrayList<SData>, context: Context) : R
             binding.sNum.text = data.co_total.toString()
 
             //스터디 분야
-            binding.spartlist.text = data.co_parts
+            binding.spartlist.text = data.co_part
+
+            //북마크
+            binding.sHeart.isChecked = listData[position].co_heart
+            binding.sHeart.setOnClickListener {
+                listData[position].co_heart = binding.sHeart.isChecked
+                request(data.co_studyId)
+            }
 
             //스터디 스택
 //            val languages = data.co_languages
@@ -102,4 +114,36 @@ class AdapterStudy(private val listData: ArrayList<SData>, context: Context) : R
 
         }
     }
+
+    private fun request(co_studyId: Int){
+        RetrofitClient.service.requestStudyBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),co_studyId).enqueue(object:
+            Callback<JsonObject> {
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 조회실패",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }else{
+                    when(response.code()){
+                        200->{
+                            response.body()?.let {
+                                Log.d("test: AdapterS__request() 성공! ", "\n${it.toString()}")
+
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                Log.d("test: AdapterS__request()실패 : ", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+
+
+
 }

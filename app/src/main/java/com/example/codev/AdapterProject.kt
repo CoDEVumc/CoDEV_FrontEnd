@@ -44,10 +44,13 @@ class AdapterProject(private val listData: ArrayList<PData>, private val context
                 binding.pdday.text = "D-Day"
             }
             else if(data.co_deadLine.toInt() < 0){ //기간 지남
+
                 val deadline = data.co_deadLine
                 val dday = deadline.substring(1,deadline.length)
 
                 binding.pdday.text = "D+" + dday
+
+                //binding.pdday.text = "-END-"
             }
             else {binding.pdday.text = "D-" + data.co_deadLine}
 
@@ -132,7 +135,7 @@ class AdapterProject(private val listData: ArrayList<PData>, private val context
                     when(response.code()){
                         200->{
                             response.body()?.let {
-                                Log.d("test: 조회 성공", "\n${it.toString()}")
+                                Log.d("test: AdapterP__request() 성공! ", "\n${it.toString()}")
 
                             }
 
@@ -142,7 +145,7 @@ class AdapterProject(private val listData: ArrayList<PData>, private val context
             }
 
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Log.d("test: 조회실패2", "[Fail]${t.toString()}")
+                Log.d("test: AdapterP__request()실패 : ", "[Fail]${t.toString()}")
                 Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
 

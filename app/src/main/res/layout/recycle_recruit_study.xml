@@ -113,7 +113,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/sHeart"
             android:layout_width="20dp"
             android:layout_height="19dp"
@@ -121,11 +121,12 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="3dp"
             android:layout_marginBottom="2dp"
-            android:background="@drawable/recruit_bookmark"
+            android:button="@drawable/recruit_bookmark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+            tools:ignore="TouchTargetSizeCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -146,7 +147,7 @@
 
         <TextView
             android:id="@+id/sNum"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="14dp"
             android:fontFamily="@font/pretendard_regular"
             android:text="n"
@@ -162,7 +163,7 @@
             android:layout_height="13dp"
             android:layout_marginTop="1dp"
             android:fontFamily="@font/pretendard_regular"
-            android:text="기획"
+            android:text="파트"
             android:textColor="#999999"
             android:textSize="11sp"
             app:layout_constraintEnd_toEndOf="parent"

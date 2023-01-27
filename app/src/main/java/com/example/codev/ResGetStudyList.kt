@@ -23,8 +23,8 @@ data class SData(
     val updatedAt: String,
     val status: Boolean,
     val co_heartCount: Int,
-    val co_heart: Boolean,
-    val co_parts: String,
+    var co_heart: Boolean,
+    val co_part: String,
 
     val co_total: Int,
     val co_languages: String,

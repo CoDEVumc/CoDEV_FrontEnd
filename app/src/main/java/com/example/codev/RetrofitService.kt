@@ -47,7 +47,7 @@ interface RetrofitService {
         @Path("coProjectId") coProjectId: Int
     ): Call<JsonObject>
 
-    @PATCH("project/study/{coStudyId}")
+    @PATCH("study/heart/{coStudyId}")
     fun requestStudyBookMark(
         @Header("CoDev_Authorization") header: String,
         @Path("coStudyId") coStudyId: Int
