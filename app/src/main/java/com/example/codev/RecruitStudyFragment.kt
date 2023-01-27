@@ -87,20 +87,6 @@ class RecruitStudyFragment : Fragment(){//, PopupMenu.OnMenuItemClickListener {
 
 
 
-        var chk : Boolean = false //처음엔 버튼 안눌림
-        //(스터디에서)모집중만 보기 버튼
-        viewBinding.recruitingStudyBtn.setOnClickListener {
-            //state_selected false면 true로 바꾸기 / true면 false로 바꾸기
-            chk = viewBinding.recruitingStudyBtn.isChecked
-            if(chk == true) {
-                loadData_s_ing(0)
-            }
-            else{
-                loadData_s(0)
-            }
-            Log.d("test: RSF - 모집중인 스터디 조회실패",it.toString())
-        }
-
 
         return viewBinding.root
     }
@@ -193,9 +179,9 @@ class RecruitStudyFragment : Fragment(){//, PopupMenu.OnMenuItemClickListener {
     }
     //모집중인 스터디만 조회
     private fun loadData_s_ing(int: Int) {
-        RetrofitClient.service.requestPDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
-            int,"","","","ING","").enqueue(object: Callback<ResGetProjectList>{
-            override fun onResponse(call: Call<ResGetProjectList>, response: Response<ResGetProjectList>) {
+        RetrofitClient.service.requestSDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
+            int,"","","","ING","").enqueue(object: Callback<ResGetStudyList>{
+            override fun onResponse(call: Call<ResGetStudyList>, response: Response<ResGetStudyList>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 조회실패",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
@@ -205,14 +191,14 @@ class RecruitStudyFragment : Fragment(){//, PopupMenu.OnMenuItemClickListener {
                             response.body()?.let {
                                 Log.d("test: 모집중인 스터디 조회 성공! ", "\n${it.toString()}")
                                 Log.d("test: 모집중 스터디 데이터 : ", "\n${it.result.success}")
-                                setAdapter_p(it.result.success) //projectAdapter
+                                setAdapter_s(it.result.success) //projectAdapter
                             }
                         }
                     }
                 }
             }
 
-            override fun onFailure(call: Call<ResGetProjectList>, t: Throwable) {
+            override fun onFailure(call: Call<ResGetStudyList>, t: Throwable) {
                 Log.d("test: 조회실패 - RPF > loadData_s_ing(모집중 스터디 조회): ", "[Fail]${t.toString()}")
                 Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
