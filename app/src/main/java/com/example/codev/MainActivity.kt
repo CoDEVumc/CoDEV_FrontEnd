@@ -1,19 +1,47 @@
 package com.example.codev
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.codev.databinding.ActivityMainBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
+import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.net.HttpURLConnection
+import java.net.URL
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityMainBinding
+    private var mGoogleSignInClient: GoogleSignInClient? = null
+    private val googleLoginLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    )
+    { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            handleSignInResult(task)
+        }
+    }
+    //https://github.com/login/oauth/authorize?client_id=Iv1.90b1ea1a45795609&redirect_url=http://localhost:8080/codev/user/github/login
+    //https://github.com/login/oauth/authorize?client_id=efe7259d386c05e1d31c
 
+    // CODEV GOOGLE GITHUB
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -23,9 +51,21 @@ class MainActivity : AppCompatActivity() {
         // 자동 로그인 방지
         UserSharedPreferences.clearUser(this)
 
-        val gso: GoogleSignInOptions = Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        getCode()
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.server_client_id))
             .requestEmail()
             .build()
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        viewBinding.btnGithub.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/login/oauth/authorize?client_id=efe7259d386c05e1d31c&redirect_url=codev%3A%2F%2Flogin"))
+            startActivity(intent)
+        }
+
+        viewBinding.btnGoogle.setOnClickListener {
+            getGoogleIdToken()
+        }
 
         viewBinding.btnRegister.setOnClickListener {
             val intent = Intent(this,RegisterTosActivity::class.java)
@@ -40,13 +80,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewBinding.btnGoogle.setOnClickListener {
-            viewBinding.webView.loadUrl("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.email&access_type=offline&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=http://semtle.catholic.ac.kr:8080/codev/user/google/login&client_id=413806176191-5ubglt67tr3gdl7u45l4qmepgcj5h71k.apps.googleusercontent.com")
-//            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.email&access_type=offline&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=http://semtle.catholic.ac.kr:8080/codev/user/google/login&client_id=413806176191-5ubglt67tr3gdl7u45l4qmepgcj5h71k.apps.googleusercontent.com"))
-//            startActivity(intent)
-            //google(this)
-        }
-
        // 자동로그인 확인
         if(checkAutoLogin(this)) {
             val intent = Intent(this,MainAppActivity::class.java)
@@ -54,31 +87,41 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
     }
-    private fun google(context: Context){
-        RetrofitClientForGoogle.service.googleSignIn().enqueue(object: Callback<ResGoogle>{
-            override fun onResponse(call: Call<ResGoogle>, response: Response<ResGoogle>) {
-                if(response.isSuccessful.not()){
-                    Log.d("test: 로그인 실패1",response.toString())
-                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                    return
-                }else{
-                    when(response.code()){
-                        200->{
-                            // 토큰 암호화
-                            response.body()?.let {
-                                Log.d("test: 로그인 성공", "\n${it.toString()}")
-                            }
-                        }
-                    }
-                }
-            }
 
-            override fun onFailure(call: Call<ResGoogle>, t: Throwable) {
-                Log.d("test: 로그인 실패2", "[Fail]${t.toString()}")
-                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+    private fun getCode() {
+        if (Intent.ACTION_VIEW.equals(intent.action)) {
+            var uri = intent.data
+            if (uri != null) {
+                var code = uri.getQueryParameter("code")
+                Log.d("test",code.toString())
             }
-        })
+        }
     }
+
+    private fun getGoogleIdToken() {
+        val signInIntent = mGoogleSignInClient!!.signInIntent
+        googleLoginLauncher.launch(signInIntent)
+    }
+
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+            val account = completedTask.getResult(ApiException::class.java)
+            val idToken = account.idToken
+            Log.d("test",account.toString())
+            Log.d("test",idToken.toString())
+        } catch (e: ApiException) {
+            Log.d("test", "handleSignInResult:error", e)
+        }
+    }
+
+    private fun signOutGoogle() {
+        mGoogleSignInClient!!.signOut()
+    }
+
+    private fun revokeAccessGoogle() {
+        mGoogleSignInClient!!.revokeAccess()
+    }
+
 
     private fun signIn(context:Context, email:String, pwd:String) {
         RetrofitClient.service.signIn(ReqSignIn(email,pwd)).enqueue(object: Callback<ResSignIn>{
