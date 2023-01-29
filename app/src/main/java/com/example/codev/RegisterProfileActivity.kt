@@ -29,7 +29,17 @@ class RegisterProfileActivity:AppCompatActivity() {
     private lateinit var viewBinding: ActivityRegisterProfileBinding
     var addPageFunction = AddPageFunction()
     private lateinit var reqSignUp: ReqSignUp
+    private var copyImagePath: String = ""
     private var file: MultipartBody.Part = MultipartBody.Part.createFormData("files", null, RequestBody.create(MediaType.parse("application/octet-stream"), ""))
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (!copyImagePath.isNullOrBlank()){
+            val deleteFile = File(copyImagePath)
+            deleteFile.delete()
+            Log.d("test","이미지 삭제")
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -137,7 +147,7 @@ class RegisterProfileActivity:AppCompatActivity() {
             val imageSize = imageInfo[1].toInt()
             val imageSizeLimitByte = 2e+7
             if(imageSize <= imageSizeLimitByte){
-                val copyImagePath = addPageFunction.createCopyAndReturnPath(this, uri, imageName)
+                copyImagePath = addPageFunction.createCopyAndReturnPath(this, uri, imageName)
                 val nowImageItem = ImageItem(uri, copyImagePath)
                 Glide.with(this)
                     .load(uri).circleCrop()
