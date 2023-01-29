@@ -121,7 +121,6 @@ class MainActivity : AppCompatActivity() {
                     if(response.isSuccessful.not()){
                         Log.d("test: 로그인 실패1",response.toString())
                         Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                        return
                     }else{
                         when(response.code()){
                             200->{
@@ -136,7 +135,6 @@ class MainActivity : AppCompatActivity() {
                                         //기존 로그인 로직
                                         UserSharedPreferences.setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))
                                         UserSharedPreferences.setUserRefreshToken(context,AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
-                                        Log.d("test: 로그인 성공", "\n${it.toString()}")
                                         Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)))
                                         Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken(context)))
                                         val intent = Intent(context,MainAppActivity::class.java)
@@ -160,7 +158,6 @@ class MainActivity : AppCompatActivity() {
                     if(response.isSuccessful.not()){
                         Log.d("test: 로그인 실패1",response.toString())
                         Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                        return
                     }else{
                         when(response.code()){
                             200->{
@@ -174,7 +171,6 @@ class MainActivity : AppCompatActivity() {
                                         //기존 로그인 로직
                                         UserSharedPreferences.setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))
                                         UserSharedPreferences.setUserRefreshToken(context,AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
-                                        Log.d("test: 로그인 성공", "\n${it.toString()}")
                                         Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)))
                                         Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken(context)))
                                         val intent = Intent(context,MainAppActivity::class.java)
@@ -202,7 +198,6 @@ class MainActivity : AppCompatActivity() {
                 if(response.isSuccessful.not()){
                     Log.d("test: 로그인 실패1",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                    return
                 }else{
                     when(response.code()){
                         200->{
