@@ -92,7 +92,7 @@ class MyFragment:Fragment() {
                             viewBinding.name.text = it.result.Complete.co_name + " 님"
                             viewBinding.email.text = it.result.Complete.co_email
                             Glide.with(context)
-                                .load(it.result.Complete.profileImg).circleCrop().fitCenter()
+                                .load(it.result.Complete.profileImg).circleCrop()
                                 .into(viewBinding.profileImg)
                             setAdapter(it.result.Portfolio)
                             userinfo = Userinfo(it.result.Complete.co_nickName,it.result.Complete.profileImg,it.result.Complete.co_email,it.result.Complete.co_name,it.result.Complete.co_gender,it.result.Complete.co_birth,it.result.Complete.co_loginType)

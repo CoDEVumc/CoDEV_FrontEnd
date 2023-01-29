@@ -30,7 +30,7 @@ class MyProfileActivity:AppCompatActivity() {
         viewBinding.etName.setText(userinfo.co_name)
         viewBinding.etNickname.setText(userinfo.co_nickName)
         Glide.with(this)
-            .load(userinfo.profileImg).circleCrop().fitCenter()
+            .load(userinfo.profileImg).circleCrop()
             .into(viewBinding.profileImg)
         viewBinding.count.text = (8 - viewBinding.etNickname.text.length).toString()
 

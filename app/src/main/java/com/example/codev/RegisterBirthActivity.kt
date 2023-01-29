@@ -60,6 +60,7 @@ class RegisterBirthActivity: AppCompatActivity() {
             viewBinding.btnMale.setTextColor(getColor(R.color.green_900))
             viewBinding.btnFemale.isSelected = false
             viewBinding.btnFemale.setTextColor(getColor(R.color.black_500))
+            reqSignUp.co_gender = "MALE"
             checkNextBtn()
         }
 
@@ -68,6 +69,7 @@ class RegisterBirthActivity: AppCompatActivity() {
             viewBinding.btnMale.setTextColor(getColor(R.color.black_500))
             viewBinding.btnFemale.isSelected = true
             viewBinding.btnFemale.setTextColor(getColor(R.color.green_900))
+            reqSignUp.co_gender = "FEMALE"
             checkNextBtn()
         }
 

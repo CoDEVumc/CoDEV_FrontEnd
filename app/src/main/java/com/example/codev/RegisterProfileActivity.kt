@@ -2,6 +2,7 @@ package com.example.codev
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -9,14 +10,26 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import com.bumptech.glide.Glide
+import com.example.codev.addpage.AddPageFunction
+import com.example.codev.addpage.ImageItem
 import com.example.codev.databinding.ActivityRegisterProfileBinding
+import com.google.gson.Gson
 import com.google.gson.JsonObject
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
 class RegisterProfileActivity:AppCompatActivity() {
     private lateinit var viewBinding: ActivityRegisterProfileBinding
+    var addPageFunction = AddPageFunction()
+    private lateinit var reqSignUp: ReqSignUp
+    private var file: MultipartBody.Part = MultipartBody.Part.createFormData("files", null, RequestBody.create(MediaType.parse("application/octet-stream"), ""))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +44,7 @@ class RegisterProfileActivity:AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
-        val reqSignUp = intent.getSerializableExtra("signUp") as ReqSignUp
+        reqSignUp = intent.getSerializableExtra("signUp") as ReqSignUp
 
         viewBinding.etNickname.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -52,17 +65,23 @@ class RegisterProfileActivity:AppCompatActivity() {
 
         //프로필 이미지 변경 필요
         viewBinding.btnChange.setOnClickListener {
-
+            addPageFunction.checkSelfPermission(this, this)
+            getContent.launch(arrayOf(
+                "image/png",
+                "image/jpg",
+                "image/jpeg"
+            ))
         }
 
         viewBinding.btnRegisterNext.setOnClickListener {
             reqSignUp.co_nickName = viewBinding.etNickname.text.toString()
-            signUp(this,reqSignUp)
+            var requestBody = RequestBody.create(MediaType.parse("application/json"), Gson().toJson(reqSignUp))
+            signUp(this,requestBody,file)
         }
     }
 
-    private fun signUp(context: Context, reqSignUp: ReqSignUp){
-        RetrofitClient.service.signUp(reqSignUp).enqueue(object: Callback<JsonObject>{
+    private fun signUp(context: Context, requestBody: RequestBody, file: MultipartBody.Part){
+        RetrofitClient.service.signUp(requestBody,file).enqueue(object: Callback<JsonObject>{
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 회원가입 실패1",response.toString())
@@ -107,6 +126,25 @@ class RegisterProfileActivity:AppCompatActivity() {
                 viewBinding.btnRegisterNext.setTextColor(getColor(R.color.white))
             }else{
                 viewBinding.btnRegisterNext.setTextColor(getColor(R.color.black_500))
+            }
+        }
+    }
+
+    private val getContent = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        if(uri != null){
+            val imageInfo = addPageFunction.getInfoFromUri(this, uri)
+            val imageName = imageInfo[0]
+            val imageSize = imageInfo[1].toInt()
+            val imageSizeLimitByte = 2e+7
+            if(imageSize <= imageSizeLimitByte){
+                val copyImagePath = addPageFunction.createCopyAndReturnPath(this, uri, imageName)
+                val nowImageItem = ImageItem(uri, copyImagePath)
+                Glide.with(this)
+                    .load(uri).circleCrop()
+                    .into(viewBinding.profileImg)
+                var fileFromPath = File(copyImagePath)
+                var fileBody = RequestBody.create(MediaType.parse("application/octet-stream"),fileFromPath)
+                file = MultipartBody.Part.createFormData("file", fileFromPath.name, fileBody)
             }
         }
     }

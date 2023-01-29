@@ -66,8 +66,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewBinding.btnRegister.setOnClickListener {
-            //로그인타입 CODEV
-            val intent = Intent(this, RegisterTosActivity::class.java)
+            val reqSignUp = ReqSignUp()
+            reqSignUp.co_loginType = "CODEV"
+            val intent = Intent(this,RegisterTosActivity::class.java)
+            intent.putExtra("signUp",reqSignUp)
             startActivity(intent)
         }
 
