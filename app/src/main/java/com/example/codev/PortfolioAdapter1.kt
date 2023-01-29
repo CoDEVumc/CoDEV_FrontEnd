@@ -5,8 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.codev.databinding.RecylePortfolioHeader1Binding
-import com.example.codev.databinding.RecylePortfolioItem1Binding
+import com.example.codev.databinding.RecyclePortfolioHeader1Binding
+import com.example.codev.databinding.RecyclePortfolioItem1Binding
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 
@@ -18,9 +18,9 @@ class PortfolioAdapter1(private val listData: ArrayList<PortFolio>) : RecyclerVi
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType){
             HEADER ->
-                PortfolioHeaderViewHolder(RecylePortfolioHeader1Binding.inflate(LayoutInflater.from(parent.context), parent, false))
+                PortfolioHeaderViewHolder(RecyclePortfolioHeader1Binding.inflate(LayoutInflater.from(parent.context), parent, false))
             else ->{
-                PortfolioItemViewHolder(RecylePortfolioItem1Binding.inflate(LayoutInflater.from(parent.context), parent, false))
+                PortfolioItemViewHolder(RecyclePortfolioItem1Binding.inflate(LayoutInflater.from(parent.context), parent, false))
             }
         }
     }
@@ -49,7 +49,7 @@ class PortfolioAdapter1(private val listData: ArrayList<PortFolio>) : RecyclerVi
     }
 
     //Item의 ViewHolder 객체
-    inner class PortfolioItemViewHolder(private val binding: RecylePortfolioItem1Binding): RecyclerView.ViewHolder(binding.root){
+    inner class PortfolioItemViewHolder(private val binding: RecyclePortfolioItem1Binding): RecyclerView.ViewHolder(binding.root){
         fun bind(data: PortFolio, position: Int){
             binding.portfolioTitle.text = data.co_title
             binding.portfolioUpdatedAt.text = convertTimestampToDate(data.updatedAt)
@@ -60,7 +60,7 @@ class PortfolioAdapter1(private val listData: ArrayList<PortFolio>) : RecyclerVi
     }
 
     //Header ViewHolder 객체
-    inner class PortfolioHeaderViewHolder(private val binding: RecylePortfolioHeader1Binding) : RecyclerView.ViewHolder(binding.root){
+    inner class PortfolioHeaderViewHolder(private val binding: RecyclePortfolioHeader1Binding) : RecyclerView.ViewHolder(binding.root){
         fun bind(){
             binding.addPortfolio.setOnClickListener {
                 Log.d("test","포트폴리오 추가")
