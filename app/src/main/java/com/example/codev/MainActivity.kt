@@ -46,12 +46,15 @@ class MainActivity : AppCompatActivity() {
         // 자동 로그인 방지
         //UserSharedPreferences.clearUser(this)
 
-        getCode()
+        //구글
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.server_client_id))
             .requestEmail()
             .build()
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        //깃허브
+        getGithubCode()
 
         viewBinding.btnGithub.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/login/oauth/authorize?client_id=Iv1.90b1ea1a45795609&redirect_url=codev://login"))
@@ -83,7 +86,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getCode() {
+    private fun getGithubCode() {
         if (Intent.ACTION_VIEW.equals(intent.action)) {
             var uri = intent.data
             if (uri != null) {
