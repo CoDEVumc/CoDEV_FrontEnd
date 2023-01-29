@@ -29,16 +29,12 @@ class MainAppActivity : AppCompatActivity() {
                             .beginTransaction()
                             .replace(viewBinding.content.id,RecruitProjectFragment())
                             .commitAllowingStateLoss()
-                        val intent = Intent(this@MainAppActivity, AddNewProjectActivity::class.java)
-                        startActivity(intent)
                     }
                     R.id.menu_community->{
                         supportFragmentManager
                             .beginTransaction()
                             .replace(viewBinding.content.id,CommunityFragment())
                             .commitAllowingStateLoss()
-                        val intent = Intent(this@MainAppActivity, AddNewStudyActivity::class.java)
-                        startActivity(intent)
                     }
                     R.id.menu_home->{
                         supportFragmentManager
@@ -52,8 +48,6 @@ class MainAppActivity : AppCompatActivity() {
                             .beginTransaction()
                             .replace(viewBinding.content.id,ChatFragment())
                             .commitAllowingStateLoss()
-                        val intent = Intent(this@MainAppActivity, AddPfPageActivity::class.java)
-                        startActivity(intent)
                     }
                     R.id.menu_my->{
                         supportFragmentManager

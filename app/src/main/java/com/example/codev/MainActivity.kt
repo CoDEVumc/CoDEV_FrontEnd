@@ -66,8 +66,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewBinding.btnRegister.setOnClickListener {
-//            val intent = Intent(this,RegisterTosActivity::class.java)
-            val intent = Intent(this, AddNewProjectActivity::class.java)
+            val intent = Intent(this, RegisterTosActivity::class.java)
             startActivity(intent)
         }
 
@@ -79,18 +78,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-       // 자동로그인 확인
+        // 자동로그인 확인
         if(checkAutoLogin(this)) {
             val intent = Intent(this,MainAppActivity::class.java)
             startActivity(intent)
-//            finish() TODO: Testing code
-        }
-
-        viewBinding.btnGoogle.setOnClickListener {
-//            val intent = Intent(this,MainAppActivity::class.java) TODO: testing code
-//            val intent = Intent(this, AddNewStudyActivity::class.java)
-            startActivity(intent)
-//            finish() TODO: Testing code
         }
     }
 
