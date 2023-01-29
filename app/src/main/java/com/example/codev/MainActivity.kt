@@ -9,6 +9,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+
+import com.example.codev.addpage.AddNewProjectActivity
+
 import com.example.codev.databinding.ActivityMainBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -63,7 +66,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewBinding.btnRegister.setOnClickListener {
-            val intent = Intent(this,RegisterTosActivity::class.java)
+//            val intent = Intent(this,RegisterTosActivity::class.java)
+            val intent = Intent(this, AddNewProjectActivity::class.java)
             startActivity(intent)
         }
 
@@ -79,7 +83,14 @@ class MainActivity : AppCompatActivity() {
         if(checkAutoLogin(this)) {
             val intent = Intent(this,MainAppActivity::class.java)
             startActivity(intent)
-            finish()
+//            finish() TODO: Testing code
+        }
+
+        viewBinding.btnGoogle.setOnClickListener {
+//            val intent = Intent(this,MainAppActivity::class.java) TODO: testing code
+//            val intent = Intent(this, AddNewStudyActivity::class.java)
+            startActivity(intent)
+//            finish() TODO: Testing code
         }
     }
 

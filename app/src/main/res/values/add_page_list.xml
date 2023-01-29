@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ":-:" 부호는 문자열을 split를 위해 작성하였고, 수정하지 마세요 -->
+    <string-array name="pm_stack">
+        <item>기획:-:27</item>
+    </string-array>
+
+    <string-array name="design_stack">
+        <item>디자인:-:26</item>
+    </string-array>
+
+    <string-array name="front_stack">
+        <item>JavaScript:-:1</item>
+        <item>TypeScript:-:2</item>
+        <item>React:-:3</item>
+        <item>Vue:-:4</item>
+        <item>Svelte:-:5</item>
+        <item>Nextjs:-:6</item>
+        <item>Flutter:-:7</item>
+        <item>Swift:-:8</item>
+        <item>Kotlin:-:9</item>
+        <item>ReactNative:-:10</item>
+        <item>Unity:-:11</item>
+    </string-array>
+
+    <string-array name="back_stack">
+        <item>Nodejs:-:12</item>
+        <item>Java:-:13</item>
+        <item>Spring:-:14</item>
+        <item>Go:-:15</item>
+        <item>Nestjs:-:16</item>
+        <item>Kotlin:-:17</item>
+        <item>Express:-:18</item>
+        <item>MySQL:-:19</item>
+        <item>MongoDB:-:20</item>
+        <item>Python:-:21</item>
+        <item>Django:-:22</item>
+        <item>php:-:23</item>
+        <item>GraphQL:-:24</item>
+        <item>Firebase:-:25</item>
+    </string-array>
+
+    <string-array name="etc_stack">
+        <item>AWS:-:28</item>
+        <item>Kubernetes:-:29</item>
+        <item>Docker:-:30</item>
+        <item>Git:-:31</item>
+        <item>Figma:-:32</item>
+        <item>Zeplin:-:33</item>
+        <item>Jest:-:34</item>
+        <item>C:-:35</item>
+    </string-array>
+
+    <string-array name="location_list">
+        <item>온라인</item>
+        <item>서울</item>
+        <item>경기</item>
+        <item>강원</item>
+        <item>인천</item>
+        <item>충북</item>
+        <item>충남</item>
+        <item>세종</item>
+        <item>대전</item>
+        <item>경북</item>
+        <item>경남</item>
+        <item>대구</item>
+        <item>부산</item>
+        <item>울산</item>
+        <item>전북</item>
+        <item>전남</item>
+        <item>광주</item>
+        <item>제주</item>
+    </string-array>
+
+    <string-array name="stack1_list">
+        <item>기획</item>
+        <item>디자인</item>
+        <item>프론트엔드</item>
+        <item>백엔드</item>
+        <item>기타</item>
+    </string-array>
+
+    <string-array name="pf_level">
+        <item>씨앗</item>
+        <item>새싹</item>
+        <item>열매</item>
+    </string-array>
+</resources>

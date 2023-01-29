@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/input_round"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@drawable/dropdown_round"/>
+
+    <EditText
+        android:id="@+id/input_of_title"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="@id/input_round"
+        app:layout_constraintBottom_toBottomOf="@id/input_round"
+        app:layout_constraintLeft_toLeftOf="@id/input_round"
+        app:layout_constraintRight_toLeftOf="@id/cancel_button"
+        android:layout_marginVertical="4dp"
+        android:layout_marginHorizontal="12dp"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:boxBackgroundColor="#FFFFFF"
+        android:hint="testing"
+        android:paddingStart="0dp"
+        android:paddingEnd="0dp"
+        android:inputType="text"
+        style="@style/Text.Body4.Medium"
+        android:textColor="@color/black_900"
+        android:background="@null"/>
+
+    <ImageButton
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/input_round"
+        app:layout_constraintBottom_toBottomOf="@id/input_round"
+        app:layout_constraintRight_toRightOf="@id/input_round"
+        android:layout_marginEnd="14dp"
+        android:background="@drawable/close_icon"
+        android:visibility="gone"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        app:layout_constraintTop_toBottomOf="@id/input_round"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,8 @@
 package com.example.codev
 
 import com.google.gson.JsonObject
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -15,6 +17,13 @@ import retrofit2.http.*
 
 interface RetrofitService {
 
+    @POST("user/sns/login")
+    fun googleSignIn(@Body params: ReqGoogleSignIn) : Call<ResSignIn>
+
+    @POST("user/sns/login")
+    fun githubSignIn(@Body params: ReqGithubSignIn) : Call<ResSignIn>
+
+
     @POST("user/login")
     fun signIn(@Body params: ReqSignIn): Call<ResSignIn>
 
@@ -27,12 +36,52 @@ interface RetrofitService {
     @GET("user/code/mail")
     fun getEmailCode(@Query("email") value1: String) : Call<ResGetEmailCode>
 
-    @POST("user/sns/login")
-    fun googleSignIn(@Body params: ReqGoogleSignIn) : Call<ResSignIn>
+    @POST("project")
+    @Multipart
+    fun createNewProject(
+        @Header("CoDev_Authorization") authToken: String
+        ,@Part("project") project: RequestBody
+        ,@Part files: List<MultipartBody.Part?>
+    ): Call<ResCreateNewProject>
 
-    @POST("user/sns/login")
-    fun githubSignIn(@Body params: ReqGithubSignIn) : Call<ResSignIn>
+    @PUT("project/update/{id}")
+    @Multipart
+    fun updateProject(
+        @Path("id") id: String
+        ,@Header("CoDev_Authorization") authToken: String
+        ,@Part("project") project: RequestBody
+        ,@Part files: List<MultipartBody.Part?>
+    ): Call<ResCreateNewProject>
 
+    @POST("study")
+    @Multipart
+    fun createNewStudy(
+        @Header("CoDev_Authorization") authToken: String
+        ,@Part("study") study: RequestBody
+        ,@Part files: List<MultipartBody.Part?>
+    ): Call<ResCreateNewStudy>
+
+    @PUT("study/update/{id}")
+    @Multipart
+    fun updateStudy(
+        @Path("id") id: String
+        ,@Header("CoDev_Authorization") authToken: String
+        ,@Part("study") study: RequestBody
+        ,@Part files: List<MultipartBody.Part?>
+    ): Call<ResCreateNewStudy>
+
+    @POST("my-page/portfolio")
+    fun createNewPF(
+        @Header("CoDev_Authorization") authToken: String
+        ,@Body params: ReqCreateNewPF
+    ): Call<ResCreateNewPF>
+
+    @PATCH("my-page/portfolio/{id}")
+    fun updatePF(
+        @Path("id") id: String
+        ,@Header("CoDev_Authorization") authToken: String
+        ,@Body params: ReqCreateNewPF
+    ): Call<ResCreateNewPF>
 
     @GET("project/projects/{page}")
     fun requestPDataList(
@@ -63,8 +112,6 @@ interface RetrofitService {
         @Header("CoDev_Authorization") header: String,
         @Path("coStudyId") coStudyId: Int
     ): Call<JsonObject>
-
-
 
     @GET("my-page/portfolioList")
     fun getPortFolio(@Header("CoDev_Authorization") header: String) : Call<ResPortFolioList>

@@ -6,11 +6,11 @@
     android:layout_height="wrap_content"
     android:id="@+id/toolbar2"
     app:title="@string/app_name"
+
     android:background="?attr/colorOnPrimary"
     app:titleTextColor="@color/black"
     app:titleTextAppearance="@style/Text.Heading3">
-
-    <TextView
+<TextView
         android:id="@+id/toolbar_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,3 +19,5 @@
         android:textColor="@color/black"/>
 
 </androidx.appcompat.widget.Toolbar>
+
+

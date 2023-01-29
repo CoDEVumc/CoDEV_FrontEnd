@@ -12,6 +12,26 @@
     <string name="menu_heart">찜</string>
     <string name="menu_mark">북마크</string>
     <string name="menu_option">옵션</string>
+
+    <string name="add_new_project">프로젝트 모집하기</string>
+    <string name="edit_new_project">프로젝트 수정하기</string>
+    <string name="add_new_study">스터디 모집하기</string>
+    <string name="edit_new_study">스터디 수정하기</string>
+    <string name="add_new_title">제목</string>
+    <string name="add_new_des">프로젝트에 대한 설명과 진행 기간 등을 자유롭게 작성해 주세요.</string>
+    <string name="add_image_text">사진 첨부</string>
+    <string name="add_part_text">모집 분야</string>
+    <string name="add_part_pm_text">기획</string>
+    <string name="add_part_design_text">디자인</string>
+    <string name="add_part_front_text">프론트엔드</string>
+    <string name="add_part_back_text">백엔드</string>
+    <string name="add_part_etc_text">기타</string>
+    <string name="add_page_stack_text">기술</string>
+    <string name="add_page_location_text">지역</string>
+    <string name="add_page_deadline_text">마감 일자</string>
+    <string name="add_page_submit_text">작성하기</string>
+    <string name="add_page_people_text">인원</string>
+
     <string name="menu_setting">설정</string>
 
     <string name="str_project">프로젝트</string>
@@ -30,6 +50,23 @@
     <string name="register_email_title">이메일을 인증해 주세요.</string>
     <string name="register_code_title">코드를 보내 드렸습니다.</string>
     <string name="register_code_subtitle">이메일 인증을 위해 아래에 코드를 입력해주세요.</string>
+
+    <string name="add_pf_toolbar">포트폴리오 작성하기</string>
+    <string name="edit_pf_toolbar">포트폴리오 수정하기</string>
+    <string name="add_pf_title_text">포트폴리오 제목</string>
+    <string name="pf_name_text">이름</string>
+    <string name="pf_birthday_text">생년월일 / 성별</string>
+    <string name="pf_level_text">직무 능력</string>
+    <string name="pf_stack_text">시용 기술 및 스택</string>
+    <string name="pf_intro_text">나를 표현하는 한 마디</string>
+    <string name="pf_content_text">자기소개</string>
+    <string name="pf_link_text">포트폴리오 자료(외부 링크 추가)</string>
+    <string name="pf_add_link_text">+ 추가하기</string>
+    <string name="pf_submit_button_text">저장하기</string>
+    <string name="pf_content_hint">나에 대해 자유롭게 표현해 보세요.</string>
+    <string name="sex_girl">여</string>
+    <string name="sex_boy">남</string>
+
 
     <string name="register_pwd_title">비밀번호를 설정해 주세요.</string>
     <string name="register_profile_title">프로필을 설정해 주세요.</string>
@@ -57,5 +94,6 @@
     <string name="filter_loc_16_text">충남</string>
     <string name="filter_loc_17_text">부산</string>
     <string name="filter_loc_18_text">온라인</string>
+
 
 </resources>
