@@ -4,7 +4,6 @@ package com.example.codev
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.Body
-<<<<<<< HEAD
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
