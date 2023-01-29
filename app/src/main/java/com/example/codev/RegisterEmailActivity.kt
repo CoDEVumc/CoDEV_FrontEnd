@@ -9,6 +9,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.core.view.isGone
 import com.example.codev.databinding.ActivityRegisterEmailBinding
 import com.google.gson.JsonObject
 import retrofit2.Call
@@ -32,17 +33,25 @@ class RegisterEmailActivity:AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
+        viewBinding.warn.isGone = true
+
         reqSignUp = intent.getSerializableExtra("signUp") as ReqSignUp
+
+        val regex = Regex("""^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+${'$'}""")
 
         viewBinding.etEmail.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (viewBinding.etEmail.text.length == 1){
+                if (viewBinding.etEmail.text.matches(regex)){
+                    viewBinding.warn.isGone = true
                     nextBtnEnable(true)
-                }else if (viewBinding.etEmail.text.isEmpty()){
+                    viewBinding.etEmail.setBackgroundResource(R.drawable.login_et)
+                } else{
+                    viewBinding.warn.isGone = false
                     nextBtnEnable(false)
+                    viewBinding.etEmail.setBackgroundResource(R.drawable.login_et_failed)
                 }
             }
 
@@ -51,11 +60,16 @@ class RegisterEmailActivity:AppCompatActivity() {
         })
 
         viewBinding.btnRegisterNext.setOnClickListener {
-            sendEmailCode(this,viewBinding.etEmail.text.toString())
+            reqSignUp.co_email = viewBinding.etEmail.text.toString()
+            val intent = Intent(this,RegisterPwdActivity::class.java)
+            intent.putExtra("signUp",reqSignUp)
+            startActivity(intent)
+
+            //코드 인증 잠시 보류
+            //sendEmailCode(this,viewBinding.etEmail.text.toString())
         }
     }
 
-    // 이메일 형식 확인 필요
     private fun sendEmailCode(context: Context, email: String){
         RetrofitClient.service.getEmailCode(email).enqueue(object: Callback<ResGetEmailCode>{
             override fun onResponse(call: Call<ResGetEmailCode>, response: Response<ResGetEmailCode>) {

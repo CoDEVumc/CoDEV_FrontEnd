@@ -27,7 +27,7 @@ class MainAppActivity : AppCompatActivity() {
                     R.id.menu_recruit->{
                         supportFragmentManager
                             .beginTransaction()
-                            .replace(viewBinding.content.id,RecruitFragment())
+                            .replace(viewBinding.content.id,RecruitProjectFragment())
                             .commitAllowingStateLoss()
                         val intent = Intent(this@MainAppActivity, AddNewProjectActivity::class.java)
                         startActivity(intent)
@@ -66,7 +66,6 @@ class MainAppActivity : AppCompatActivity() {
             }
             selectedItemId = R.id.menu_home
         }
-
 
     }
 }

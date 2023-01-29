@@ -24,6 +24,35 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="이름"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/et_name"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="6dp"
+        style="@style/Text.Body4.Medium"
+        android:textColor="@color/black_700"/>
+
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_register"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="133dp"
+        android:hint="이름 입력"
+        android:textColorHint="@color/black_500"
+        style="@style/Text.Body4.Medium"
+        android:textColor="@color/black_900"
+        android:background="@drawable/login_et"
+        android:inputType="text"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="생년월일 / 성별"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/et_brith"
@@ -37,17 +66,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_register"
+        app:layout_constraintTop_toBottomOf="@+id/et_name"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginTop="133dp"
-        android:hint="선택 입력"
+        android:layout_marginTop="44dp"
+        android:hint="날짜 선택"
         android:textColorHint="@color/black_500"
         style="@style/Text.Body4.Medium"
         android:textColor="@color/black_900"
         android:background="@drawable/login_et"
-        android:inputType="date"/>
+        android:inputType="date"
+        android:enabled="false"/>
+
+    <View
+        android:id="@+id/btn_calendar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="44dp"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_male"
@@ -88,6 +129,7 @@
         android:layout_marginTop="508dp"
         style="@style/Text.Body4.SemiBold"
         android:textColor="@color/black_500"
-        android:background="@drawable/register_button"/>
+        android:background="@drawable/register_button"
+        android:enabled="false"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

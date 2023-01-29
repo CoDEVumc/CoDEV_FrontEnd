@@ -6,20 +6,17 @@
     android:layout_height="match_parent">
 
     <!-- Toolbar -->
+
     <include
         android:id="@+id/toolbar_recruit"
-        layout="@layout/toolbar1"/>
+        layout="@layout/toolbar1" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:text="Recruit Fragment"
-        android:textSize="30dp"
-        android:fontFamily="@font/halogen_black"
-        android:textColor="@color/black"/>
+    <FrameLayout
+        android:id="@+id/recruitframelayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+    <!--frameLayout의 id 추가함-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
