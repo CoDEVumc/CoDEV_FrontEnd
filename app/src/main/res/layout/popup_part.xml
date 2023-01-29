@@ -5,6 +5,7 @@
     android:layout_height="397dp">
 
     <RadioGroup
+        android:id="@+id/radioGroup_part"
         android:layout_width="wrap_content"
         android:layout_height="204dp"
         android:layout_marginStart="25dp"

@@ -52,7 +52,7 @@
                 android:layout_marginTop="108dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:lineSpacingExtra="12sp"
-                android:text="(프)모집 중만 보기"
+                android:text="모집 중만 보기"
                 android:textColor="#666666"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"

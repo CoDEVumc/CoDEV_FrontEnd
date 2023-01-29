@@ -7,7 +7,7 @@
 
 
     <RadioGroup
-        android:id="@+id/radioGroup"
+        android:id="@+id/radioGroup_loc"
         android:layout_width="250dp"
         android:layout_height="230dp"
         android:layout_marginStart="25dp"
@@ -36,7 +36,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
-                    android:text="서울" />
+                    android:text="@string/filter_loc_1_text" />
 
                 <RadioButton
                     android:id="@+id/btn2"
@@ -44,7 +44,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
-                    android:text="세종" />
+                    android:text="@string/filter_loc_2_text" />
 
                 <RadioButton
                     android:id="@+id/btn3"
@@ -52,7 +52,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
-                    android:text="울산" />
+                    android:text="@string/filter_loc_3_text" />
             </TableRow>
 
             <TableRow
@@ -65,7 +65,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
-                    android:text="경기" />
+                    android:text="@string/filter_loc_4_text" />
 
                 <RadioButton
                     android:id="@+id/btn5"
@@ -73,7 +73,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
-                    android:text="대전" />
+                    android:text="@string/filter_loc_5_text" />
 
                 <RadioButton
                     android:id="@+id/btn6"
@@ -81,7 +81,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
-                    android:text="전북" />
+                    android:text="@string/filter_loc_6_text" />
             </TableRow>
 
             <TableRow
@@ -94,7 +94,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
-                    android:text="강원" />
+                    android:text="@string/filter_loc_7_text" />
 
                 <RadioButton
                     android:id="@+id/btn8"
@@ -102,7 +102,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
-                    android:text="경북" />
+                    android:text="@string/filter_loc_8_text" />
 
                 <RadioButton
                     android:id="@+id/btn9"
@@ -110,7 +110,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
-                    android:text="전남" />
+                    android:text="@string/filter_loc_9_text" />
             </TableRow>
 
             <TableRow
@@ -123,7 +123,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
-                    android:text="인천" />
+                    android:text="@string/filter_loc_10_text" />
 
                 <RadioButton
                     android:id="@+id/btn11"
@@ -131,7 +131,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
-                    android:text="경남" />
+                    android:text="@string/filter_loc_11_text" />
 
                 <RadioButton
                     android:id="@+id/btn12"
@@ -139,7 +139,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
-                    android:text="광주" />
+                    android:text="@string/filter_loc_12_text" />
             </TableRow>
 
             <TableRow
@@ -152,7 +152,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
-                    android:text="충북" />
+                    android:text="@string/filter_loc_13_text" />
 
                 <RadioButton
                     android:id="@+id/btn14"
@@ -160,7 +160,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
-                    android:text="대구" />
+                    android:text="@string/filter_loc_14_text" />
 
                 <RadioButton
                     android:id="@+id/btn15"
@@ -168,7 +168,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
-                    android:text="제주" />
+                    android:text="@string/filter_loc_15_text" />
             </TableRow>
 
             <TableRow
@@ -181,7 +181,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
-                    android:text="충남" />
+                    android:text="@string/filter_loc_16_text" />
 
                 <RadioButton
                     android:id="@+id/btn17"
@@ -189,7 +189,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
-                    android:text="부산" />
+                    android:text="@string/filter_loc_17_text" />
 
                 <RadioButton
                     android:id="@+id/btn18"
@@ -197,7 +197,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
-                    android:text="온라인" />
+                    android:text="@string/filter_loc_18_text" />
             </TableRow>
         </TableLayout>
 

@@ -7,10 +7,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.codev.databinding.FragmentRecruitProjectBinding
+import com.example.codev.databinding.PopupLocBinding
 import com.example.codev.databinding.RecycleRecruitProjectBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -19,9 +22,18 @@ import retrofit2.Response
 
 class RecruitProjectFragment : Fragment() {
     private lateinit var viewBinding: FragmentRecruitProjectBinding
+    var pdataList: ArrayList<PData> = ArrayList()
+    var sdataList: ArrayList<SData> = ArrayList()
 
-    //여기
-    private lateinit var dataList : ArrayList<ResponseOfGetProject>
+    var p_loc: String = ""
+    var p_part: String = ""
+    var s_loc: String = ""
+    var s_part: String = ""
+
+
+    var downpage: Int = 0
+    var uppage: Int = 0
+    var lastPage: Boolean = false
 
     private lateinit var mainAppActivity: Context
     override fun onAttach(context: Context) {
@@ -42,28 +54,56 @@ class RecruitProjectFragment : Fragment() {
         viewBinding.toolbarRecruit.toolbar1.title = ""
 
 
-        loadData_p(0) //기본으로 0page PData 가져오기
-        var page: Int = 0
 
-        //페이징 처리 부분
+        loadData_p(downpage) //기본으로 0page PData 가져오기
+
+
+
+        //자동페이징 처리 부분
         viewBinding.listviewMain.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                //**********************
-                if (!viewBinding.listviewMain.canScrollVertically(1)) {
-                    //스크롤 할 수 있으면 true, 못하면 false 반환
-                    Log.d("SCROLL", "last Position...")
 
-//                    page += 1
-//                    while (){ //success != [] 이면
-//                        loadData_p(page)
-//                    }
+                val state: Int
+                val lastVisibleItemPosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition() - 2
+                val lastPosition = recyclerView.adapter!!.itemCount - 3 //원래 1
+                if(lastVisibleItemPosition == lastPosition){
+                    downpage += 1
+
+                    loadData_p(downpage)
 
                 }
-                //**********************
+
+
+                //최하단 도착 시
+//                if (!viewBinding.listviewMain.canScrollVertically(1)) { //1 : 최하단, -1 : 최상단
+//                    //스크롤 할 수 있으면 true, 못하면 false 반환
+//                    //스크롤 못해서 false -> !false --> true >> 스크롤이 마지막에 닿으면
+//
+//                    Log.d("SCROLL", "last Position...")
+//                    //lastPage여부 check
+//                    if(lastPage == false){
+//                        downpage += 1
+//                        loadData_p(downpage)
+//                    }
+//                    else{ //불러온 페이지에 더이상 값이 없으면
+//                        Log.d("SCROLL", "맨 마지막 페이지 도착. ")
+//                    }
+//                }
+                //최상단 도착 시
+//                if (!viewBinding.listviewMain.canScrollVertically(-1)){ //1 : 최하단, -1 : 최상단
+//                    uppage -= 1
+//                    if(uppage != -1){ //가장 최상단 0 페이지 제외
+//                        loadData_p(uppage)
+//                        uppage -= 1
+//                    }else{
+//                        //가장 최상단 0페이지
+//                        Log.d("SCROLL", "맨 위 페이지 도착. ")
+//                    }
+//
+//                }
             }
         })
-
 
         //프로젝트인지 스터딘지 구분해줄려고
         var now : Int = 0 //0이 프로젝트 1이 스터디
@@ -79,7 +119,7 @@ class RecruitProjectFragment : Fragment() {
                         //Adatper 호출부분
                         loadData_p(0)
                         viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_project)
-                        Log.d("test: (0나와야 돼) now = ",now.toString())
+                        Log.d("test: (0나와야 돼) now : ",now.toString())
 
                         true
                     }
@@ -90,7 +130,7 @@ class RecruitProjectFragment : Fragment() {
 
                         loadData_s(0)
                         viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_study)
-                        Log.d("test: (1나와야 돼) now = ",now.toString())
+                        Log.d("test: (1나와야 돼) now : ",now.toString())
 
                         true
                     }
@@ -117,29 +157,62 @@ class RecruitProjectFragment : Fragment() {
             }
         }
 
-        //지역 버튼
+        val bottomSheetLoc = BottomSheetLoc()
+        //지역 버튼 --> 선택 한거로 바껴있어야 됨(내용&색)
         viewBinding.loc.setOnClickListener {
-            val bottomSheetLoc = BottomSheetLoc()
             bottomSheetLoc.show(childFragmentManager, bottomSheetLoc.tag)
         }
         viewBinding.filterLoc.setOnClickListener {
-            val bottomSheetLoc = BottomSheetLoc()
             bottomSheetLoc.show(childFragmentManager, bottomSheetLoc.tag)
         }
+        //지역 고르고 적용하기 누르면 -> 그 지역으로 "" 내용 바껴야됨
+//        popupLocBinding.btnSelect.setOnClickListener {
+//            //loadData_p_loc(0,p_loc)
+//            //bottomSheetLoc.dismiss()
+//            Log.d("test: ","적용하기 버튼 누름")
+//            bottomSheetLoc.dismiss()
+//        }
 
-        //분야 버튼
+//        popupLocBinding.radioGroupLoc.setOnClickListener{ //true랑 else->false 달아줘야함??
+//                checkedId -> when(checkedId){
+//                popupLocBinding.btn1 -> { p_loc = "${popupLocBinding.btn1.text}" }
+//                popupLocBinding.btn2 -> { p_loc = "${popupLocBinding.btn2.text}" }
+//                popupLocBinding.btn3 -> { p_loc = "${popupLocBinding.btn3.text}" }
+//                popupLocBinding.btn4 -> { p_loc = "${popupLocBinding.btn4.text}" }
+//                popupLocBinding.btn5 -> { p_loc = "${popupLocBinding.btn5.text}" }
+//                popupLocBinding.btn6 -> { p_loc = "${popupLocBinding.btn6.text}" }
+//                popupLocBinding.btn7 -> { p_loc = "${popupLocBinding.btn7.text}" }
+//                popupLocBinding.btn8 -> { p_loc = "${popupLocBinding.btn8.text}" }
+//                popupLocBinding.btn9 -> { p_loc = "${popupLocBinding.btn9.text}" }
+//                popupLocBinding.btn10 -> { p_loc = "${popupLocBinding.btn10.text}" }
+//                popupLocBinding.btn11 -> { p_loc = "${popupLocBinding.btn11.text}" }
+//                popupLocBinding.btn12 -> { p_loc = "${popupLocBinding.btn12.text}" }
+//                popupLocBinding.btn13 -> { p_loc = "${popupLocBinding.btn13.text}" }
+//                popupLocBinding.btn14 -> { p_loc = "${popupLocBinding.btn14.text}" }
+//                popupLocBinding.btn15 -> { p_loc = "${popupLocBinding.btn15.text}" }
+//                popupLocBinding.btn16 -> { p_loc = "${popupLocBinding.btn16.text}" }
+//                popupLocBinding.btn17 -> { p_loc = "${popupLocBinding.btn17.text}" }
+//                popupLocBinding.btn18 -> { p_loc = "${popupLocBinding.btn18.text}" }
+//            }
+//        }
+
+
+        //분야 버튼 --> 선택 한거로 바껴있어야 됨(내용&색)
         viewBinding.part.setOnClickListener {
             val bottomSheetPart = BottomSheetPart()
             bottomSheetPart.show(childFragmentManager, bottomSheetPart.tag)
+            //뭐눌렀는지 떠야돼 --> 누른 값 인자로 전달 coPart의 ""안에 넣으면 됨
         }
         viewBinding.filterPart.setOnClickListener {
             val bottomSheetPart = BottomSheetPart()
             bottomSheetPart.show(childFragmentManager, bottomSheetPart.tag)
         }
+        //분야 고르고 적용하기 누르면
+
 
         //(프로젝트에서)모집중만 보기 버튼
         //누르면 현재 로고가 플젝인지 스터딘지 검사?
-        var chk : Boolean = false //처음엔 버튼 안눌림
+        var chk : Boolean //처음엔 버튼 안눌림
         viewBinding.recruitingProjectBtn.setOnClickListener {
             //플젝인지 스터딘지 검사
             chk = viewBinding.recruitingProjectBtn.isChecked
@@ -147,21 +220,21 @@ class RecruitProjectFragment : Fragment() {
                 0 -> { //프로젝트
                     if(chk == true) { //모집중 버튼 체크 o
                         loadData_p_ing(0)
-                        Log.d("when test: (0나와야 돼) now = ",now.toString())
+                        Log.d("when test: (0나와야 돼) now : ",now.toString())
                     }
                     else{ //모집중 버튼이 체크 x
                         loadData_p(0)
-                        Log.d("when test: (0나와야 돼) now = ",now.toString())
+                        Log.d("when test: (0나와야 돼) now : ",now.toString())
                     }
                 }
                 1 -> { //스터디
                     if(chk == true) { //모집중 버튼 체크 o
                         loadData_s_ing(0)
-                        Log.d("when test: (1나와야 돼) now = ",now.toString())
+                        Log.d("when test: (1나와야 돼) now : ",now.toString())
                     }
                     else{ //모집중 버튼이 체크 x
                         loadData_s(0)
-                        Log.d("when test: (1나와야 돼) now = ",now.toString())
+                        Log.d("when test: (1나와야 돼) now : ",now.toString())
                     }
                 }
             }
@@ -172,6 +245,15 @@ class RecruitProjectFragment : Fragment() {
 
         return viewBinding.root
     }
+
+    //마지막 페이지인지 확인 (success 빈 배열인지 확인)
+//    private fun check(dataList: ArrayList<ResponseOfGetProject>){
+//        var str: String
+//        dataList.toString()
+//        str = dataList.toString()[1].toString()
+//        Log.d("success : ",str.toString())
+//    }
+
 
     //전체 프로젝트 조회
     private fun loadData_p(int: Int) {
@@ -186,9 +268,23 @@ class RecruitProjectFragment : Fragment() {
                         200->{
                             response.body()?.let {
                                 Log.d("test: 플젝 전체 조회 성공! ", "\n${it.toString()}")
-
                                 Log.d("test: 플젝 전체 데이터 : ", "\n${it.result.success}")
-                                setAdapter_p(it.result.success) //projectAdapter
+
+                                //페이지가 비어있으면
+                                if(it.result.success.toString() == "[]") {
+                                    Log.d("test: success: ", "[] 라서 비어있어용")
+                                    lastPage = true
+                                }
+                                //페이지에 내용이 있으면
+                                else {
+                                    pdataList.addAll(it.result.success)
+                                    if(int == 0) {
+                                        setAdapter_p(pdataList) //projectAdapter
+                                    }
+                                    else{
+                                        viewBinding.listviewMain.adapter!!.notifyDataSetChanged()
+                                    }
+                                }
                             }
 
                         }
@@ -283,6 +379,44 @@ class RecruitProjectFragment : Fragment() {
 
             override fun onFailure(call: Call<ResGetStudyList>, t: Throwable) {
                 Log.d("test: 조회실패 - RPF > loadData_s_ing(모집중 스터디 조회): ", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+    //+지역조건+전체 프로젝트 조회
+    private fun loadData_p_loc(int: Int,p_loc: String) {
+        RetrofitClient.service.requestPDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
+            int,p_loc,"","","","").enqueue(object: Callback<ResGetProjectList>{
+            override fun onResponse(call: Call<ResGetProjectList>, response: Response<ResGetProjectList>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 조회실패",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }else{
+                    when(response.code()){
+                        200->{
+                            response.body()?.let {
+                                Log.d("test: 플젝 전체 조회 성공! ", "\n${it.toString()}")
+                                Log.d("test: 플젝 전체 데이터 : ", "\n${it.result.success}")
+
+                                //페이지가 비어있으면
+                                if(it.result.success.toString() == "[]") {
+                                    Log.d("test: success: ", "[] 라서 비어있어용")
+                                    lastPage = true
+                                }
+                                //페이지에 내용이 있으면
+                                else {
+
+                                    setAdapter_p(it.result.success) //projectAdapter
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResGetProjectList>, t: Throwable) {
+                Log.d("test: 조회실패 - RPF > loadData_p(플젝 전체조회): ", "[Fail]${t.toString()}")
                 Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
         })
