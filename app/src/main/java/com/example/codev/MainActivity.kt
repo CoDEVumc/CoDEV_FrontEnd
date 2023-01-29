@@ -66,8 +66,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewBinding.btnRegister.setOnClickListener {
-            val reqSignUp = ReqSignUp()
-            reqSignUp.co_loginType = "CODEV"
+            val reqSignUp = ReqSignUp("","","","","","","","CODEV")
             val intent = Intent(this,RegisterTosActivity::class.java)
             intent.putExtra("signUp",reqSignUp)
             startActivity(intent)
@@ -131,6 +130,10 @@ class MainActivity : AppCompatActivity() {
                                     Log.d("test: 로그인 성공", "\n${it.toString()}")
                                     if (it.code == 505){
                                         //로그인 타입 가지고 회원가입 페이지
+                                        val reqSignUp = ReqSignUp(it.result.co_email,it.result.co_password,"","","","","",loginType)
+                                        val intent = Intent(context,RegisterTosActivity::class.java)
+                                        intent.putExtra("signUp",reqSignUp)
+                                        startActivity(intent)
                                     }else{
                                         //자동 로그인 설정
                                         UserSharedPreferences.setAutoLogin(context,"TRUE")
@@ -167,6 +170,10 @@ class MainActivity : AppCompatActivity() {
                                     Log.d("test: 로그인 성공", "\n${it.toString()}")
                                     if (it.code == 505){
                                         //로그인 타입 가지고 회원가입 페이지
+                                        val reqSignUp = ReqSignUp(it.result.co_email,it.result.co_password,"","","","","",loginType)
+                                        val intent = Intent(context,RegisterTosActivity::class.java)
+                                        intent.putExtra("signUp",reqSignUp)
+                                        startActivity(intent)
                                     }else{
                                         //자동 로그인 설정
                                         UserSharedPreferences.setAutoLogin(context,"TRUE")
