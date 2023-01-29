@@ -13,6 +13,13 @@
     <string name="menu_mark">북마크</string>
     <string name="menu_option">옵션</string>
     <string name="menu_setting">설정</string>
+
+    <string name="str_project">프로젝트</string>
+    <string name="str_study">스터디</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="hint_email">abcde@email.com</string>
     <string name="hint_password">영문, 숫자, 특수문자 포함 8자 이상</string>
     <string name="hint_profile">닉네임 입력</string>
@@ -23,9 +30,32 @@
     <string name="register_email_title">이메일을 인증해 주세요.</string>
     <string name="register_code_title">코드를 보내 드렸습니다.</string>
     <string name="register_code_subtitle">이메일 인증을 위해 아래에 코드를 입력해주세요.</string>
+
     <string name="register_pwd_title">비밀번호를 설정해 주세요.</string>
     <string name="register_profile_title">프로필을 설정해 주세요.</string>
     <string name="register_done_title">가입이 완료되었습니다!</string>
     <string name="register_birth_title">정보를 입력해 주세요.</string>
+
     <string name="server_client_id">242179001869-snj41p9nfda06ves81efofk8b0g6q9t2.apps.googleusercontent.com</string>
+
+
+    <string name="filter_loc_1_text">서울</string>
+    <string name="filter_loc_2_text">세종</string>
+    <string name="filter_loc_3_text">울산</string>
+    <string name="filter_loc_4_text">경기</string>
+    <string name="filter_loc_5_text">대전</string>
+    <string name="filter_loc_6_text">전북</string>
+    <string name="filter_loc_7_text">강원</string>
+    <string name="filter_loc_8_text">경북</string>
+    <string name="filter_loc_9_text">전남</string>
+    <string name="filter_loc_10_text">인천</string>
+    <string name="filter_loc_11_text">경남</string>
+    <string name="filter_loc_12_text">광주</string>
+    <string name="filter_loc_13_text">충북</string>
+    <string name="filter_loc_14_text">대구</string>
+    <string name="filter_loc_15_text">제주</string>
+    <string name="filter_loc_16_text">충남</string>
+    <string name="filter_loc_17_text">부산</string>
+    <string name="filter_loc_18_text">온라인</string>
+
 </resources>

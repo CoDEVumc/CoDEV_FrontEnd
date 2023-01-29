@@ -2,6 +2,8 @@ package com.example.codev
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.PopupMenu
+import android.widget.Toast
 import com.example.codev.databinding.ActivityMainAppBinding
 
 class MainAppActivity : AppCompatActivity() {
@@ -23,7 +25,7 @@ class MainAppActivity : AppCompatActivity() {
                     R.id.menu_recruit->{
                         supportFragmentManager
                             .beginTransaction()
-                            .replace(viewBinding.content.id,RecruitFragment())
+                            .replace(viewBinding.content.id,RecruitProjectFragment())
                             .commitAllowingStateLoss()
                     }
                     R.id.menu_community->{
@@ -55,5 +57,8 @@ class MainAppActivity : AppCompatActivity() {
             }
             selectedItemId = R.id.menu_home
         }
+
+
+
     }
 }
