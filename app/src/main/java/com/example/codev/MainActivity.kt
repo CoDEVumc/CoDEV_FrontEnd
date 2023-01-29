@@ -136,6 +136,11 @@ class MainActivity : AppCompatActivity() {
 //                                UserSharedPreferences.setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))
 //                                UserSharedPreferences.setUserRefreshToken(context,AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
                                     Log.d("test: 로그인 성공", "\n${it.toString()}")
+                                    if (it.code == 505){
+                                        //회원가입 페이지
+                                    }else{
+                                        //기존 로그인 로직
+                                    }
 //                                Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)))
 //                                Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken(context)))
                                 }

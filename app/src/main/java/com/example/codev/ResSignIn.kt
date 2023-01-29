@@ -8,5 +8,7 @@ data class ResSignIn(
 data class Token(
     val accessToken: String,
     val key: String,
-    val refreshToken: String
+    val refreshToken: String,
+    val co_password: String,
+    val co_email: String
 )

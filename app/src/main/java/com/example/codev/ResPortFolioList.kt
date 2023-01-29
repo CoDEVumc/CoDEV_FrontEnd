@@ -24,5 +24,7 @@ data class Userinfo(
     val co_nickName: String,
     val profileImg: String,
     val co_email: String,
-    val co_name: String
+    val co_name: String,
+    val co_gender: String,
+    val co_brith: String
 ) : Serializable

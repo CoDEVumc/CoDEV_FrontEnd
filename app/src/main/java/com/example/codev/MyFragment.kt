@@ -94,7 +94,7 @@ class MyFragment:Fragment() {
                                 .load(it.result.Complete.profileImg).circleCrop().fitCenter()
                                 .into(viewBinding.profileImg)
                             setAdapter(it.result.Portfolio)
-                            userinfo = Userinfo(it.result.Complete.co_nickName,it.result.Complete.profileImg,it.result.Complete.co_email,it.result.Complete.co_name)
+                            userinfo = Userinfo(it.result.Complete.co_nickName,it.result.Complete.profileImg,it.result.Complete.co_email,it.result.Complete.co_name,it.result.Complete.co_gender,it.result.Complete.co_brith)
                         }
                     }
                 }
