@@ -104,6 +104,7 @@ class MainActivity : AppCompatActivity() {
             val idToken = account.idToken
             Log.d("test",account.toString())
             Log.d("test",idToken.toString())
+            sendIdToken(this,"GOOGLE",idToken.toString())
         } catch (e: ApiException) {
             Log.d("test", "handleSignInResult:error", e)
         }
@@ -115,6 +116,72 @@ class MainActivity : AppCompatActivity() {
 
     private fun revokeAccessGoogle() {
         mGoogleSignInClient!!.revokeAccess()
+    }
+
+    private fun sendIdToken(context: Context,loginType: String, token: String){
+        if (loginType == "GOOGLE"){
+            RetrofitClient.service.googleSignIn(ReqGoogleSignIn(loginType,token)).enqueue(object: Callback<ResSignIn>{
+                override fun onResponse(call: Call<ResSignIn>, response: Response<ResSignIn>) {
+                    if(response.isSuccessful.not()){
+                        Log.d("test: 로그인 실패1",response.toString())
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                        return
+                    }else{
+                        when(response.code()){
+                            200->{
+                                // 토큰 암호화
+                                response.body()?.let {
+//                                UserSharedPreferences.setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))
+//                                UserSharedPreferences.setUserRefreshToken(context,AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
+                                    Log.d("test: 로그인 성공", "\n${it.toString()}")
+//                                Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)))
+//                                Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken(context)))
+                                }
+//                            val intent = Intent(context,MainAppActivity::class.java)
+//                            startActivity(intent)
+//                            finish()
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<ResSignIn>, t: Throwable) {
+                    Log.d("test: 로그인 실패2", "[Fail]${t.toString()}")
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }else if(loginType == "GITHUB"){
+            RetrofitClient.service.githubSignIn(ReqGithubSignIn(loginType,token)).enqueue(object: Callback<ResSignIn>{
+                override fun onResponse(call: Call<ResSignIn>, response: Response<ResSignIn>) {
+                    if(response.isSuccessful.not()){
+                        Log.d("test: 로그인 실패1",response.toString())
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                        return
+                    }else{
+                        when(response.code()){
+                            200->{
+                                // 토큰 암호화
+                                response.body()?.let {
+//                                UserSharedPreferences.setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))
+//                                UserSharedPreferences.setUserRefreshToken(context,AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
+                                    Log.d("test: 로그인 성공", "\n${it.toString()}")
+//                                Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)))
+//                                Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken(context)))
+                                }
+//                            val intent = Intent(context,MainAppActivity::class.java)
+//                            startActivity(intent)
+//                            finish()
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<ResSignIn>, t: Throwable) {
+                    Log.d("test: 로그인 실패2", "[Fail]${t.toString()}")
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
     }
 
 

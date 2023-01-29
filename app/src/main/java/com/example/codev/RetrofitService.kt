@@ -26,6 +26,12 @@ interface RetrofitService {
     @GET("user/code/mail")
     fun getEmailCode(@Query("email") value1: String) : Call<ResGetEmailCode>
 
+    @POST("user/sns/login")
+    fun googleSignIn(@Body params: ReqGoogleSignIn) : Call<ResSignIn>
+
+    @POST("user/sns/login")
+    fun githubSignIn(@Body params: ReqGithubSignIn) : Call<ResSignIn>
+
     @GET("my-page/portfolioList")
     fun getPortFolio(@Header("CoDev_Authorization") header: String) : Call<ResPortFolioList>
 
