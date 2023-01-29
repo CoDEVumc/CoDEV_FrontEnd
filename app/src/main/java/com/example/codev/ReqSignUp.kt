@@ -7,8 +7,8 @@ data class ReqSignUp(
     var co_password: String,
     var co_nickName: String,
     var co_name: String,
+    var co_gender: String,
     var co_birth: String,
-    var role: String
-): Serializable {
-    constructor() : this("test","test","test","test","test","test")
-}
+    var role: String,
+    var co_loginType: String
+): Serializable
