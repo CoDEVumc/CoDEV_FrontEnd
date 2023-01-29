@@ -15,14 +15,16 @@
     <string name="menu_setting">설정</string>
     <string name="hint_email">abcde@email.com</string>
     <string name="hint_password">영문, 숫자, 특수문자 포함 8자 이상</string>
-    <string name="register_tos_title">서비스 이용 약관에\n동의해주세요.</string>
-    <string name="register_type_title">회원 유형을 선택 해주세요.</string>
+    <string name="hint_profile">8글자 미만</string>
+    <string name="register_tos_title">서비스 이용 약관에\n동의해 주세요.</string>
+    <string name="register_type_title">회원 유형을 선택해 주세요.</string>
     <string name="register_type_individual">개인 회원</string>
     <string name="register_type_business">기업 회원</string>
-    <string name="register_email_title">이메일 인증을 해주세요.</string>
+    <string name="register_email_title">이메일을 인증해 주세요.</string>
     <string name="register_code_title">코드를 보내 드렸습니다.</string>
     <string name="register_code_subtitle">이메일 인증을 위해 아래에 코드를 입력해주세요.</string>
-    <string name="register_pwd_title">비밀번호를 설정 해주세요.</string>
-    <string name="register_profile_title">프로필을 설정 해주세요.</string>
-    <string name="register_done_title">가입이 완료 되었습니다.</string>
+    <string name="register_pwd_title">비밀번호를 설정해 주세요.</string>
+    <string name="register_profile_title">프로필을 설정해 주세요.</string>
+    <string name="register_done_title">가입이 완료되었습니다!</string>
+    <string name="register_birth_title">정보를 입력해 주세요.</string>
 </resources>

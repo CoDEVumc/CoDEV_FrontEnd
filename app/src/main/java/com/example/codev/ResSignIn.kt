@@ -1,6 +1,6 @@
 package com.example.codev
 
-data class ResSignUp(
+data class ResSignIn(
     val code: Int,
     val result: Token
 )

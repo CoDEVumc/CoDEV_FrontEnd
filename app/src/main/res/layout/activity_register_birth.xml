@@ -17,23 +17,23 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar_register"
         android:layout_marginTop="21dp"
         android:layout_marginStart="24dp"
-        android:text="@string/register_pwd_title"
+        android:text="@string/register_birth_title"
         style="@style/Text.Heading1"
         android:textColor="@color/black_900"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="이메일"
+        android:text="이름"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/et_email"
+        app:layout_constraintBottom_toTopOf="@+id/et_name"
         android:layout_marginStart="32dp"
         android:layout_marginBottom="6dp"
         style="@style/Text.Body4.Medium"
         android:textColor="@color/black_700"/>
 
     <EditText
-        android:id="@+id/et_email"
+        android:id="@+id/et_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,87 +42,67 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="133dp"
-        style="@style/Text.Body4.SemiBold"
-        android:text="@string/hint_email"
+        android:hint="이름 입력"
+        android:textColorHint="@color/black_500"
+        style="@style/Text.Body4.Medium"
         android:textColor="@color/black_900"
         android:background="@drawable/login_et"
-        android:inputType="textEmailAddress"
-        android:enabled="false"/>
+        android:inputType="text"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/et_email"
-        app:layout_constraintEnd_toEndOf="@+id/et_email"
-        app:layout_constraintBottom_toBottomOf="@+id/et_email"
-        android:layout_marginEnd="14dp"
-        android:src="@drawable/register_chk_checked"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="비밀번호"
+        android:text="생년월일 / 성별"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/et_password"
+        app:layout_constraintBottom_toTopOf="@+id/et_brith"
         android:layout_marginStart="32dp"
         android:layout_marginBottom="6dp"
         style="@style/Text.Body4.Medium"
         android:textColor="@color/black_700"/>
 
     <EditText
-        android:id="@+id/et_password"
+        android:id="@+id/et_brith"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_email"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="43dp"
         android:layout_marginEnd="24dp"
-        android:hint="@string/hint_password"
+        android:layout_marginTop="44dp"
+        android:hint="선택 입력"
         android:textColorHint="@color/black_500"
         style="@style/Text.Body4.Medium"
         android:textColor="@color/black_900"
         android:background="@drawable/login_et"
-        android:inputType="textPassword"/>
+        android:inputType="date"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="비밀번호 확인"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/et_password_chk"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="6dp"
-        style="@style/Text.Body4.Medium"
-        android:textColor="@color/black_700"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_male"
+        android:layout_width="32dp"
+        android:layout_height="28dp"
+        app:layout_constraintTop_toTopOf="@+id/et_brith"
+        app:layout_constraintEnd_toEndOf="@+id/et_brith"
+        app:layout_constraintBottom_toBottomOf="@+id/et_brith"
+        android:background="@drawable/register_typebox2"
+        android:text="남"
+        style="@style/Text.Body5.Medium"
+        android:textColor="@color/black_500"
+        android:layout_marginEnd="49dp"/>
 
-    <EditText
-        android:id="@+id/et_password_chk"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_password"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="43dp"
-        android:layout_marginEnd="24dp"
-        android:hint="@string/hint_password"
-        android:textColorHint="@color/black_500"
-        style="@style/Text.Body4.Medium"
-        android:textColor="@color/black_900"
-        android:background="@drawable/login_et"
-        android:inputType="textPassword"/>
-
-    <ImageView
-        android:id="@+id/et_password_chk_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/et_password_chk"
-        app:layout_constraintEnd_toEndOf="@+id/et_password_chk"
-        app:layout_constraintBottom_toBottomOf="@+id/et_password_chk"
-        android:layout_marginEnd="14dp"
-        android:src="@drawable/register_unchecked"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_female"
+        android:layout_width="32dp"
+        android:layout_height="28dp"
+        app:layout_constraintTop_toTopOf="@+id/et_brith"
+        app:layout_constraintEnd_toEndOf="@+id/et_brith"
+        app:layout_constraintBottom_toBottomOf="@+id/et_brith"
+        android:background="@drawable/register_typebox2"
+        android:text="여"
+        style="@style/Text.Body5.Medium"
+        android:textColor="@color/black_500"
+        android:layout_marginEnd="9dp"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_register_next"
@@ -137,7 +117,6 @@
         android:layout_marginTop="508dp"
         style="@style/Text.Body4.SemiBold"
         android:textColor="@color/black_500"
-        android:background="@drawable/register_button"
-        android:enabled="false"/>
+        android:background="@drawable/register_button"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

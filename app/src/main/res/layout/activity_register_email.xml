@@ -42,10 +42,11 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="133dp"
-        style="@style/Text.Body4.Medium"
-        android:textColor="@color/black_500"
-        android:background="@drawable/login_et"
         android:hint="@string/hint_email"
+        android:textColorHint="@color/black_500"
+        style="@style/Text.Body4.Medium"
+        android:textColor="@color/black_900"
+        android:background="@drawable/login_et"
         android:inputType="textEmailAddress"/>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -61,6 +62,7 @@
         android:layout_marginTop="508dp"
         style="@style/Text.Body4.SemiBold"
         android:textColor="@color/black_500"
-        android:background="@drawable/register_button_unselected"/>
+        android:background="@drawable/register_button"
+        android:enabled="false"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
