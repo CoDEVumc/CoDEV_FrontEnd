@@ -30,6 +30,12 @@ class MyFragment:Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.d("test","onResume")
+        loadData(mainAppActivity)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,7 +56,6 @@ class MyFragment:Fragment() {
                 else -> false
             }
         }
-        loadData(mainAppActivity)
 
         viewBinding.profile.setOnClickListener {
             val intent = Intent(mainAppActivity, MyProfileActivity::class.java)

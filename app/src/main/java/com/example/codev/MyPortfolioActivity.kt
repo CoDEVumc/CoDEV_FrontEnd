@@ -65,6 +65,8 @@ class MyPortfolioActivity:AppCompatActivity() {
                 Log.d("test: 삭제 목록",adapter.getDeleteList()[i].toString())
                 deletePortfolio(this,adapter.getDeleteList()[i])
             }
+            viewBinding.btnEditChk.isChecked = !viewBinding.btnEditChk.isChecked
+            viewBinding.btnDelete.isGone = !viewBinding.btnEditChk.isChecked
         }
 
         //isChecked 된 항목들 삭제기능 필요
