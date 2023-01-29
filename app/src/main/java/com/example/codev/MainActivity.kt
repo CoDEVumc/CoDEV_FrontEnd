@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         AndroidKeyStoreUtil.init(this)
 
         // 자동 로그인 방지
-        UserSharedPreferences.clearUser(this)
+        // UserSharedPreferences.clearUser(this)
 
         getCode()
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
