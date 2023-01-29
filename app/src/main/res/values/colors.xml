@@ -20,4 +20,6 @@
     <color name="black_100">#E1E1E1</color>
     <color name="black_50">#F8F8F8</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#FF5959</color>
+    <color name="opacity_black_900">#33333333</color>
 </resources>

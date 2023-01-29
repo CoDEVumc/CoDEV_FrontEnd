@@ -12,15 +12,17 @@
     <string name="menu_heart">찜</string>
     <string name="menu_mark">북마크</string>
     <string name="menu_option">옵션</string>
+    <string name="menu_setting">설정</string>
 
     <string name="str_project">프로젝트</string>
     <string name="str_study">스터디</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="hint_email">abcde@email.com</string>
     <string name="hint_password">영문, 숫자, 특수문자 포함 8자 이상</string>
-    <string name="hint_profile">8글자 미만</string>
+    <string name="hint_profile">닉네임 입력</string>
     <string name="register_tos_title">서비스 이용 약관에\n동의해 주세요.</string>
     <string name="register_type_title">회원 유형을 선택해 주세요.</string>
     <string name="register_type_individual">개인 회원</string>
@@ -33,6 +35,9 @@
     <string name="register_profile_title">프로필을 설정해 주세요.</string>
     <string name="register_done_title">가입이 완료되었습니다!</string>
     <string name="register_birth_title">정보를 입력해 주세요.</string>
+
+    <string name="server_client_id">242179001869-snj41p9nfda06ves81efofk8b0g6q9t2.apps.googleusercontent.com</string>
+
 
     <string name="filter_loc_1_text">서울</string>
     <string name="filter_loc_2_text">세종</string>
