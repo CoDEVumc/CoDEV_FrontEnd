@@ -11,7 +11,7 @@ import com.example.codev.databinding.ListItemBinding
 
 import java.util.ArrayList;
 
-class NewDropdownRVListAdapter(private var context: Context, private var itemList: ArrayList<AddListItem>): RecyclerView.Adapter<NewDropdownRVListAdapter.NewStackViewHolder>(){
+class NewDropdownRVListAdapter(private var itemList: ArrayList<AddListItem>): RecyclerView.Adapter<NewDropdownRVListAdapter.NewStackViewHolder>(){
 
     interface OnItemClickListener {
         fun onItemClick(v: View?, item: AddListItem, pos: Int)

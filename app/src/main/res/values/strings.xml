@@ -14,7 +14,9 @@
     <string name="menu_option">옵션</string>
 
     <string name="add_new_project">프로젝트 모집하기</string>
+    <string name="edit_new_project">프로젝트 수정하기</string>
     <string name="add_new_study">스터디 모집하기</string>
+    <string name="edit_new_study">스터디 수정하기</string>
     <string name="add_new_title">제목</string>
     <string name="add_new_des">프로젝트에 대한 설명과 진행 기간 등을 자유롭게 작성해 주세요.</string>
     <string name="add_image_text">사진 첨부</string>
@@ -45,6 +47,7 @@
     <string name="register_done_title">가입이 완료 되었습니다.</string>
     <string name="register_birth_title">정보를 입력 해주세요.</string>
     <string name="add_pf_toolbar">포트폴리오 작성하기</string>
+    <string name="edit_pf_toolbar">포트폴리오 수정하기</string>
     <string name="add_pf_title_text">포트폴리오 제목</string>
     <string name="pf_name_text">이름</string>
     <string name="pf_birthday_text">생년월일 / 성별</string>
@@ -55,6 +58,8 @@
     <string name="pf_link_text">포트폴리오 자료(외부 링크 추가)</string>
     <string name="pf_add_link_text">+ 추가하기</string>
     <string name="pf_submit_button_text">저장하기</string>
-    <string name="pf_content_hint">나에 대해 자유롭게 표현해 보세요. (최대 500자)</string>
+    <string name="pf_content_hint">나에 대해 자유롭게 표현해 보세요.</string>
+    <string name="sex_girl">여</string>
+    <string name="sex_boy">남</string>
 
 </resources>

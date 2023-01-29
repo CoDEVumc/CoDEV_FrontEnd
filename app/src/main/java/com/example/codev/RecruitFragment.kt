@@ -1,6 +1,7 @@
 package com.example.codev
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.PopupMenu
@@ -48,8 +49,6 @@ class RecruitFragment:Fragment() {
                 else -> false
             }
         }
-
-        
 
         return viewBinding.root
     }

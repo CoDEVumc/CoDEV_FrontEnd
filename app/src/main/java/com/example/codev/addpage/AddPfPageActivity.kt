@@ -1,32 +1,36 @@
 package com.example.codev.addpage
 
+import android.content.Context
 import android.graphics.Typeface
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.util.TypedValue
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.codev.AndroidKeyStoreUtil
 import com.example.codev.R
 import com.example.codev.databinding.ActivityAddPfPageBinding
-import com.example.codev.databinding.DropdownListBinding
-import com.google.android.material.chip.Chip
-import java.util.ArrayList
-import java.util.HashMap
+import com.example.codev.databinding.InputLayoutBinding
+
 
 class AddPfPageActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityAddPfPageBinding
 
+    //functionVar
+    var addPageFunction = AddPageFunction()
+    var project2Server = Project2Server()
+
+    //stackVar
     var allStackList = HashMap<Int, ArrayList<AddListItem> >()
     var chipList = HashMap<AddListItem, View>()
-    var addPageFunction = AddPageFunction()
 
-
-
+    //linkList
+    private var linkTimeTextHashMap = LinkedHashMap<Long, String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,194 +51,336 @@ class AddPfPageActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
-        //setPFTitle
+        //TitleSection - Start
+        val titleLimit = 30
         var isTitleOk = false
-        viewBinding.inputPfTitle.inputTitle.hint = "제목 입력 (최대 25자)"
-        viewBinding.inputPfTitle.inputTitle.addTextChangedListener(object : TextWatcher{
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(viewBinding.inputPfTitle.inputTitle.text.toString().isEmpty() || viewBinding.inputPfTitle.inputTitle.text.toString().replace(" ", "").length == 0) {
-                    viewBinding.inputPfTitle.inputTitle.error = "제목을 입력하세요."
+        viewBinding.inputPfTitle.inputOfTitle.hint = "제목 입력 (최대 30자)"
+        viewBinding.inputPfTitle.inputOfTitle.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                if(s.isNullOrBlank()) {
+                    viewBinding.inputPfTitle.inputOfTitle.error = "제목을 입력하세요."
                     isTitleOk = false
-                }else if(count >= 30){
-                    viewBinding.inputPfTitle.inputTitle.error = "제목이 30자를 초과할 수 없습니다."
+                }else if(s.length > titleLimit){
+                    viewBinding.inputPfTitle.inputOfTitle.error = "제목이 ${titleLimit}자를 초과할 수 없습니다."
                     isTitleOk = false
                 }else{
-                    viewBinding.inputPfTitle.inputTitle.error = null
+                    viewBinding.inputPfTitle.inputOfTitle.error = null
+
                     isTitleOk = true
                 }
             }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
         })
+        //TitleSection - End
 
 
         //setPFName
         val userName = "상명이"
-        viewBinding.inputPfName.inputTitle.setText(userName)
-        viewBinding.inputPfName.inputTitle.isFocusable = false
-        viewBinding.inputPfName.inputTitle.setTextColor(getColor(R.color.black_500))
-        viewBinding.inputPfName.inputTitle.isClickable = false
+        viewBinding.inputPfName.inputOfTitle.setText(userName)
+        viewBinding.inputPfName.inputOfTitle.isFocusable = false
+        viewBinding.inputPfName.inputOfTitle.setTextColor(getColor(R.color.black_500))
+        viewBinding.inputPfName.inputOfTitle.isClickable = false
 
         //setBirthday
         val userBirth = "1234-05-06"
-        viewBinding.inputPfBirthday.inputTitle.setText(userBirth)
-        viewBinding.inputPfBirthday.inputTitle.isFocusable = false
-        viewBinding.inputPfBirthday.inputTitle.setTextColor(getColor(R.color.black_500))
-        viewBinding.inputPfBirthday.inputTitle.isClickable = false
+        viewBinding.inputPfBirthday.inputOfTitle.setText(userBirth)
+        viewBinding.inputPfBirthday.inputOfTitle.isFocusable = false
+        viewBinding.inputPfBirthday.inputOfTitle.setTextColor(getColor(R.color.black_500))
+        viewBinding.inputPfBirthday.inputOfTitle.isClickable = false
+
+        //setSex
+
 
         //setLevel
-        viewBinding.inputPfLevel.dropdownTitle.hint = "능력 정도 선택"
 
-        // START-setLevel
-        var newLevelString = resources.getStringArray(R.array.pf_level);
-        var newLevelList = ArrayList<AddListItem>()
-        for(i in newLevelString) newLevelList.add(AddListItem(false, i, 0))
-        var selectedNewLevelIndex = -1
+        // START - setLevel
+        var isLevelListVisible = false
 
-        var newLevelListView = DropdownListBinding.inflate(layoutInflater)
-        var isLevelListOpen = false
-        var newLevelRVAdapter = NewDropdownRVListAdapter(this, newLevelList)
-        newLevelRVAdapter.setOnItemClickListener(object:
-            NewDropdownRVListAdapter.OnItemClickListener {
-            override fun onItemClick(v: View?, item: AddListItem, pos: Int) {
-                if(pos != selectedNewLevelIndex){ //직전 선택한 항목이 아니고
-                    if(selectedNewLevelIndex != -1){ // 직전에 선택한 항목이 있었을 때
-                        newLevelList[selectedNewLevelIndex].isSelected = false
-                        newLevelRVAdapter.notifyItemChanged(selectedNewLevelIndex)
-                    }
-                    newLevelList[pos].isSelected = true
-                    newLevelRVAdapter.notifyItemChanged(pos)
-                    selectedNewLevelIndex = pos
-                    viewBinding.inputPfLevel.dropdownTitle.text = newLevelList[selectedNewLevelIndex].name
-                }
-            }
-        })
-        viewBinding.inputPfLevel.dropdownRound.setOnClickListener {
-            if(!isLevelListOpen){
-                var addLocationListView = newLevelListView.rvList
-                addLocationListView.adapter = newLevelRVAdapter;
-                addLocationListView.layoutManager = LinearLayoutManager(this)
-                viewBinding.levelSection.addView(addLocationListView.rootView)
-                isLevelListOpen = true
+        var levelString = resources.getStringArray(R.array.pf_level);
+        var levelList = ArrayList<AddListItem>()
+        for(i in levelString) levelList.add(AddListItem(false, i, 0))
+        var selectedLevelIndex = -1
+        viewBinding.levelHead.dropdownTitle.text = "능력 정도 선택"
+
+        viewBinding.inputPfLevel.adapter = CallbackSingleRVAdapter(levelList, selectedLevelIndex) {
+            Log.d("inputPfLevel", it.toString())
+            viewBinding.levelHead.dropdownTitle.text = levelList[it].name
+        }
+        viewBinding.inputPfLevel.layoutManager = LinearLayoutManager(this)
+        viewBinding.levelHead.root.setOnClickListener{
+            if(!isLevelListVisible){
+                viewBinding.inputPfLevel.visibility = View.VISIBLE
+                isLevelListVisible = true
             }else{
-                viewBinding.levelSection.removeAllViews()
-                isLevelListOpen = false
+                viewBinding.inputPfLevel.visibility = View.GONE
+                isLevelListVisible = false
             }
         }
-        // END-setLevelNew
+        // End - setLevel
+
 
         // START-setNewStack2
-        var makeStackDropdown = MakeStackDropdown()
-        allStackList = makeStackDropdown.createAllStackHashMap(resources)
+        allStackList = addPageFunction.createAllStackHashMap(resources)
 
-        var selectedNewStack1Index = -1
+        var selectedStack1Index = -1
 
-        viewBinding.stackDropdown2.dropdownTitle.text = "세부 기술 선택"
+        viewBinding.stack2Head.dropdownTitle.text = "세부 기술을 선택하세요"
 
-        var newStack2ListView = DropdownListBinding.inflate(layoutInflater)
-        var isStack2ListOpen = false
-        var newStack2RVListAdapter = NewDropdownRVListAdapter(this, allStackList[selectedNewStack1Index]!!)
-        newStack2RVListAdapter = setStack2ClickEvent(newStack2RVListAdapter)
-        viewBinding.stackDropdown2.dropdownRound.setOnClickListener {
-            if(!isStack2ListOpen){
-                var addStack2ListView = newStack2ListView.rvList
-                addStack2ListView.adapter = newStack2RVListAdapter;
-                addStack2ListView.layoutManager = LinearLayoutManager(this)
-                viewBinding.stack2Section.addView(addStack2ListView.rootView)
-                isStack2ListOpen = true
+        viewBinding.stack2List.adapter = getStack2Adapter(allStackList[selectedStack1Index]!!)
+        viewBinding.stack2List.layoutManager = LinearLayoutManager(this)
+        var isStack2ListVisible = false
+        viewBinding.stack2Head.root.setOnClickListener {
+            if(!isStack2ListVisible){
+                viewBinding.stack2List.visibility = View.VISIBLE
+                isStack2ListVisible = true
             }else{
-                viewBinding.stack2Section.removeAllViews()
-                isStack2ListOpen = false
+                viewBinding.stack2List.visibility = View.GONE
+                isStack2ListVisible = false
             }
         }
         // END-setNewStack2
 
-
         // START-setNewStack1
-        var newStack1String = resources.getStringArray(R.array.stack1_list);
-        var newStack1List = ArrayList<AddListItem>()
-        for(i in newStack1String) newStack1List.add(AddListItem(false, i, 0))
-        viewBinding.stackDropdown.dropdownTitle.text = "분야를 선택하세요"
+        var isStack1ListVisible = false
 
-        var newStack1ListView = DropdownListBinding.inflate(layoutInflater)
-        var isStack1ListOpen = false
-        var newStack1RVListAdapter = NewDropdownRVListAdapter(this, newStack1List)
-        newStack1RVListAdapter.setOnItemClickListener(object:
-            NewDropdownRVListAdapter.OnItemClickListener {
-            override fun onItemClick(v: View?, item: AddListItem, pos: Int) {
-                if(pos != selectedNewStack1Index){ //클릭한 항목이 선택한 항목이 아니면
-                    if(selectedNewStack1Index != -1){ //직전에 선택한 항목이 있었을 때
-                        newStack1List[selectedNewStack1Index].isSelected = false
-                        newStack1RVListAdapter.notifyItemChanged(selectedNewStack1Index)
-                    }
-                    newStack1List[pos].isSelected = true
-                    newStack1RVListAdapter.notifyItemChanged(pos)
-                    selectedNewStack1Index = pos
+        val stack1String = resources.getStringArray(R.array.stack1_list);
+        val stack1List = ArrayList<AddListItem>()
+        for(i in stack1String) stack1List.add(AddListItem(false, i, 0))
+        viewBinding.stack1Head.dropdownTitle.text = "분야를 선택하세요"
 
-                    //resetStack2Section
-                    viewBinding.stack2Section.removeAllViews()
-                    newStack2RVListAdapter = NewDropdownRVListAdapter(this@AddPfPageActivity, allStackList[selectedNewStack1Index]!!)
-                    newStack2RVListAdapter = setStack2ClickEvent(newStack2RVListAdapter)
-                    var addStack2ListView = newStack2ListView.rvList
-                    addStack2ListView.adapter = newStack2RVListAdapter;
-                    addStack2ListView.layoutManager = LinearLayoutManager(this@AddPfPageActivity)
-                    viewBinding.stack2Section.addView(addStack2ListView.rootView)
-                    isStack2ListOpen = true
-                    //resetStack2Section END
-                }
-            }
-        })
-        viewBinding.stackDropdown.dropdownRound.setOnClickListener {
-            if(!isStack1ListOpen){
-                var addStack1ListView = newStack1ListView.rvList
-                addStack1ListView.adapter = newStack1RVListAdapter;
-                addStack1ListView.layoutManager = LinearLayoutManager(this)
-                viewBinding.stack1Section.addView(addStack1ListView.rootView)
-                isStack1ListOpen = true
+        var stack1Adapter = CallbackSingleRVAdapter(stack1List, selectedStack1Index) {
+            Log.d("stack1Index", it.toString())
+            selectedStack1Index = it
+            viewBinding.stack2List.adapter = getStack2Adapter(allStackList[it]!!)
+            viewBinding.stack2List.visibility = View.VISIBLE
+            isStack2ListVisible = true
+        }
+
+        viewBinding.stack1List.adapter = stack1Adapter
+        viewBinding.stack1List.layoutManager = LinearLayoutManager(this)
+        viewBinding.stack1Head.root.setOnClickListener{
+            if(!isStack1ListVisible){
+                viewBinding.stack1List.visibility = View.VISIBLE
+                isStack1ListVisible = true
             }else{
-                viewBinding.stack1Section.removeAllViews()
-                isStack1ListOpen = false
+                viewBinding.stack1List.visibility = View.GONE
+                isStack1ListVisible = false
             }
         }
         // END-setNewStack1
 
-        //setPFIntro
+        //IntroSection - Start
+        val introLimit = 30
         var isIntroOk = false
-        viewBinding.inputPfIntro.inputTitle.hint = "나를 한 마디로 표현해 보세요. (최대 25자)"
-        viewBinding.inputPfIntro.inputTitle.addTextChangedListener(object : TextWatcher{
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(viewBinding.inputPfIntro.inputTitle.text.toString().isEmpty() || viewBinding.inputPfIntro.inputTitle.text.toString().replace(" ", "").length == 0) {
-                    viewBinding.inputPfIntro.inputTitle.error = "제목을 입력하세요."
+        viewBinding.inputPfIntro.inputOfTitle.hint = "나를 한 마디로 표현해 보세요. (최대 30자)"
+        viewBinding.inputPfIntro.inputOfTitle.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                if(s.isNullOrBlank()) {
+                    viewBinding.inputPfIntro.inputOfTitle.error = "대표 문구를 입력하세요."
                     isIntroOk = false
-                }else if(count >= 25){
-                    viewBinding.inputPfIntro.inputTitle.error = "제목이 25자를 초과할 수 없습니다."
+                }else if(s.length > introLimit){
+                    viewBinding.inputPfIntro.inputOfTitle.error = "대표 문구가 ${introLimit}자를 초과할 수 없습니다."
                     isIntroOk = false
                 }else{
-                    viewBinding.inputPfIntro.inputTitle.error = null
+                    viewBinding.inputPfIntro.inputOfTitle.error = null
                     isIntroOk = true
                 }
             }
+        })
+        //IntroSection - End
 
+        //contentSection - Start
+        val contentLimit = 500
+        viewBinding.contentTextCounter.text = "0/${contentLimit}"
+
+        var isContentOk = false
+        viewBinding.inputPfContent.hint = getString(R.string.pf_content_hint)
+        viewBinding.inputPfContent.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
+                if(s.isNullOrBlank()) {
+                    viewBinding.contentTextCounter.text = "0/${contentLimit}"
+                    viewBinding.inputPfContent.error = "자기 소개를 입력하세요."
+                    isContentOk = false
+                }else {
+                    viewBinding.contentTextCounter.text = "${s!!.length}/${contentLimit}"
+                    if(s.length > contentLimit){
+                        viewBinding.inputPfContent.error = "자기 소개가 ${contentLimit}자를 초과할 수 없습니다."
+                        isContentOk = false
+                    }else{
+                        viewBinding.inputPfContent.error = null
+                        isContentOk = true
+                    }
+                }
             }
         })
+        //contentSection - End
+
+        //LinkSection - Start
+        val linkLimit = 65536
+        var maxLinkLimit = 5
+        var nowLinkNumber = 0
+        viewBinding.addLinkButton.setOnClickListener {
+            if(nowLinkNumber >= maxLinkLimit){
+                Toast.makeText(this, "외부 링크는 최대 5개까지입니다.", Toast.LENGTH_SHORT).show()
+            }else{
+                val nowTime = System.currentTimeMillis()
+                linkTimeTextHashMap[nowTime] = ""
+                val linkView = InputLayoutBinding.inflate(layoutInflater)
+                linkView.inputOfTitle.hint = "링크 입력 (최대 65536자)"
+                linkView.inputOfTitle.addTextChangedListener(object : TextWatcher {
+                    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+                    override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+                    override fun afterTextChanged(s: Editable?) {
+                        linkTimeTextHashMap[nowTime] = s.toString()
+                        if(s.isNullOrBlank()) {
+                            linkView.inputOfTitle.error = "링크를 입력하세요."
+                        }else if(s.length > linkLimit){
+                            linkView.inputOfTitle.error = "링크가 ${linkLimit}자를 초과할 수 없습니다."
+                        }else{
+                            linkView.inputOfTitle.error = null
+                        }
+                    }
+                })
+                linkView.cancelButton.visibility = View.VISIBLE
+                linkView.cancelButton.setOnClickListener {
+                    viewBinding.addLinkSection.removeView(linkView.root)
+                    linkTimeTextHashMap.remove(nowTime)
+                    nowLinkNumber -= 1
+                }
+
+                linkView.inputOfTitle.hint = "링크를 입력하세요."
+                viewBinding.addLinkSection.addView(linkView.root)
+                nowLinkNumber += 1
+            }
+            
+        }
+        //LinkSection - End
+
+        //setViewData
+        val extras = intent.extras
+        //TODO: 객체가 존재하면 객체 내용을 페이지에 적용하고, toolbar과 제출하기의 text도 "수정하기"로 바꾸자
+        //checkIsNew
+        var isOld = false
+        if (extras != null) {
+            isOld = true
+            viewBinding.toolbarTitle.toolbarText.text = getString(R.string.edit_pf_toolbar)
+            viewBinding.submitButton.text = "수정하기"
+
+            val oldData: EditPF = extras.get("pf") as EditPF
+
+            //setTitle
+            viewBinding.inputPfTitle.inputOfTitle.setText(oldData.title)
+            //=================================
+
+            //setName
+            viewBinding.inputPfName.inputOfTitle.setText(oldData.realName)
+
+            //setBirthday
+            viewBinding.inputPfBirthday.inputOfTitle.setText(oldData.birthday)
+
+            //setSex
+            if(oldData.isMan){
+                viewBinding.boyIcon.setImageResource(R.drawable.sex_icon_selected_round)
+                viewBinding.textBoy.setTextColor(resources.getColor(R.color.green_900) )
+            }else {
+                viewBinding.girlIcon.setImageResource(R.drawable.sex_icon_selected_round)
+                viewBinding.textGirl.setTextColor(resources.getColor(R.color.green_900))
+            }
+
+            //setPartName
+            viewBinding.levelHead.dropdownTitle.text = oldData.level
+            //=================================
+
+            //setChipGroup
+            for(i in oldData.languageIdNameMap.keys){
+                val oldChip = AddListItem(false, oldData.languageIdNameMap[i]!!, i)
+                addPageFunction.changeItem2True(allStackList, oldData.languageIdNameMap[i]!!)
+                addOrRemoveChip(oldChip)
+                viewBinding.stack2List.adapter!!.notifyDataSetChanged()
+            }
+
+            viewBinding.inputPfIntro.inputOfTitle.setText(oldData.intro)
+
+            //setLocation
+            viewBinding.inputPfContent.setText(oldData.content)
+
+            //setLinkList
+            //TODO: link List Add
+        }
 
 
+        viewBinding.submitButton.setOnClickListener {
+            val finalTitle = viewBinding.inputPfTitle.inputOfTitle.text.toString()
+            Log.d("finalTitle", finalTitle)
+
+            val finalLevel = viewBinding.levelHead.dropdownTitle.text.toString()
+            Log.d("finalLevel", finalLevel)
+
+            val finalStackList = ArrayList<Int>();
+            for(i in chipList.keys){
+                finalStackList.add(i.numberInServer)
+            }
+            Log.d("finalStackList", finalStackList.toString())
+
+            val finalIntro = viewBinding.inputPfIntro.inputOfTitle.text.toString()
+            Log.d("finalIntro", finalIntro)
+
+            val finalContent = viewBinding.inputPfContent.text.toString()
+            Log.d("finalContent", finalContent)
+
+            val finalLinkList = ArrayList<String>()
+            for(i in linkTimeTextHashMap.values){
+                finalLinkList.add(i)
+            }
+            Log.d("finalLinkList", finalLinkList.toString())
+
+            var toastString = ""
+            if(!isTitleOk){
+                toastString += "제목, "
+            }
+
+            var isLevelOk = true
+            if(finalLevel == "능력 정도 선택"){
+                toastString += "능력, "
+                isLevelOk = false
+            }
+
+            if(!isIntroOk){
+                toastString += "대표 문구, "
+            }
+
+            if(!isContentOk){
+                toastString += "자기 소개, "
+            }
+
+            var isLinkOk = true
+            for(i in finalLinkList){
+                if (i.isEmpty()){
+                    toastString += "링크, "
+                    isLinkOk = false
+                    break
+                }
+            }
+
+            if(isTitleOk and isLevelOk and isIntroOk and isContentOk and isLinkOk){
+                var result = project2Server.postNewPF(this, finalTitle, finalLevel, finalIntro, finalContent, finalStackList, finalLinkList)
+                if(result){
+
+                    finish()
+                }
+            }else{
+                toastString = toastString.substring(0, toastString.length-2) + "을 확인하세요."
+                Log.d("string", toastString)
+                Toast.makeText(this, toastString, Toast.LENGTH_LONG).show()
+            }
 
 
-
-
-
-
-
-
+        }
 
 
     }
@@ -249,39 +395,44 @@ class AddPfPageActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    //setStack2Section - Start
-    fun setStack2ClickEvent(adapter: NewDropdownRVListAdapter): NewDropdownRVListAdapter {
-        adapter.setOnItemClickListener(object: NewDropdownRVListAdapter.OnItemClickListener {
-            override fun onItemClick(v: View?, item: AddListItem, pos: Int) {
-                if(!item.isSelected){
-                    chipList[item] = makeChip(item, adapter)
-                    item.isSelected = true
-                }else{
-                    var removeChipView = chipList[item]
-
-                    viewBinding.stackChipGroup.removeView(removeChipView)
-                    chipList.remove(item)//remove from chipview
-                    item.isSelected = false
-                }
-                adapter.notifyItemChanged(pos)
-            }
-        })
-        return adapter
-    }
-    private fun makeChip(addItem: AddListItem, adapter: NewDropdownRVListAdapter): Chip {
-        var chipView = addPageFunction.setStackChip(this, addItem, adapter)
-
-        chipView.setOnCloseIconClickListener {
-//            addPageFunction.changeItem2False(allStackList, name)'
-            addItem.isSelected = false
-            viewBinding.stackChipGroup.removeView(chipView)
-            chipList.remove(addItem)
-            adapter.notifyDataSetChanged()
+    //SetStack2Function - Start
+    private fun getStack2Adapter(itemList: ArrayList<AddListItem>): Stack2RVAdapter{
+        return Stack2RVAdapter(itemList) {
+            Log.d("stack2Clicked", it.name)
+            addOrRemoveChip(it)
         }
-        viewBinding.stackChipGroup.addView(chipView)
-        Log.d("did", "addDID")
-        return chipView
     }
-    //setStack2Section - End
+    private fun addOrRemoveChip(chipItem: AddListItem){
+        //list안에 있는 클래스를 따로 만들어서 보관하는 것이 좋다
+        val chipItemInList = AddListItem(false, chipItem.name, chipItem.numberInServer)
+
+        //칩이 현재 존재하는지
+        if(chipItemInList !in chipList.keys) {
+            Log.d("iWillAddChip", chipItemInList.name)
+            //칩 추가
+            val chipView = addPageFunction.setStackChip(this, chipItemInList)
+            chipView.setOnCloseIconClickListener{
+                viewBinding.stackChipGroup.removeView(it)
+                chipList.remove(chipItemInList)
+                addPageFunction.changeItem2False(allStackList, chipItem)
+                viewBinding.stack2List.adapter!!.notifyDataSetChanged()
+            }
+            viewBinding.stackChipGroup.addView(chipView)
+            chipList[chipItemInList] = chipView
+        }else{
+            //칩 삭제
+            Log.d("iWillDeleteChip", chipItemInList.name)
+
+            viewBinding.stackChipGroup.removeView(chipList[chipItemInList])
+            chipList.remove(chipItemInList)
+        }
+    }
+    //SetStack2Function - End
+
+
+
+    fun dpToPx(context: Context, dp: Float): Float {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics)
+    }
 
 }

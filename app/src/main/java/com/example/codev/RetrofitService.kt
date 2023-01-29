@@ -25,4 +25,43 @@ interface RetrofitService {
         ,@Part files: List<MultipartBody.Part?>
     ): Call<ResCreateNewProject>
 
+    @PUT("project/update/{id}")
+    @Multipart
+    fun updateProject(
+        @Path("id") id: String
+        ,@Header("CoDev_Authorization") authToken: String
+        ,@Part("project") project: RequestBody
+        ,@Part files: List<MultipartBody.Part?>
+    ): Call<ResCreateNewProject>
+
+    @POST("study")
+    @Multipart
+    fun createNewStudy(
+        @Header("CoDev_Authorization") authToken: String
+        ,@Part("study") study: RequestBody
+        ,@Part files: List<MultipartBody.Part?>
+    ): Call<ResCreateNewStudy>
+
+    @PUT("study/update/{id}")
+    @Multipart
+    fun updateStudy(
+        @Path("id") id: String
+        ,@Header("CoDev_Authorization") authToken: String
+        ,@Part("study") study: RequestBody
+        ,@Part files: List<MultipartBody.Part?>
+    ): Call<ResCreateNewStudy>
+
+    @POST("my-page/portfolio")
+    fun createNewPF(
+        @Header("CoDev_Authorization") authToken: String
+        ,@Body params: ReqCreateNewPF
+    ): Call<ResCreateNewPF>
+
+    @PATCH("my-page/portfolio/{id}")
+    fun updatePF(
+        @Path("id") id: String
+        ,@Header("CoDev_Authorization") authToken: String
+        ,@Body params: ReqCreateNewPF
+    ): Call<ResCreateNewPF>
+
 }

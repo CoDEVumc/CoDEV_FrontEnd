@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".addpage.AddPfPageActivity">
+    tools:context=".addpage.AddPfPageActivity"
+    android:animateLayoutChanges="true">
     <!-- Toolbar -->
     <include
         android:id="@+id/toolbar_title"
@@ -16,12 +17,14 @@
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/toolbar_title"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:animateLayoutChanges="true"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
+            android:animateLayoutChanges="true"
             >
 
             <TextView
@@ -91,6 +94,56 @@
                 app:layout_constraintTop_toBottomOf="@id/text_pf_birthday"
                 android:layout_marginTop="12dp"/>
 
+            <ImageView
+                android:id="@+id/girl_icon"
+                android:layout_width="32dp"
+                android:layout_height="28dp"
+                app:layout_constraintRight_toRightOf="@+id/input_pf_birthday"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintTop_toTopOf="@id/input_pf_birthday"
+                app:layout_constraintBottom_toBottomOf="@id/input_pf_birthday"
+                android:layout_marginVertical="10dp"
+                android:src="@drawable/sex_icon_round"
+                />
+
+            <TextView
+                android:id="@+id/text_girl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/girl_icon"
+                app:layout_constraintBottom_toBottomOf="@id/girl_icon"
+                app:layout_constraintLeft_toLeftOf="@id/girl_icon"
+                app:layout_constraintRight_toRightOf="@id/girl_icon"
+                android:text="@string/sex_girl"
+                style="@style/Text.Body5.Medium"
+                android:textColor="@color/black_500"/>
+
+            <ImageView
+                android:id="@+id/boy_icon"
+                android:layout_width="32dp"
+                android:layout_height="28dp"
+                app:layout_constraintRight_toLeftOf="@+id/girl_icon"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintTop_toTopOf="@id/input_pf_birthday"
+                app:layout_constraintBottom_toBottomOf="@id/input_pf_birthday"
+                android:layout_marginVertical="10dp"
+                android:src="@drawable/sex_icon_round"
+                />
+
+            <TextView
+                android:id="@+id/text_boy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/boy_icon"
+                app:layout_constraintBottom_toBottomOf="@id/boy_icon"
+                app:layout_constraintLeft_toLeftOf="@id/boy_icon"
+                app:layout_constraintRight_toRightOf="@id/boy_icon"
+                android:text="@string/sex_boy"
+                style="@style/Text.Body5.Medium"
+                android:textColor="@color/black_500"/>
+
+
+
             <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/birthday_divider"
                 android:layout_width="match_parent"
@@ -111,37 +164,43 @@
                 style="@style/Text.Body4.SemiBold"/>
 
             <include
-                android:id="@+id/input_pf_level"
+                android:id="@+id/level_head"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 layout="@layout/dropdown_layout"
                 app:layout_constraintTop_toBottomOf="@id/text_pf_level"
-                android:layout_marginTop="12dp"/>
+                android:layout_marginTop="12dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                />
 
-            <LinearLayout
-                android:id="@+id/level_section"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/input_pf_level"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintTop_toBottomOf="@id/input_pf_level"
+                android:layout_height="182dp"
+                app:layout_constraintTop_toBottomOf="@id/level_head"
                 android:layout_marginTop="-8dp"
-                android:orientation="vertical"/>
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:background="@drawable/dropdown_menu"
+                tools:listitem="@layout/list_item"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/stack_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/level_section"
-                android:layout_marginTop="32dp"
+                app:layout_constraintTop_toBottomOf="@id/input_pf_level"
+                android:layout_marginTop="24dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginStart="4dp"
-                android:text="@string/pf_stack_text"
+                android:text="@string/add_page_stack_text"
                 android:textColor="@color/black_900"
                 style="@style/Text.Body4.SemiBold"
                 />
 
-
             <include
-                android:id="@+id/stack_dropdown"
+                android:id="@+id/stack_1_head"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 layout="@layout/dropdown_layout"
@@ -151,45 +210,53 @@
                 app:layout_constraintRight_toRightOf="parent"
                 />
 
-            <LinearLayout
-                android:id="@+id/stack_1_section"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/stack_1_list"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintTop_toBottomOf="@id/stack_dropdown"
-                android:layout_marginTop="-5dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:orientation="vertical"/>
-
-
-            <include
-                android:id="@+id/stack_dropdown2"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                layout="@layout/dropdown_layout"
-                app:layout_constraintTop_toBottomOf="@id/stack_1_section"
-                android:layout_marginTop="13dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                />
-
-            <LinearLayout
-                android:id="@+id/stack_2_section"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintTop_toBottomOf="@id/stack_dropdown2"
+                android:layout_height="182dp"
+                app:layout_constraintTop_toBottomOf="@id/stack_1_head"
                 android:layout_marginTop="-8dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:orientation="vertical">
-            </LinearLayout>
+                android:background="@drawable/dropdown_menu"
+                tools:listitem="@layout/list_item"
+                android:visibility="gone"
+                />
+
+
+            <include
+                android:id="@+id/stack_2_head"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                layout="@layout/dropdown_layout"
+                app:layout_constraintTop_toBottomOf="@id/stack_1_list"
+                android:layout_marginTop="13dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/stack_2_list"
+                android:layout_width="match_parent"
+                android:layout_height="182dp"
+                app:layout_constraintTop_toBottomOf="@id/stack_2_head"
+                android:layout_marginTop="-8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:background="@drawable/dropdown_menu"
+                tools:listitem="@layout/list_item"
+                android:visibility="gone"
+                />
+
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/stack_chip_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/stack_2_section"
+                app:layout_constraintTop_toBottomOf="@+id/stack_2_list"
                 android:layout_marginTop="12dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:animateLayoutChanges="true"
                 />
 
             <TextView
@@ -232,18 +299,19 @@
                 app:layout_constraintTop_toBottomOf="@id/text_pf_content"
                 android:layout_marginTop="12dp"
                 android:textSize="14sp"
-                android:hint="@string/pf_content_hint"/>
+                android:hint="@string/pf_content_hint"
+                android:inputType="textMultiLine"/>
 
 
             <TextView
-                android:id="@+id/text_counter"
+                android:id="@+id/content_text_counter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintRight_toRightOf="@id/input_pf_content"
                 android:layout_marginEnd="12dp"
-                app:layout_constraintBottom_toBottomOf="@id/input_pf_content"
+                app:layout_constraintTop_toBottomOf="@id/input_pf_content"
                 android:layout_marginBottom="18dp"
-                android:text="1/100"/>
+                android:text="0/500"/>
 
             <TextView
                 android:id="@+id/text_pf_link"
@@ -258,23 +326,43 @@
                 style="@style/Text.Body4.SemiBold"/>
 
             <LinearLayout
-                android:id="@+id/link_section"
+                android:id="@+id/add_link_section"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/text_pf_link"
                 android:layout_marginTop="12dp"
-                android:orientation="vertical"/>
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:orientation="vertical"
+                android:animateLayoutChanges="true"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/add_link_button"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                app:layout_constraintTop_toBottomOf="@id/link_section"
-                android:layout_marginTop="12dp"
-                android:text="@string/pf_add_link_text"
-                android:background="@drawable/write_gray_button"
-                style="@style/Text.Body4.SemiBold"
-                android:textColor="@color/black_700"/>
+                app:layout_constraintTop_toBottomOf="@id/add_link_section"
+                android:background="@drawable/write_gray_button"/>
+
+            <TextView
+                android:id="@+id/add_link_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/add_link_button"
+                app:layout_constraintBottom_toBottomOf="@id/add_link_button"
+                app:layout_constraintLeft_toLeftOf="@id/add_link_button"
+                app:layout_constraintRight_toRightOf="@id/add_link_button"
+                android:text="추가하기"
+                style="@style/Text.Body4.SemiBold"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/add_link_text"
+                app:layout_constraintBottom_toBottomOf="@id/add_link_text"
+                app:layout_constraintRight_toLeftOf="@id/add_link_text"
+                android:layout_marginEnd="6dp"
+                android:src="@drawable/add_icon"/>
+
 
             <Button
                 android:id="@+id/submit_button"

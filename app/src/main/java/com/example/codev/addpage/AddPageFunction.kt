@@ -1,16 +1,24 @@
 package com.example.codev.addpage
 
+import android.Manifest
 import android.content.ContentResolver
 import android.content.Context
+import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.database.Cursor
 import android.database.DatabaseUtils
 import android.net.Uri
 import android.provider.MediaStore
 import android.provider.OpenableColumns
+import android.text.TextUtils
 import android.util.Log
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.*
 import com.example.codev.R
 import com.example.codev.databinding.AddSubSectionBinding
@@ -23,10 +31,39 @@ import java.io.OutputStream
 
 class AddPageFunction {
 
+    fun checkSelfPermission(context: Context, nowActivity: AppCompatActivity) {
+        var temp = ""
+
+        //파일 읽기 권한 확인
+        if (ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            temp += Manifest.permission.READ_EXTERNAL_STORAGE + " "
+        }
+//        //파일 쓰기 권한 확인
+//        if (ContextCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            temp += Manifest.permission.WRITE_EXTERNAL_STORAGE + " "
+//        }
+        if (!TextUtils.isEmpty(temp)) {
+            Toast.makeText(context, "권한을 요청합니다.", Toast.LENGTH_SHORT).show()
+            // 권한 요청
+            ActivityCompat.requestPermissions(
+                nowActivity,
+                temp.trim { it <= ' ' }.split(" ".toRegex()).dropLastWhile { it.isEmpty() }
+                    .toTypedArray(),
+                1)
+        }
+    }
+
     fun setStackChip(
         context: Context,
-        addItem: AddListItem,
-        adapter: NewDropdownRVListAdapter
+        addItem: AddListItem
     ): Chip {
         var chipView = Chip(context)
         chipView.text = addItem.name
@@ -46,7 +83,7 @@ class AddPageFunction {
     fun changeItem2False(allStackList: HashMap<Int, ArrayList<AddListItem>>, addItem: AddListItem){
         for(i in allStackList.values){
             for(j in i){
-                if(j.name == addItem.name){
+                if(j == addItem){
                     j.isSelected = false
                     return
                 }
@@ -100,7 +137,6 @@ class AddPageFunction {
                     MotionEvent.ACTION_DOWN -> section.addButton.background = getDrawable(context, R.drawable.add_button_press)
                     MotionEvent.ACTION_UP -> section.addButton.background = getDrawable(context, R.drawable.add_button)
                 }
-
                 return v?.onTouchEvent(event) ?: true
             }
         })
@@ -149,6 +185,57 @@ class AddPageFunction {
         outputStream.close()
         inputStream.close()
         return filePath
+    }
+
+    public fun createAllStackHashMap(resources: Resources): LinkedHashMap<Int, ArrayList<AddListItem>> {
+        val allStackList = LinkedHashMap<Int, ArrayList<AddListItem>>()
+        allStackList[-1] = ArrayList<AddListItem>()
+
+        val pmStackStringList = resources.getStringArray(R.array.pm_stack);
+        allStackList[0] = ArrayList<AddListItem>()
+        for(i in pmStackStringList){
+            val splitList = i.split(":-:")
+            val stackName = splitList[0]
+            val stackInt = splitList[1].toInt()
+            allStackList[0]?.add(AddListItem(false, stackName, stackInt))
+        }
+
+        val designStackStringList = resources.getStringArray(R.array.design_stack);
+        allStackList[1] = ArrayList<AddListItem>()
+        for(i in designStackStringList){
+            val splitList = i.split(":-:")
+            val stackName = splitList[0]
+            val stackInt = splitList[1].toInt()
+            allStackList[1]?.add(AddListItem(false, stackName, stackInt))
+        }
+
+        val frontStackStringList = resources.getStringArray(R.array.front_stack);
+        allStackList[2] = ArrayList<AddListItem>()
+        for(i in frontStackStringList){
+            val splitList = i.split(":-:")
+            val stackName = splitList[0]
+            val stackInt = splitList[1].toInt()
+            allStackList[2]?.add(AddListItem(false, stackName, stackInt))
+        }
+
+        val backStackStringList = resources.getStringArray(R.array.back_stack);
+        allStackList[3] = ArrayList<AddListItem>()
+        for(i in backStackStringList){
+            val splitList = i.split(":-:")
+            val stackName = splitList[0]
+            val stackInt = splitList[1].toInt()
+            allStackList[3]?.add(AddListItem(false, stackName, stackInt))
+        }
+
+        val etcStackStringList = resources.getStringArray(R.array.etc_stack);
+        allStackList[4] = ArrayList<AddListItem>()
+        for(i in etcStackStringList){
+            val splitList = i.split(":-:")
+            val stackName = splitList[0]
+            val stackInt = splitList[1].toInt()
+            allStackList[4]?.add(AddListItem(false, stackName, stackInt))
+        }
+        return allStackList
     }
 
 }

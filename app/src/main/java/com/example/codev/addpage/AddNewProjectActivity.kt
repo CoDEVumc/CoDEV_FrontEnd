@@ -1,115 +1,52 @@
 package com.example.codev.addpage
 
-import android.Manifest
 import android.app.DatePickerDialog
-import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.codev.AndroidKeyStoreUtil
 import com.example.codev.R
 import com.example.codev.databinding.ActivityAddNewProjectBinding
-import com.example.codev.databinding.DropdownListBinding
-import com.example.codev.databinding.ImageItemBinding
-import com.google.android.material.chip.Chip
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.schedulers.Schedulers
 import java.io.File
-import java.net.URLDecoder
-import java.net.URLEncoder
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class AddNewProjectActivity : AppCompatActivity() {
 
     private lateinit var viewBinding: ActivityAddNewProjectBinding
-    private var imageFileList = ArrayList<File>()
-    private var imageNum = 0
-    var allStackList = HashMap<Int, ArrayList<AddListItem> >()
-    var chipList = HashMap<AddListItem, View>()
-    private var dateJsonString: String = ""
+
+    //functionVar
     var addPageFunction = AddPageFunction()
     var project2Server = Project2Server()
 
-    @RequiresApi(Build.VERSION_CODES.Q)
+    //imageVar
+    private val imageLimit = 5
+    var imageItemList = ArrayList<ImageItem>()
+
+    //stackVar
+    var allStackList = LinkedHashMap<Int, ArrayList<AddListItem> >()
+    var chipList = LinkedHashMap<AddListItem, View>()
+
+    //DeadLineTimeVar
+    private var dateJsonString: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityAddNewProjectBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         AndroidKeyStoreUtil.init(this)
-
-//        checkSelfPermission()
-
-        //setViewData
-        val extras = intent.extras
-        //TODO: 객체가 존재하면 객체 내용을 페이지에 적용하고, toolbar과 제출하기의 text도 "수정하기"로 바꾸자
-        //checkIsNew
-
-
-        //setTitle
-        //val data = extras!!["MainEditText"] as String
-        //=================================
-
-        //setDes
-
-        //=================================
-
-//        //setImage
-//        val urlList = ArrayList<String>()
-//        urlList.add("http://semtle.catholic.ac.kr:8080/image?name=jpgSana20230123182825.jpg")
-//        urlList.add("http://semtle.catholic.ac.kr:8080/image?name=shot20230123182825.png")
-//        for(i in urlList){
-//            val imageBinding = ImageItemBinding.inflate(layoutInflater)
-//            Glide.with(this).asFile().load(i).submit().get()
-//            imageBinding.cancelButton.setOnClickListener {
-//                viewBinding.selectedImages.removeView(imageBinding.root)
-////                imageFileList.remove(nowFile)
-//                viewBinding.addImageNum.text = (--imageNum).toString() + "/5"
-//            }
-//            viewBinding.selectedImages.addView(imageBinding.root)
-//            imageFileList.add(nowFile)
-//            viewBinding.addImageNum.text = (++imageNum).toString() + "/5"
-//
-//        }
-
-        //=================================
-
-        //setPartNumber
-        ////setPmNumber
-
-        ////setDesignNumber
-
-        ////setFrontNumber
-
-        ////setBackNumber
-
-        ////setetcNumber
-        //=================================
-
-        //setChipGroup
-
-        //setLocation
-
-        //setDeadline
-
-
 
         //가운데 정렬 글 작성 예시
         viewBinding.toolbarTitle.toolbarAddPageToolbar.title = ""
@@ -125,239 +62,272 @@ class AddNewProjectActivity : AppCompatActivity() {
         }
 
         //TitleSection - Start
+        val titleLimit = 30
         var isTitleOk = false
-        viewBinding.addPageTitleLayout.counterMaxLength = 30
-        viewBinding.addPageTitleLayout.isCounterEnabled = true
-
-        viewBinding.addPageTitle.addTextChangedListener(object : TextWatcher {
+        viewBinding.inputOfTitle.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if(viewBinding.addPageTitle.text.toString().isEmpty() || viewBinding.addPageTitle.text.toString().replace(" ", "").length == 0) {
-                    viewBinding.addPageTitleLayout.error = "제목을 입력하세요."
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                if(s.isNullOrBlank()) {
+                    viewBinding.inputOfTitleLayout.error = "제목을 입력하세요."
                     isTitleOk = false
-                }else if(count >= 30){
-                    viewBinding.addPageTitleLayout.error = "제목이 30자를 초과할 수 없습니다."
+                }else if(s.length > titleLimit){
+                    viewBinding.inputOfTitleLayout.error = "제목이 ${titleLimit}자를 초과할 수 없습니다."
                     isTitleOk = false
                 }else{
-                    viewBinding.addPageTitleLayout.error = null
+                    viewBinding.inputOfTitleLayout.error = null
                     isTitleOk = true
                 }
-            }
-            override fun afterTextChanged(s: Editable?) {
-
             }
         })
         //TitleSection - End
 
-        //DesSection - Start
-        var isDesOk = false
-//        viewBinding.addPageDes.inputType = TEXT
-        viewBinding.addPageDes.addTextChangedListener(object : TextWatcher {
+        //contentSection - Start
+        val contentLimit = 500
+        viewBinding.contentTextCounter.text = "0/${contentLimit}"
+        var isContentOk = false
+        viewBinding.inputOfContent.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if(viewBinding.addPageDes.text.isEmpty() || viewBinding.addPageDes.text.toString().replace(" ", "").length == 0) {
-                    Log.d("desText", viewBinding.addPageDes.text.toString().replace(" ", "").length.toString())
-                    viewBinding.addPageDes.error = "상세 설명을 입력하세요."
-                    isDesOk = false
-                }else if(count >= 300){
-                    viewBinding.addPageDes.error = "상세설명이 300자를 초과할 수 없습니다."
-                    isDesOk = false
-                }else{
-                    viewBinding.addPageDes.error = null
-                    isDesOk = true
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                if(s.isNullOrBlank()) {
+                    viewBinding.contentTextCounter.text = "0/${contentLimit}"
+                    viewBinding.inputOfContent.error = "상세 설명을 입력하세요."
+                    isContentOk = false
+                }else {
+                    viewBinding.contentTextCounter.text = "${s!!.length}/${contentLimit}"
+                    if(s.length > contentLimit){
+                        viewBinding.inputOfContent.error = "상세 설명이 ${contentLimit}자를 초과할 수 없습니다."
+                        isContentOk = false
+                    }else{
+                        viewBinding.inputOfContent.error = null
+                        isContentOk = true
+                    }
                 }
             }
-            override fun afterTextChanged(s: Editable?) {}
         })
-        //DesSection - End
+        //contentSection - End
 
-        //add_image_section
+        //
+
+        //addImageSection - Start
+        viewBinding.addImageSection.adapter = ImageRVAdapter(this, imageItemList) {
+            //subImageCounter
+            viewBinding.addImageNum.text = "${imageItemList.size}/${imageLimit}"
+        }
+
+        viewBinding.addImageSection.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        viewBinding.addImageSection.setHasFixedSize(true)
         viewBinding.addImageButton.setOnClickListener {
-            if(imageNum == 5){
-                Toast.makeText(this, "사진은 최대 5개를 추가할 수 있습니다.", Toast.LENGTH_SHORT).show()
+            if(imageItemList.size == imageLimit){
+                Toast.makeText(this, "사진은 최대 ${imageLimit}개를 추가할 수 있습니다.", Toast.LENGTH_SHORT).show()
             }else {
+                addPageFunction.checkSelfPermission(this, this)
                 getContent.launch(arrayOf(
                     "image/png",
                     "image/jpg",
                     "image/jpeg"
                 ))
             }
+
         }
+        //addImageSection - End
 
-
-        //add_sub_button_setting
+        //AddPartPeople - Start
         addPageFunction.setAddSubButton(this, viewBinding.pmSection)
         addPageFunction.setAddSubButton(this, viewBinding.designSection)
         addPageFunction.setAddSubButton(this, viewBinding.frontSection)
         addPageFunction.setAddSubButton(this, viewBinding.backSection)
         addPageFunction.setAddSubButton(this, viewBinding.etcSection)
-
-        //set stack list
+        //AddPartPeople - End
 
         // START-setNewStack2
-        var makeStackDropdown = MakeStackDropdown()
-        allStackList = makeStackDropdown.createAllStackHashMap(resources)
+        allStackList = addPageFunction.createAllStackHashMap(resources)
+        var selectedStack1Index = -1
 
-        var selectedNewStack1Index = -1
+        viewBinding.stack2Head.dropdownTitle.text = "세부 기술을 선택하세요"
 
-        viewBinding.stackDropdown2.dropdownTitle.text = "세부 기술을 선택하세요"
-
-        var newStack2ListView = DropdownListBinding.inflate(layoutInflater)
-        var isStack2ListOpen = false
-        var newStack2RVListAdapter = NewDropdownRVListAdapter(this, allStackList[selectedNewStack1Index]!!)
-        newStack2RVListAdapter = setStack2ClickEvent(newStack2RVListAdapter)
-        viewBinding.stackDropdown2.dropdownRound.setOnClickListener {
-            if(!isStack2ListOpen){
-                var addStack2ListView = newStack2ListView.rvList
-                addStack2ListView.adapter = newStack2RVListAdapter;
-                addStack2ListView.layoutManager = LinearLayoutManager(this)
-                viewBinding.stack2Section.addView(addStack2ListView.rootView)
-                isStack2ListOpen = true
+        viewBinding.stack2List.adapter = getStack2Adapter(allStackList[selectedStack1Index]!!)
+        viewBinding.stack2List.layoutManager = LinearLayoutManager(this)
+        var isStack2ListVisible = false
+        viewBinding.stack2Head.root.setOnClickListener {
+            if(!isStack2ListVisible){
+                viewBinding.stack2List.visibility = View.VISIBLE
+                isStack2ListVisible = true
             }else{
-                viewBinding.stack2Section.removeAllViews()
-                isStack2ListOpen = false
+                viewBinding.stack2List.visibility = View.GONE
+                isStack2ListVisible = false
             }
         }
         // END-setNewStack2
 
 
         // START-setNewStack1
-        var newStack1String = resources.getStringArray(R.array.stack1_list);
-        var newStack1List = ArrayList<AddListItem>()
-        for(i in newStack1String) newStack1List.add(AddListItem(false, i, 0))
-        viewBinding.stackDropdown.dropdownTitle.text = "분야를 선택하세요"
+        var isStack1ListVisible = false
 
-        var newStack1ListView = DropdownListBinding.inflate(layoutInflater)
-        var isStack1ListOpen = false
-        var newStack1RVListAdapter = NewDropdownRVListAdapter(this, newStack1List)
-        newStack1RVListAdapter.setOnItemClickListener(object:
-            NewDropdownRVListAdapter.OnItemClickListener {
-            override fun onItemClick(v: View?, item: AddListItem, pos: Int) {
-                if(pos != selectedNewStack1Index){ //클릭한 항목이 선택한 항목이 아니면
-                    if(selectedNewStack1Index != -1){ //직전에 선택한 항목이 있었을 때
-                        newStack1List[selectedNewStack1Index].isSelected = false
-                        newStack1RVListAdapter.notifyItemChanged(selectedNewStack1Index)
-                    }
-                    newStack1List[pos].isSelected = true
-                    newStack1RVListAdapter.notifyItemChanged(pos)
-                    selectedNewStack1Index = pos
+        val stack1String = resources.getStringArray(R.array.stack1_list);
+        val stack1List = ArrayList<AddListItem>()
+        for(i in stack1String) stack1List.add(AddListItem(false, i, 0))
+        viewBinding.stack1Head.dropdownTitle.text = "분야를 선택하세요"
 
-                    //resetStack2Section
-                    viewBinding.stack2Section.removeAllViews()
-                    newStack2RVListAdapter = NewDropdownRVListAdapter(this@AddNewProjectActivity, allStackList[selectedNewStack1Index]!!)
-                    newStack2RVListAdapter = setStack2ClickEvent(newStack2RVListAdapter)
-                    var addStack2ListView = newStack2ListView.rvList
-                    addStack2ListView.adapter = newStack2RVListAdapter;
-                    addStack2ListView.layoutManager = LinearLayoutManager(this@AddNewProjectActivity)
-                    viewBinding.stack2Section.addView(addStack2ListView.rootView)
-                    isStack2ListOpen = true
-                    //resetStack2Section END
-                }
-            }
-        })
-        viewBinding.stackDropdown.dropdownRound.setOnClickListener {
-            if(!isStack1ListOpen){
-                var addStack1ListView = newStack1ListView.rvList
-                addStack1ListView.adapter = newStack1RVListAdapter;
-                addStack1ListView.layoutManager = LinearLayoutManager(this)
-                viewBinding.stack1Section.addView(addStack1ListView.rootView)
-                isStack1ListOpen = true
+        var stack1Adapter = CallbackSingleRVAdapter(stack1List, selectedStack1Index) {
+            Log.d("stack1Index", it.toString())
+            selectedStack1Index = it
+            viewBinding.stack2List.adapter = getStack2Adapter(allStackList[it]!!)
+            viewBinding.stack2List.visibility = View.VISIBLE
+            isStack2ListVisible = true
+        }
+
+        viewBinding.stack1List.adapter = stack1Adapter
+        viewBinding.stack1List.layoutManager = LinearLayoutManager(this)
+        viewBinding.stack1Head.root.setOnClickListener{
+            if(!isStack1ListVisible){
+                viewBinding.stack1List.visibility = View.VISIBLE
+                isStack1ListVisible = true
             }else{
-                viewBinding.stack1Section.removeAllViews()
-                isStack1ListOpen = false
+                viewBinding.stack1List.visibility = View.GONE
+                isStack1ListVisible = false
             }
         }
         // END-setNewStack1
 
+        // START - setLocation
+        var isLocationListVisible = false
 
-        // START-setLocationNew
-        var newLocationString = resources.getStringArray(R.array.location_list);
-        var newLocationList = ArrayList<AddListItem>()
-        for(i in newLocationString) newLocationList.add(AddListItem(false, i, 0))
-        var selectedNewLocationIndex = -1
-        viewBinding.locationDropdown.dropdownTitle.text = "지역을 선택하세요"
+        var locationString = resources.getStringArray(R.array.location_list);
+        var locationList = ArrayList<AddListItem>()
+        for(i in locationString) locationList.add(AddListItem(false, i, 0))
+        var selectedLocationIndex = -1
+        viewBinding.locationHead.dropdownTitle.text = "지역을 선택하세요"
 
-        var newLocationListView = DropdownListBinding.inflate(layoutInflater)
-        var isLocationListOpen = false
-        var newLocationRVAdapter = NewDropdownRVListAdapter(this, newLocationList)
-        newLocationRVAdapter.setOnItemClickListener(object:
-            NewDropdownRVListAdapter.OnItemClickListener {
-            override fun onItemClick(v: View?, item: AddListItem, pos: Int) {
-                if(pos != selectedNewLocationIndex){ //직전 선택한 항목이 아니고
-                    if(selectedNewLocationIndex != -1){ // 직전에 선택한 항목이 있었을 때
-                        newLocationList[selectedNewLocationIndex].isSelected = false
-                        newLocationRVAdapter.notifyItemChanged(selectedNewLocationIndex)
-                    }
-                    newLocationList[pos].isSelected = true
-                    newLocationRVAdapter.notifyItemChanged(pos)
-                    selectedNewLocationIndex = pos
-                    viewBinding.locationDropdown.dropdownTitle.text = newLocationList[selectedNewLocationIndex].name
-                }
-            }
-        })
-        viewBinding.locationDropdown.dropdownRound.setOnClickListener {
-            if(!isLocationListOpen){
-                var addLocationListView = newLocationListView.rvList
-                addLocationListView.adapter = newLocationRVAdapter;
-                addLocationListView.layoutManager = LinearLayoutManager(this)
-                viewBinding.locationSection.addView(addLocationListView.rootView)
-                isLocationListOpen = true
+        viewBinding.locationList.adapter = CallbackSingleRVAdapter(locationList, selectedLocationIndex) {
+            Log.d("location", it.toString())
+            viewBinding.locationHead.dropdownTitle.text = locationList[it].name
+        }
+        viewBinding.locationList.layoutManager = LinearLayoutManager(this)
+        viewBinding.locationHead.root.setOnClickListener{
+            if(!isLocationListVisible){
+                viewBinding.locationList.visibility = View.VISIBLE
+                isLocationListVisible = true
             }else{
-                viewBinding.locationSection.removeAllViews()
-                isLocationListOpen = false
+                viewBinding.locationList.visibility = View.GONE
+                isLocationListVisible = false
             }
         }
-        // END-setLocationNew
+        // End - setLocationNew
 
         //setDeadLine
-        viewBinding.deadlineDropdown.dropdownTitle.text = "마감 일자를 선택하세요"
-        viewBinding.deadlineDropdown.dropdownRound.setOnClickListener {
+        viewBinding.deadlineHead.dropdownTitle.text = "마감 일자를 선택하세요"
+        viewBinding.deadlineHead.dropdownRound.setOnClickListener {
             val cal = Calendar.getInstance()    //캘린더뷰 만들기
             val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
                 var dateShowString = "${year}/${month+1}/${dayOfMonth}"
                 dateJsonString = String.format("%d-%02d-%d", year, month+1, dayOfMonth)
-                viewBinding.deadlineDropdown.dropdownTitle.text = dateShowString
+                viewBinding.deadlineHead.dropdownTitle.text = dateShowString
             }
             var dpd = DatePickerDialog(this, dateSetListener, cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH))
             dpd.datePicker.minDate = System.currentTimeMillis()
+            dpd.datePicker.maxDate = (System.currentTimeMillis() + 3.156e+10).toLong() //1년 설정
             dpd.show()
         }
 
+        //setViewData
+        val extras = intent.extras
+        //TODO: 객체가 존재하면 객체 내용을 페이지에 적용하고, toolbar과 제출하기의 text도 "수정하기"로 바꾸자
+        //checkIsNew
+        var isOld = false
+        if (extras != null) {
+            isOld = true
+            viewBinding.toolbarTitle.toolbarText.text = getString(R.string.edit_new_project)
+            viewBinding.submitButton.text = "프로젝트 수정하기"
+
+            val oldData: EditProject = extras.get("project") as EditProject
+
+            //setTitle
+            viewBinding.inputOfTitle.setText(oldData.title)
+
+            //setDes
+            viewBinding.inputOfContent.setText(oldData.content)
+
+            //=================================
+
+            //setImage
+
+
+            //
+            //        val urlList = ArrayList<String>()
+            //        urlList.add("http://semtle.catholic.ac.kr:8080/image?name=jpgSana20230123182825.jpg")
+            //        urlList.add("http://semtle.catholic.ac.kr:8080/image?name=shot20230123182825.png")
+            //        for(i in urlList){
+            //            val imageBinding = ImageItemBinding.inflate(layoutInflater)
+            //            Glide.with(this).asFile().load(i).submit().get()
+            //            imageBinding.cancelButton.setOnClickListener {
+            //                viewBinding.selectedImages.removeView(imageBinding.root)
+            ////                imageFileList.remove(nowFile)
+            //                viewBinding.addImageNum.text = (--imageNum).toString() + "/5"
+            //            }
+            //            viewBinding.selectedImages.addView(imageBinding.root)
+            //            imageFileList.add(nowFile)
+            //            viewBinding.addImageNum.text = (++imageNum).toString() + "/5"
+            //        }
+
+            //=================================
+
+            //setPartNumber
+            ////setPmNumber
+            viewBinding.pmSection.peopleNum.text = oldData.pmPeople.toString()
+
+            ////setDesignNumber
+            viewBinding.designSection.peopleNum.text = oldData.designPeople.toString()
+
+            ////setFrontNumber
+            viewBinding.frontSection.peopleNum.text = oldData.frontPeople.toString()
+
+            ////setBackNumber
+            viewBinding.backSection.peopleNum.text = oldData.backPeople.toString()
+
+            ////setEtcNumber
+            viewBinding.etcSection.peopleNum.text = oldData.etcPeople.toString()
+
+            //=================================
+
+            //setChipGroup
+            for(i in oldData.languageIdNameMap.keys){
+                val oldChip = AddListItem(false, oldData.languageIdNameMap[i]!!, i)
+                addPageFunction.changeItem2True(allStackList, oldData.languageIdNameMap[i]!!)
+                addOrRemoveChip(oldChip)
+                viewBinding.stack2List.adapter!!.notifyDataSetChanged()
+            }
+
+
+            //setLocation
+            viewBinding.locationHead.dropdownTitle.text = oldData.location
+
+            //setDeadline
+            dateJsonString = oldData.deadLine
+            viewBinding.deadlineHead.dropdownTitle.text = oldData.deadLine.replace("-", "/")
+
+        }
+
+
         //setSubmitButton
         viewBinding.submitButton.setOnClickListener {
-            val finalTitle = viewBinding.addPageTitle.text.toString()
+            val finalTitle = viewBinding.inputOfTitle.text.toString()
             Log.d("finalTitle", finalTitle)
 
-            val finalDes = viewBinding.addPageDes.text.toString()
+            val finalDes = viewBinding.inputOfContent.text.toString()
             Log.d("finalDes", finalDes)
 
-            val finalDesUniCode = URLEncoder.encode(finalDes, "utf-8")
-            Log.d("finalDesUTF8", finalDesUniCode)
+            val finalImagePathList = ArrayList<String>()
+            for(i in imageItemList) finalImagePathList.add(i.imageCopyPath)
+            Log.d("finalImagePaths", finalImagePathList.toString())
 
-            val finalUTF8ToString = URLDecoder.decode(finalDesUniCode, "utf-8")
-            Log.d("UTF-8 -> Text", finalUTF8ToString)
-
-
-
-
-
-            val finalImageList = imageFileList
-            Log.d("finalImagePaths", finalImageList.toString())
-
-            val finalPmPeople = viewBinding.pmSection.peopleNum.text.toString().toInt()
-            Log.d("finalPmPeople", finalPmPeople.toString())
-
-            val finalDesignPeople = viewBinding.designSection.peopleNum.text.toString().toInt()
-            Log.d("finalDesignPeople", finalDesignPeople.toString())
-
-            val finalFrontPeople = viewBinding.frontSection.peopleNum.text.toString().toInt()
-            Log.d("finalFrontPeople", finalFrontPeople.toString())
-
-            val finalBackPeople = viewBinding.backSection.peopleNum.text.toString().toInt()
-            Log.d("finalBackPeople", finalBackPeople.toString())
-
-            val finalEtcPeople = viewBinding.etcSection.peopleNum.text.toString().toInt()
-            Log.d("finalEtcPeople", finalEtcPeople.toString())
+            val finalPartNumList = listOf(viewBinding.pmSection.peopleNum.text.toString().toInt(),
+                                            viewBinding.designSection.peopleNum.text.toString().toInt(),
+                                            viewBinding.frontSection.peopleNum.text.toString().toInt(),
+                                            viewBinding.backSection.peopleNum.text.toString().toInt(),
+                                            viewBinding.etcSection.peopleNum.text.toString().toInt())
+            Log.d("finalPartNumList", finalPartNumList.toString())
 
             val finalStackList = ArrayList<Int>();
             for(i in chipList.keys){
@@ -365,106 +335,68 @@ class AddNewProjectActivity : AppCompatActivity() {
             }
             Log.d("finalStackList", finalStackList.toString())
 
-            val finalLocation = viewBinding.locationDropdown.dropdownTitle.text.toString()
+            val finalLocation = viewBinding.locationHead.dropdownTitle.text.toString()
             Log.d("finalLocation", finalLocation)
 
             val finalDeadline = dateJsonString
             Log.d("finalDeadline", finalDeadline)
 
             var toastString = ""
-
             if(!isTitleOk){
                 toastString += "제목, "
             }
-
-            if(!isDesOk){
+            if(!isContentOk){
                 toastString += "상세 설명, "
             }
 
-            var isPartPeopleOk: Boolean
-            if(finalPmPeople + finalDesignPeople + finalFrontPeople + finalBackPeople + finalEtcPeople == 0){
+            var isPartPeopleOk = true
+            if(finalPartNumList.sum() == 0){
                 toastString += "총 모집 인원수, "
                 isPartPeopleOk = false
-            }else{
-                isPartPeopleOk = true
             }
 
-            var isLocationOk: Boolean
+            var isLocationOk = true
             if(finalLocation == "지역을 선택하세요"){
                 toastString += "지역, "
                 isLocationOk = false
-            }else{
-                isLocationOk = true
             }
 
-            var isDeadlineOk: Boolean
+            var isDeadlineOk = true
             if(dateJsonString.isEmpty()){
                 toastString+= "마감 시간, "
                 isDeadlineOk = false
-            }else{
-                isDeadlineOk = true
             }
 
-            if(isTitleOk and isDesOk and isPartPeopleOk and isLocationOk and isDeadlineOk){
-                val finalNumOfPartList = project2Server.createPartNumList(finalPmPeople, finalDesignPeople, finalFrontPeople, finalBackPeople, finalEtcPeople)
+            if(isTitleOk and isContentOk and isPartPeopleOk and isLocationOk and isDeadlineOk){
+                val finalNumOfPartList = project2Server.createPartNumList(finalPartNumList)
                 Log.d("finalPartList", finalNumOfPartList.toString())
 
-                val imageMultiPartList = project2Server.createImageMultiPartList(imageFileList)
+                val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
                 Log.d("finalImageMultiPartList", imageMultiPartList.toString())
 
-                project2Server.postNewProject(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList)
+                if(isOld){
+
+                }else{
+                    var result = project2Server.postNewProject(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList)
+                }
             }else{
                 toastString = toastString.substring(0, toastString.length-2) + "을 확인하세요."
                 Log.d("string", toastString)
                 Toast.makeText(this, toastString, Toast.LENGTH_LONG).show()
             }
-
-
-
         }
-
     }
 
+    //ImageSection - Start
     override fun onDestroy() {
         super.onDestroy()
-        for (i in imageFileList){
+        for (i in imageItemList){
             Log.d("delete", i.toString())
-            i.delete()
+            val deleteFile = File(i.imageCopyPath)
+            deleteFile.delete()
         }
     }
-
-    private fun checkSelfPermission() {
-        var temp = ""
-
-        //파일 읽기 권한 확인
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            temp += Manifest.permission.READ_EXTERNAL_STORAGE + " "
-        }
-
-//        //파일 쓰기 권한 확인
-//        if (ContextCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.WRITE_EXTERNAL_STORAGE
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            temp += Manifest.permission.WRITE_EXTERNAL_STORAGE + " "
-//        }
-
-        if (!TextUtils.isEmpty(temp)) {
-            // 권한 요청
-            ActivityCompat.requestPermissions(
-                this,
-                temp.trim { it <= ' ' }.split(" ".toRegex()).dropLastWhile { it.isEmpty() }
-                    .toTypedArray(),
-                1)
-        } else {
-            Toast.makeText(this, "권한을 모두 허용", Toast.LENGTH_SHORT).show()
-        }
-    }
+    //ImageSection - End
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
@@ -476,67 +408,68 @@ class AddNewProjectActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    //imageSection - Start
     private val getContent = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
         if(uri != null){
-            addImageView(imageFileList, uri)
-        }
-    }
+            val imageInfo = addPageFunction.getInfoFromUri(this, uri)
+            val imageName = imageInfo[0]
+            val imageSize = imageInfo[1].toInt()
+            val imageSizeLimitByte = 2e+7
+            if(imageSize <= imageSizeLimitByte){
+                val copyImagePath = addPageFunction.createCopyAndReturnPath(this, uri, imageName)
+                val nowImageItem = ImageItem(uri, copyImagePath)
+                imageItemList.add(nowImageItem)
+                viewBinding.addImageSection.adapter!!.notifyItemInserted(imageItemList.lastIndex)
 
-    private fun addImageView(list: ArrayList<File>, imageUri: Uri){
-        val imageBinding = ImageItemBinding.inflate(layoutInflater)
-        imageBinding.selectedImage.setImageURI(imageUri)
-        val imageInfo = addPageFunction.getInfoFromUri(this, imageUri)
-        val imageName = imageInfo[0]
-        val imageSize = imageInfo[1]
-        val imagePath = addPageFunction.createCopyAndReturnPath(this, imageUri, imageName)
-        val imageFile = File(imagePath)
-        imageBinding.cancelButton.setOnClickListener {
-            viewBinding.selectedImages.removeView(imageBinding.root)
-            list.remove(imageFile)
-            imageFile.delete()
-            viewBinding.addImageNum.text = (--imageNum).toString() + "/5"
+                //subImageCounter
+                viewBinding.addImageNum.text = "${imageItemList.size}/${imageLimit}"
+
+            }
         }
-        viewBinding.selectedImages.addView(imageBinding.root)
-        list.add(imageFile)
-        viewBinding.addImageNum.text = (++imageNum).toString() + "/5"
     }
     //imageSection - End
 
-
-    //setStack2Section - Start
-    fun setStack2ClickEvent(adapter: NewDropdownRVListAdapter): NewDropdownRVListAdapter {
-        adapter.setOnItemClickListener(object: NewDropdownRVListAdapter.OnItemClickListener {
-            override fun onItemClick(v: View?, item: AddListItem, pos: Int) {
-                if(!item.isSelected){
-                    chipList[item] = makeChip(item, adapter)
-                    item.isSelected = true
-                }else{
-                    var removeChipView = chipList[item]
-
-                    viewBinding.stackChipGroup.removeView(removeChipView)
-                    chipList.remove(item)//remove from chipview
-                    item.isSelected = false
-                }
-                adapter.notifyItemChanged(pos)
-            }
-        })
-        return adapter
-    }
-
-    private fun makeChip(addItem: AddListItem, adapter: NewDropdownRVListAdapter): Chip {
-        var chipView = addPageFunction.setStackChip(this, addItem, adapter)
-
-        chipView.setOnCloseIconClickListener {
-//            addPageFunction.changeItem2False(allStackList, name)'
-            addItem.isSelected = false
-            viewBinding.stackChipGroup.removeView(chipView)
-            chipList.remove(addItem)
-            adapter.notifyDataSetChanged()
+    //SetStack2Function - Start
+    private fun getStack2Adapter(itemList: ArrayList<AddListItem>): Stack2RVAdapter{
+        return Stack2RVAdapter(itemList) {
+            Log.d("stack2Clicked", it.name)
+            addOrRemoveChip(it)
         }
-        viewBinding.stackChipGroup.addView(chipView)
-        Log.d("did", "addDID")
-        return chipView
     }
-    //setStack2Section - End
+    private fun addOrRemoveChip(chipItem: AddListItem){
+        //list안에 있는 클래스를 따로 만들어서 보관하는 것이 좋다
+        val chipItemInList = AddListItem(false, chipItem.name, chipItem.numberInServer)
 
+        //칩이 현재 존재하는지
+        if(chipItemInList !in chipList.keys) {
+            Log.d("iWillAddChip", chipItemInList.name)
+            //칩 추가
+            val chipView = addPageFunction.setStackChip(this, chipItemInList)
+            chipView.setOnCloseIconClickListener{
+                viewBinding.stackChipGroup.removeView(it)
+                chipList.remove(chipItemInList)
+                addPageFunction.changeItem2False(allStackList, chipItem)
+                viewBinding.stack2List.adapter!!.notifyDataSetChanged()
+            }
+            viewBinding.stackChipGroup.addView(chipView)
+            chipList[chipItemInList] = chipView
+        }else{
+            //칩 삭제
+            Log.d("iWillDeleteChip", chipItemInList.name)
+
+            viewBinding.stackChipGroup.removeView(chipList[chipItemInList])
+            chipList.remove(chipItemInList)
+        }
+    }
+    //SetStack2Function - End
+
+    //setHadImage
+    private fun loadImageData(urlList: List<String>, imageItemList: ArrayList<AddImageItem>){
+        for(url in urlList){
+            var nowFile = Glide.with(this).asFile().load(url).submit().get()
+            var nowUri = Uri.fromFile(nowFile)
+            imageItemList.add(AddImageItem(nowUri, nowFile))
+            viewBinding.addImageSection.adapter!!.notifyItemInserted(imageItemList.lastIndex)
+        }
+    }
 }

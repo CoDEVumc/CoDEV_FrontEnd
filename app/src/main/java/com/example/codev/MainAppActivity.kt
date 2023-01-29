@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.codev.addpage.AddNewProjectActivity
-//import com.example.codev.addpage.AddNewStudyActivity
+import com.example.codev.addpage.AddNewStudyActivity
 import com.example.codev.addpage.AddPfPageActivity
 import com.example.codev.databinding.ActivityMainAppBinding
 
@@ -29,24 +29,31 @@ class MainAppActivity : AppCompatActivity() {
                             .beginTransaction()
                             .replace(viewBinding.content.id,RecruitFragment())
                             .commitAllowingStateLoss()
+                        val intent = Intent(this@MainAppActivity, AddNewProjectActivity::class.java)
+                        startActivity(intent)
                     }
                     R.id.menu_community->{
                         supportFragmentManager
                             .beginTransaction()
                             .replace(viewBinding.content.id,CommunityFragment())
                             .commitAllowingStateLoss()
+                        val intent = Intent(this@MainAppActivity, AddNewStudyActivity::class.java)
+                        startActivity(intent)
                     }
                     R.id.menu_home->{
                         supportFragmentManager
                             .beginTransaction()
                             .replace(viewBinding.content.id,HomeFragment())
                             .commitAllowingStateLoss()
+
                     }
                     R.id.menu_chat->{
                         supportFragmentManager
                             .beginTransaction()
                             .replace(viewBinding.content.id,ChatFragment())
                             .commitAllowingStateLoss()
+                        val intent = Intent(this@MainAppActivity, AddPfPageActivity::class.java)
+                        startActivity(intent)
                     }
                     R.id.menu_my->{
                         supportFragmentManager
@@ -60,9 +67,6 @@ class MainAppActivity : AppCompatActivity() {
             selectedItemId = R.id.menu_home
         }
 
-        viewBinding.root.setOnClickListener {
-            val intent = Intent(this, AddNewProjectActivity::class.java)
-            startActivity(intent)
-        }
+
     }
 }
