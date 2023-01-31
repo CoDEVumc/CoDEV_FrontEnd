@@ -24,6 +24,8 @@ class RecruitDetailActivity:AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
+        val projectId = intent.getStringExtra("id")
+        
         val imgList = arrayListOf("https://cdn.imweb.me/upload/S201807025b39d1981b0b0/16b98d3e3d30e.jpg",
             "https://cdn.imweb.me/upload/S201807025b39d1981b0b0/16b98d3e3d30e.jpg",
             "https://cdn.imweb.me/upload/S201807025b39d1981b0b0/16b98d3e3d30e.jpg")
