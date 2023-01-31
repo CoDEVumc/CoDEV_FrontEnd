@@ -66,10 +66,10 @@ class AdapterStudy(private val listData: ArrayList<SData>, private val context: 
             }
 
             //스터디 스택
-            val languages = data.co_languages
-            val comma = ","
-            val imgList = languages.split(comma)
-            val defaultImage = R.drawable.ic_launcher_background
+//            val languages = data.co_languages
+//            val comma = ","
+//            val imgList = languages.split(comma)
+//            val defaultImage = R.drawable.ic_launcher_background
 
 
 //            val img1 = imageList[0]
@@ -78,13 +78,13 @@ class AdapterStudy(private val listData: ArrayList<SData>, private val context: 
 //            val img4 = imageList[3]
 //            val img5 = imageList[4]
 
-            Glide.with(context)
-                .load(imgList[0]) //불러올 이미지 url
-                .placeholder(defaultImage) //미리보기
-                .error(defaultImage)
-                .fallback(defaultImage)
-                .circleCrop()
-                .into(binding.sStackImg1)
+//            Glide.with(context)
+//                .load(imgList[0]) //불러올 이미지 url
+//                .placeholder(defaultImage) //미리보기
+//                .error(defaultImage)
+//                .fallback(defaultImage)
+//                .circleCrop()
+//                .into(binding.sStackImg1)
 //            Glide.with(this@StudyAdapter)
 //                .load(img1) //불러올 이미지 url
 //                .placeholder(defaultImage)

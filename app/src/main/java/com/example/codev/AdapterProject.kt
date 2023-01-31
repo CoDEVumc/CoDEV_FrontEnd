@@ -69,47 +69,25 @@ class AdapterProject(private val listData: ArrayList<PData>, private val context
 
 
 
+
+
             //프로젝트 사용 스택 이미지 5개
-            val langs = data.co_languages
-            val comma = ","
-            val imgList = langs.split(comma)
-            val defaultImage = R.drawable.profiles
-
-
-            var img1:String
-            var img2:String
-            var img3:String
-            var img4:String
-            var img5:String
-
-
-            Log.d("imgList :",imgList.toString())
-            try{
-                for(i: Int in 0..5){ //imgList.size-1
-                    try {
-                        Log.d("imgList: "+i+"번째 ",imgList[i])
-
-                    }catch (IOE: IndexOutOfBoundsException){
-                        Log.d("imgList: "+i+"번째 ","")
-                    }
-                }
-
-
-            }catch (IOE: IndexOutOfBoundsException){
-
-            }
+//            val langs = data.co_languages
+//            val comma = ","
+//            val imgList = langs.split(comma)
+//            val defaultImage = R.drawable.profiles
+//
+//            var img1:String// = imgList[0]
+//            var img2:String// = imgList[1]
+//            var img3:String// = imgList[2]
+//            var img4:String// = imgList[3]
+//            var img5:String// = imgList[4]
 
 
             //.png파일 띄우기
+
 //            Glide.with(context)
 //                .load(imgList[0]) //불러올 이미지 url
-//                .placeholder(defaultImage) //미리보기
-//                .error(defaultImage)
-//                .fallback(defaultImage)
-//                .circleCrop()
-//                .into(binding.pStackImg1)
-//            Glide.with(context)
-//                .load(img1) //불러올 이미지 url
 //                .placeholder(defaultImage) //미리보기
 //                .error(defaultImage)
 //                .fallback(defaultImage)
