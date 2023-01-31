@@ -81,45 +81,7 @@ class AdapterProject(private val listData: ArrayList<PData>, private val context
             var img3:String
             var img4:String
             var img5:String
-//            var img1:String
-//            if(imgList[0] != ""){
-//                img1 = imgList[0]
-//            }
-//            else{
-//                img1 = ""
-//            }
-//
-//            var img2:String
-//            if(imgList[1] != ""){
-//                img2 = imgList[1]
-//            }
-//            else{
-//                img2 = ""
-//            }
-//
-//            var img3:String
-//            if(imgList[2] != ""){
-//                img3 = imgList[2]
-//            }
-//            else{
-//                img3 = ""
-//            }
-//
-//            var img4:String
-//            if(imgList[3] != ""){
-//                img4 = imgList[3]
-//            }
-//            else{
-//                img4 = ""
-//            }
-//
-//            var img5:String
-//            if(imgList[4] != ""){
-//                img5 = imgList[4]
-//            }
-//            else{
-//                img5 = ""
-//            }
+
 
             Log.d("imgList :",imgList.toString())
             try{
@@ -138,21 +100,14 @@ class AdapterProject(private val listData: ArrayList<PData>, private val context
             }
 
 
-//            Log.d("ig1 :",img1)
-//            Log.d("ig2 :",img2)
-//            Log.d("ig3 :",img3)
-//            Log.d("ig4 :",img4)
-//            Log.d("ig5 :",img5)
-
             //.png파일 띄우기
-            Glide.with(context)
-                .load(imgList[0]) //불러올 이미지 url
-                .placeholder(defaultImage) //미리보기
-                .error(defaultImage)
-                .fallback(defaultImage)
-                .circleCrop()
-                .into(binding.pStackImg1)
-
+//            Glide.with(context)
+//                .load(imgList[0]) //불러올 이미지 url
+//                .placeholder(defaultImage) //미리보기
+//                .error(defaultImage)
+//                .fallback(defaultImage)
+//                .circleCrop()
+//                .into(binding.pStackImg1)
 //            Glide.with(context)
 //                .load(img1) //불러올 이미지 url
 //                .placeholder(defaultImage) //미리보기

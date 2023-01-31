@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
 //import com.bumptech.glide.Glide
 import com.example.codev.databinding.RecycleRecruitStudyBinding
@@ -65,16 +66,25 @@ class AdapterStudy(private val listData: ArrayList<SData>, private val context: 
             }
 
             //스터디 스택
-//            val languages = data.co_languages
-//            val comma = ","
-//            val imageList = languages.split(comma)
-//            val defaultImage = R.drawable.ic_launcher_background
+            val languages = data.co_languages
+            val comma = ","
+            val imgList = languages.split(comma)
+            val defaultImage = R.drawable.ic_launcher_background
+
+
 //            val img1 = imageList[0]
 //            val img2 = imageList[1]
 //            val img3 = imageList[2]
 //            val img4 = imageList[3]
 //            val img5 = imageList[4]
 
+            Glide.with(context)
+                .load(imgList[0]) //불러올 이미지 url
+                .placeholder(defaultImage) //미리보기
+                .error(defaultImage)
+                .fallback(defaultImage)
+                .circleCrop()
+                .into(binding.sStackImg1)
 //            Glide.with(this@StudyAdapter)
 //                .load(img1) //불러올 이미지 url
 //                .placeholder(defaultImage)

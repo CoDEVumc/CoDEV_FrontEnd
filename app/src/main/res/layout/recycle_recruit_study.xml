@@ -6,11 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="114dp">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="200dp"
+        android:layout_marginBottom="40dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <LinearLayout
         android:id="@+id/imagelist"
         android:layout_width="136dp"
         android:layout_height="24dp"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="45dp"
         android:layout_marginEnd="200dp"
         android:layout_marginBottom="40dp"
         android:orientation="horizontal"
