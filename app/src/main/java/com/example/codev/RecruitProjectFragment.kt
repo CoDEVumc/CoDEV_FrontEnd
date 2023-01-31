@@ -57,7 +57,9 @@ class RecruitProjectFragment : Fragment() {
         //분야
         val bottomSheetPart = BottomSheetPart()
         //지역
-        val bottomSheetLoc = BottomSheetLoc()
+        val bottomSheetLoc = BottomSheetLoc(){
+            viewBinding.loc.text = it
+        }
         //프로젝트인지 스터딘지 구분해줄려고
         var now : Int = 0 // 0-프로젝트 / 1- 스터디
 
@@ -141,9 +143,15 @@ class RecruitProjectFragment : Fragment() {
             else{
                 coProcessTag = ""
             }
-            when(now){ //플 스 검사
-                0 -> loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
-                1 -> loadSData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
+            when(now){
+                0 -> {
+                    pdataList = ArrayList()
+                    loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
+                }
+                1 -> {
+                    sdataList = ArrayList()
+                    loadSData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
+                }
             }
 
         }
@@ -164,7 +172,6 @@ class RecruitProjectFragment : Fragment() {
             viewBinding.loc.text = bottomSheetLoc.loc
         }
         viewBinding.filterPart.setOnClickListener {
-            val bottomSheetPart = BottomSheetPart()
             bottomSheetPart.show(childFragmentManager, bottomSheetPart.tag)
         }
         //분야 고르고 적용하기 누르면

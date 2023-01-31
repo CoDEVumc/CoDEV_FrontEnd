@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.example.codev.databinding.PopupLocBinding
 
-class BottomSheetLoc : BottomSheetDialogFragment(){
+class BottomSheetLoc(private val returnLoc: (String) -> Unit) : BottomSheetDialogFragment(){
     private lateinit var popupLocBinding: PopupLocBinding
 
     var loc: String=""
@@ -82,8 +82,7 @@ class BottomSheetLoc : BottomSheetDialogFragment(){
                     loc = resources.getString(R.string.filter_loc_18_text)
                 }
             }
-
-
+            returnLoc(loc)
             Log.d("test: 클릭한 지역: ",loc)
         }
 
