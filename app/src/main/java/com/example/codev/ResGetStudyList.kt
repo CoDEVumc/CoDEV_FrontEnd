@@ -25,7 +25,6 @@ data class SData(
     val co_heartCount: Int,
     var co_heart: Boolean,
     val co_part: String,
-
     val co_total: Int,
     val co_languages: String,
     val co_photos: String, //null <-- data type???

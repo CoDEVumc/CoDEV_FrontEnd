@@ -7,20 +7,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.codev.databinding.FragmentRecruitProjectBinding
-import com.example.codev.databinding.PopupLocBinding
-import com.example.codev.databinding.RecycleRecruitProjectBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class RecruitProjectFragment : Fragment() {
+class RecruitListFragment : Fragment() {
     private lateinit var viewBinding: FragmentRecruitProjectBinding
 
     private var pdataList: ArrayList<PData> = ArrayList()
@@ -34,6 +31,7 @@ class RecruitProjectFragment : Fragment() {
 
     private var downpage: Int = 0
     private var lastPage: Boolean = false
+    private var now : Int = 0 // 0-프로젝트 / 1- 스터디
 
     private lateinit var mainAppActivity: Context
     override fun onAttach(context: Context) {
@@ -56,42 +54,6 @@ class RecruitProjectFragment : Fragment() {
         popupMenu.inflate(R.menu.menu_recruit)
         viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_project) //기본으로 logo_project띄워놓기
 
-        //지역 태그
-        //프 스 비교 해야됨
-//        val bottomSheetLoc = BottomSheetLoc(){
-//            coLocationTag = it
-//            if(coLocationTag != "") {
-//                viewBinding.loc.text = it
-//                pdataList = ArrayList()
-//                sdataList = ArrayList()
-//                loadPData(mainAppActivity, downpage,coLocationTag,coPartTag,coKeyword,coProcessTag,coSortingTag)
-//            }
-//            else{
-//                viewBinding.loc.text = "지역"
-//                pdataList = ArrayList()
-//                sdataList = ArrayList()
-//            }
-//            Log.d("coLocation: ",coLocationTag)
-//        }
-//        //분야 태그
-//        //프 스 비교 해야됨
-//        val bottomSheetPart = BottomSheetPart(){
-//            coPartTag = it
-//            if(coPartTag != "") {
-//                viewBinding.part.text = it
-//                pdataList = ArrayList()
-//                sdataList = ArrayList()
-//            }
-//            else{
-//                viewBinding.part.text = "분야"
-//                pdataList = ArrayList()
-//                sdataList = ArrayList()
-//            }
-//            Log.d("coPart: ",coPartTag)
-//        }
-
-        //프로젝트인지 스터딘지 구분해줄려고
-        var now : Int = 0 // 0-프로젝트 / 1- 스터디
 
         pdataList = ArrayList() //초기화
         sdataList = ArrayList()
@@ -106,14 +68,8 @@ class RecruitProjectFragment : Fragment() {
 
                 val lastVisibleItemPosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition() - 2
                 val lastPosition = recyclerView.adapter!!.itemCount - 3 //원래 1
-//                if(lastVisibleItemPosition == lastPosition){
-//                    downpage += 1
-//                    when(now){ //프/스 분리 해야 됨
-//                        0 -> loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
-//                        1 -> loadSData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
-//                    }
-//                }
-                if(lastVisibleItemPosition == lastPosition && !lastPage){
+
+                if((lastVisibleItemPosition == lastPosition) && !lastPage){
                     downpage += 1
                     when(now){ //프/스 분리 해야 됨
                         0 -> loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
@@ -291,9 +247,6 @@ class RecruitProjectFragment : Fragment() {
             bottomSheetSort.show(childFragmentManager, bottomSheetSort.tag)
         }
 
-
-
-
         return viewBinding.root
     }
 
@@ -398,12 +351,12 @@ class RecruitProjectFragment : Fragment() {
     }
 
     private fun setPAdapter(projectList: ArrayList<PData>){
-        val adapter = AdapterProject(projectList, mainAppActivity)
+        val adapter = AdapterProjectList(mainAppActivity,projectList)
         viewBinding.listviewMain.adapter = adapter
     }
 
     private fun setSAdapter(studyList: ArrayList<SData>){
-        val adapter = AdapterStudy(studyList, mainAppActivity)
+        val adapter = AdapterStudyList(mainAppActivity,studyList)
         viewBinding.listviewMain.adapter = adapter
     }
 }
