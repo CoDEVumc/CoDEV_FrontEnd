@@ -1,12 +1,14 @@
 package com.example.codev.addpage
 
+import java.io.Serializable
+
 data class EditPF(
     val pfId: String,
     val title: String,
 
-    val realName: String,
-    val birthday: String, //생일은 YYYY/MM/DD 형식으로 보내주세면 감사하겠습니다!
-    val isMan: Boolean, //남자가 아니면 자동으로 여자로 취급
+    val name: String,
+    val birth: String, //생일은 YYYY/MM/DD 형식으로 보내주세면 감사하겠습니다!
+    val gender: String, //남자가 아니면 자동으로 여자로 취급
 
     val level: String, // 직무 능력
 
@@ -16,4 +18,4 @@ data class EditPF(
     val content: String,
 
     val linkList: List<String>, //리스트로 이미지 Url를 보내주세요, 없으면 null값으로
-)
+) : Serializable

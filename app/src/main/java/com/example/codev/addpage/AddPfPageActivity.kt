@@ -32,6 +32,9 @@ class AddPfPageActivity : AppCompatActivity() {
     //linkList
     private var linkTimeTextHashMap = LinkedHashMap<Long, String>()
 
+    //oldProject
+    private var oldPfId = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityAddPfPageBinding.inflate(layoutInflater)
@@ -261,57 +264,86 @@ class AddPfPageActivity : AppCompatActivity() {
         }
         //LinkSection - End
 
-        //setViewData
-        val extras = intent.extras
-        //TODO: 객체가 존재하면 객체 내용을 페이지에 적용하고, toolbar과 제출하기의 text도 "수정하기"로 바꾸자
-        //checkIsNew
         var isOld = false
-        if (extras != null) {
-            isOld = true
-            viewBinding.toolbarTitle.toolbarText.text = getString(R.string.edit_pf_toolbar)
-            viewBinding.submitButton.text = "수정하기"
+       if(intent.getSerializableExtra("default") != null){
+           //when get default date
+           val defaultDate = intent.getSerializableExtra("default") as DefaultPf
+           viewBinding.inputPfName.inputOfTitle.setText(defaultDate.name)
+           viewBinding.inputPfBirthday.inputOfTitle.setText(defaultDate.birth)
+           if(defaultDate.gender == "MALE"){
+               viewBinding.boyIcon.setImageResource(R.drawable.sex_icon_selected_round)
+               viewBinding.textBoy.setTextColor(getColor(R.color.green_900))
+           }else{
+               viewBinding.girlIcon.setImageResource(R.drawable.sex_icon_selected_round)
+               viewBinding.textGirl.setTextColor(getColor(R.color.green_900))
+           }
 
-            val oldData: EditPF = extras.get("pf") as EditPF
+       }else if(intent.getSerializableExtra("pf") != null){
+           isOld = true
+           //when get old date
+           val oldPf = intent.getSerializableExtra("pf") as EditPF
+           oldPfId = oldPf.pfId
+           viewBinding.toolbarTitle.toolbarText.text = getString(R.string.edit_pf_toolbar)
+           viewBinding.submitButton.text = "포트폴리오 수정하기"
 
-            //setTitle
-            viewBinding.inputPfTitle.inputOfTitle.setText(oldData.title)
-            //=================================
+           viewBinding.inputPfTitle.inputOfTitle.setText(oldPf.title)
 
-            //setName
-            viewBinding.inputPfName.inputOfTitle.setText(oldData.realName)
+           viewBinding.inputPfName.inputOfTitle.setText(oldPf.name)
+           viewBinding.inputPfBirthday.inputOfTitle.setText(oldPf.birth)
+           if(oldPf.gender == "MALE"){
+               viewBinding.boyIcon.setImageResource(R.drawable.sex_icon_selected_round)
+               viewBinding.textBoy.setTextColor(getColor(R.color.green_900))
+           }else{
+               viewBinding.girlIcon.setImageResource(R.drawable.sex_icon_selected_round)
+               viewBinding.textGirl.setTextColor(getColor(R.color.green_900))
+           }
 
-            //setBirthday
-            viewBinding.inputPfBirthday.inputOfTitle.setText(oldData.birthday)
+           viewBinding.levelHead.dropdownTitle.text = oldPf.level
 
-            //setSex
-            if(oldData.isMan){
-                viewBinding.boyIcon.setImageResource(R.drawable.sex_icon_selected_round)
-                viewBinding.textBoy.setTextColor(resources.getColor(R.color.green_900) )
-            }else {
-                viewBinding.girlIcon.setImageResource(R.drawable.sex_icon_selected_round)
-                viewBinding.textGirl.setTextColor(resources.getColor(R.color.green_900))
-            }
+           //setChipGroup
+           for(i in oldPf.languageIdNameMap.keys){
+               val oldChip = AddListItem(false, oldPf.languageIdNameMap[i]!!, i)
+               val listItem = addPageFunction.changeItem2True(allStackList, oldPf.languageIdNameMap[i]!!)
+               addOrRemoveChip(listItem!!)
+               viewBinding.stack2List.adapter!!.notifyDataSetChanged()
+           }
 
-            //setPartName
-            viewBinding.levelHead.dropdownTitle.text = oldData.level
-            //=================================
+           viewBinding.inputPfIntro.inputOfTitle.setText(oldPf.intro)
 
-            //setChipGroup
-            for(i in oldData.languageIdNameMap.keys){
-                val oldChip = AddListItem(false, oldData.languageIdNameMap[i]!!, i)
-                addPageFunction.changeItem2True(allStackList, oldData.languageIdNameMap[i]!!)
-                addOrRemoveChip(oldChip)
-                viewBinding.stack2List.adapter!!.notifyDataSetChanged()
-            }
+           viewBinding.inputPfContent.setText(oldPf.content)
 
-            viewBinding.inputPfIntro.inputOfTitle.setText(oldData.intro)
+           for(i in oldPf.linkList){
+               val nowTime = System.currentTimeMillis()
+               linkTimeTextHashMap[nowTime] = i
+               val linkView = InputLayoutBinding.inflate(layoutInflater)
+               linkView.inputOfTitle.hint = "링크 입력 (최대 65536자)"
+               linkView.inputOfTitle.setText(i)
+               linkView.inputOfTitle.addTextChangedListener(object : TextWatcher {
+                   override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+                   override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+                   override fun afterTextChanged(s: Editable?) {
+                       linkTimeTextHashMap[nowTime] = s.toString()
+                       if(s.isNullOrBlank()) {
+                           linkView.inputOfTitle.error = "링크를 입력하세요."
+                       }else if(s.length > linkLimit){
+                           linkView.inputOfTitle.error = "링크가 ${linkLimit}자를 초과할 수 없습니다."
+                       }else{
+                           linkView.inputOfTitle.error = null
+                       }
+                   }
+               })
+               linkView.cancelButton.visibility = View.VISIBLE
+               linkView.cancelButton.setOnClickListener {
+                   viewBinding.addLinkSection.removeView(linkView.root)
+                   linkTimeTextHashMap.remove(nowTime)
+                   nowLinkNumber -= 1
+               }
 
-            //setLocation
-            viewBinding.inputPfContent.setText(oldData.content)
-
-            //setLinkList
-            //TODO: link List Add
-        }
+               linkView.inputOfTitle.hint = "링크를 입력하세요."
+               viewBinding.addLinkSection.addView(linkView.root)
+               nowLinkNumber += 1
+           }
+       }
 
 
         viewBinding.submitButton.setOnClickListener {
@@ -368,11 +400,12 @@ class AddPfPageActivity : AppCompatActivity() {
             }
 
             if(isTitleOk and isLevelOk and isIntroOk and isContentOk and isLinkOk){
-                var result = project2Server.postNewPF(this, finalTitle, finalLevel, finalIntro, finalContent, finalStackList, finalLinkList)
-                if(result){
-
-                    finish()
+                if(isOld){
+                    project2Server.updatePF(this, oldPfId, finalTitle, finalLevel, finalIntro, finalContent, finalStackList, finalLinkList)
+                }else{
+                    project2Server.postNewPF(this, finalTitle, finalLevel, finalIntro, finalContent, finalStackList, finalLinkList)
                 }
+
             }else{
                 toastString = toastString.substring(0, toastString.length-2) + "을 확인하세요."
                 Log.d("string", toastString)

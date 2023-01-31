@@ -6,7 +6,12 @@
     </string-array>
 
     <string-array name="design_stack">
-        <item>디자인:-:26</item>
+        <item>AdobeXD:-:26</item>
+        <item>Blender:-:36</item>
+        <item>Cinema4D:-:37</item>
+        <item>Illustrator:-:38</item>
+        <item>PhotoShop:-:39</item>
+        <item>Sketch:-:40</item>
     </string-array>
 
     <string-array name="front_stack">

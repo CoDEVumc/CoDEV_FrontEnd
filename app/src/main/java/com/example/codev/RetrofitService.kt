@@ -80,7 +80,7 @@ interface RetrofitService {
     fun updatePF(
         @Path("id") id: String
         ,@Header("CoDev_Authorization") authToken: String
-        ,@Body params: ReqCreateNewPF
+        ,@Body params: ReqUpdatePF
     ): Call<ResCreateNewPF>
 
     @GET("project/projects/{page}")

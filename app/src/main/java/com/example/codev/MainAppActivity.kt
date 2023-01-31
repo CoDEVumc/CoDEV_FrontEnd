@@ -3,9 +3,7 @@ package com.example.codev
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.codev.addpage.AddNewProjectActivity
-import com.example.codev.addpage.AddNewStudyActivity
-import com.example.codev.addpage.AddPfPageActivity
+import com.example.codev.addpage.*
 import com.example.codev.databinding.ActivityMainAppBinding
 
 class MainAppActivity : AppCompatActivity() {
@@ -29,12 +27,22 @@ class MainAppActivity : AppCompatActivity() {
                             .beginTransaction()
                             .replace(viewBinding.content.id,RecruitProjectFragment())
                             .commitAllowingStateLoss()
+
+                        //TODO: 김유정 테스트 코드임, 맘대로 삭제 가능
+                        val intent = Intent(this@MainAppActivity,AddNewProjectActivity::class.java)
+                        startActivity(intent)
+
                     }
                     R.id.menu_community->{
                         supportFragmentManager
                             .beginTransaction()
                             .replace(viewBinding.content.id,CommunityFragment())
                             .commitAllowingStateLoss()
+
+                        //TODO: 김유정 테스트 코드임, 맘대로 삭제 가능
+                        val intent = Intent(this@MainAppActivity,AddNewStudyActivity::class.java)
+                        startActivity(intent)
+
                     }
                     R.id.menu_home->{
                         supportFragmentManager
@@ -48,12 +56,22 @@ class MainAppActivity : AppCompatActivity() {
                             .beginTransaction()
                             .replace(viewBinding.content.id,ChatFragment())
                             .commitAllowingStateLoss()
+
+                        //TODO: 김유정 테스트 코드임, 맘대로 삭제 가능
+                        val intent = Intent(this@MainAppActivity,AddPfPageActivity::class.java)
+                        intent.putExtra("default", DefaultPf("기본 이름", "2001/09/06", "MALE"))
+                        startActivity(intent)
+
                     }
                     R.id.menu_my->{
                         supportFragmentManager
                             .beginTransaction()
                             .replace(viewBinding.content.id,MyFragment())
                             .commitAllowingStateLoss()
+                        //TODO: 김유정 테스트 코드임, 맘대로 삭제 가능
+                        val intent = Intent(this@MainAppActivity,AddPfPageActivity::class.java)
+                        intent.putExtra("pf", EditPF(47.toString(), "titleEdited", "기본 이름", "2001/09/06", "MALE", "새싹", HashMap(), "Inteo Stirng", "hi, my name is abc", listOf("imlink1", "imlink2")))
+                        startActivity(intent)
                     }
                 }
                 true

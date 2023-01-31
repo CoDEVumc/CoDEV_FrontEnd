@@ -1,7 +1,9 @@
 package com.example.codev.addpage
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -13,6 +15,9 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.codev.AndroidKeyStoreUtil
 import com.example.codev.R
 import com.example.codev.databinding.*
@@ -37,6 +42,8 @@ class AddNewStudyActivity : AppCompatActivity() {
 
     //DeadLineTimeVar
     private var dateJsonString: String = ""
+
+    private var oldStudyId = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -213,7 +220,7 @@ class AddNewStudyActivity : AppCompatActivity() {
             val cal = Calendar.getInstance()    //캘린더뷰 만들기
             val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
                 var dateShowString = "${year}/${month+1}/${dayOfMonth}"
-                dateJsonString = String.format("%d-%02d-%d", year, month+1, dayOfMonth)
+                dateJsonString = String.format("%d-%02d-%02d", year, month+1, dayOfMonth)
                 viewBinding.deadlineHead.dropdownTitle.text = dateShowString
             }
             var dpd = DatePickerDialog(this, dateSetListener, cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH))
@@ -223,77 +230,58 @@ class AddNewStudyActivity : AppCompatActivity() {
         }
         //setDeadLine - End
 
-        //setViewData
-        val extras = intent.extras
-        //TODO: 객체가 존재하면 객체 내용을 페이지에 적용하고, toolbar과 제출하기의 text도 "수정하기"로 바꾸자
-        //checkIsNew
         var isOld = false
-        if (extras != null) {
-            isOld = true
-            viewBinding.toolbarTitle.toolbarText.text = getString(R.string.edit_new_study)
-            viewBinding.submitButton.text = "수정하기"
+        if(intent.getSerializableExtra("study") != null){
+            val oldStudy = intent.getSerializableExtra("study") as EditStudy
 
-            val oldData: EditStudy = extras.get("study") as EditStudy
+            //checkIsNew
+            isOld = true
+            oldStudyId = oldStudy.studyId
+            viewBinding.toolbarTitle.toolbarText.text = getString(R.string.edit_new_study)
+            viewBinding.submitButton.text = "스터디 수정하기"
 
             //setTitle
-            viewBinding.inputOfTitle.setText(oldData.title)
+            viewBinding.inputOfTitle.setText(oldStudy.title)
 
             //setDes
-            viewBinding.inputOfContent.setText(oldData.content)
-
-            //=================================
+            viewBinding.inputOfContent.setText(oldStudy.content)
 
             //setImage
+            for(nowUrl in oldStudy.imageUrl){
+                val nowImageItem = ImageItem(Uri.EMPTY, "", nowUrl)
+                imageItemList.add(nowImageItem)
+                viewBinding.addImageSection.adapter!!.notifyItemInserted(imageItemList.lastIndex)
+                //subImageCounter
+                viewBinding.addImageNum.text = "${imageItemList.size}/${imageLimit}"
+            }
 
-
-            //
-            //        val urlList = ArrayList<String>()
-            //        urlList.add("http://semtle.catholic.ac.kr:8080/image?name=jpgSana20230123182825.jpg")
-            //        urlList.add("http://semtle.catholic.ac.kr:8080/image?name=shot20230123182825.png")
-            //        for(i in urlList){
-            //            val imageBinding = ImageItemBinding.inflate(layoutInflater)
-            //            Glide.with(this).asFile().load(i).submit().get()
-            //            imageBinding.cancelButton.setOnClickListener {
-            //                viewBinding.selectedImages.removeView(imageBinding.root)
-            ////                imageFileList.remove(nowFile)
-            //                viewBinding.addImageNum.text = (--imageNum).toString() + "/5"
-            //            }
-            //            viewBinding.selectedImages.addView(imageBinding.root)
-            //            imageFileList.add(nowFile)
-            //            viewBinding.addImageNum.text = (++imageNum).toString() + "/5"
-            //        }
-
-            //=================================
-
-            //setPartName
-            viewBinding.stack1Head.dropdownTitle.text = oldData.partName
+            //setPartName(stack1Name)
+            viewBinding.stack1Head.dropdownTitle.text = oldStudy.partName
 
             //setPartNumber
             ////setPartNumber
-            viewBinding.peopleSection.peopleNum.text = oldData.partPeople.toString()
-
+            viewBinding.peopleSection.peopleNum.text = oldStudy.partPeople.toString()
+            if(oldStudy.partPeople.toString() != "0"){
+                viewBinding.peopleSection.peopleNum.setTextColor(resources.getColor(R.color.black_900))
+            }
             //=================================
 
             //setChipGroup
-            for(i in oldData.languageIdNameMap.keys){
-                val oldChip = AddListItem(false, oldData.languageIdNameMap[i]!!, i)
-                addPageFunction.changeItem2True(allStackList, oldData.languageIdNameMap[i]!!)
-                addOrRemoveChip(oldChip)
+            for(i in oldStudy.languageIdNameMap.keys){
+                val oldChip = AddListItem(false, oldStudy.languageIdNameMap[i]!!, i)
+                val listItem = addPageFunction.changeItem2True(allStackList, oldStudy.languageIdNameMap[i]!!)
+                addOrRemoveChip(listItem!!)
                 viewBinding.stack2List.adapter!!.notifyDataSetChanged()
             }
 
             //setLocation
-            viewBinding.locationHead.dropdownTitle.text = oldData.location
+            viewBinding.locationHead.dropdownTitle.text = oldStudy.location
 
             //setDeadline
-            dateJsonString = oldData.deadLine
-            viewBinding.deadlineHead.dropdownTitle.text = oldData.deadLine.replace("-", "/")
+            dateJsonString = oldStudy.deadLine
+            viewBinding.deadlineHead.dropdownTitle.text = oldStudy.deadLine.replace("-", "/")
 
         }
-
-
-
-
 
         //setSubmitButton
         viewBinding.submitButton.setOnClickListener {
@@ -359,20 +347,87 @@ class AddNewStudyActivity : AppCompatActivity() {
             }
 
             if(isTitleOk and isContentOk and isPartPeopleOk and isLocationOk and isDeadlineOk){
-                val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
-                Log.d("finalImageMultiPartList", imageMultiPartList.toString())
 
                 if(isOld){
+                    val imageFileList = ArrayList<File>()
+                    //getOldImageNumber
+                    var allUrlNumber = 0
+                    var loadedImageNumber = 0
+                    for(i in imageItemList){
+                        if(i.imageUrl != "") allUrlNumber+=1
+                    }
+
+                    Log.d("finalOldNumber", "onCreate: $allUrlNumber")
+                    for(i in imageItemList){
+                        val nowIdx = imageItemList.indexOf(i)
+                        imageFileList.add(File(i.imageCopyPath))
+
+                        if(i.imageUrl != ""){ //when i == oldImage
+                            Glide.with(this).asFile().load(i.imageUrl).into(object : CustomTarget<File>(){
+                                override fun onResourceReady(resource: File, transition: Transition<in File>?) {
+                                    val filename = i.imageUrl.split("http://semtle.catholic.ac.kr:8080/image?name=", limit = 2)[1]
+                                    Log.d("filename", "run: filename is: $filename")
+                                    val newNameFile = File(resource.parent!!, filename)
+                                    resource.renameTo(newNameFile)
+
+                                    imageFileList[nowIdx] = newNameFile
+                                    loadedImageNumber += 1
+                                    Log.d("finalLoadedOldNumber", "onCreate: $loadedImageNumber")
+                                    Log.d("finalImage", "onResourceReady: ${imageFileList.toString()}")
+
+                                    if(loadedImageNumber == allUrlNumber){
+                                        val imageMultiPartListUsingFile = project2Server.createImageMultiPartListUsingFile(imageFileList)
+                                        project2Server.updateStudy(this@AddNewStudyActivity, oldStudyId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartListUsingFile)
+                                    }
+                                }
+                                override fun onLoadCleared(placeholder: Drawable?) {
+                                    Toast.makeText(this@AddNewStudyActivity, "모집글 수정 시 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                                }
+                            })
+                        }
+                    }
+
+                    if(allUrlNumber == 0){
+                        val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
+                        project2Server.updateStudy(this@AddNewStudyActivity, oldStudyId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartList)
+                    }
+
+                    Log.d("deadlineServerJson", dateJsonString)
 
                 }else{
-                    var result = project2Server.postNewStudy(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartList)
+                    val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
+                    Log.d("finalImageMultiPartList", imageMultiPartList.toString())
+                    Log.d("deadlineServerJson", dateJsonString)
+                    project2Server.postNewStudy(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartList)
                 }
             }else{
                 toastString = toastString.substring(0, toastString.length-2) + "을 확인하세요."
                 Log.d("string", toastString)
                 Toast.makeText(this, toastString, Toast.LENGTH_LONG).show()
+
+                //TODO: 테스트코드
+                if(finalPartNum == 11 && finalStack1Name == "기획"){
+                    val finalStackMap = testStackMap(listOf(1, 2, 36 ,37), listOf("JavaScript", "TypeScript", "Blender", "Cinema4D"))
+                    val testStudy = EditStudy(
+                        42.toString(),
+                        "edit42",
+                        "please42",
+                        listOf(),
+                        "디자인",
+                        1,
+                        finalStackMap,
+                        "경기",
+                        "2022-02-07")
+                    val intent = Intent(this, AddNewStudyActivity::class.java)
+                    intent.putExtra("study", testStudy)
+                    startActivity(intent)
+                    finish()
+                }
             }
         }
+
+//        val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
+//        Log.d("finalImageMultiPartList", imageMultiPartList.toString())
 
 
     }
@@ -453,6 +508,15 @@ class AddNewStudyActivity : AppCompatActivity() {
         }
     }
     //SetStack2Function - End
+
+    //TODO: 테스트 코드
+    private fun testStackMap(numberList: List<Int>, nameList: List<String>): LinkedHashMap<Int, String>{
+        val returnMap = LinkedHashMap<Int, String>()
+        for(i in numberList){
+            returnMap[i] = nameList[numberList.indexOf(i)]
+        }
+        return returnMap
+    }
 
 
 }
