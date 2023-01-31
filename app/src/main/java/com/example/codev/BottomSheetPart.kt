@@ -9,8 +9,10 @@ import com.example.codev.databinding.PopupLocBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.example.codev.databinding.PopupPartBinding
 
-class BottomSheetPart : BottomSheetDialogFragment(){
+class BottomSheetPart(private val returnPart: (String) -> Unit) : BottomSheetDialogFragment(){
     private lateinit var popupPartBinding: PopupPartBinding
+
+    var part: String=""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -20,16 +22,44 @@ class BottomSheetPart : BottomSheetDialogFragment(){
         super.onCreateView(inflater, container, savedInstanceState)
         popupPartBinding = PopupPartBinding.inflate(layoutInflater)
 
+        popupPartBinding.btnSelect2.setOnClickListener { view ->
+            Log.d("test: ","적용하기 버튼 누름")
+            dismiss()
+            when(popupPartBinding.radioGroupPart.checkedRadioButtonId){
+                R.id.btn01 -> {
+                    part = resources.getString(R.string.filter_part_1_text)
+                }
+                R.id.btn02 -> {
+                    part = resources.getString(R.string.filter_part_2_text)
+                }
+                R.id.btn03 -> {
+                    part = resources.getString(R.string.filter_part_3_text)
+                }
+                R.id.btn04 -> {
+                    part = resources.getString(R.string.filter_part_4_text)
+                }
+                R.id.btn05 -> {
+                    part = resources.getString(R.string.filter_part_5_text)
+                }
+            }
+
+            returnPart(part)
+            //Log.d("test: 클릭한 파트: ",part)
+        }
+
+        popupPartBinding.btnReset2.setOnClickListener { view ->
+            //Log.d("test: ", "초기화 버튼 누름")
+            part = ""
+            popupPartBinding.radioGroupPart.clearCheck()
+        }
+
         return popupPartBinding.root
         //return inflater.inflate(R.layout.popup_loc, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        popupPartBinding.btnSelect2.setOnClickListener {
-            Log.d("test: ","적용하기 버튼 누름")
-            dismiss()
-        }
+
     }
 
 }

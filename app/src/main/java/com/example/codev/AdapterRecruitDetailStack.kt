@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.codev.databinding.RecycleRecruitDetailStackBinding
 
-class AdapterRecruitDetailStack(var context: Context, var dataList: ArrayList<String>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterRecruitDetailStack(var context: Context, var dataList: List<String>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : RecyclerView.ViewHolder{
         return StackViewHolder(context, RecycleRecruitDetailStackBinding.inflate(LayoutInflater.from(parent.context), parent, false))
