@@ -75,15 +75,55 @@ class AdapterProject(private val listData: ArrayList<PData>, private val context
             val imgList = langs.split(comma)
             val defaultImage = R.drawable.profiles
 
-            var img1:String// = imgList[0]
-            var img2:String// = imgList[1]
-            var img3:String// = imgList[2]
-            var img4:String// = imgList[3]
-            var img5:String// = imgList[4]
 
-            //Log.d("imgList :",imgList.toString())
+            var img1:String
+            var img2:String
+            var img3:String
+            var img4:String
+            var img5:String
+//            var img1:String
+//            if(imgList[0] != ""){
+//                img1 = imgList[0]
+//            }
+//            else{
+//                img1 = ""
+//            }
+//
+//            var img2:String
+//            if(imgList[1] != ""){
+//                img2 = imgList[1]
+//            }
+//            else{
+//                img2 = ""
+//            }
+//
+//            var img3:String
+//            if(imgList[2] != ""){
+//                img3 = imgList[2]
+//            }
+//            else{
+//                img3 = ""
+//            }
+//
+//            var img4:String
+//            if(imgList[3] != ""){
+//                img4 = imgList[3]
+//            }
+//            else{
+//                img4 = ""
+//            }
+//
+//            var img5:String
+//            if(imgList[4] != ""){
+//                img5 = imgList[4]
+//            }
+//            else{
+//                img5 = ""
+//            }
+
+            Log.d("imgList :",imgList.toString())
             try{
-                for(i: Int in 0..4){ //imgList.size-1
+                for(i: Int in 0..5){ //imgList.size-1
                     try {
                         Log.d("imgList: "+i+"번째 ",imgList[i])
 
@@ -105,8 +145,16 @@ class AdapterProject(private val listData: ArrayList<PData>, private val context
 //            Log.d("ig5 :",img5)
 
             //.png파일 띄우기
+            Glide.with(context)
+                .load(imgList[0]) //불러올 이미지 url
+                .placeholder(defaultImage) //미리보기
+                .error(defaultImage)
+                .fallback(defaultImage)
+                .circleCrop()
+                .into(binding.pStackImg1)
+
 //            Glide.with(context)
-//                .load(imgList[0]) //불러올 이미지 url
+//                .load(img1) //불러올 이미지 url
 //                .placeholder(defaultImage) //미리보기
 //                .error(defaultImage)
 //                .fallback(defaultImage)
