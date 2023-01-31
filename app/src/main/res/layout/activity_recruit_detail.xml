@@ -2,27 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <!-- Toolbar -->
-    <include
-        android:id="@+id/toolbar_recruit"
-        layout="@layout/toolbar3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/bottom_btn"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:elevation="16dp"
-        android:background="@drawable/recruit_nav_bottom_background">
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -37,20 +18,36 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/image"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_image"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
+            <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                android:id="@+id/indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@id/vp_image"
+                app:layout_constraintBottom_toBottomOf="@+id/vp_image"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="16dp"
+                app:dotsColor="@color/black_500"
+                app:dotsCornerRadius="6dp"
+                app:dotsSize="6dp"
+                app:dotsSpacing="5dp"
+                app:dotsWidthFactor="3"
+                app:selectedDotColor="@color/black_700"
+                app:progressMode="true"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/header1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/image"
+                app:layout_constraintTop_toBottomOf="@+id/vp_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
@@ -181,6 +178,18 @@
                     style="@style/Text.Body5.Medium"
                     android:textColor="@color/black_700"
                     android:text="기술"/>
+                
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/stack"
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/location"
+                    android:layout_marginStart="35dp"
+                    android:layout_marginTop="15dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:orientation="horizontal"
+                    tools:listitem="@layout/recycle_recruit_detail_stack"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -234,6 +243,17 @@
                     style="@style/Text.Body4.SemiBold"
                     android:textColor="@color/black_900"
                     android:text="6명 모집중"/>
+                
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/part"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/total"
+                    android:layout_marginTop="12dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:orientation="horizontal"
+                    tools:listitem="@layout/recycle_recruit_detail_part"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -252,15 +272,90 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/header3"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginStart="26dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="24dp"
+                android:layout_marginBottom="15dp"
                 style="@style/Text.Body4.Regular"
                 android:textColor="@color/black_700"
                 android:text="같이 프로젝트를 처음부터 시작해보실 분들 구합니다!개발자들이 프로젝트 경험과 지식을 쌓으며 성장을 이룰 수 있는, 좋은 아이디어가 있어도 팀을 꾸리기 어려웠던 분들이 팀원을 찾을 수 있는 플랫폼 CODEV ~같이 프로젝트를 처음부터 시작해보실 분들 구합니다!
 개발자들이 프로젝트 경험과 지식을 쌓으며 성장을 이룰 수 있는, 좋은 아이디어가 있어도 팀을 꾸리기 어려웠던 분들이 팀원을 찾을 수 있는 플랫폼 CODEV ~같이 프로젝트를 처음부터 시작해보실 분들 구합니다!
+개발자들이 프로젝트 경험과 지식을 쌓으며 성장을 이룰 수 있는, 좋은 아이디어가 있어도 팀을 꾸리기 어려웠던 분들이 팀원을 찾을 수 있는 플랫폼 CODEV ~
+개발자들이 프로젝트 경험과 지식을 쌓으며 성장을 이룰 수 있는, 좋은 아이디어가 있어도 팀을 꾸리기 어려웠던 분들이 팀원을 찾을 수 있는 플랫폼 CODEV ~
+개발자들이 프로젝트 경험과 지식을 쌓으며 성장을 이룰 수 있는, 좋은 아이디어가 있어도 팀을 꾸리기 어려웠던 분들이 팀원을 찾을 수 있는 플랫폼 CODEV ~
+개발자들이 프로젝트 경험과 지식을 쌓으며 성장을 이룰 수 있는, 좋은 아이디어가 있어도 팀을 꾸리기 어려웠던 분들이 팀원을 찾을 수 있는 플랫폼 CODEV ~
 개발자들이 프로젝트 경험과 지식을 쌓으며 성장을 이룰 수 있는, 좋은 아이디어가 있어도 팀을 꾸리기 어려웠던 분들이 팀원을 찾을 수 있는 플랫폼 CODEV ~"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <!-- Toolbar -->
+    <include
+        android:id="@+id/toolbar_recruit"
+        layout="@layout/toolbar3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottom_btn"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:elevation="16dp"
+        android:background="@drawable/recruit_nav_bottom_background">
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/heart"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:button="@drawable/recruit_bookmark"/>
+
+        <TextView
+            android:id="@+id/heart_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/heart"
+            android:layout_marginStart="32dp"
+            style="@style/Text.Body5.SemiBold"
+            android:textColor="@color/black_700"
+            android:text="6"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_1"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            app:layout_constraintStart_toEndOf="@id/heart"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="24dp"
+            style="@style/Text.Body4.SemiBold"
+            android:textColor="@color/black_700"
+            android:background="@drawable/recruit_detail_btn1"
+            android:text="문의하기"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_2"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            app:layout_constraintStart_toEndOf="@id/btn_1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="24dp"
+            style="@style/Text.Body4.SemiBold"
+            android:textColor="@color/white"
+            android:background="@drawable/recruit_detail_btn2"
+            android:text="지원하기"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
