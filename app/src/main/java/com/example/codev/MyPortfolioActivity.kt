@@ -16,7 +16,7 @@ import java.util.*
 
 class MyPortfolioActivity:AppCompatActivity() {
     private lateinit var viewBinding: ActivityMyPortfolioBinding
-    private lateinit var adapter: PortfolioAdapter2
+    private lateinit var adapter: AdapterPortfolio2
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,7 +107,7 @@ class MyPortfolioActivity:AppCompatActivity() {
     }
 
     private fun setAdapter(dataList: ArrayList<PortFolio>){
-        adapter = PortfolioAdapter2(dataList){
+        adapter = AdapterPortfolio2(dataList){
             Log.d("test","리콜받음")
             if (it == 1){
                 enableDelete(true)

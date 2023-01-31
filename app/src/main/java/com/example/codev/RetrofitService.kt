@@ -120,5 +120,4 @@ interface RetrofitService {
 
     @DELETE("my-page/portfolio/{coPortfolioId}")
     fun deletePortFolio(@Path("coPortfolioId") coPortfolioId:Int,@Header("CoDev_Authorization") header: String) : Call<ResDeletePortfolio>
-
 }

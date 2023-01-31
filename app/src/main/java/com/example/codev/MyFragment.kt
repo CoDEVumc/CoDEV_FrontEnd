@@ -73,7 +73,7 @@ class MyFragment:Fragment() {
     }
 
     private fun setAdapter(dataList: ArrayList<PortFolio>){
-        val adapter = PortfolioAdapter1(dataList)
+        val adapter = AdapterPortfolio1(dataList)
         viewBinding.recyclePortfolio.adapter = adapter
     }
 
