@@ -140,6 +140,7 @@ class RecruitListFragment : Fragment() {
         viewBinding.recruitingProjectBtn.setOnClickListener {
             //필터링 다른거 적용이 이중으로 안돼
             downpage = 0
+            lastPage = false
             if(viewBinding.recruitingProjectBtn.isChecked){
                 coProcessTag = "ING"
             }
@@ -161,6 +162,7 @@ class RecruitListFragment : Fragment() {
         //지역,분야 고르고 적용하기 누르면
         val bottomSheetLoc = BottomSheetLoc(){ //now 값이 뭔지 알아야돼서 여기에 선언 해야 돼용
             downpage=0
+            lastPage = false
             coLocationTag = it
             if(coLocationTag != "") {
                 viewBinding.loc.text = coLocationTag
@@ -180,8 +182,10 @@ class RecruitListFragment : Fragment() {
             }
             Log.d("coLocation: ",coLocationTag)
         }
+
         val bottomSheetPart = BottomSheetPart(){
             downpage=0
+            lastPage = false
             coPartTag = it
             if(coPartTag != "") {
                 viewBinding.part.text = coPartTag
@@ -201,9 +205,11 @@ class RecruitListFragment : Fragment() {
             }
             Log.d("coPart: ",coPartTag)
         }
+
         //정렬 누르고 최신순or추천순 선택하면
         val bottomSheetSort = BottomSheetSort(){
             downpage = 0
+            lastPage = false
             coSortingTag = it // ""이거나 populaRity
             if(coSortingTag != "") { //populaRity : 추천순
                 viewBinding.sort.text = "추천순"
@@ -223,6 +229,7 @@ class RecruitListFragment : Fragment() {
             }
             Log.d("coSortingTag: ",coSortingTag)
         }
+
         //지역 버튼 --> 선택 한거로 바껴있어야 됨(내용&색)
         viewBinding.loc.setOnClickListener {
             bottomSheetLoc.show(childFragmentManager, bottomSheetLoc.tag)
