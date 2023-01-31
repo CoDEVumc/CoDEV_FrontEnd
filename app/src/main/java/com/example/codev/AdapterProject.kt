@@ -70,48 +70,70 @@ class AdapterProject(private val listData: ArrayList<PData>, private val context
 
 
             //프로젝트 사용 스택 이미지 5개
-//            val langs = data.co_languages
-//            val comma = ","
-//            val imgList = langs.split(comma)
-//            val defaultImage = R.drawable.profiles
-//            val img1 = imgList[0]
-//            val img2 = imgList[1]
-//            val img3 = imgList[2]
-//            val img4 = imgList[3]
-//            val img5 = imgList[4]
+            val langs = data.co_languages
+            val comma = ","
+            val imgList = langs.split(comma)
+            val defaultImage = R.drawable.profiles
+
+            var img1:String// = imgList[0]
+            var img2:String// = imgList[1]
+            var img3:String// = imgList[2]
+            var img4:String// = imgList[3]
+            var img5:String// = imgList[4]
+
+            //Log.d("imgList :",imgList.toString())
+            try{
+                for(i: Int in 0..4){ //imgList.size-1
+                    try {
+                        Log.d("imgList: "+i+"번째 ",imgList[i])
+
+                    }catch (IOE: IndexOutOfBoundsException){
+                        Log.d("imgList: "+i+"번째 ","")
+                    }
+                }
 
 
-            //.svg파일 띄우기
+            }catch (IOE: IndexOutOfBoundsException){
+
+            }
+
+
+//            Log.d("ig1 :",img1)
+//            Log.d("ig2 :",img2)
+//            Log.d("ig3 :",img3)
+//            Log.d("ig4 :",img4)
+//            Log.d("ig5 :",img5)
+
+            //.png파일 띄우기
 //            Glide.with(context)
-//                .load(img1) //불러올 이미지 url
+//                .load(imgList[0]) //불러올 이미지 url
 //                .placeholder(defaultImage) //미리보기
 //                .error(defaultImage)
 //                .fallback(defaultImage)
 //                .circleCrop()
 //                .into(binding.pStackImg1)
-
-//            Glide.with(RecruitProjectFragment())
+//            Glide.with(context)
 //                .load(img2) //불러올 이미지 url
 //                .placeholder(defaultImage) //미리보기
 //                .error(defaultImage)
 //                .fallback(defaultImage)
 //                .circleCrop()
 //                .into(binding.pStackImg2)
-//            Glide.with(RecruitProjectFragment())
+//            Glide.with(context)
 //                .load(img3) //불러올 이미지 url
 //                .placeholder(defaultImage) //미리보기
 //                .error(defaultImage)
 //                .fallback(defaultImage)
 //                .circleCrop()
 //                .into(binding.pStackImg3)
-//            Glide.with(RecruitProjectFragment())
+//            Glide.with(context)
 //                .load(img4) //불러올 이미지 url
 //                .placeholder(defaultImage) //미리보기
 //                .error(defaultImage)
 //                .fallback(defaultImage)
 //                .circleCrop()
 //                .into(binding.pStackImg4)
-//            Glide.with(RecruitProjectFragment())
+//            Glide.with(context)
 //                .load(img5) //불러올 이미지 url
 //                .placeholder(defaultImage) //미리보기
 //                .error(defaultImage)
