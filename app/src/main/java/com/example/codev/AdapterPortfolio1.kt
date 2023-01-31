@@ -10,7 +10,7 @@ import com.example.codev.databinding.RecyclePortfolioItem1Binding
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 
-class PortfolioAdapter1(private val listData: ArrayList<PortFolio>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterPortfolio1(private val listData: ArrayList<PortFolio>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val HEADER = 0
     private val ITEM = 1
 

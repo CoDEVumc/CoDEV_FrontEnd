@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class PortfolioAdapter2(private val listData: ArrayList<PortFolio>, private val returnDeleteCount: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterPortfolio2(private val listData: ArrayList<PortFolio>, private val returnDeleteCount: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val ITEM = 1
     private val FOOTER = 2
     private var EDIT: Boolean = false
