@@ -30,16 +30,16 @@ class MyProfileActivity:AppCompatActivity() {
         viewBinding.etName.setText(userinfo.co_name)
         viewBinding.etNickname.setText(userinfo.co_nickName)
         Glide.with(this)
-            .load(userinfo.profileImg).circleCrop().fitCenter()
+            .load(userinfo.profileImg).circleCrop()
             .into(viewBinding.profileImg)
-        viewBinding.count.setText((8 - viewBinding.etNickname.text.length).toString())
+        viewBinding.count.text = (8 - viewBinding.etNickname.text.length).toString()
 
         viewBinding.etNickname.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewBinding.count.setText((8 - viewBinding.etNickname.text.length).toString())
+                viewBinding.count.text = (8 - viewBinding.etNickname.text.length).toString()
             }
 
             override fun afterTextChanged(p0: Editable?) {

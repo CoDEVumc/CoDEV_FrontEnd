@@ -23,7 +23,7 @@ class RegisterTosActivity:AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
-        val reqSignUp = ReqSignUp()
+        val reqSignUp = intent.getSerializableExtra("signUp") as ReqSignUp
 
         viewBinding.tosRdo1.setOnClickListener {
             if (viewBinding.tosRdo1.isChecked){
