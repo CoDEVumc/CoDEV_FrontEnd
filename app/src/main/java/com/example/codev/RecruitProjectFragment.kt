@@ -224,8 +224,6 @@ class RecruitProjectFragment : Fragment() {
             }
             Log.d("coLocation: ",coLocationTag)
         }
-        //분야 태그
-        //프 스 비교 해야됨
         val bottomSheetPart = BottomSheetPart(){
             downpage=0
             coPartTag = it
@@ -247,13 +245,33 @@ class RecruitProjectFragment : Fragment() {
             }
             Log.d("coPart: ",coPartTag)
         }
+        //정렬 누르고 최신순or추천순 선택하면
+        val bottomSheetSort = BottomSheetSort(){
+            downpage = 0
+            coSortingTag = it // ""이거나 populaRity
+            if(coSortingTag != "") { //populaRity : 추천순
+                viewBinding.sort.text = "추천순"
+            }
+            else{ //아무것도 없 : 최신순
+                viewBinding.sort.text = "최신순"
+            }
+            when(now){
+                0 -> {
+                    pdataList = ArrayList()
+                    loadPData(mainAppActivity, downpage,coLocationTag,coPartTag,coKeyword,coProcessTag,coSortingTag)
+                }
+                1 -> {
+                    sdataList = ArrayList()
+                    loadSData(mainAppActivity, downpage,coLocationTag,coPartTag,coKeyword,coProcessTag,coSortingTag)
+                }
+            }
+            Log.d("coSortingTag: ",coSortingTag)
+        }
         //지역 버튼 --> 선택 한거로 바껴있어야 됨(내용&색)
         viewBinding.loc.setOnClickListener {
-            downpage = 0
             bottomSheetLoc.show(childFragmentManager, bottomSheetLoc.tag)
         }
         viewBinding.filterLoc.setOnClickListener {
-            downpage = 0
             bottomSheetLoc.show(childFragmentManager, bottomSheetLoc.tag)
         }
 
@@ -263,6 +281,14 @@ class RecruitProjectFragment : Fragment() {
         }
         viewBinding.filterPart.setOnClickListener {
             bottomSheetPart.show(childFragmentManager, bottomSheetPart.tag)
+        }
+
+        //정렬 버튼
+        viewBinding.sort.setOnClickListener {
+            bottomSheetSort.show(childFragmentManager, bottomSheetSort.tag)
+        }
+        viewBinding.filterSort.setOnClickListener {
+            bottomSheetSort.show(childFragmentManager, bottomSheetSort.tag)
         }
 
 
