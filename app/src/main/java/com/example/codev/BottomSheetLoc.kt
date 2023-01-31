@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.example.codev.databinding.PopupLocBinding
 
@@ -20,8 +21,6 @@ class BottomSheetLoc(private val returnLoc: (String) -> Unit) : BottomSheetDialo
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         popupLocBinding = PopupLocBinding.inflate(layoutInflater)
-
-
 
         popupLocBinding.btnSelect.setOnClickListener { view ->
             Log.d("test: ","적용하기 버튼 누름")
@@ -83,7 +82,13 @@ class BottomSheetLoc(private val returnLoc: (String) -> Unit) : BottomSheetDialo
                 }
             }
             returnLoc(loc)
-            Log.d("test: 클릭한 지역: ",loc)
+            //Log.d("test: 클릭한 지역: ",loc)
+        }
+
+        popupLocBinding.btnReset.setOnClickListener { view ->
+            loc = ""
+            popupLocBinding.radioGroupLoc.clearCheck()
+            //Log.d("test: ", "초기화 버튼 누름")
         }
 
 
@@ -97,7 +102,6 @@ class BottomSheetLoc(private val returnLoc: (String) -> Unit) : BottomSheetDialo
 
     }
 
-    //지역 고르고 적용하기 누르면 -> 그 지역으로 "" 내용 바껴야됨
 
 
 

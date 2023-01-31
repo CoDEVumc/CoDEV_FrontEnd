@@ -73,7 +73,7 @@
                 tools:ignore="TouchTargetSizeCheck" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="56dp"
@@ -82,7 +82,7 @@
 
                 <TextView
                     android:id="@+id/part"
-                    android:layout_width="25dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="18dp"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="11dp"
@@ -98,7 +98,7 @@
 
                 <TextView
                     android:id="@+id/loc"
-                    android:layout_width="25dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="18dp"
                     android:layout_marginTop="11dp"
                     android:layout_marginBottom="11dp"

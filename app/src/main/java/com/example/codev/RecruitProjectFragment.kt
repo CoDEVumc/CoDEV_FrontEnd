@@ -33,6 +33,7 @@ class RecruitProjectFragment : Fragment() {
     private var coSortingTag:String = ""
 
     private var downpage: Int = 0
+    private var lastPage: Boolean = false
 
     private lateinit var mainAppActivity: Context
     override fun onAttach(context: Context) {
@@ -54,12 +55,41 @@ class RecruitProjectFragment : Fragment() {
         var popupMenu = PopupMenu(mainAppActivity, temp)
         popupMenu.inflate(R.menu.menu_recruit)
         viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_project) //기본으로 logo_project띄워놓기
-        //분야
-        val bottomSheetPart = BottomSheetPart()
-        //지역
-        val bottomSheetLoc = BottomSheetLoc(){
-            viewBinding.loc.text = it
-        }
+
+        //지역 태그
+        //프 스 비교 해야됨
+//        val bottomSheetLoc = BottomSheetLoc(){
+//            coLocationTag = it
+//            if(coLocationTag != "") {
+//                viewBinding.loc.text = it
+//                pdataList = ArrayList()
+//                sdataList = ArrayList()
+//                loadPData(mainAppActivity, downpage,coLocationTag,coPartTag,coKeyword,coProcessTag,coSortingTag)
+//            }
+//            else{
+//                viewBinding.loc.text = "지역"
+//                pdataList = ArrayList()
+//                sdataList = ArrayList()
+//            }
+//            Log.d("coLocation: ",coLocationTag)
+//        }
+//        //분야 태그
+//        //프 스 비교 해야됨
+//        val bottomSheetPart = BottomSheetPart(){
+//            coPartTag = it
+//            if(coPartTag != "") {
+//                viewBinding.part.text = it
+//                pdataList = ArrayList()
+//                sdataList = ArrayList()
+//            }
+//            else{
+//                viewBinding.part.text = "분야"
+//                pdataList = ArrayList()
+//                sdataList = ArrayList()
+//            }
+//            Log.d("coPart: ",coPartTag)
+//        }
+
         //프로젝트인지 스터딘지 구분해줄려고
         var now : Int = 0 // 0-프로젝트 / 1- 스터디
 
@@ -76,17 +106,31 @@ class RecruitProjectFragment : Fragment() {
 
                 val lastVisibleItemPosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition() - 2
                 val lastPosition = recyclerView.adapter!!.itemCount - 3 //원래 1
-                if(lastVisibleItemPosition == lastPosition){
+//                if(lastVisibleItemPosition == lastPosition){
+//                    downpage += 1
+//                    when(now){ //프/스 분리 해야 됨
+//                        0 -> loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
+//                        1 -> loadSData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
+//                    }
+//                }
+                if(lastVisibleItemPosition == lastPosition && !lastPage){
                     downpage += 1
-                    loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
+                    when(now){ //프/스 분리 해야 됨
+                        0 -> loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
+                        1 -> loadSData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
+                    }
                 }
             }
         })
 
 
+        //툴바에서 프 <-> 스 전환
         viewBinding.toolbarRecruit.toolbarImg.setOnClickListener {
             popupMenu.setOnMenuItemClickListener {
                 downpage = 0
+                lastPage = false //없으면 페이지 전환시 무한스크롤 작동x
+                // (이유: 스터디 화면에서 페이지 끝까지 닿으면 lastpage = true -> addOnScrollListener의 조건에 의해 더이상 downpage가 증가하지 x)
+                // S화면 끝까지 닿았다가 P화면 전환 시 P화면 무한스크롤 x
                 if(now == 0){ //현재 프로젝트 화면이면
                     sdataList = ArrayList()
                     when (it.itemId) { //프->스
@@ -153,28 +197,74 @@ class RecruitProjectFragment : Fragment() {
                     loadSData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
                 }
             }
-
         }
 
+        //분야 고르고 적용하기 누르면
+        val bottomSheetLoc = BottomSheetLoc(){
+            downpage=0
+            coLocationTag = it
+            if(coLocationTag != "") {
+                viewBinding.loc.text = coLocationTag
+            }
+            else{
+                viewBinding.loc.text = "지역"
+            }
+            when(now){
+                0 -> {
+                    pdataList = ArrayList()
+                    loadPData(mainAppActivity, downpage,coLocationTag,coPartTag,coKeyword,coProcessTag,coSortingTag)
+                }
+                1 -> {
+                    sdataList = ArrayList()
+                    loadSData(mainAppActivity, downpage,coLocationTag,coPartTag,coKeyword,coProcessTag,coSortingTag)
+                }
+            }
+            Log.d("coLocation: ",coLocationTag)
+        }
+        //분야 태그
+        //프 스 비교 해야됨
+        val bottomSheetPart = BottomSheetPart(){
+            downpage=0
+            coPartTag = it
+            if(coPartTag != "") {
+                viewBinding.part.text = coPartTag
+            }
+            else{
+                viewBinding.part.text = "분야"
+            }
+            when(now){
+                0 -> {
+                    pdataList = ArrayList()
+                    loadPData(mainAppActivity, downpage,coLocationTag,coPartTag,coKeyword,coProcessTag,coSortingTag)
+                }
+                1 -> {
+                    sdataList = ArrayList()
+                    loadSData(mainAppActivity, downpage,coLocationTag,coPartTag,coKeyword,coProcessTag,coSortingTag)
+                }
+            }
+            Log.d("coPart: ",coPartTag)
+        }
         //지역 버튼 --> 선택 한거로 바껴있어야 됨(내용&색)
         viewBinding.loc.setOnClickListener {
+            downpage = 0
             bottomSheetLoc.show(childFragmentManager, bottomSheetLoc.tag)
         }
         viewBinding.filterLoc.setOnClickListener {
+            downpage = 0
             bottomSheetLoc.show(childFragmentManager, bottomSheetLoc.tag)
         }
-
 
         //분야 버튼 --> 선택 한거로 바껴있어야 됨(내용&색)
         viewBinding.part.setOnClickListener {
             bottomSheetPart.show(childFragmentManager, bottomSheetPart.tag)
-            //뭐눌렀는지 떠야돼 --> 누른 값 인자로 전달 coPart의 ""안에 넣으면 됨
-            viewBinding.loc.text = bottomSheetLoc.loc
         }
         viewBinding.filterPart.setOnClickListener {
             bottomSheetPart.show(childFragmentManager, bottomSheetPart.tag)
         }
-        //분야 고르고 적용하기 누르면
+
+
+
+
         return viewBinding.root
     }
 
@@ -190,12 +280,14 @@ class RecruitProjectFragment : Fragment() {
                     when(response.code()){
                         200->{
                             response.body()?.let {
-                                Log.d("test: 플젝 전체 조회 성공! ", "\n${it.toString()}")
-                                Log.d("test: 플젝 전체 데이터 : ", "\n${it.result.success}")
+                                Log.d("test: 플젝 조회 성공! ", "\n${it.toString()}")
+                                Log.d("test: 플젝 데이터 : ", "\n${it.result.success}")
+                                Log.d("test: 매개변수: ",coLocationTag+coPartTag+coKeyword+coProcessTag+coSortingTag)
                                 //페이지가 비어있으면
                                 if(it.result.success.toString() == "[]") {
-                                    Log.d("test: success: ", "[] 라서 비어있어용")
+                                    //Log.d("test: success: ", "[] 라서 비어있어용")
                                     Toast.makeText(context,"이 글의 끝입니다.",Toast.LENGTH_SHORT).show()
+                                    lastPage = true
                                 }
                                 //페이지에 내용이 있으면
                                 else {
@@ -205,6 +297,7 @@ class RecruitProjectFragment : Fragment() {
                                     }
                                     else{
                                         viewBinding.listviewMain.adapter!!.notifyDataSetChanged()
+                                        //viewBinding.listviewMain.adapter!!.notifyItemRangeInserted(downpage*10-1,10)
                                     }
                                 }
                             }
@@ -233,12 +326,14 @@ class RecruitProjectFragment : Fragment() {
                     when(response.code()){
                         200->{
                             response.body()?.let {
-                                Log.d("test: 스터디 전체 조회 성공! ", "\n${it.toString()}")
-                                Log.d("test: 스터디 전체 데이터 :", "\n${it.result.success}")
+                                Log.d("test: 스터디 조회 성공! ", "\n${it.toString()}")
+                                Log.d("test: 스터디 데이터 :", "\n${it.result.success}")
+                                Log.d("test: 매개변수: ",coLocationTag+coPartTag+coKeyword+coProcessTag+coSortingTag)
                                 //페이지가 비어있으면
                                 if(it.result.success.toString() == "[]") {
-                                    Log.d("test: success: ", "[] 라서 비어있어용")
+                                    //Log.d("test: success: ", "[] 라서 비어있어용")
                                     Toast.makeText(context,"이 글의 끝입니다.",Toast.LENGTH_SHORT).show()
+                                    lastPage = true
                                 }
                                 //페이지에 내용이 있으면
                                 else {

@@ -9,10 +9,11 @@ import com.example.codev.databinding.PopupLocBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.example.codev.databinding.PopupPartBinding
 
-class BottomSheetPart : BottomSheetDialogFragment(){
+class BottomSheetPart(private val returnPart: (String) -> Unit) : BottomSheetDialogFragment(){
     private lateinit var popupPartBinding: PopupPartBinding
 
     var part: String=""
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,8 +43,14 @@ class BottomSheetPart : BottomSheetDialogFragment(){
                 }
             }
 
+            returnPart(part)
+            //Log.d("test: 클릭한 파트: ",part)
+        }
 
-            Log.d("test: 클릭한 파트: ",part)
+        popupPartBinding.btnReset2.setOnClickListener { view ->
+            //Log.d("test: ", "초기화 버튼 누름")
+            part = ""
+            popupPartBinding.radioGroupPart.clearCheck()
         }
 
         return popupPartBinding.root
