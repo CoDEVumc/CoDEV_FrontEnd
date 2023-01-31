@@ -132,6 +132,7 @@ class RecruitProjectFragment : Fragment() {
                 // (이유: 스터디 화면에서 페이지 끝까지 닿으면 lastpage = true -> addOnScrollListener의 조건에 의해 더이상 downpage가 증가하지 x)
                 // S화면 끝까지 닿았다가 P화면 전환 시 P화면 무한스크롤 x
                 if(now == 0){ //현재 프로젝트 화면이면
+                    pdataList = ArrayList()
                     sdataList = ArrayList()
                     when (it.itemId) { //프->스
                         R.id.m_study -> {
@@ -147,6 +148,7 @@ class RecruitProjectFragment : Fragment() {
                 }
                 else { //현재 스터디 화면이면
                     pdataList = ArrayList()
+                    sdataList = ArrayList()
                     when (it.itemId) { //스->프
                         R.id.m_project -> {
                             now = 0
@@ -180,6 +182,7 @@ class RecruitProjectFragment : Fragment() {
 
         //모집중만 보기 버튼
         viewBinding.recruitingProjectBtn.setOnClickListener {
+            //필터링 다른거 적용이 이중으로 안돼
             downpage = 0
             if(viewBinding.recruitingProjectBtn.isChecked){
                 coProcessTag = "ING"
@@ -199,8 +202,8 @@ class RecruitProjectFragment : Fragment() {
             }
         }
 
-        //분야 고르고 적용하기 누르면
-        val bottomSheetLoc = BottomSheetLoc(){
+        //지역,분야 고르고 적용하기 누르면
+        val bottomSheetLoc = BottomSheetLoc(){ //now 값이 뭔지 알아야돼서 여기에 선언 해야 돼용
             downpage=0
             coLocationTag = it
             if(coLocationTag != "") {
@@ -288,6 +291,11 @@ class RecruitProjectFragment : Fragment() {
                                     //Log.d("test: success: ", "[] 라서 비어있어용")
                                     Toast.makeText(context,"이 글의 끝입니다.",Toast.LENGTH_SHORT).show()
                                     lastPage = true
+                                    if(int == 0) { //0page
+                                        // 1.페이지가 끝이라서 그 다음페이지 결과가 []인거 --> int != 0
+                                        // 2.필터링 결과가 아무것도 없는거 --> int == 0
+                                        setPAdapter(pdataList) //projectAdapter
+                                    }
                                 }
                                 //페이지에 내용이 있으면
                                 else {
@@ -334,6 +342,11 @@ class RecruitProjectFragment : Fragment() {
                                     //Log.d("test: success: ", "[] 라서 비어있어용")
                                     Toast.makeText(context,"이 글의 끝입니다.",Toast.LENGTH_SHORT).show()
                                     lastPage = true
+                                    if(int == 0) {
+                                        // 1.페이지가 끝이라서 그 다음페이지 결과가 []인거 --> int != 0
+                                        // 2.필터링 결과가 아무것도 없는거 --> int == 0
+                                        setSAdapter(sdataList) //projectAdapter
+                                    }
                                 }
                                 //페이지에 내용이 있으면
                                 else {
