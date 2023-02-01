@@ -34,7 +34,7 @@ class PfDetailActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         viewBinding.addLinkSection.removeAllViews()
-        viewBinding.addLinkSection.removeAllViews()
+        viewBinding.stackChipGroup.removeAllViews()
         pfId = intent.getStringExtra("id").toString()
         loadDataUsingPFId(pfId)
     }
