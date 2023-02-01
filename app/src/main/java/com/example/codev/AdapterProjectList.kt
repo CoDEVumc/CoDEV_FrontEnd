@@ -60,7 +60,7 @@ class AdapterProjectList(private val context: Context, private val listData: Arr
             //기술 스택
             if (!data.co_languages.isNullOrBlank()){
                 val languages = data.co_languages
-                binding.stack.adapter = AdapterRecruitDetailStack(context,languages.split(","))
+                binding.stack.adapter = AdapterRecruitStack(context,languages.split(","))
             }
 
             //프로젝트 모집 파트
@@ -76,6 +76,8 @@ class AdapterProjectList(private val context: Context, private val listData: Arr
             binding.item.setOnClickListener {
                 val intent = Intent(binding.item.context, RecruitDetailActivity::class.java)
                 intent.putExtra("id",data.co_projectId)
+                intent.putExtra("type","PROJECT")
+                intent.putExtra("dday",binding.dday.text)
                 Log.d("test : 선택한 프로젝트 아이디", data.co_projectId.toString())
                 startActivity(binding.item.context,intent,null)
             }
