@@ -150,13 +150,15 @@ class PfDetailActivity : AppCompatActivity() {
         viewBinding.editPfLevel.text = pfData.co_rank
 
         //setStack
-        val stackNameList = pfData.co_languages.split(",")
-        for (i in stackNameList) viewBinding.stackChipGroup.addView(
-            addPageFunction.returnStackChipWithPF(
-                context,
-                i
+        if (!pfData.co_languages.isNullOrBlank()){
+            val stackNameList = pfData.co_languages.split(",")
+            for (i in stackNameList) viewBinding.stackChipGroup.addView(
+                addPageFunction.returnStackChipWithPF(
+                    context,
+                    i
+                )
             )
-        )
+        }
 
         viewBinding.editPfIntro.text = pfData.co_headLine
 

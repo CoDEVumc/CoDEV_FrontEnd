@@ -1,10 +1,14 @@
 package com.example.codev
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.codev.addpage.PfDetailActivity
 import com.example.codev.databinding.RecyclePortfolioHeader1Binding
 import com.example.codev.databinding.RecyclePortfolioItem1Binding
 import java.sql.Timestamp
@@ -55,6 +59,10 @@ class AdapterPortfolio1(private val listData: ArrayList<PortFolio>) : RecyclerVi
             binding.portfolioUpdatedAt.text = convertTimestampToDate(data.updatedAt)
             binding.portfolio.setOnClickListener {
                 Log.d("test", "포트폴리오 클릭 $position")
+                val intent = Intent(binding.portfolio.context, PfDetailActivity::class.java)
+                intent.putExtra("id", data.co_portfolioId.toString())
+                Log.d("test",data.co_portfolioId.toString())
+                startActivity(binding.portfolio.context, intent, null)
             }
         }
     }
