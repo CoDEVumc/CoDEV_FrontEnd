@@ -66,7 +66,7 @@ class AddPageFunction {
         context: Context,
         addItem: AddListItem
     ): Chip {
-        var chipView = Chip(context)
+        val chipView = Chip(context)
         chipView.text = addItem.name
         chipView.setChipBackgroundColorResource(R.color.green_300)
         chipView.chipStrokeColor = getColorStateList(context, R.color.green_900)
@@ -77,7 +77,21 @@ class AddPageFunction {
         chipView.closeIcon?.setTint(getColor(context, R.color.green_900))
         chipView.setTextColor(getColor(context, R.color.black_900))
         chipView.setTextAppearance(R.style.Text_Body4_SemiBold)
+        return chipView
+    }
 
+    fun returnStackChipWithPF(
+        context: Context,
+        addItem: String
+    ): Chip {
+        val chipView = Chip(context)
+        chipView.text = addItem
+        chipView.setChipBackgroundColorResource(R.color.green_300)
+        chipView.chipStrokeColor = getColorStateList(context, R.color.green_900)
+        chipView.chipStrokeWidth = dpToPx(context, 1f)
+        chipView.chipCornerRadius = dpToPx(context, 6f)
+        chipView.setTextColor(getColor(context, R.color.black_900))
+        chipView.setTextAppearance(R.style.Text_Body4_SemiBold)
         return chipView
     }
 

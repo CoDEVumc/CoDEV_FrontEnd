@@ -49,6 +49,10 @@ class MainAppActivity : AppCompatActivity() {
                             .beginTransaction()
                             .replace(viewBinding.content.id,HomeFragment())
                             .commitAllowingStateLoss()
+                        //TODO: 김유정 테스트 코드임, 맘대로 삭제 가능
+                        val intent = Intent(this@MainAppActivity,PfDetailActivity::class.java)
+                        intent.putExtra("id", "48")
+                        startActivity(intent)
 
                     }
                     R.id.menu_chat->{

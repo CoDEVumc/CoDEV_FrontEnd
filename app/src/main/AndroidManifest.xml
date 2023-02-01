@@ -18,7 +18,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".PfDetailActivity"
+            android:name=".addpage.PfDetailActivity"
             android:exported="false" />
         <activity
             android:name=".addpage.AddPfPageActivity"

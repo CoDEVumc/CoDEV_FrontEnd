@@ -173,7 +173,7 @@
                 android:id="@+id/text_pf_intro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/text_pf_stack"
+                app:layout_constraintTop_toBottomOf="@id/stack_chip_group"
                 android:layout_marginTop="24dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginStart="24dp"
@@ -226,7 +226,6 @@
                 android:text="abcd"
                 android:textColor="@color/black_900"
                 style="@style/Text.Body4.Medium"
-                android:lines="10"
                 />
 
             <com.google.android.material.divider.MaterialDivider
@@ -243,9 +242,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintRight_toRightOf="@+id/edit_pf_content"
-                android:layout_marginEnd="12dp"
-                app:layout_constraintBottom_toBottomOf="@id/pf_content_bottom_divider"
-                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintTop_toBottomOf="@id/pf_content_bottom_divider"
+                android:layout_marginTop="4dp"
                 android:text="100"
                 android:textColor="@color/black_300"
                 style="@style/Text.Body4.Medium"/>

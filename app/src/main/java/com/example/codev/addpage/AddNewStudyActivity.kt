@@ -409,10 +409,10 @@ class AddNewStudyActivity : AppCompatActivity() {
                 if(finalPartNum == 11 && finalStack1Name == "기획"){
                     val finalStackMap = testStackMap(listOf(1, 2, 36 ,37), listOf("JavaScript", "TypeScript", "Blender", "Cinema4D"))
                     val testStudy = EditStudy(
-                        42.toString(),
-                        "edit42",
-                        "please42",
-                        listOf(),
+                        44.toString(),
+                        "edit44",
+                        "please44",
+                        listOf("http://semtle.catholic.ac.kr:8080/image?name=104947-JpegJihyo20230201105005.jpeg"),
                         "디자인",
                         1,
                         finalStackMap,
