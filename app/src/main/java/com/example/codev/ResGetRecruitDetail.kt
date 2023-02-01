@@ -14,6 +14,7 @@ data class ResponseOfGetRecruitDetail(
 data class RecruitDetail(
     val co_studyId: Int,
     val co_projectId: Int,
+    val co_nickname: String,
     val co_email: String,
     val co_viewer: String,
     val co_title: String,

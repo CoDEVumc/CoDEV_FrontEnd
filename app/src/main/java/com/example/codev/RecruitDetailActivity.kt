@@ -153,6 +153,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     setPartAdapter(context,it.result.Complete.co_partList)
                                     setImageAdapter(context,it.result.Complete.co_photos)
                                     viewBinding.type.text = "프로젝트"
+                                    viewBinding.name.text = it.result.Complete.co_nickname
                                     viewBinding.title.text = it.result.Complete.co_title
                                     viewBinding.location.text = it.result.Complete.co_location
                                     viewBinding.day.text = dday
@@ -162,7 +163,6 @@ class RecruitDetailActivity:AppCompatActivity() {
                                         menuInflater.inflate(R.menu.menu_toolbar_detail, viewBinding.toolbarRecruit.toolbar3.menu)
                                     }
 
-                                    //co_total 적용 x, co_nickname(작성자) 없음, co_heart 적용x
                                     viewBinding.total.text = it.result.Complete.co_total.toString() + "명 모집중"
                                     viewBinding.heartCount.text = it.result.Complete.co_heartCount.toString()
                                     viewBinding.heart.isChecked = it.result.Complete.co_heart
@@ -200,6 +200,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     setPartAdapter(context,arrayListOf(RecruitPartLimit(it.result.Complete.co_part,it.result.Complete.co_total)))
                                     setImageAdapter(context,it.result.Complete.co_photos)
                                     viewBinding.type.text = "스터디"
+                                    viewBinding.name.text = it.result.Complete.co_nickname
                                     viewBinding.title.text = it.result.Complete.co_title
                                     viewBinding.location.text = it.result.Complete.co_location
                                     viewBinding.day.text = dday
@@ -209,7 +210,6 @@ class RecruitDetailActivity:AppCompatActivity() {
                                         menuInflater.inflate(R.menu.menu_toolbar_detail, viewBinding.toolbarRecruit.toolbar3.menu)
                                     }
 
-                                    //co_total 적용 x, co_nickname(작성자) 없음, co_heart 적용x, co_part가 null
                                     viewBinding.total.text = it.result.Complete.co_total.toString() + "명 모집중"
                                     viewBinding.heartCount.text = it.result.Complete.co_heartCount.toString()
                                     viewBinding.heart.isChecked = it.result.Complete.co_heart
