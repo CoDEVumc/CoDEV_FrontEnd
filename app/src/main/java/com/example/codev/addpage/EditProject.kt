@@ -15,8 +15,8 @@ data class EditProject(
     val backPeople: Int,
     val etcPeople: Int,
 
-    //hashMap으로 모든 언어의 Id와 이름을 추가해서 보내주세요!, 없으면 null으로 보내주세요
-    val languageIdNameMap: HashMap<Int, String>,
+    //LinkedHashMap으로 모든 언어의 Id와 이름을 추가해서 보내주세요!, 없으면 null으로 보내주세요
+    val languageIdNameMap: LinkedHashMap<Int, String>,
     val location: String,
     val deadLine: String, //마감시간은 YYYY-MM-DD 형식으로 보내주세면 감사하겠습니다!
 ) : Serializable

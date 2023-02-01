@@ -377,7 +377,7 @@ class AddNewStudyActivity : AppCompatActivity() {
 
                                     if(loadedImageNumber == allUrlNumber){
                                         val imageMultiPartListUsingFile = project2Server.createImageMultiPartListUsingFile(imageFileList)
-                                        project2Server.updateStudy(this@AddNewStudyActivity, oldStudyId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartListUsingFile)
+                                        project2Server.updateStudy(this@AddNewStudyActivity, oldStudyId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartListUsingFile) { finish() }
                                     }
                                 }
                                 override fun onLoadCleared(placeholder: Drawable?) {
@@ -389,7 +389,7 @@ class AddNewStudyActivity : AppCompatActivity() {
 
                     if(allUrlNumber == 0){
                         val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
-                        project2Server.updateStudy(this@AddNewStudyActivity, oldStudyId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartList)
+                        project2Server.updateStudy(this@AddNewStudyActivity, oldStudyId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartList) { finish() }
                     }
 
                     Log.d("deadlineServerJson", dateJsonString)
@@ -398,31 +398,31 @@ class AddNewStudyActivity : AppCompatActivity() {
                     val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
                     Log.d("finalImageMultiPartList", imageMultiPartList.toString())
                     Log.d("deadlineServerJson", dateJsonString)
-                    project2Server.postNewStudy(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartList)
+                    project2Server.postNewStudy(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartList) { finish() }
                 }
             }else{
                 toastString = toastString.substring(0, toastString.length-2) + "을 확인하세요."
                 Log.d("string", toastString)
                 Toast.makeText(this, toastString, Toast.LENGTH_LONG).show()
 
-                //TODO: 테스트코드
-                if(finalPartNum == 11 && finalStack1Name == "기획"){
-                    val finalStackMap = testStackMap(listOf(1, 2, 36 ,37), listOf("JavaScript", "TypeScript", "Blender", "Cinema4D"))
-                    val testStudy = EditStudy(
-                        44.toString(),
-                        "edit44",
-                        "please44",
-                        listOf("http://semtle.catholic.ac.kr:8080/image?name=104947-JpegJihyo20230201105005.jpeg"),
-                        "디자인",
-                        1,
-                        finalStackMap,
-                        "경기",
-                        "2022-02-07")
-                    val intent = Intent(this, AddNewStudyActivity::class.java)
-                    intent.putExtra("study", testStudy)
-                    startActivity(intent)
-                    finish()
-                }
+//                //TODO: 테스트코드
+//                if(finalPartNum == 11 && finalStack1Name == "기획"){
+//                    val finalStackMap = testStackMap(listOf(1, 2, 36 ,37), listOf("JavaScript", "TypeScript", "Blender", "Cinema4D"))
+//                    val testStudy = EditStudy(
+//                        44.toString(),
+//                        "edit44",
+//                        "please44",
+//                        listOf("http://semtle.catholic.ac.kr:8080/image?name=104947-JpegJihyo20230201105005.jpeg"),
+//                        "디자인",
+//                        1,
+//                        finalStackMap,
+//                        "경기",
+//                        "2022-02-07")
+//                    val intent = Intent(this, AddNewStudyActivity::class.java)
+//                    intent.putExtra("study", testStudy)
+//                    startActivity(intent)
+//                    finish()
+//                }
             }
         }
 
@@ -509,14 +509,14 @@ class AddNewStudyActivity : AppCompatActivity() {
     }
     //SetStack2Function - End
 
-    //TODO: 테스트 코드
-    private fun testStackMap(numberList: List<Int>, nameList: List<String>): LinkedHashMap<Int, String>{
-        val returnMap = LinkedHashMap<Int, String>()
-        for(i in numberList){
-            returnMap[i] = nameList[numberList.indexOf(i)]
-        }
-        return returnMap
-    }
+//    //TODO: 테스트 코드
+//    private fun testStackMap(numberList: List<Int>, nameList: List<String>): LinkedHashMap<Int, String>{
+//        val returnMap = LinkedHashMap<Int, String>()
+//        for(i in numberList){
+//            returnMap[i] = nameList[numberList.indexOf(i)]
+//        }
+//        return returnMap
+//    }
 
 
 }

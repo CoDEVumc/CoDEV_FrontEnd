@@ -312,7 +312,8 @@ class AddPfPageActivity : AppCompatActivity() {
 
            viewBinding.inputPfContent.setText(oldPf.content)
 
-           for(i in oldPf.linkList){
+           val oldLinkList = oldPf.linkListString.split(",")
+           for(i in oldLinkList){
                val nowTime = System.currentTimeMillis()
                linkTimeTextHashMap[nowTime] = i
                val linkView = InputLayoutBinding.inflate(layoutInflater)
@@ -401,9 +402,9 @@ class AddPfPageActivity : AppCompatActivity() {
 
             if(isTitleOk and isLevelOk and isIntroOk and isContentOk and isLinkOk){
                 if(isOld){
-                    project2Server.updatePF(this, oldPfId, finalTitle, finalLevel, finalIntro, finalContent, finalStackList, finalLinkList)
+                    project2Server.updatePF(this, oldPfId, finalTitle, finalLevel, finalIntro, finalContent, finalStackList, finalLinkList) { finish() }
                 }else{
-                    project2Server.postNewPF(this, finalTitle, finalLevel, finalIntro, finalContent, finalStackList, finalLinkList)
+                    project2Server.postNewPF(this, finalTitle, finalLevel, finalIntro, finalContent, finalStackList, finalLinkList) { finish() }
                 }
 
             }else{
@@ -411,13 +412,8 @@ class AddPfPageActivity : AppCompatActivity() {
                 Log.d("string", toastString)
                 Toast.makeText(this, toastString, Toast.LENGTH_LONG).show()
             }
-
-
         }
-
-
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
             android.R.id.home ->{
@@ -427,7 +423,6 @@ class AddPfPageActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
     //SetStack2Function - Start
     private fun getStack2Adapter(itemList: ArrayList<AddListItem>): Stack2RVAdapter{
         return Stack2RVAdapter(itemList) {

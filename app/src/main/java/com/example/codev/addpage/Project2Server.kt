@@ -49,7 +49,7 @@ class Project2Server {
         return fileMultipartList.toList()
     }
 
-    fun postNewProject(context: Context, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>){
+    fun postNewProject(context: Context, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>, finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
         val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
         Log.d("postAuth", userToken)
@@ -88,15 +88,15 @@ class Project2Server {
 
                 }
                 response.body()?.let { Log.d("Success: testCreateNewProject", "\n${it.result.message}")}
+                finishPage()
             }
-
             override fun onFailure(call: Call<ResCreateNewProject>, t: Throwable) {
                 Log.d("FAIL", "[Fail]${t.toString()}")
             }
         })
     }
 
-    fun updateProject(context: Context, projectId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>){
+    fun updateProject(context: Context, projectId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>, finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
         val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
         Log.d("postAuth", userToken)
@@ -135,6 +135,7 @@ class Project2Server {
 
                 }
                 response.body()?.let { Log.d("Success: testCreateNewProject", "\n${it.result.message}")}
+                finishPage()
             }
 
             override fun onFailure(call: Call<ResCreateNewProject>, t: Throwable) {
@@ -143,7 +144,7 @@ class Project2Server {
         })
     }
 
-    fun postNewStudy(context: Context, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, stack1Name: String, peopleNumber: Int, imagePartList: List<MultipartBody.Part>): Boolean{
+    fun postNewStudy(context: Context, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, stack1Name: String, peopleNumber: Int, imagePartList: List<MultipartBody.Part>, finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
         val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
         Log.d("postAuth", userToken)
@@ -170,8 +171,6 @@ class Project2Server {
             finalArray = imagePartList
         }
 
-        var isSuccess = false
-
         RetrofitClient.service.createNewStudy(userToken, requestBody, finalArray).enqueue(object:
             Callback<ResCreateNewStudy> {
             override fun onResponse(
@@ -185,7 +184,7 @@ class Project2Server {
                 }
                 Toast.makeText(context, "업로드 성공!!!", Toast.LENGTH_SHORT).show()
                 response.body()?.let { Log.d("Success: testCreateNewStudy", "\n${it.result.message}")}
-                isSuccess = true
+                finishPage()
             }
 
             override fun onFailure(call: Call<ResCreateNewStudy>, t: Throwable) {
@@ -193,10 +192,9 @@ class Project2Server {
 
             }
         })
-        return isSuccess
     }
 
-    fun updateStudy(context: Context, studyId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, stack1Name: String, peopleNumber: Int, imagePartList: List<MultipartBody.Part>): Boolean{
+    fun updateStudy(context: Context, studyId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, stack1Name: String, peopleNumber: Int, imagePartList: List<MultipartBody.Part>, finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
         val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
         Log.d("postAuth", userToken)
@@ -224,8 +222,6 @@ class Project2Server {
             finalArray = imagePartList
         }
 
-        var isSuccess = false
-
         RetrofitClient.service.updateStudy(studyId, userToken, requestBody, finalArray).enqueue(object:
             Callback<ResCreateNewStudy> {
             override fun onResponse(
@@ -239,7 +235,7 @@ class Project2Server {
                 }
                 Toast.makeText(context, "업로드 성공!!!", Toast.LENGTH_SHORT).show()
                 response.body()?.let { Log.d("Success: testCreateNewStudy", "\n${it.result.message}")}
-                isSuccess = true
+                finishPage()
             }
 
             override fun onFailure(call: Call<ResCreateNewStudy>, t: Throwable) {
@@ -247,11 +243,10 @@ class Project2Server {
 
             }
         })
-        return isSuccess
     }
 
 
-    fun postNewPF(context: Context, title: String, level: String, intro: String, content: String, stackList: List<Int>, linkList: List<String>): Boolean{
+    fun postNewPF(context: Context, title: String, level: String, intro: String, content: String, stackList: List<Int>, linkList: List<String>, finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
         val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
         Log.d("postAuth", userToken)
@@ -264,7 +259,6 @@ class Project2Server {
             linkList
         )
         Log.d("postClass", reqCreateNewPF.toString())
-        var isSuccess = false
         RetrofitClient.service.createNewPF(userToken, reqCreateNewPF).enqueue(object:
             Callback<ResCreateNewPF> {
             override fun onResponse(
@@ -277,17 +271,16 @@ class Project2Server {
 
                 }
                 response.body()?.let { Log.d("Success: testCreateNewStudy", "\n${it.result.message}")}
-                isSuccess = true
+                finishPage()
             }
 
             override fun onFailure(call: Call<ResCreateNewPF>, t: Throwable) {
                 Log.d("OnFailure", "[Fail]${t.toString()}")
             }
         })
-        return isSuccess
     }
 
-    fun updatePF(context: Context, pfId: String, title: String, level: String, intro: String, content: String, stackList: List<Int>, linkList: List<String>): Boolean{
+    fun updatePF(context: Context, pfId: String, title: String, level: String, intro: String, content: String, stackList: List<Int>, linkList: List<String>, finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
         val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
         Log.d("postAuth", userToken)
@@ -300,7 +293,6 @@ class Project2Server {
             linkList
         )
         Log.d("postClass", reqUpdatePF.toString())
-        var isSuccess = false
         RetrofitClient.service.updatePF(pfId, userToken, reqUpdatePF).enqueue(object:
             Callback<ResCreateNewPF> {
             override fun onResponse(
@@ -313,14 +305,12 @@ class Project2Server {
 
                 }
                 response.body()?.let { Log.d("Success: testCreateNewStudy", "\n${it.result.message}")}
-                isSuccess = true
+                finishPage()
             }
 
             override fun onFailure(call: Call<ResCreateNewPF>, t: Throwable) {
                 Log.d("OnFailure", "[Fail]${t.toString()}")
             }
         })
-        return isSuccess
     }
-
 }

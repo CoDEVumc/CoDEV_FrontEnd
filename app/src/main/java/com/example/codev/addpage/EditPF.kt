@@ -12,10 +12,10 @@ data class EditPF(
 
     val level: String, // 직무 능력
 
-    //hashMap으로 모든 언어의 Id와 이름을 추가해서 보내주세요!, 없으면 null으로 보내주세요
-    val languageIdNameMap: HashMap<Int, String>,
+    //LinkedHashMap으로 모든 언어의 Id와 이름을 추가해서 보내주세요!, 없으면 null으로 보내주세요
+    val languageIdNameMap: LinkedHashMap<Int, String>,
     val intro: String, //나를 표현하는 한 마디
     val content: String,
 
-    val linkList: List<String>, //리스트로 이미지 Url를 보내주세요, 없으면 null값으로
+    val linkListString: String, //리스트로 이미지 Url를 보내주세요, 없으면 null값으로
 ) : Serializable

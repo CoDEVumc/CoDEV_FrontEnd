@@ -415,7 +415,7 @@ class AddNewProjectActivity : AppCompatActivity() {
 
                                     if(loadedImageNumber == allUrlNumber){
                                         val imageMultiPartListUsingFile = project2Server.createImageMultiPartListUsingFile(imageFileList)
-                                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartListUsingFile)
+                                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartListUsingFile) { finish() }
                                     }
                                 }
                                 override fun onLoadCleared(placeholder: Drawable?) {
@@ -426,14 +426,14 @@ class AddNewProjectActivity : AppCompatActivity() {
                     }
                     if(allUrlNumber == 0){
                         val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
-                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList)
+                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList) { finish() }
                     }
 
                 }else{
                     val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
                     Log.d("finalImageMultiPartList", imageMultiPartList.toString())
                     Log.d("deadlineServerJson", dateJsonString)
-                    project2Server.postNewProject(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList)
+                    project2Server.postNewProject(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList) { finish() }
                 }
 
             }else{
@@ -441,24 +441,23 @@ class AddNewProjectActivity : AppCompatActivity() {
                 Log.d("string", toastString)
                 Toast.makeText(this, toastString, Toast.LENGTH_LONG).show()
 
-                //TODO: 테스트코드
-                if(finalPartNumList == listOf(0,1,0,1,0)){
-                    val finalStackMap = testStackMap(listOf(1, 2, 36 ,37), listOf("JavaScript", "TypeScript", "Blender", "Cinema4D"))
-                    val testProject = EditProject(
-                        26.toString(),
-                        "edit26",
-                        "please",
-                        listOf("http://semtle.catholic.ac.kr:8080/image?name=1675165181948-shot2023013120395820230201015713.png", "http://semtle.catholic.ac.kr:8080/image?name=1675184191441-jpgSana20230201015713.jpg"),
-                        1,0,2,0,3,
-                        finalStackMap,
-                        "경기",
-                        "2022-01-31")
-                    val intent = Intent(this, AddNewProjectActivity::class.java)
-                    intent.putExtra("project", testProject)
-                    startActivity(intent)
-                    finish()
-                }
-
+//                //TODO: 테스트코드
+//                if(finalPartNumList == listOf(0,1,0,1,0)){
+//                    val finalStackMap = testStackMap(listOf(1, 2, 36 ,37), listOf("JavaScript", "TypeScript", "Blender", "Cinema4D"))
+//                    val testProject = EditProject(
+//                        26.toString(),
+//                        "edit26",
+//                        "please",
+//                        listOf("http://semtle.catholic.ac.kr:8080/image?name=1675165181948-shot2023013120395820230201015713.png", "http://semtle.catholic.ac.kr:8080/image?name=1675184191441-jpgSana20230201015713.jpg"),
+//                        1,0,2,0,3,
+//                        finalStackMap,
+//                        "경기",
+//                        "2022-01-31")
+//                    val intent = Intent(this, AddNewProjectActivity::class.java)
+//                    intent.putExtra("project", testProject)
+//                    startActivity(intent)
+//                    finish()
+//                }
             }
         }
     }
@@ -542,12 +541,12 @@ class AddNewProjectActivity : AppCompatActivity() {
 
 
 
-    //TODO: 테스트 코드
-    private fun testStackMap(numberList: List<Int>, nameList: List<String>): LinkedHashMap<Int, String>{
-        val returnMap = LinkedHashMap<Int, String>()
-        for(i in numberList){
-            returnMap[i] = nameList[numberList.indexOf(i)]
-        }
-        return returnMap
-    }
+//    //TODO: 테스트 코드
+//    private fun testStackMap(numberList: List<Int>, nameList: List<String>): LinkedHashMap<Int, String>{
+//        val returnMap = LinkedHashMap<Int, String>()
+//        for(i in numberList){
+//            returnMap[i] = nameList[numberList.indexOf(i)]
+//        }
+//        return returnMap
+//    }
 }
