@@ -43,6 +43,18 @@ class RecruitListFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        pdataList = ArrayList() //초기화
+        sdataList = ArrayList()
+
+        when (now){
+            0 -> loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag) //기본으로 0page PData 가져오기
+            1 -> loadSData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag) //기본으로 0page PData 가져오기
+        }
+
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,10 +69,10 @@ class RecruitListFragment : Fragment() {
         viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_project) //기본으로 logo_project띄워놓기
 
 
-        pdataList = ArrayList() //초기화
-        sdataList = ArrayList()
+//        pdataList = ArrayList() //초기화
+//        sdataList = ArrayList()
 
-        loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag) //기본으로 0page PData 가져오기
+        //loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag) //기본으로 0page PData 가져오기
 
 
         //자동페이징 처리 부분
