@@ -16,6 +16,21 @@ import retrofit2.Response
 class RecruitDetailActivity:AppCompatActivity() {
     private lateinit var viewBinding: ActivityRecruitDetailBinding
 
+    private var id: Int = -1
+    private var type: String = ""
+    private var dday: String = ""
+
+    override fun onResume() {
+        super.onResume()
+        id = intent.getIntExtra("id",-1)
+        type = intent.getStringExtra("type").toString()
+        dday = intent.getStringExtra("dday").toString()
+        Log.d("test: 상세페이지 넘어온 type, id", "$type : $id")
+        if (id != -1 && type != null && dday != null) {
+            loadRecruitDetail(this,type,id,dday)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityRecruitDetailBinding.inflate(layoutInflater)
@@ -29,15 +44,6 @@ class RecruitDetailActivity:AppCompatActivity() {
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.left2)
-        }
-
-        val id = intent.getIntExtra("id",-1)
-        val type = intent.getStringExtra("type")
-        val dday = intent.getStringExtra("dday")
-        Log.d("test: 상세페이지 넘어온 type, id", "$type : $id")
-
-        if (id != -1 && type != null && dday != null) {
-            loadRecruitDetail(this,type,id,dday)
         }
     }
 
