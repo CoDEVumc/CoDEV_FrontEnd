@@ -1,14 +1,13 @@
 package com.example.codev
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.codev.databinding.RecycleRecruitDetailStackBinding
 
-class AdapterRecruitDetailStack(var context: Context, var dataList: ArrayList<RecruitLanguage>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterRecruitStack(var context: Context, var dataList: List<String>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : RecyclerView.ViewHolder{
         return StackViewHolder(context, RecycleRecruitDetailStackBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -25,9 +24,9 @@ class AdapterRecruitDetailStack(var context: Context, var dataList: ArrayList<Re
     }
 
     inner class StackViewHolder(val context: Context, private val binding: RecycleRecruitDetailStackBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: RecruitLanguage, position: Int){
+        fun bind(data: String, position: Int){
             Glide.with(context)
-                .load(data.co_logo)
+                .load(data)
                 .into(binding.image)
         }
     }

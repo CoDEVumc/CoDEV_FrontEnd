@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.codev.databinding.RecycleRecruitDetailImageBinding
 
-class AdapterRecruitDetailImg(var context: Context, var dataList: ArrayList<String>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterRecruitDetailImg(var context: Context, var dataList: ArrayList<RecruitPhoto>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : RecyclerView.ViewHolder{
         return PagerViewHolder(context, RecycleRecruitDetailImageBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -25,9 +25,9 @@ class AdapterRecruitDetailImg(var context: Context, var dataList: ArrayList<Stri
     }
 
     inner class PagerViewHolder(val context: Context, private val binding: RecycleRecruitDetailImageBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: String, position: Int){
+        fun bind(data: RecruitPhoto, position: Int){
             Glide.with(context)
-                .load(data)
+                .load(data.co_fileUrl)
                 .into(binding.image)
 
             //이미지 전체화면 구현 필요
