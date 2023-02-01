@@ -37,7 +37,6 @@ class MainAppActivity : AppCompatActivity() {
                             .beginTransaction()
                             .replace(viewBinding.content.id,HomeFragment())
                             .commitAllowingStateLoss()
-
                     }
                     R.id.menu_chat->{
                         supportFragmentManager

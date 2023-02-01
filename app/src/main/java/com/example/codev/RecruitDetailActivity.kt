@@ -115,7 +115,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     viewBinding.location.text = it.result.Complete.co_location
                                     viewBinding.day.text = dday
                                     viewBinding.text.text = it.result.Complete.co_content
-                                    //co_total 적용 x, co_nickname(작성자) 없음, co_heart 적용x
+                                    //co_total 적용 x, co_nickname(작성자) 없음, co_heart 적용x, co_part가 null
                                     viewBinding.total.text = it.result.Complete.co_total.toString() + "명 모집중"
                                     viewBinding.heartCount.text = it.result.Complete.co_heartCount.toString()
                                     viewBinding.heart.isChecked = it.result.Complete.co_heart

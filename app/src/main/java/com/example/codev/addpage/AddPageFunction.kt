@@ -9,13 +9,11 @@ import android.database.Cursor
 import android.database.DatabaseUtils
 import android.net.Uri
 import android.provider.MediaStore
-import android.provider.OpenableColumns
 import android.text.TextUtils
 import android.util.Log
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -25,8 +23,11 @@ import com.example.codev.databinding.AddSubSectionBinding
 import com.google.android.material.chip.Chip
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
-import java.io.OutputStream
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.collections.LinkedHashMap
 
 
 class AddPageFunction {
@@ -44,14 +45,14 @@ class AddPageFunction {
         }
 //        //파일 쓰기 권한 확인
 //        if (ContextCompat.checkSelfPermission(
-//                this,
+//                context,
 //                Manifest.permission.WRITE_EXTERNAL_STORAGE
 //            ) != PackageManager.PERMISSION_GRANTED
 //        ) {
 //            temp += Manifest.permission.WRITE_EXTERNAL_STORAGE + " "
 //        }
         if (!TextUtils.isEmpty(temp)) {
-            Toast.makeText(context, "권한을 요청합니다.", Toast.LENGTH_SHORT).show()
+            Log.d("permission", "checkSelfPermission: 권한을 요청합니다.")
             // 권한 요청
             ActivityCompat.requestPermissions(
                 nowActivity,
@@ -65,7 +66,7 @@ class AddPageFunction {
         context: Context,
         addItem: AddListItem
     ): Chip {
-        var chipView = Chip(context)
+        val chipView = Chip(context)
         chipView.text = addItem.name
         chipView.setChipBackgroundColorResource(R.color.green_300)
         chipView.chipStrokeColor = getColorStateList(context, R.color.green_900)
@@ -76,7 +77,21 @@ class AddPageFunction {
         chipView.closeIcon?.setTint(getColor(context, R.color.green_900))
         chipView.setTextColor(getColor(context, R.color.black_900))
         chipView.setTextAppearance(R.style.Text_Body4_SemiBold)
+        return chipView
+    }
 
+    fun returnStackChipWithPF(
+        context: Context,
+        addItem: String
+    ): Chip {
+        val chipView = Chip(context)
+        chipView.text = addItem
+        chipView.setChipBackgroundColorResource(R.color.green_300)
+        chipView.chipStrokeColor = getColorStateList(context, R.color.green_900)
+        chipView.chipStrokeWidth = dpToPx(context, 1f)
+        chipView.chipCornerRadius = dpToPx(context, 6f)
+        chipView.setTextColor(getColor(context, R.color.black_900))
+        chipView.setTextAppearance(R.style.Text_Body4_SemiBold)
         return chipView
     }
 
@@ -91,15 +106,16 @@ class AddPageFunction {
         }
     }
 
-    fun changeItem2True(allStackList: HashMap<Int, ArrayList<AddListItem>>, name: String){
+    fun changeItem2True(allStackList: HashMap<Int, ArrayList<AddListItem>>, name: String): AddListItem?{
         for(i in allStackList.values){
             for(j in i){
                 if(j.name == name){
                     j.isSelected = true
-                    return
+                    return j
                 }
             }
         }
+        return null
     }
 
     fun dpToPx(context: Context, dp: Float): Float {
@@ -174,7 +190,10 @@ class AddPageFunction {
         val contentResolver: ContentResolver = context.contentResolver
         // 내부 저장소 안에 위치하도록 파일 생성
         val filePath: String =
-            context.applicationInfo.dataDir + File.separator + System.currentTimeMillis() + "-" + fileName
+            context.applicationInfo.dataDir + File.separator + SimpleDateFormat(
+                "HHmmss",
+                Locale.getDefault()
+            ).format(Date()) + "-" + fileName
         val file = File(filePath)
 
         val inputStream = contentResolver.openInputStream(uri)!!

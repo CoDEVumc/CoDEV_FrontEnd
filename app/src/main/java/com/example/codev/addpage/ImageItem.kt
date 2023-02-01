@@ -4,5 +4,6 @@ import android.net.Uri
 
 data class ImageItem(
     val imageUri: Uri,
-    val imageCopyPath: String
+    val imageCopyPath: String,
+    var imageUrl: String = "",
 )
