@@ -1,7 +1,9 @@
 package com.example.codev.addpage
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -14,13 +16,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.codev.AndroidKeyStoreUtil
 import com.example.codev.R
 import com.example.codev.databinding.ActivityAddNewProjectBinding
 import java.io.File
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 class AddNewProjectActivity : AppCompatActivity() {
@@ -41,6 +43,9 @@ class AddNewProjectActivity : AppCompatActivity() {
 
     //DeadLineTimeVar
     private var dateJsonString: String = ""
+
+    //oldProject
+    private var oldProjectId = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -222,7 +227,7 @@ class AddNewProjectActivity : AppCompatActivity() {
             val cal = Calendar.getInstance()    //캘린더뷰 만들기
             val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
                 var dateShowString = "${year}/${month+1}/${dayOfMonth}"
-                dateJsonString = String.format("%d-%02d-%d", year, month+1, dayOfMonth)
+                dateJsonString = String.format("%d-%02d-%02d", year, month+1, dayOfMonth)
                 viewBinding.deadlineHead.dropdownTitle.text = dateShowString
             }
             var dpd = DatePickerDialog(this, dateSetListener, cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH))
@@ -232,86 +237,90 @@ class AddNewProjectActivity : AppCompatActivity() {
         }
 
         //setViewData
-        val extras = intent.extras
-        //TODO: 객체가 존재하면 객체 내용을 페이지에 적용하고, toolbar과 제출하기의 text도 "수정하기"로 바꾸자
-        //checkIsNew
         var isOld = false
-        if (extras != null) {
+        if(intent.getSerializableExtra("project") != null){
+            val oldProject = intent.getSerializableExtra("project") as EditProject
+
+            //checkIsNew
             isOld = true
+            oldProjectId = oldProject.projectId
             viewBinding.toolbarTitle.toolbarText.text = getString(R.string.edit_new_project)
             viewBinding.submitButton.text = "프로젝트 수정하기"
 
-            val oldData: EditProject = extras.get("project") as EditProject
-
             //setTitle
-            viewBinding.inputOfTitle.setText(oldData.title)
+            viewBinding.inputOfTitle.setText(oldProject.title)
 
             //setDes
-            viewBinding.inputOfContent.setText(oldData.content)
+            viewBinding.inputOfContent.setText(oldProject.content)
 
             //=================================
 
             //setImage
-
-
-            //
-            //        val urlList = ArrayList<String>()
-            //        urlList.add("http://semtle.catholic.ac.kr:8080/image?name=jpgSana20230123182825.jpg")
-            //        urlList.add("http://semtle.catholic.ac.kr:8080/image?name=shot20230123182825.png")
-            //        for(i in urlList){
-            //            val imageBinding = ImageItemBinding.inflate(layoutInflater)
-            //            Glide.with(this).asFile().load(i).submit().get()
-            //            imageBinding.cancelButton.setOnClickListener {
-            //                viewBinding.selectedImages.removeView(imageBinding.root)
-            ////                imageFileList.remove(nowFile)
-            //                viewBinding.addImageNum.text = (--imageNum).toString() + "/5"
-            //            }
-            //            viewBinding.selectedImages.addView(imageBinding.root)
-            //            imageFileList.add(nowFile)
-            //            viewBinding.addImageNum.text = (++imageNum).toString() + "/5"
-            //        }
+            for(nowUrl in oldProject.imageUrl){
+                val nowImageItem = ImageItem(Uri.EMPTY, "", nowUrl)
+                imageItemList.add(nowImageItem)
+                viewBinding.addImageSection.adapter!!.notifyItemInserted(imageItemList.lastIndex)
+                //subImageCounter
+                viewBinding.addImageNum.text = "${imageItemList.size}/${imageLimit}"
+            }
 
             //=================================
 
             //setPartNumber
             ////setPmNumber
-            viewBinding.pmSection.peopleNum.text = oldData.pmPeople.toString()
+            viewBinding.pmSection.peopleNum.text = oldProject.pmPeople.toString()
+            if(oldProject.pmPeople.toString() != "0"){
+                viewBinding.pmSection.peopleNum.setTextColor(resources.getColor(R.color.black_900))
+            }
 
             ////setDesignNumber
-            viewBinding.designSection.peopleNum.text = oldData.designPeople.toString()
+            viewBinding.designSection.peopleNum.text = oldProject.designPeople.toString()
+            if(oldProject.designPeople.toString() != "0"){
+                viewBinding.designSection.peopleNum.setTextColor(resources.getColor(R.color.black_900))
+            }
 
             ////setFrontNumber
-            viewBinding.frontSection.peopleNum.text = oldData.frontPeople.toString()
+            viewBinding.frontSection.peopleNum.text = oldProject.frontPeople.toString()
+            if(oldProject.frontPeople.toString() != "0"){
+                viewBinding.frontSection.peopleNum.setTextColor(resources.getColor(R.color.black_900))
+            }
 
             ////setBackNumber
-            viewBinding.backSection.peopleNum.text = oldData.backPeople.toString()
+            viewBinding.backSection.peopleNum.text = oldProject.backPeople.toString()
+            if(oldProject.backPeople.toString() != "0"){
+                viewBinding.backSection.peopleNum.setTextColor(resources.getColor(R.color.black_900))
+            }
 
             ////setEtcNumber
-            viewBinding.etcSection.peopleNum.text = oldData.etcPeople.toString()
-
+            viewBinding.etcSection.peopleNum.text = oldProject.etcPeople.toString()
+            if(oldProject.etcPeople.toString() != "0"){
+                viewBinding.etcSection.peopleNum.setTextColor(resources.getColor(R.color.black_900))
+            }
             //=================================
 
             //setChipGroup
-            for(i in oldData.languageIdNameMap.keys){
-                val oldChip = AddListItem(false, oldData.languageIdNameMap[i]!!, i)
-                addPageFunction.changeItem2True(allStackList, oldData.languageIdNameMap[i]!!)
-                addOrRemoveChip(oldChip)
+            for(i in oldProject.languageIdNameMap.keys){
+                val oldChip = AddListItem(false, oldProject.languageIdNameMap[i]!!, i)
+                val listItem = addPageFunction.changeItem2True(allStackList, oldProject.languageIdNameMap[i]!!)
+                addOrRemoveChip(listItem!!)
                 viewBinding.stack2List.adapter!!.notifyDataSetChanged()
             }
 
 
             //setLocation
-            viewBinding.locationHead.dropdownTitle.text = oldData.location
+            viewBinding.locationHead.dropdownTitle.text = oldProject.location
 
             //setDeadline
-            dateJsonString = oldData.deadLine
-            viewBinding.deadlineHead.dropdownTitle.text = oldData.deadLine.replace("-", "/")
+            dateJsonString = oldProject.deadLine
+            viewBinding.deadlineHead.dropdownTitle.text = oldProject.deadLine.replace("-", "/")
 
         }
 
-
         //setSubmitButton
         viewBinding.submitButton.setOnClickListener {
+
+
+
             val finalTitle = viewBinding.inputOfTitle.text.toString()
             Log.d("finalTitle", finalTitle)
 
@@ -368,21 +377,87 @@ class AddNewProjectActivity : AppCompatActivity() {
             }
 
             if(isTitleOk and isContentOk and isPartPeopleOk and isLocationOk and isDeadlineOk){
+
                 val finalNumOfPartList = project2Server.createPartNumList(finalPartNumList)
                 Log.d("finalPartList", finalNumOfPartList.toString())
 
-                val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
-                Log.d("finalImageMultiPartList", imageMultiPartList.toString())
+//                var imageMultiPartList:  List<MultipartBody.Part> = listOf()
 
                 if(isOld){
+                    val imageFileList = ArrayList<File>()
+
+                    //getOldImageNumber
+                    var allUrlNumber = 0
+                    var loadedImageNumber = 0
+
+                    for(i in imageItemList){
+                        if(i.imageUrl != "") allUrlNumber+=1
+                    }
+                    Log.d("finalOldNumber", "onCreate: $allUrlNumber")
+
+
+                    for(i in imageItemList){
+                        val nowIdx = imageItemList.indexOf(i)
+                        imageFileList.add(File(i.imageCopyPath))
+
+                        if(i.imageUrl != ""){
+                            Glide.with(this).asFile().load(i.imageUrl).into(object : CustomTarget<File>(){
+                                override fun onResourceReady(resource: File, transition: Transition<in File>?) {
+                                    val filename = i.imageUrl.split("http://semtle.catholic.ac.kr:8080/image?name=", limit = 2)[1]
+                                    Log.d("filename", "run: filename is: $filename")
+                                    val newNameFile = File(resource.parent!!, filename)
+                                    resource.renameTo(newNameFile)
+
+                                    imageFileList[nowIdx] = newNameFile
+                                    loadedImageNumber += 1
+                                    Log.d("finalLoadedOldNumber", "onCreate: $loadedImageNumber")
+                                    Log.d("finalImage", "onResourceReady: ${imageFileList.toString()}")
+
+                                    if(loadedImageNumber == allUrlNumber){
+                                        val imageMultiPartListUsingFile = project2Server.createImageMultiPartListUsingFile(imageFileList)
+                                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartListUsingFile) { finish() }
+                                    }
+                                }
+                                override fun onLoadCleared(placeholder: Drawable?) {
+                                    Toast.makeText(this@AddNewProjectActivity, "모집글 수정 시 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                                }
+                            })
+                        }
+                    }
+                    if(allUrlNumber == 0){
+                        val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
+                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList) { finish() }
+                    }
 
                 }else{
-                    var result = project2Server.postNewProject(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList)
+                    val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
+                    Log.d("finalImageMultiPartList", imageMultiPartList.toString())
+                    Log.d("deadlineServerJson", dateJsonString)
+                    project2Server.postNewProject(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList) { finish() }
                 }
+
             }else{
                 toastString = toastString.substring(0, toastString.length-2) + "을 확인하세요."
                 Log.d("string", toastString)
                 Toast.makeText(this, toastString, Toast.LENGTH_LONG).show()
+
+//                //TODO: 테스트코드
+//                if(finalPartNumList == listOf(0,1,0,1,0)){
+//                    val finalStackMap = testStackMap(listOf(1, 2, 36 ,37), listOf("JavaScript", "TypeScript", "Blender", "Cinema4D"))
+//                    val testProject = EditProject(
+//                        26.toString(),
+//                        "edit26",
+//                        "please",
+//                        listOf("http://semtle.catholic.ac.kr:8080/image?name=1675165181948-shot2023013120395820230201015713.png", "http://semtle.catholic.ac.kr:8080/image?name=1675184191441-jpgSana20230201015713.jpg"),
+//                        1,0,2,0,3,
+//                        finalStackMap,
+//                        "경기",
+//                        "2022-01-31")
+//                    val intent = Intent(this, AddNewProjectActivity::class.java)
+//                    intent.putExtra("project", testProject)
+//                    startActivity(intent)
+//                    finish()
+//                }
             }
         }
     }
@@ -463,13 +538,15 @@ class AddNewProjectActivity : AppCompatActivity() {
     }
     //SetStack2Function - End
 
-    //setHadImage
-    private fun loadImageData(urlList: List<String>, imageItemList: ArrayList<AddImageItem>){
-        for(url in urlList){
-            var nowFile = Glide.with(this).asFile().load(url).submit().get()
-            var nowUri = Uri.fromFile(nowFile)
-            imageItemList.add(AddImageItem(nowUri, nowFile))
-            viewBinding.addImageSection.adapter!!.notifyItemInserted(imageItemList.lastIndex)
-        }
-    }
+
+
+
+//    //TODO: 테스트 코드
+//    private fun testStackMap(numberList: List<Int>, nameList: List<String>): LinkedHashMap<Int, String>{
+//        val returnMap = LinkedHashMap<Int, String>()
+//        for(i in numberList){
+//            returnMap[i] = nameList[numberList.indexOf(i)]
+//        }
+//        return returnMap
+//    }
 }

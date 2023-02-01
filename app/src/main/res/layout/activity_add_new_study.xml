@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".addpage.AddNewStudyActivity">
+    tools:context=".addpage.AddNewStudyActivity"
+    android:animateLayoutChanges="true">
 
     <!-- Toolbar -->
     <include
@@ -20,7 +21,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_of_title_layout"
