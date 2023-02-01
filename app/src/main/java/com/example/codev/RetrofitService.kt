@@ -82,7 +82,7 @@ interface RetrofitService {
     fun updatePF(
         @Path("id") id: String
         ,@Header("CoDev_Authorization") authToken: String
-        ,@Body params: ReqCreateNewPF
+        ,@Body params: ReqUpdatePF
     ): Call<ResCreateNewPF>
 
     @GET("project/projects/{page}")
@@ -117,6 +117,9 @@ interface RetrofitService {
 
     @GET("my-page/portfolioList")
     fun getPortFolio(@Header("CoDev_Authorization") header: String) : Call<ResPortFolioList>
+
+    @GET("my-page/portfolio/{coPortfolioId}")
+    fun getPortFolioDetail(@Header("CoDev_Authorization") authToken: String, @Path("coPortfolioId") id: String) : Call<ResGetPFDetail>
 
     @DELETE("my-page/portfolio/{coPortfolioId}")
     fun deletePortFolio(@Path("coPortfolioId") coPortfolioId:Int,@Header("CoDev_Authorization") header: String) : Call<ResDeletePortfolio>

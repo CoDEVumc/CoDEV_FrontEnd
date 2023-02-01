@@ -12,7 +12,11 @@ import java.io.File
 class ImageRVAdapter(private var context: Context, private var imageList: ArrayList<ImageItem>, private val returnData: (ImageItem) -> Unit): RecyclerView.Adapter<ImageRVAdapter.ImageViewHolder>(){
     inner class ImageViewHolder(private val viewBinding: ImageItemBinding): RecyclerView.ViewHolder(viewBinding.root){
         fun bind(nowImageItem: ImageItem){
-            Glide.with(context).load(nowImageItem.imageUri).into(viewBinding.selectedImage)
+            if(nowImageItem.imageUrl == ""){
+                Glide.with(context).load(nowImageItem.imageUri).into(viewBinding.selectedImage)
+            }else{
+                Glide.with(context).load(nowImageItem.imageUrl).into(viewBinding.selectedImage)
+            }
             viewBinding.cancelButton.setOnClickListener {
                 imageList.remove(nowImageItem)
                 val deleteFile = File(nowImageItem.imageCopyPath)
