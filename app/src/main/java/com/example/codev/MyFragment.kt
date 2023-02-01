@@ -50,6 +50,7 @@ class MyFragment:Fragment() {
                 R.id.menu_setting ->{
                     Toast.makeText(mainAppActivity, "설정", Toast.LENGTH_SHORT).show()
                     val intent = Intent(mainAppActivity, MySettingActivity::class.java)
+                    intent.putExtra("userinfo",userinfo)
                     startActivity(intent)
                     true
                 }
@@ -72,7 +73,7 @@ class MyFragment:Fragment() {
     }
 
     private fun setAdapter(dataList: ArrayList<PortFolio>){
-        val adapter = PortfolioAdapter1(dataList)
+        val adapter = AdapterPortfolio1(dataList)
         viewBinding.recyclePortfolio.adapter = adapter
     }
 
@@ -91,10 +92,10 @@ class MyFragment:Fragment() {
                             viewBinding.name.text = it.result.Complete.co_name + " 님"
                             viewBinding.email.text = it.result.Complete.co_email
                             Glide.with(context)
-                                .load(it.result.Complete.profileImg).circleCrop().fitCenter()
+                                .load(it.result.Complete.profileImg).circleCrop()
                                 .into(viewBinding.profileImg)
                             setAdapter(it.result.Portfolio)
-                            userinfo = Userinfo(it.result.Complete.co_nickName,it.result.Complete.profileImg,it.result.Complete.co_email,it.result.Complete.co_name,it.result.Complete.co_gender,it.result.Complete.co_birth)
+                            userinfo = Userinfo(it.result.Complete.co_nickName,it.result.Complete.profileImg,it.result.Complete.co_email,it.result.Complete.co_name,it.result.Complete.co_gender,it.result.Complete.co_birth,it.result.Complete.co_loginType)
                         }
                     }
                 }

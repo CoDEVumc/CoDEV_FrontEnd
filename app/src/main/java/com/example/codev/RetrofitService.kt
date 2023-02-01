@@ -31,7 +31,9 @@ interface RetrofitService {
     fun refreshToken(@Body params: ReqRefreshToken): Call<ResRefreshToken>
 
     @POST("user/join")
-    fun signUp(@Body params: ReqSignUp): Call<JsonObject>
+    @Multipart
+    fun signUp(@Part("user") user: RequestBody
+               ,@Part file: MultipartBody.Part): Call<JsonObject>
 
     @GET("user/code/mail")
     fun getEmailCode(@Query("email") value1: String) : Call<ResGetEmailCode>
@@ -122,4 +124,9 @@ interface RetrofitService {
     @DELETE("my-page/portfolio/{coPortfolioId}")
     fun deletePortFolio(@Path("coPortfolioId") coPortfolioId:Int,@Header("CoDev_Authorization") header: String) : Call<ResDeletePortfolio>
 
+    @GET("project/{coProjectId}")
+    fun getProjectDetail(@Header("CoDev_Authorization") header: String, @Path("coProjectId") coProjectId: Int) : Call<ResGetRecruitDetail>
+
+    @GET("study/{coStudyId}")
+    fun getStudyDetail(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int) : Call<ResGetRecruitDetail>
 }

@@ -60,6 +60,7 @@ class RegisterBirthActivity: AppCompatActivity() {
             viewBinding.btnMale.setTextColor(getColor(R.color.green_900))
             viewBinding.btnFemale.isSelected = false
             viewBinding.btnFemale.setTextColor(getColor(R.color.black_500))
+            reqSignUp.co_gender = "MALE"
             checkNextBtn()
         }
 
@@ -68,6 +69,7 @@ class RegisterBirthActivity: AppCompatActivity() {
             viewBinding.btnMale.setTextColor(getColor(R.color.black_500))
             viewBinding.btnFemale.isSelected = true
             viewBinding.btnFemale.setTextColor(getColor(R.color.green_900))
+            reqSignUp.co_gender = "FEMALE"
             checkNextBtn()
         }
 
@@ -75,9 +77,15 @@ class RegisterBirthActivity: AppCompatActivity() {
         viewBinding.btnRegisterNext.setOnClickListener {
             reqSignUp.co_name = viewBinding.etName.text.toString()
             reqSignUp.co_birth = viewBinding.etBrith.text.toString()
-            val intent = Intent(this,RegisterEmailActivity::class.java)
-            intent.putExtra("signUp",reqSignUp)
-            startActivity(intent)
+            if (reqSignUp.co_loginType != "CODEV"){
+                val intent = Intent(this,RegisterProfileActivity::class.java)
+                intent.putExtra("signUp",reqSignUp)
+                startActivity(intent)
+            }else{
+                val intent = Intent(this,RegisterEmailActivity::class.java)
+                intent.putExtra("signUp",reqSignUp)
+                startActivity(intent)
+            }
         }
     }
 

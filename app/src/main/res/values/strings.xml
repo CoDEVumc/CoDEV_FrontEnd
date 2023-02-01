@@ -96,5 +96,11 @@
     <string name="filter_loc_17_text">부산</string>
     <string name="filter_loc_18_text">온라인</string>
 
+    <string name="filter_part_1_text">프론트엔드</string>
+    <string name="filter_part_2_text">백엔드</string>
+    <string name="filter_part_3_text">디자인</string>
+    <string name="filter_part_4_text">기획</string>
+    <string name="filter_part_5_text">기타</string>
+
 
 </resources>

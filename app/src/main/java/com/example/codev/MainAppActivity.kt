@@ -1,9 +1,7 @@
 package com.example.codev
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.codev.addpage.*
 import com.example.codev.databinding.ActivityMainAppBinding
 
 class MainAppActivity : AppCompatActivity() {
@@ -25,7 +23,7 @@ class MainAppActivity : AppCompatActivity() {
                     R.id.menu_recruit->{
                         supportFragmentManager
                             .beginTransaction()
-                            .replace(viewBinding.content.id,RecruitProjectFragment())
+                            .replace(viewBinding.content.id,RecruitListFragment())
                             .commitAllowingStateLoss()
                     }
                     R.id.menu_community->{

@@ -1,207 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="360dp"
-    android:layout_height="397dp">
-
+    android:layout_width="400dp"
+    android:layout_height="wrap_content">
 
     <RadioGroup
         android:id="@+id/radioGroup_loc"
-        android:layout_width="250dp"
-        android:layout_height="230dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="92dp"
-        android:layout_marginBottom="300dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.142"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TableLayout
-            android:layout_width="250dp"
-            android:layout_height="230dp">
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn16"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_16_text" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn17"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_17_text" />
 
-                <RadioButton
-                    android:id="@+id/btn1"
-                    android:layout_width="57dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/filter_loc_1_text" />
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn18"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_18_text" />
 
-                <RadioButton
-                    android:id="@+id/btn2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/filter_loc_2_text" />
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn13"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_13_text" />
 
-                <RadioButton
-                    android:id="@+id/btn3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/filter_loc_3_text" />
-            </TableRow>
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn14"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_14_text" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <RadioButton
-                    android:id="@+id/btn4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/filter_loc_4_text" />
-
-                <RadioButton
-                    android:id="@+id/btn5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/filter_loc_5_text" />
-
-                <RadioButton
-                    android:id="@+id/btn6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/filter_loc_6_text" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <RadioButton
-                    android:id="@+id/btn7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/filter_loc_7_text" />
-
-                <RadioButton
-                    android:id="@+id/btn8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/filter_loc_8_text" />
-
-                <RadioButton
-                    android:id="@+id/btn9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/filter_loc_9_text" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <RadioButton
-                    android:id="@+id/btn10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/filter_loc_10_text" />
-
-                <RadioButton
-                    android:id="@+id/btn11"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/filter_loc_11_text" />
-
-                <RadioButton
-                    android:id="@+id/btn12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/filter_loc_12_text" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <RadioButton
-                    android:id="@+id/btn13"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/filter_loc_13_text" />
-
-                <RadioButton
-                    android:id="@+id/btn14"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/filter_loc_14_text" />
-
-                <RadioButton
-                    android:id="@+id/btn15"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/filter_loc_15_text" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <RadioButton
-                    android:id="@+id/btn16"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/filter_loc_16_text" />
-
-                <RadioButton
-                    android:id="@+id/btn17"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/filter_loc_17_text" />
-
-                <RadioButton
-                    android:id="@+id/btn18"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/filter_loc_18_text" />
-            </TableRow>
-        </TableLayout>
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn15"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_15_text" />
 
 
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn10"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_10_text" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn11"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_11_text" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn12"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_12_text" />
+
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn7"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_7_text" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn8"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_8_text" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn9"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_9_text" />
+
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn4"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_4_text" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn5"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_5_text" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn6"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_6_text" />
+
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn1"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_1_text" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn2"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_2_text" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn3"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_3_text" />
     </RadioGroup>
 
     <TextView
@@ -245,7 +226,7 @@
         android:layout_marginTop="323dp"
         android:layout_marginEnd="212dp"
         android:layout_marginBottom="36dp"
-        android:background="@color/black_100"
+        android:background="@color/black_300"
         android:fontFamily="@font/pretendard_regular"
         android:text="초기화"
         android:textColor="@color/black_500"

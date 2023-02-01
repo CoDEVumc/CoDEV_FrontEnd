@@ -36,10 +36,7 @@ class MainActivity : AppCompatActivity() {
             handleSignInResult(task)
         }
     }
-    //https://github.com/login/oauth/authorize?client_id=Iv1.90b1ea1a45795609&redirect_url=http://localhost:8080/codev/user/github/login
-    //https://github.com/login/oauth/authorize?client_id=efe7259d386c05e1d31c
 
-    // CODEV GOOGLE GITHUB
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -47,17 +44,20 @@ class MainActivity : AppCompatActivity() {
         AndroidKeyStoreUtil.init(this)
 
         // 자동 로그인 방지
-        // UserSharedPreferences.clearUser(this)
+        //UserSharedPreferences.clearUser(this)
 
-        getCode()
+        //구글
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.server_client_id))
             .requestEmail()
             .build()
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 
+        //깃허브
+        getGithubCode()
+
         viewBinding.btnGithub.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/login/oauth/authorize?client_id=efe7259d386c05e1d31c&redirect_url=codev%3A%2F%2Flogin"))
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/login/oauth/authorize?client_id=Iv1.90b1ea1a45795609&redirect_url=codev://login"))
             startActivity(intent)
         }
 
@@ -66,7 +66,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewBinding.btnRegister.setOnClickListener {
-            val intent = Intent(this, RegisterTosActivity::class.java)
+            val reqSignUp = ReqSignUp("","","","","","","","CODEV")
+            val intent = Intent(this,RegisterTosActivity::class.java)
+            intent.putExtra("signUp",reqSignUp)
             startActivity(intent)
         }
 
@@ -85,12 +87,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getCode() {
+    private fun getGithubCode() {
         if (Intent.ACTION_VIEW.equals(intent.action)) {
             var uri = intent.data
             if (uri != null) {
                 var code = uri.getQueryParameter("code")
                 Log.d("test",code.toString())
+                sendIdToken(this,"GITHUB",code.toString())
             }
         }
     }
@@ -112,14 +115,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun signOutGoogle() {
-        mGoogleSignInClient!!.signOut()
-    }
-
-    private fun revokeAccessGoogle() {
-        mGoogleSignInClient!!.revokeAccess()
-    }
-
     private fun sendIdToken(context: Context,loginType: String, token: String){
         if (loginType == "GOOGLE"){
             RetrofitClient.service.googleSignIn(ReqGoogleSignIn(loginType,token)).enqueue(object: Callback<ResSignIn>{
@@ -127,26 +122,31 @@ class MainActivity : AppCompatActivity() {
                     if(response.isSuccessful.not()){
                         Log.d("test: 로그인 실패1",response.toString())
                         Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                        return
                     }else{
                         when(response.code()){
                             200->{
                                 // 토큰 암호화
                                 response.body()?.let {
-//                                UserSharedPreferences.setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))
-//                                UserSharedPreferences.setUserRefreshToken(context,AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
                                     Log.d("test: 로그인 성공", "\n${it.toString()}")
                                     if (it.code == 505){
-                                        //회원가입 페이지
+                                        //로그인 타입 가지고 회원가입 페이지
+                                        val reqSignUp = ReqSignUp(it.result.co_email,it.result.co_password,"","","","","",loginType)
+                                        val intent = Intent(context,RegisterTosActivity::class.java)
+                                        intent.putExtra("signUp",reqSignUp)
+                                        startActivity(intent)
                                     }else{
+                                        //자동 로그인 설정
+                                        UserSharedPreferences.setAutoLogin(context,"TRUE")
                                         //기존 로그인 로직
+                                        UserSharedPreferences.setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))
+                                        UserSharedPreferences.setUserRefreshToken(context,AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
+                                        Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)))
+                                        Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken(context)))
+                                        val intent = Intent(context,MainAppActivity::class.java)
+                                        startActivity(intent)
+                                        finish()
                                     }
-//                                Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)))
-//                                Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken(context)))
                                 }
-//                            val intent = Intent(context,MainAppActivity::class.java)
-//                            startActivity(intent)
-//                            finish()
                             }
                         }
                     }
@@ -163,21 +163,30 @@ class MainActivity : AppCompatActivity() {
                     if(response.isSuccessful.not()){
                         Log.d("test: 로그인 실패1",response.toString())
                         Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                        return
                     }else{
                         when(response.code()){
                             200->{
-                                // 토큰 암호화
                                 response.body()?.let {
-//                                UserSharedPreferences.setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))
-//                                UserSharedPreferences.setUserRefreshToken(context,AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
                                     Log.d("test: 로그인 성공", "\n${it.toString()}")
-//                                Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)))
-//                                Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken(context)))
+                                    if (it.code == 505){
+                                        //로그인 타입 가지고 회원가입 페이지
+                                        val reqSignUp = ReqSignUp(it.result.co_email,it.result.co_password,"","","","","",loginType)
+                                        val intent = Intent(context,RegisterTosActivity::class.java)
+                                        intent.putExtra("signUp",reqSignUp)
+                                        startActivity(intent)
+                                    }else{
+                                        //자동 로그인 설정
+                                        UserSharedPreferences.setAutoLogin(context,"TRUE")
+                                        //기존 로그인 로직
+                                        UserSharedPreferences.setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))
+                                        UserSharedPreferences.setUserRefreshToken(context,AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
+                                        Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)))
+                                        Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken(context)))
+                                        val intent = Intent(context,MainAppActivity::class.java)
+                                        startActivity(intent)
+                                        finish()
+                                    }
                                 }
-//                            val intent = Intent(context,MainAppActivity::class.java)
-//                            startActivity(intent)
-//                            finish()
                             }
                         }
                     }
@@ -198,7 +207,6 @@ class MainActivity : AppCompatActivity() {
                 if(response.isSuccessful.not()){
                     Log.d("test: 로그인 실패1",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                    return
                 }else{
                     when(response.code()){
                         200->{
