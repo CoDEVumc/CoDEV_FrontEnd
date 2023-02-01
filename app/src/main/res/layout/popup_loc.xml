@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="400dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/recruit_popup_dialog_background"
+    >
 
     <RadioGroup
         android:id="@+id/radioGroup_loc"
@@ -218,7 +220,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.082" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_reset"
         android:layout_width="124dp"
         android:layout_height="38dp"
@@ -226,10 +228,10 @@
         android:layout_marginTop="323dp"
         android:layout_marginEnd="212dp"
         android:layout_marginBottom="36dp"
-        android:background="@color/black_300"
+        android:background="@drawable/recruit_detail_btn1"
         android:fontFamily="@font/pretendard_regular"
         android:text="초기화"
-        android:textColor="@color/black_500"
+        android:textColor="@color/black_300"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.091"
@@ -237,7 +239,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.908" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_select"
         android:layout_width="172dp"
         android:layout_height="38dp"
@@ -245,7 +247,7 @@
         android:layout_marginTop="323dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="36dp"
-        android:background="#09D687"
+        android:background="@drawable/recruit_detail_btn2_unselected"
         android:fontFamily="@font/pretendard_regular"
         android:text="적용하기"
         app:layout_constraintBottom_toBottomOf="parent"

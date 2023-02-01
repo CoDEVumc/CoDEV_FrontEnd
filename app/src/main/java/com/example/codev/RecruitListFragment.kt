@@ -11,14 +11,14 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.codev.databinding.FragmentRecruitProjectBinding
+import com.example.codev.databinding.FragmentRecruitListBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
 class RecruitListFragment : Fragment() {
-    private lateinit var viewBinding: FragmentRecruitProjectBinding
+    private lateinit var viewBinding: FragmentRecruitListBinding
 
     private var pdataList: ArrayList<PData> = ArrayList()
     private var sdataList: ArrayList<SData> = ArrayList()
@@ -33,6 +33,8 @@ class RecruitListFragment : Fragment() {
     private var lastPage: Boolean = false
     private var now : Int = 0 // 0-프로젝트 / 1- 스터디
 
+    private var write : String = ""
+
     private lateinit var mainAppActivity: Context
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -41,12 +43,24 @@ class RecruitListFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        pdataList = ArrayList() //초기화
+        sdataList = ArrayList()
+
+        when (now){
+            0 -> loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag) //기본으로 0page PData 가져오기
+            1 -> loadSData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag) //기본으로 0page PData 가져오기
+        }
+
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewBinding = FragmentRecruitProjectBinding.inflate(layoutInflater)
+        viewBinding = FragmentRecruitListBinding.inflate(layoutInflater)
         var temp = viewBinding.toolbarRecruit.toolbar1
         viewBinding.toolbarRecruit.toolbar1.inflateMenu(R.menu.menu_toolbar_2)
         viewBinding.toolbarRecruit.toolbar1.title = ""
@@ -55,10 +69,10 @@ class RecruitListFragment : Fragment() {
         viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_project) //기본으로 logo_project띄워놓기
 
 
-        pdataList = ArrayList() //초기화
-        sdataList = ArrayList()
+//        pdataList = ArrayList() //초기화
+//        sdataList = ArrayList()
 
-        loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag) //기본으로 0page PData 가져오기
+        //loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag) //기본으로 0page PData 가져오기
 
 
         //자동페이징 처리 부분
@@ -254,6 +268,15 @@ class RecruitListFragment : Fragment() {
             bottomSheetSort.show(childFragmentManager, bottomSheetSort.tag)
         }
 
+        val bottomSheetWrite = BottomSheetWrite(){
+            write = it
+            Log.d("test :", write+" 버튼 누름")
+        }
+        //플로팅 작성버튼
+        viewBinding.floatingActionButton.setOnClickListener {
+            bottomSheetWrite.show(childFragmentManager, bottomSheetWrite.tag)
+        }
+
         return viewBinding.root
     }
 
@@ -358,12 +381,12 @@ class RecruitListFragment : Fragment() {
     }
 
     private fun setPAdapter(projectList: ArrayList<PData>){
-        val adapter = AdapterProjectList(mainAppActivity,projectList)
+        val adapter = AdapterRecruitProjectList(mainAppActivity,projectList)
         viewBinding.listviewMain.adapter = adapter
     }
 
     private fun setSAdapter(studyList: ArrayList<SData>){
-        val adapter = AdapterStudyList(mainAppActivity,studyList)
+        val adapter = AdapterRecruitStudyList(mainAppActivity,studyList)
         viewBinding.listviewMain.adapter = adapter
     }
 }
