@@ -33,7 +33,9 @@ class PfDetailActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val pfId = intent.getStringExtra("id").toString()
+        viewBinding.addLinkSection.removeAllViews()
+        viewBinding.addLinkSection.removeAllViews()
+        pfId = intent.getStringExtra("id").toString()
         loadDataUsingPFId(pfId)
     }
 
