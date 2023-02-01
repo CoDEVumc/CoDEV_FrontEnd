@@ -31,14 +31,19 @@ class PfDetailActivity : AppCompatActivity() {
     private var isLoaded = false
     private var loadedObject: RealDataPF? = null
 
+    override fun onResume() {
+        super.onResume()
+        val pfId = intent.getStringExtra("id").toString()
+        loadDataUsingPFId(pfId)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityPfDetailBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         AndroidKeyStoreUtil.init(this)
 
-        val pfId = intent.getStringExtra("id").toString()
-        loadDataUsingPFId(pfId)
+
 
         //가운데 정렬 글 작성 예시
         viewBinding.toolbarTitle.toolbarAddPageToolbar.title = ""
@@ -53,8 +58,6 @@ class PfDetailActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
-        this.pfId = intent.getStringExtra("id").toString()
-        loadDataUsingPFId(pfId)
 
     }
 
@@ -167,13 +170,17 @@ class PfDetailActivity : AppCompatActivity() {
         viewBinding.textCounter.text = pfData.co_introduction.length.toString()
 
         //setLink
-        val linkList = pfData.co_links.split(",")
-        for (i in linkList) {
-            val linkView = InputLayoutBinding.inflate(layoutInflater)
-            linkView.inputOfTitle.setText(i)
-            linkView.inputOfTitle.isFocusable = false
-            linkView.inputOfTitle.isClickable = false
-            viewBinding.addLinkSection.addView(linkView.root)
+        if(!pfData.co_links.isNullOrBlank()){
+            val linkList = pfData.co_links.split(",")
+            Log.d("linktest", "setData: $linkList")
+            for (i in linkList) {
+                val linkView = InputLayoutBinding.inflate(layoutInflater)
+                linkView.inputOfTitle.setText(i)
+                linkView.inputOfTitle.isFocusable = false
+                linkView.inputOfTitle.isClickable = false
+                viewBinding.addLinkSection.addView(linkView.root)
+                Log.d("nowLink", "setData: $i")
+            }
         }
     }
 }
