@@ -1,7 +1,6 @@
 package com.example.codev.addpage
 
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -257,7 +256,7 @@ class AddNewProjectActivity : AppCompatActivity() {
 
             //setImage
             for(nowUrl in oldProject.imageUrl){
-                val nowImageItem = ImageItem(Uri.EMPTY, "", nowUrl)
+                val nowImageItem = ImageItem(Uri.EMPTY, "", nowUrl.co_fileUrl)
                 imageItemList.add(nowImageItem)
                 viewBinding.addImageSection.adapter!!.notifyItemInserted(imageItemList.lastIndex)
                 //subImageCounter
@@ -268,34 +267,38 @@ class AddNewProjectActivity : AppCompatActivity() {
 
             //setPartNumber
             ////setPmNumber
-            viewBinding.pmSection.peopleNum.text = oldProject.pmPeople.toString()
-            if(oldProject.pmPeople.toString() != "0"){
-                viewBinding.pmSection.peopleNum.setTextColor(resources.getColor(R.color.black_900))
+
+            oldProject.partList
+            for (i in 0 until oldProject.partList.size){
+                val part = oldProject.partList[i]
+                if (part.co_part == "프론트엔드"){
+                    viewBinding.frontSection.peopleNum.text = part.co_limit.toString()
+                    if(part.co_limit.toString() != "0"){
+                        viewBinding.frontSection.peopleNum.setTextColor(resources.getColor(R.color.black_900))
+                    }
+                }else if (part.co_part == "백엔드"){
+                    viewBinding.backSection.peopleNum.text = part.co_limit.toString()
+                    if(part.co_limit.toString() != "0"){
+                        viewBinding.backSection.peopleNum.setTextColor(resources.getColor(R.color.black_900))
+                    }
+                }else if (part.co_part == "디자인"){
+                    viewBinding.designSection.peopleNum.text = part.co_limit.toString()
+                    if(part.co_limit.toString() != "0"){
+                        viewBinding.designSection.peopleNum.setTextColor(resources.getColor(R.color.black_900))
+                    }
+                }else if (part.co_part == "기획"){
+                    viewBinding.pmSection.peopleNum.text = part.co_limit.toString()
+                    if(part.co_limit.toString() != "0"){
+                        viewBinding.pmSection.peopleNum.setTextColor(resources.getColor(R.color.black_900))
+                    }
+                }else if (part.co_part == "기타"){
+                    viewBinding.etcSection.peopleNum.text = part.co_limit.toString()
+                    if(part.co_limit.toString() != "0"){
+                        viewBinding.etcSection.peopleNum.setTextColor(resources.getColor(R.color.black_900))
+                    }
+                }
             }
 
-            ////setDesignNumber
-            viewBinding.designSection.peopleNum.text = oldProject.designPeople.toString()
-            if(oldProject.designPeople.toString() != "0"){
-                viewBinding.designSection.peopleNum.setTextColor(resources.getColor(R.color.black_900))
-            }
-
-            ////setFrontNumber
-            viewBinding.frontSection.peopleNum.text = oldProject.frontPeople.toString()
-            if(oldProject.frontPeople.toString() != "0"){
-                viewBinding.frontSection.peopleNum.setTextColor(resources.getColor(R.color.black_900))
-            }
-
-            ////setBackNumber
-            viewBinding.backSection.peopleNum.text = oldProject.backPeople.toString()
-            if(oldProject.backPeople.toString() != "0"){
-                viewBinding.backSection.peopleNum.setTextColor(resources.getColor(R.color.black_900))
-            }
-
-            ////setEtcNumber
-            viewBinding.etcSection.peopleNum.text = oldProject.etcPeople.toString()
-            if(oldProject.etcPeople.toString() != "0"){
-                viewBinding.etcSection.peopleNum.setTextColor(resources.getColor(R.color.black_900))
-            }
             //=================================
 
             //setChipGroup

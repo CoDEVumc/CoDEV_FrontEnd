@@ -1,12 +1,13 @@
 package com.example.codev.addpage
 
+import com.example.codev.RecruitPhoto
 import java.io.Serializable
 
 data class EditStudy(
     val studyId: String,
     val title: String,
     val content: String,
-    val imageUrl: List<String>, //리스트로 이미지 Url(co_fileUrl)를 보내주세요, 없으면 null값으로
+    val imageUrl: ArrayList<RecruitPhoto>, //리스트로 이미지 Url(co_fileUrl)를 보내주세요, 없으면 null값으로
 
     val partName: String,
     val partPeople: Int,

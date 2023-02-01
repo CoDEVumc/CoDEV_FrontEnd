@@ -129,4 +129,10 @@ interface RetrofitService {
 
     @GET("study/{coStudyId}")
     fun getStudyDetail(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int) : Call<ResGetRecruitDetail>
+
+    @DELETE("project/out/{coProjectId}")
+    fun deleteProject(@Path("coProjectId") coProjectId:Int,@Header("CoDev_Authorization") header: String) : Call<JsonObject>
+
+    @DELETE("study/{coStudyId}")
+    fun deleteStudy(@Path("coStudyId") coStudyId:Int,@Header("CoDev_Authorization") header: String) : Call<JsonObject>
 }

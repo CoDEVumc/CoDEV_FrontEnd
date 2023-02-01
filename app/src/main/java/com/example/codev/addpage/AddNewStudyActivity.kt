@@ -248,7 +248,7 @@ class AddNewStudyActivity : AppCompatActivity() {
 
             //setImage
             for(nowUrl in oldStudy.imageUrl){
-                val nowImageItem = ImageItem(Uri.EMPTY, "", nowUrl)
+                val nowImageItem = ImageItem(Uri.EMPTY, "", nowUrl.co_fileUrl)
                 imageItemList.add(nowImageItem)
                 viewBinding.addImageSection.adapter!!.notifyItemInserted(imageItemList.lastIndex)
                 //subImageCounter
