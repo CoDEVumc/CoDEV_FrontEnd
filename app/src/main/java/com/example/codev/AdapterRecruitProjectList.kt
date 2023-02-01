@@ -16,7 +16,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AdapterProjectList(private val context: Context, private val listData: ArrayList<PData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterRecruitProjectList(private val context: Context, private val listData: ArrayList<PData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
