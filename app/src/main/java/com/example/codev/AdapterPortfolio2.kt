@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
+import com.example.codev.addpage.AddPfPageActivity
+import com.example.codev.addpage.DefaultPf
 import com.example.codev.addpage.PfDetailActivity
 import com.example.codev.databinding.RecyclePortfolioFooter2Binding
 import com.example.codev.databinding.RecyclePortfolioItem2Binding
@@ -16,7 +18,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AdapterPortfolio2(private val listData: ArrayList<PortFolio>, private val returnDeleteCount: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterPortfolio2(private val listData: ArrayList<PortFolio>, private val co_name: String, private val co_birth: String, private val co_gender: String, private val returnDeleteCount: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val ITEM = 1
     private val FOOTER = 2
     private var EDIT: Boolean = false
@@ -154,6 +156,9 @@ class AdapterPortfolio2(private val listData: ArrayList<PortFolio>, private val 
             //포트폴리오 추가 기능 필요
             binding.addPortfolio.setOnClickListener {
                 Log.d("test", "포트폴리오 추가")
+                val intent = Intent(binding.addPortfolio.context, AddPfPageActivity::class.java)
+                intent.putExtra("default", DefaultPf(co_name, co_birth, co_gender))
+                ContextCompat.startActivity(binding.addPortfolio.context, intent, null)
             }
         }
     }

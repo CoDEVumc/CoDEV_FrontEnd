@@ -8,13 +8,15 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.codev.addpage.AddPfPageActivity
+import com.example.codev.addpage.DefaultPf
 import com.example.codev.addpage.PfDetailActivity
 import com.example.codev.databinding.RecyclePortfolioHeader1Binding
 import com.example.codev.databinding.RecyclePortfolioItem1Binding
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 
-class AdapterPortfolio1(private val listData: ArrayList<PortFolio>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterPortfolio1(private val listData: ArrayList<PortFolio>, private val co_name: String, private val co_birth: String, private val co_gender: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val HEADER = 0
     private val ITEM = 1
 
@@ -72,6 +74,9 @@ class AdapterPortfolio1(private val listData: ArrayList<PortFolio>) : RecyclerVi
         fun bind(){
             binding.addPortfolio.setOnClickListener {
                 Log.d("test","포트폴리오 추가")
+                val intent = Intent(binding.addPortfolio.context, AddPfPageActivity::class.java)
+                intent.putExtra("default", DefaultPf(co_name, co_birth, co_gender))
+                startActivity(binding.addPortfolio.context, intent, null)
             }
         }
     }
