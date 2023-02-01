@@ -59,7 +59,7 @@ class AdapterRecruitStudyList(private val context: Context, private val listData
             //기술 스택
             if (!data.co_languages.isNullOrBlank()){
                 val languages = data.co_languages
-                binding.stack.adapter = AdapterRecruitDetailStack(context,languages.split(","))
+                binding.stack.adapter = AdapterRecruitStack(context,languages.split(","))
             }
 
             //스터디 분야
@@ -75,6 +75,8 @@ class AdapterRecruitStudyList(private val context: Context, private val listData
             binding.item.setOnClickListener {
                 val intent = Intent(binding.item.context, RecruitDetailActivity::class.java)
                 intent.putExtra("id",data.co_studyId)
+                intent.putExtra("type","STUDY")
+                intent.putExtra("dday",binding.dday.text)
                 Log.d("test : 선택한 스터디 아이디", data.co_studyId.toString())
                 startActivity(binding.item.context, intent, null)
             }
