@@ -153,7 +153,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     setPartAdapter(context,it.result.Complete.co_partList)
                                     setImageAdapter(context,it.result.Complete.co_photos)
                                     viewBinding.type.text = "프로젝트"
-                                    viewBinding.name.text = it.result.Complete.co_nickName
+                                    viewBinding.name.text = it.result.Complete.co_nickname
                                     viewBinding.title.text = it.result.Complete.co_title
                                     viewBinding.location.text = it.result.Complete.co_location
                                     viewBinding.day.text = dday
@@ -200,7 +200,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     setPartAdapter(context,arrayListOf(RecruitPartLimit(it.result.Complete.co_part,it.result.Complete.co_total)))
                                     setImageAdapter(context,it.result.Complete.co_photos)
                                     viewBinding.type.text = "스터디"
-                                    viewBinding.name.text = it.result.Complete.co_nickName
+                                    viewBinding.name.text = it.result.Complete.co_nickname
                                     viewBinding.title.text = it.result.Complete.co_title
                                     viewBinding.location.text = it.result.Complete.co_location
                                     viewBinding.day.text = dday
