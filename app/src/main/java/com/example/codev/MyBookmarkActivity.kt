@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -41,13 +42,15 @@ class MyBookmarkActivity : AppCompatActivity() {
 
     }
 
-
-
-
-
-
-
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            android.R.id.home ->{
+                Toast.makeText(this, "뒤로가기", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }
 
 

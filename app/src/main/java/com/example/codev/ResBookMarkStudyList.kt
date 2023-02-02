@@ -8,7 +8,7 @@ data class ResBookMarkStudyList(
     val result: ResponseOfGetBookMarkStudy
 )
 data class ResponseOfGetBookMarkStudy(
-    val Compelte: ArrayList<BookmarkSData>
+    val Complete: ArrayList<BookmarkSData>
 )
 data class BookmarkSData(
     val co_studyId: Int,

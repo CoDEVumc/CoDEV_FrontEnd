@@ -32,8 +32,6 @@ class MyBookMarkStudyFragment :Fragment(){
     ): View? {
         viewBinding = FragmentMyBookmarkStudyBinding.inflate(layoutInflater)
 
-
-
         return viewBinding.root
     }
 
@@ -49,7 +47,7 @@ class MyBookMarkStudyFragment :Fragment(){
                     200 -> {
                         response.body()?.let {
                             Log.d("test: 찜한 프로젝트 불러오기 성공", "\n${it.toString()}")
-                            setSAdapter(it.result.Compelte, context)
+                            setSAdapter(it.result.Complete, context)
                         }
                     }
                 }

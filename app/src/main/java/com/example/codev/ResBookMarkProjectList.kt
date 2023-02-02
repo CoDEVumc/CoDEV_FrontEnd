@@ -8,7 +8,7 @@ data class ResBookMarkProjectList(
     val result: ResponseOfGetBookMarkProject
 )
 data class ResponseOfGetBookMarkProject(
-    val Compelte: ArrayList<BookmarkPData>
+    val Complete: ArrayList<BookmarkPData>
 )
 data class BookmarkPData(
     val co_projectId: Int,
