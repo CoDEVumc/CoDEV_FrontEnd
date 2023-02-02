@@ -194,6 +194,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     //지원마감
                                     if(it.result.Complete.co_process!="ING"){
                                         viewBinding.btn2.text = "지원마감"
+                                        viewBinding.btn2.setTextColor(getColor(R.color.black_500))
                                         viewBinding.btn2.background = getDrawable(R.drawable.recruit_detail_btn2_disabled)
                                         viewBinding.btn2.isEnabled = false
                                     }
@@ -259,6 +260,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     //지원마감
                                     if(it.result.Complete.co_process!="ING"){
                                         viewBinding.btn2.text = "지원마감"
+                                        viewBinding.btn2.setTextColor(getColor(R.color.black_500))
                                         viewBinding.btn2.background = getDrawable(R.drawable.recruit_detail_btn2_disabled)
                                         viewBinding.btn2.isEnabled = false
                                     }
