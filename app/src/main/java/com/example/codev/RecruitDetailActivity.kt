@@ -16,6 +16,9 @@ import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 
 class RecruitDetailActivity:AppCompatActivity() {
     private lateinit var viewBinding: ActivityRecruitDetailBinding
@@ -37,13 +40,23 @@ class RecruitDetailActivity:AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityRecruitDetailBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
         viewBinding.toolbarRecruit.toolbar3.title = ""
-        //모집글 작성자일시 메뉴 추가(수정, 삭제) 필요
+
+        viewBinding.heart.setOnClickListener {
+            request(this, type, id)
+            if (viewBinding.heart.isChecked){
+                viewBinding.heartCount.text = (viewBinding.heartCount.text.toString().toInt() + 1).toString()
+            }else{
+                viewBinding.heartCount.text = (viewBinding.heartCount.text.toString().toInt() - 1).toString()
+            }
+        }
+
         //스크롤 위치가 이미지 indicator 정도 오면 툴바 배경 흰색으로 변경 필요
 
         setSupportActionBar(viewBinding.toolbarRecruit.toolbar3)
@@ -135,9 +148,10 @@ class RecruitDetailActivity:AppCompatActivity() {
         builder.show()
     }
 
-    private fun loadRecruitDetail(context:Context, type:String, int: Int, dday: String){
+    private fun loadRecruitDetail(context:Context, type:String, id: Int, dday: String){
         if (type == "PROJECT"){
-            RetrofitClient.service.getProjectDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), int).enqueue(object: Callback<ResGetRecruitDetail> {
+            RetrofitClient.service.getProjectDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<ResGetRecruitDetail> {
+                @SuppressLint("UseCompatLoadingForDrawables")
                 override fun onResponse(call: Call<ResGetRecruitDetail>, response: Response<ResGetRecruitDetail>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 조회실패",response.toString())
@@ -158,19 +172,37 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     viewBinding.location.text = it.result.Complete.co_location
                                     viewBinding.day.text = dday
                                     viewBinding.text.text = it.result.Complete.co_content
-
-                                    if (it.result.Complete.co_email == it.result.Complete.co_viewer){
-                                        menuInflater.inflate(R.menu.menu_toolbar_detail, viewBinding.toolbarRecruit.toolbar3.menu)
-                                    }
-
+                                    viewBinding.date.text = convertTimestampToDate(it.result.Complete.updatedAt)
+                                    viewBinding.deadline.text = it.result.Complete.co_deadLine.split(" ")[0].replace("-",".")
                                     viewBinding.total.text = it.result.Complete.co_total.toString() + "명 모집중"
                                     viewBinding.heartCount.text = it.result.Complete.co_heartCount.toString()
                                     viewBinding.heart.isChecked = it.result.Complete.co_heart
+
+                                    //지원현황 activity로 전환, 연장하기 기능
+                                    if (it.result.Complete.co_email == it.result.Complete.co_viewer){
+                                        menuInflater.inflate(R.menu.menu_toolbar_detail, viewBinding.toolbarRecruit.toolbar3.menu)
+                                        viewBinding.btn1.text = "연장하기"
+                                        viewBinding.btn2.text = "지원현황"
+                                    }
+
+                                    //지원취소
+                                    if (it.result.Complete.status){
+                                        viewBinding.btn2.isSelected = true
+                                        viewBinding.btn2.text = "지원취소"
+                                    }
+
+                                    //지원마감
+                                    if(it.result.Complete.co_process!="ING"){
+                                        viewBinding.btn2.text = "지원마감"
+                                        viewBinding.btn2.background = getDrawable(R.drawable.recruit_detail_btn2_disabled)
+                                        viewBinding.btn2.isEnabled = false
+                                    }
 
                                     val stackList = LinkedHashMap<Int, String>()
                                     for (i in 0 until it.result.Complete.co_languageList.size){
                                         stackList[it.result.Complete.co_languageList[i].co_languageId] = it.result.Complete.co_languageList[i].co_language
                                     }
+
                                     projectData = EditProject(it.result.Complete.co_projectId.toString(),it.result.Complete.co_title,it.result.Complete.co_content,it.result.Complete.co_photos,it.result.Complete.co_partList,stackList,it.result.Complete.co_location,it.result.Complete.co_deadLine.split(" ")[0])
                                 }
                             }
@@ -184,7 +216,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                 }
             })
         }else if(type == "STUDY"){
-            RetrofitClient.service.getStudyDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), int).enqueue(object: Callback<ResGetRecruitDetail> {
+            RetrofitClient.service.getStudyDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<ResGetRecruitDetail> {
                 override fun onResponse(call: Call<ResGetRecruitDetail>, response: Response<ResGetRecruitDetail>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 조회실패",response.toString())
@@ -205,19 +237,37 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     viewBinding.location.text = it.result.Complete.co_location
                                     viewBinding.day.text = dday
                                     viewBinding.text.text = it.result.Complete.co_content
-
-                                    if (it.result.Complete.co_email == it.result.Complete.co_viewer){
-                                        menuInflater.inflate(R.menu.menu_toolbar_detail, viewBinding.toolbarRecruit.toolbar3.menu)
-                                    }
-
+                                    viewBinding.date.text = convertTimestampToDate(it.result.Complete.updatedAt)
+                                    viewBinding.deadline.text = it.result.Complete.co_deadLine.split(" ")[0].replace("-",".")
                                     viewBinding.total.text = it.result.Complete.co_total.toString() + "명 모집중"
                                     viewBinding.heartCount.text = it.result.Complete.co_heartCount.toString()
                                     viewBinding.heart.isChecked = it.result.Complete.co_heart
+
+                                    //지원현황 activity로 전환, 연장하기 기능
+                                    if (it.result.Complete.co_email == it.result.Complete.co_viewer){
+                                        menuInflater.inflate(R.menu.menu_toolbar_detail, viewBinding.toolbarRecruit.toolbar3.menu)
+                                        viewBinding.btn1.text = "연장하기"
+                                        viewBinding.btn2.text = "지원현황"
+                                    }
+
+                                    //지원취소
+                                    if (it.result.Complete.status){
+                                        viewBinding.btn2.isSelected = true
+                                        viewBinding.btn2.text = "지원취소"
+                                    }
+
+                                    //지원마감
+                                    if(it.result.Complete.co_process!="ING"){
+                                        viewBinding.btn2.text = "지원마감"
+                                        viewBinding.btn2.background = getDrawable(R.drawable.recruit_detail_btn2_disabled)
+                                        viewBinding.btn2.isEnabled = false
+                                    }
 
                                     val stackList = LinkedHashMap<Int, String>()
                                     for (i in 0 until it.result.Complete.co_languageList.size){
                                         stackList[it.result.Complete.co_languageList[i].co_languageId] = it.result.Complete.co_languageList[i].co_language
                                     }
+
                                     studyData = EditStudy(it.result.Complete.co_projectId.toString(),it.result.Complete.co_title,it.result.Complete.co_content,it.result.Complete.co_photos,it.result.Complete.co_part, it.result.Complete.co_total,stackList,it.result.Complete.co_location,it.result.Complete.co_deadLine.split(" ")[0])
                                 }
                             }
@@ -250,5 +300,68 @@ class RecruitDetailActivity:AppCompatActivity() {
             viewBinding.vpImage.adapter = AdapterRecruitDetailImg(context, imgList)
             viewBinding.indicator.attachTo(viewBinding.vpImage)
         }
+    }
+
+    private fun request(context: Context, type: String, id: Int){
+        if(type == "PROJECT"){
+            RetrofitClient.service.requestProjectBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<JsonObject>{
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    if(response.isSuccessful.not()){
+                        Log.d("test: 북마크 실패",response.toString())
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }else{
+                        when(response.code()){
+                            200->{
+                                response.body()?.let {
+                                    Log.d("test: 북마크 성공! ", "\n${it.toString()}")
+
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Log.d("test: 북마크 실패 : ", "[Fail]${t.toString()}")
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+
+            })
+        }else if(type == "STUDY"){
+            RetrofitClient.service.requestStudyBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<JsonObject> {
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    if(response.isSuccessful.not()){
+                        Log.d("test: 북마크 실패",response.toString())
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }else{
+                        when(response.code()){
+                            200->{
+                                response.body()?.let {
+                                    Log.d("test: 북마크 성공! ", "\n${it.toString()}")
+
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Log.d("test: 북마크 실패 : ", "[Fail]${t.toString()}")
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+
+            })
+        }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun convertTimestampToDate(timestamp: Timestamp):String {
+        val sdf = SimpleDateFormat("yyyy.MM.dd")
+        val date = sdf.format(timestamp)
+        Log.d("TTT UNix Date -> ", sdf.format((System.currentTimeMillis())).toString())
+        Log.d("TTTT date -> ", date.toString())
+        return date.toString()
     }
 }
