@@ -40,13 +40,13 @@ class MyBookMarkStudyFragment :Fragment(){
             Callback<ResBookMarkStudyList> {
             override fun onResponse(call: Call<ResBookMarkStudyList>, response: Response<ResBookMarkStudyList>) {
                 if(response.isSuccessful.not()){
-                    Log.d("test: 북마크 프로젝트 불러오기 실패",response.toString())
+                    Log.d("test: 북마크 스터디 불러오기 실패",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
                 when(response.code()){
                     200 -> {
                         response.body()?.let {
-                            Log.d("test: 찜한 프로젝트 불러오기 성공", "\n${it.toString()}")
+                            Log.d("test: 찜한 스터디 불러오기 성공", "\n${it.toString()}")
                             setSAdapter(it.result.Complete, context)
                         }
                     }
@@ -60,7 +60,9 @@ class MyBookMarkStudyFragment :Fragment(){
     }
 
     private fun setSAdapter(studyList: ArrayList<BookmarkSData>, context: Context){
-        adapterSData = AdapterMyBookmarkStudyList(context, studyList)
-        viewBinding.listviewStudy.adapter = adapterSData
+        if(studyList.size != 0){
+            adapterSData = AdapterMyBookmarkStudyList(context, studyList)
+            viewBinding.listviewStudy.adapter = adapterSData
+        }
     }
 }

@@ -59,7 +59,9 @@ class MyBookMarkProjectFragment :Fragment(){
     }
 
     private fun setPAdapter(projectList: ArrayList<BookmarkPData>, context: Context){
-        adapterPData = AdapterMyBookmarkProjectList(context, projectList)
-        viewBinding.listviewProject.adapter = adapterPData
+        if(projectList.size != 0) {
+            adapterPData = AdapterMyBookmarkProjectList(context, projectList)
+            viewBinding.listviewProject.adapter = adapterPData
+        }
     }
 }

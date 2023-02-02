@@ -24,7 +24,7 @@ data class BookmarkSData(
     val status: Boolean,
     val co_heartCount: Int,
     var co_heart: Boolean,
-    val co_parts: String,
+    val co_part: String,
     val co_total: Int,
     val co_languages: String,
     val co_recruitStatus: Boolean,

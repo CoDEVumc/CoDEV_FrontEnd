@@ -44,15 +44,13 @@ class AdapterRecruitProjectList(private val context: Context, private val listDa
             //프로젝트 디데이
             if(data.co_deadLine.toInt() == 0) {
                 binding.dday.text = "D-Day"
+            }else if(data.co_process == "TEST"){
+                binding.dday.text = "심사중"
+            }else if(data.co_process == "FIN"){
+                binding.dday.text = "모집 완료"
+            } else {
+                binding.dday.text = "D-" + data.co_deadLine
             }
-            else if(data.co_deadLine.toInt() < 0){ //기간 지남
-
-                val deadline = data.co_deadLine
-                val dday = deadline.substring(1,deadline.length)
-
-                binding.dday.text = "D+" + dday
-            }
-            else {binding.dday.text = "D-" + data.co_deadLine}
 
             //프로젝트 총 인원
             binding.num.text = data.co_total.toString()
