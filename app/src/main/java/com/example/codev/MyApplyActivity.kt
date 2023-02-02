@@ -12,23 +12,23 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.codev.databinding.ActivityMyBookmarkBinding
+import com.example.codev.databinding.ActivityMyApplyBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
-class MyBookmarkActivity : AppCompatActivity() {
-    private lateinit var viewBinding: ActivityMyBookmarkBinding
+class MyApplyActivity : AppCompatActivity() {
+    private lateinit var viewBinding: ActivityMyApplyBinding
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewBinding = ActivityMyBookmarkBinding.inflate(layoutInflater)
+        viewBinding = ActivityMyApplyBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
         viewBinding.toolbarMy.toolbar2.title = ""
-        viewBinding.toolbarMy.toolbarText.text = "북마크"
+        viewBinding.toolbarMy.toolbarText.text = "지원 현황"
         setSupportActionBar(viewBinding.toolbarMy.toolbar2)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
@@ -37,7 +37,7 @@ class MyBookmarkActivity : AppCompatActivity() {
 
         supportFragmentManager
             .beginTransaction()
-            .replace(viewBinding.container.id, MyBookMarkFragment())
+            .replace(viewBinding.container.id, MyApplyFragment())
             .commitAllowingStateLoss()
 
     }

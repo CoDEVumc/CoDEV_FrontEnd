@@ -123,6 +123,18 @@ interface RetrofitService {
     @GET("my-page/hearts/studies")
     fun getHeartedStudy(@Header("CoDev_Authorization") header: String) : Call<ResBookMarkStudyList>
 
+    @GET("my-page/recruitment")
+    fun getApplyProject(
+        @Header("CoDev_Authorization") header: String,
+        @Query("type") type: String
+    ) : Call<ResApplyProjectList>
+    @GET("my-page/recruitment")
+    fun getApplyStudy(
+        @Header("CoDev_Authorization") header: String,
+        @Query("type") type: String
+    ) : Call<ResApplyStudyList>
+
+
     @GET("my-page/portfolio/{coPortfolioId}")
     fun getPortFolioDetail(@Header("CoDev_Authorization") authToken: String, @Path("coPortfolioId") id: String) : Call<ResGetPFDetail>
 
