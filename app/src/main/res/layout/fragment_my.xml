@@ -220,7 +220,7 @@
                     tools:ignore="RtlSymmetry"/>
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_part"
+                    android:id="@+id/btn_join"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"

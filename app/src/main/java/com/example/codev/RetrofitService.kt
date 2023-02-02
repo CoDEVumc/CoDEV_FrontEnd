@@ -129,6 +129,12 @@ interface RetrofitService {
         @Query("type") type: String
     ) : Call<ResApplyList>
 
+    @GET("my-page/participation")
+    fun getJoinList(
+        @Header("CoDev_Authorization") header: String,
+        @Query("type") type: String
+    ) : Call<ResJoinList>
+
 
     @GET("my-page/portfolio/{coPortfolioId}")
     fun getPortFolioDetail(@Header("CoDev_Authorization") authToken: String, @Path("coPortfolioId") id: String) : Call<ResGetPFDetail>
