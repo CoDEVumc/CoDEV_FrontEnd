@@ -66,6 +66,7 @@ class MyFragment:Fragment() {
 
         viewBinding.btnMore.setOnClickListener {
             val intent = Intent(mainAppActivity, MyPortfolioActivity::class.java)
+            intent.putExtra("userinfo",userinfo)
             startActivity(intent)
         }
 
@@ -79,7 +80,7 @@ class MyFragment:Fragment() {
     }
 
     private fun setAdapter(dataList: ArrayList<PortFolio>){
-        val adapter = AdapterPortfolio1(dataList)
+        val adapter = AdapterPortfolio1(dataList, userinfo.co_name, userinfo.co_birth, userinfo.co_gender)
         viewBinding.recyclePortfolio.adapter = adapter
     }
 
@@ -97,11 +98,11 @@ class MyFragment:Fragment() {
                             Log.d("test: 포트폴리오 불러오기 성공", "\n${it.toString()}")
                             viewBinding.name.text = it.result.Complete.co_name + " 님"
                             viewBinding.email.text = it.result.Complete.co_email
+                            userinfo = Userinfo(it.result.Complete.co_nickName,it.result.Complete.profileImg,it.result.Complete.co_email,it.result.Complete.co_name,it.result.Complete.co_gender,it.result.Complete.co_birth,it.result.Complete.co_loginType)
                             Glide.with(context)
                                 .load(it.result.Complete.profileImg).circleCrop()
                                 .into(viewBinding.profileImg)
                             setAdapter(it.result.Portfolio)
-                            userinfo = Userinfo(it.result.Complete.co_nickName,it.result.Complete.profileImg,it.result.Complete.co_email,it.result.Complete.co_name,it.result.Complete.co_gender,it.result.Complete.co_birth,it.result.Complete.co_loginType)
                         }
                     }
                 }

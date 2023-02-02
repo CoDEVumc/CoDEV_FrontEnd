@@ -1,5 +1,7 @@
 package com.example.codev
 
+import java.io.Serializable
+
 data class ResGetRecruitDetail(
     val code:Int,
     val result: ResponseOfGetRecruitDetail
@@ -12,6 +14,7 @@ data class ResponseOfGetRecruitDetail(
 data class RecruitDetail(
     val co_studyId: Int,
     val co_projectId: Int,
+    val co_nickname: String,
     val co_email: String,
     val co_viewer: String,
     val co_title: String,
@@ -35,14 +38,14 @@ data class RecruitDetail(
 data class RecruitPartLimit(
     val co_part: String,
     val co_limit: Int
-)
+): Serializable
 
 data class RecruitPhoto(
     val co_fileUrl : String
-)
+): Serializable
 
 data class RecruitLanguage(
     val co_languageId: Int,
     val co_language: String,
     val co_logo: String
-)
+): Serializable

@@ -1,11 +1,16 @@
 package com.example.codev
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
+import com.example.codev.addpage.AddPfPageActivity
+import com.example.codev.addpage.DefaultPf
+import com.example.codev.addpage.PfDetailActivity
 import com.example.codev.databinding.RecyclePortfolioFooter2Binding
 import com.example.codev.databinding.RecyclePortfolioItem2Binding
 import java.sql.Timestamp
@@ -13,7 +18,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AdapterPortfolio2(private val listData: ArrayList<PortFolio>, private val returnDeleteCount: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterPortfolio2(private val listData: ArrayList<PortFolio>, private val co_name: String, private val co_birth: String, private val co_gender: String, private val returnDeleteCount: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val ITEM = 1
     private val FOOTER = 2
     private var EDIT: Boolean = false
@@ -113,6 +118,10 @@ class AdapterPortfolio2(private val listData: ArrayList<PortFolio>, private val 
                     notifyItemChanged(position)
                 }else{
                     //포트폴리오 세부 페이지 이동
+                    val intent = Intent(binding.portfolio.context, PfDetailActivity::class.java)
+                    intent.putExtra("id", data.co_portfolioId.toString())
+                    Log.d("test",data.co_portfolioId.toString())
+                    ContextCompat.startActivity(binding.portfolio.context, intent, null)
                 }
             }
         }
@@ -147,6 +156,9 @@ class AdapterPortfolio2(private val listData: ArrayList<PortFolio>, private val 
             //포트폴리오 추가 기능 필요
             binding.addPortfolio.setOnClickListener {
                 Log.d("test", "포트폴리오 추가")
+                val intent = Intent(binding.addPortfolio.context, AddPfPageActivity::class.java)
+                intent.putExtra("default", DefaultPf(co_name, co_birth, co_gender))
+                ContextCompat.startActivity(binding.addPortfolio.context, intent, null)
             }
         }
     }

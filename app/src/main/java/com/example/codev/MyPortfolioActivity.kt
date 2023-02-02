@@ -17,6 +17,12 @@ import java.util.*
 class MyPortfolioActivity:AppCompatActivity() {
     private lateinit var viewBinding: ActivityMyPortfolioBinding
     private lateinit var adapter: AdapterPortfolio2
+    private lateinit var userinfo: Userinfo
+
+    override fun onResume() {
+        super.onResume()
+        loadData(this)
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +38,8 @@ class MyPortfolioActivity:AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
-        loadData(this)
+        userinfo = intent.getSerializableExtra("userinfo") as Userinfo
+
         viewBinding.btnDelete.isGone = true
 
         viewBinding.btnEdit.setOnClickListener {
@@ -107,7 +114,7 @@ class MyPortfolioActivity:AppCompatActivity() {
     }
 
     private fun setAdapter(dataList: ArrayList<PortFolio>){
-        adapter = AdapterPortfolio2(dataList){
+        adapter = AdapterPortfolio2(dataList, userinfo.co_name, userinfo.co_birth, userinfo.co_gender){
             Log.d("test","리콜받음")
             if (it == 1){
                 enableDelete(true)

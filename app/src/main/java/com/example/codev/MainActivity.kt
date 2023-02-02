@@ -84,6 +84,7 @@ class MainActivity : AppCompatActivity() {
         if(checkAutoLogin(this)) {
             val intent = Intent(this,MainAppActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 

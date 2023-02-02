@@ -30,6 +30,15 @@ class PfDetailActivity : AppCompatActivity() {
     private var pfId = ""
     private var isLoaded = false
     private var loadedObject: RealDataPF? = null
+    private var stackMap = LinkedHashMap<Int, String>()
+
+    override fun onResume() {
+        super.onResume()
+        viewBinding.addLinkSection.removeAllViews()
+        viewBinding.stackChipGroup.removeAllViews()
+        pfId = intent.getStringExtra("id").toString()
+        loadDataUsingPFId(pfId)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +46,7 @@ class PfDetailActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
         AndroidKeyStoreUtil.init(this)
 
-        val pfId = intent.getStringExtra("id").toString()
-        loadDataUsingPFId(pfId)
+
 
         //가운데 정렬 글 작성 예시
         viewBinding.toolbarTitle.toolbarAddPageToolbar.title = ""
@@ -53,8 +61,6 @@ class PfDetailActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
-        this.pfId = intent.getStringExtra("id").toString()
-        loadDataUsingPFId(pfId)
 
     }
 
@@ -108,7 +114,7 @@ class PfDetailActivity : AppCompatActivity() {
                 if(isLoaded){
                     val intent = Intent(this,AddPfPageActivity::class.java)
 //                        val stackMap = makeLinkedHashMap()
-                    intent.putExtra("pf", EditPF(loadedObject!!.co_portfolioId.toString(), loadedObject!!.co_title, loadedObject!!.co_name, loadedObject!!.co_birth, loadedObject!!.co_gender, loadedObject!!.co_rank, LinkedHashMap(), loadedObject!!.co_headLine, loadedObject!!.co_introduction, loadedObject!!.co_links))
+                    intent.putExtra("pf", EditPF(loadedObject!!.co_portfolioId.toString(), loadedObject!!.co_title, loadedObject!!.co_name, loadedObject!!.co_birth, loadedObject!!.co_gender, loadedObject!!.co_rank, stackMap,  loadedObject!!.co_headLine, loadedObject!!.co_introduction, loadedObject!!.co_links))
                     startActivity(intent)
                 }else{
                     Toast.makeText(this, "잠시 후 시도해보세요", Toast.LENGTH_SHORT).show()
@@ -150,7 +156,24 @@ class PfDetailActivity : AppCompatActivity() {
         viewBinding.editPfLevel.text = pfData.co_rank
 
         //setStack
-        val stackNameList = pfData.co_languages.split(",")
+        if (!pfData.co_languages.isNullOrBlank()){
+            val stackNameList = pfData.co_languages.split(",")
+            for (i in stackNameList) viewBinding.stackChipGroup.addView(
+                addPageFunction.returnStackChipWithPF(
+                    context,
+                    i
+                )
+            )
+        }
+
+        val stackNameList = ArrayList<String>()
+        for( i in pfData.co_languageList){
+            val nowName = i.co_language
+            val nowId = i.co_languageId
+            stackNameList.add(nowName)
+            stackMap[nowId] = nowName
+        }
+
         for (i in stackNameList) viewBinding.stackChipGroup.addView(
             addPageFunction.returnStackChipWithPF(
                 context,
@@ -165,13 +188,17 @@ class PfDetailActivity : AppCompatActivity() {
         viewBinding.textCounter.text = pfData.co_introduction.length.toString()
 
         //setLink
-        val linkList = pfData.co_links.split(",")
-        for (i in linkList) {
-            val linkView = InputLayoutBinding.inflate(layoutInflater)
-            linkView.inputOfTitle.setText(i)
-            linkView.inputOfTitle.isFocusable = false
-            linkView.inputOfTitle.isClickable = false
-            viewBinding.addLinkSection.addView(linkView.root)
+        if(!pfData.co_links.isNullOrBlank()){
+            val linkList = pfData.co_links.split(",")
+            Log.d("linktest", "setData: $linkList")
+            for (i in linkList) {
+                val linkView = InputLayoutBinding.inflate(layoutInflater)
+                linkView.inputOfTitle.setText(i)
+                linkView.inputOfTitle.isFocusable = false
+                linkView.inputOfTitle.isClickable = false
+                viewBinding.addLinkSection.addView(linkView.root)
+                Log.d("nowLink", "setData: $i")
+            }
         }
     }
 }
