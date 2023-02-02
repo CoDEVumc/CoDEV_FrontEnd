@@ -35,9 +35,9 @@ class MyApplyStudyFragment :Fragment(){
     }
 
     private fun loadSData(context: Context){
-        RetrofitClient.service.getApplyStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
-            ,"study").enqueue(object:Callback<ResApplyStudyList> {
-            override fun onResponse(call: Call<ResApplyStudyList>, response: Response<ResApplyStudyList>) {
+        RetrofitClient.service.getApplyList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+            ,"study").enqueue(object:Callback<ResApplyList> {
+            override fun onResponse(call: Call<ResApplyList>, response: Response<ResApplyList>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 지원한 스터디 불러오기 실패",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
@@ -52,13 +52,13 @@ class MyApplyStudyFragment :Fragment(){
                 }
             }
 
-            override fun onFailure(call: Call<ResApplyStudyList>, t: Throwable) {
+            override fun onFailure(call: Call<ResApplyList>, t: Throwable) {
                 Log.d("test", "[Fail]${t.toString()}")
             }
         })
     }
 
-    private fun setSAdapter(studyList: ArrayList<ApplySData>, context: Context){
+    private fun setSAdapter(studyList: ArrayList<ApplyData>, context: Context){
         if(studyList.size != 0){
             adapterSData = AdapterMyApplyStudyList(context, studyList)
             viewBinding.listviewStudy.adapter = adapterSData

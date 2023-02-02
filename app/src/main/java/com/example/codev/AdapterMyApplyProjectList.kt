@@ -18,7 +18,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AdapterMyApplyProjectList(private val context: Context, private val listData: ArrayList<ApplyPData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class AdapterMyApplyProjectList(private val context: Context, private val listData: ArrayList<ApplyData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -39,7 +39,7 @@ class AdapterMyApplyProjectList(private val context: Context, private val listDa
 
     //Item의 ViewHolder 객체
     inner class ProjectItemViewHolder(val context: Context, private val binding: RecycleRecruitListBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: ApplyPData, position: Int){
+        fun bind(data: ApplyData, position: Int){
             //프로젝트 제목
             binding.title.text = data.co_title
 

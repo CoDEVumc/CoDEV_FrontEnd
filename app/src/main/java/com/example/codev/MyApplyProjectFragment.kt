@@ -36,9 +36,9 @@ class MyApplyProjectFragment :Fragment(){
     }
 
     private fun loadPData(context: Context){
-        RetrofitClient.service.getApplyProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
-            ,"project").enqueue(object: Callback<ResApplyProjectList> {
-            override fun onResponse(call: Call<ResApplyProjectList>, response: Response<ResApplyProjectList>) {
+        RetrofitClient.service.getApplyList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+            ,"project").enqueue(object: Callback<ResApplyList> {
+            override fun onResponse(call: Call<ResApplyList>, response: Response<ResApplyList>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 지원한 프로젝트 불러오기 실패",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
@@ -53,13 +53,13 @@ class MyApplyProjectFragment :Fragment(){
                 }
             }
 
-            override fun onFailure(call: Call<ResApplyProjectList>, t: Throwable) {
+            override fun onFailure(call: Call<ResApplyList>, t: Throwable) {
                 Log.d("test", "[Fail]${t.toString()}")
             }
         })
     }
 
-    private fun setPAdapter(projectList: ArrayList<ApplyPData>, context: Context){
+    private fun setPAdapter(projectList: ArrayList<ApplyData>, context: Context){
         if(projectList.size != 0) {
             adapterPData = AdapterMyApplyProjectList(context, projectList)
             viewBinding.listviewProject.adapter = adapterPData

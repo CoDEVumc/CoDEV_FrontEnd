@@ -16,7 +16,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AdapterMyApplyStudyList(private val context: Context, private val listData: ArrayList<ApplySData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class AdapterMyApplyStudyList(private val context: Context, private val listData: ArrayList<ApplyData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -37,7 +37,7 @@ class AdapterMyApplyStudyList(private val context: Context, private val listData
 
     //Item의 ViewHolder 객체
     inner class StudyItemViewHolder(val context: Context, private val binding: RecycleRecruitListBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: ApplySData, position: Int){
+        fun bind(data: ApplyData, position: Int){
             //스터디 제목
             binding.title.text = data.co_title
 
