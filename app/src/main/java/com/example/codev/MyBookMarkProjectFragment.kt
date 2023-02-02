@@ -20,17 +20,9 @@ class MyBookMarkProjectFragment :Fragment(){
 
     private lateinit var adapterPData: AdapterMyBookmarkProjectList
 
-    private lateinit var mainAppActivity: Context
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if(context is MainAppActivity){
-            mainAppActivity = context
-        }
-    }
-
     override fun onResume() {
         super.onResume()
-
+        loadPData(requireContext())
     }
 
     override fun onCreateView(
@@ -39,8 +31,6 @@ class MyBookMarkProjectFragment :Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         viewBinding = FragmentMyBookmarkProjectBinding.inflate(layoutInflater)
-
-        loadPData(mainAppActivity)
 
         return viewBinding.root
     }
@@ -68,16 +58,8 @@ class MyBookMarkProjectFragment :Fragment(){
         })
     }
 
-
     private fun setPAdapter(projectList: ArrayList<BookmarkPData>, context: Context){
         adapterPData = AdapterMyBookmarkProjectList(context, projectList)
         viewBinding.listviewProject.adapter = adapterPData
     }
-
-
-
-
-
-
-
 }

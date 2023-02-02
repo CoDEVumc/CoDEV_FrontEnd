@@ -20,20 +20,10 @@ class MyBookMarkStudyFragment :Fragment(){
 
     private lateinit var adapterSData: AdapterMyBookmarkStudyList
 
-
-    private lateinit var mainAppActivity: Context
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if(context is MainAppActivity){
-            mainAppActivity = context
-        }
-    }
-
     override fun onResume() {
         super.onResume()
-        loadSData(mainAppActivity)
+        loadSData(requireContext())
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,14 +61,8 @@ class MyBookMarkStudyFragment :Fragment(){
         })
     }
 
-
-
     private fun setSAdapter(studyList: ArrayList<BookmarkSData>, context: Context){
         adapterSData = AdapterMyBookmarkStudyList(context, studyList)
         viewBinding.listviewStudy.adapter = adapterSData
     }
-
-
-
-
 }

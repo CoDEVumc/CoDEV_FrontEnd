@@ -18,13 +18,6 @@ import retrofit2.Response
 class MyBookMarkFragment: Fragment() {
     private lateinit var viewBinding: FragmentMyBookmarkBinding
 
-    private lateinit var mainAppActivity: Context
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if(context is MainAppActivity){
-            mainAppActivity = context
-        }
-    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,13 +38,4 @@ class MyBookMarkFragment: Fragment() {
 
         return viewBinding.root
     }
-
-
-
-
-
-
-
-
-
 }
