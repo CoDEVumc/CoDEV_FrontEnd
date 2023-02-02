@@ -69,6 +69,12 @@ class MyFragment:Fragment() {
             startActivity(intent)
         }
 
+        //여기 추가 -수진
+        viewBinding.btnBookmark.setOnClickListener {
+            val intent = Intent(mainAppActivity, MyBookmarkActivity::class.java)
+            startActivity(intent)
+        }
+
         return viewBinding.root
     }
 

@@ -4,46 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity_my_bookmark">
+    >
 
     <!-- Toolbar -->
+
     <include
-        android:id="@+id/toolbar_title"
-        layout="@layout/toolbar_add_page"/>
+        android:id="@+id/toolbar_my"
+        layout="@layout/toolbar2"/>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_title"
-        app:layout_scrollFlags="scroll|enterAlways"
-        app:tabIconTint="@color/white"
-        app:tabIndicatorColor="@color/green_900"
-        app:tabSelectedTextColor="@color/green_900"
-        app:tabTextColor="@color/black_500"
-        tools:layout_editor_absoluteX="0dp"
-        >
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/bookmark_project"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="프로젝트" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/bookmark_study"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="스터디" />
-
-
-
-
-
-    </com.google.android.material.tabs.TabLayout>
-
-
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_my"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
