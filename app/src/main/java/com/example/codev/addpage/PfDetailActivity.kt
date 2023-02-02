@@ -30,6 +30,7 @@ class PfDetailActivity : AppCompatActivity() {
     private var pfId = ""
     private var isLoaded = false
     private var loadedObject: RealDataPF? = null
+    private var stackMap = LinkedHashMap<Int, String>()
 
     override fun onResume() {
         super.onResume()
@@ -113,7 +114,7 @@ class PfDetailActivity : AppCompatActivity() {
                 if(isLoaded){
                     val intent = Intent(this,AddPfPageActivity::class.java)
 //                        val stackMap = makeLinkedHashMap()
-                    intent.putExtra("pf", EditPF(loadedObject!!.co_portfolioId.toString(), loadedObject!!.co_title, loadedObject!!.co_name, loadedObject!!.co_birth, loadedObject!!.co_gender, loadedObject!!.co_rank, LinkedHashMap(), loadedObject!!.co_headLine, loadedObject!!.co_introduction, loadedObject!!.co_links))
+                    intent.putExtra("pf", EditPF(loadedObject!!.co_portfolioId.toString(), loadedObject!!.co_title, loadedObject!!.co_name, loadedObject!!.co_birth, loadedObject!!.co_gender, loadedObject!!.co_rank, stackMap,  loadedObject!!.co_headLine, loadedObject!!.co_introduction, loadedObject!!.co_links))
                     startActivity(intent)
                 }else{
                     Toast.makeText(this, "잠시 후 시도해보세요", Toast.LENGTH_SHORT).show()
@@ -164,6 +165,21 @@ class PfDetailActivity : AppCompatActivity() {
                 )
             )
         }
+
+        val stackNameList = ArrayList<String>()
+        for( i in pfData.co_languageList){
+            val nowName = i.co_language
+            val nowId = i.co_languageId
+            stackNameList.add(nowName)
+            stackMap[nowId] = nowName
+        }
+
+        for (i in stackNameList) viewBinding.stackChipGroup.addView(
+            addPageFunction.returnStackChipWithPF(
+                context,
+                i
+            )
+        )
 
         viewBinding.editPfIntro.text = pfData.co_headLine
 

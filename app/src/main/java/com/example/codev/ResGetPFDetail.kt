@@ -25,9 +25,17 @@ data class RealDataPF(
     val co_introduction: String,
     val co_languages: String, //split(",")
     val co_links: String, //split(",")
-    val co_languageList: String,
+    val co_languageList: List<LanguageData>,
     val co_linkList: String,
     val createdAt: String,
     val updatedAt: String,
     val status: Boolean,
+)
+
+data class LanguageData(
+    val co_languageId: Int,
+    val co_language: String,
+    val co_logo: String,
+    val createdAt: String,
+    val updatedAt: String
 )
