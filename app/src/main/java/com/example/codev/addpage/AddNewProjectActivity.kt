@@ -314,8 +314,14 @@ class AddNewProjectActivity : AppCompatActivity() {
             viewBinding.locationHead.dropdownTitle.text = oldProject.location
             for (i in locationList){
                 if(i.name == oldProject.location){
+                    selectedLocationIndex = locationList.indexOf(i)
                     i.isSelected = true
-                    viewBinding.locationList.adapter!!.notifyItemChanged(locationList.indexOf(i))
+                    //selectedLocationIndex 초기화를 위한 코드
+                    viewBinding.locationList.adapter = CallbackSingleRVAdapter(locationList, selectedLocationIndex) {
+                        Log.d("location", it.toString())
+                        viewBinding.locationHead.dropdownTitle.text = locationList[it].name
+                    }
+                    break
                 }
             }
 

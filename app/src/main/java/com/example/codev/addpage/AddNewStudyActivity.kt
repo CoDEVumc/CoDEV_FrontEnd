@@ -193,7 +193,7 @@ class AddNewStudyActivity : AppCompatActivity() {
         var isLocationListVisible = false
 
         var locationString = resources.getStringArray(R.array.location_list);
-        var locationList = java.util.ArrayList<AddListItem>()
+        var locationList = ArrayList<AddListItem>()
         for(i in locationString) locationList.add(AddListItem(false, i, 0))
         var selectedLocationIndex = -1
         viewBinding.locationHead.dropdownTitle.text = "지역을 선택하세요"
@@ -259,9 +259,16 @@ class AddNewStudyActivity : AppCompatActivity() {
             viewBinding.stack1Head.dropdownTitle.text = oldStudy.partName
             for (i in stack1List){
                 if(i.name == oldStudy.partName){
-                    i.isSelected = true
-                    viewBinding.stack1List.adapter!!.notifyItemChanged(stack1List.indexOf(i))
                     selectedStack1Index = stack1List.indexOf(i)
+                    i.isSelected = true
+                    viewBinding.stack1List.adapter = CallbackSingleRVAdapter(stack1List, selectedStack1Index) {
+                        Log.d("stack1Index", it.toString())
+                        viewBinding.stack1Head.dropdownTitle.text = stack1List[it].name
+                        selectedStack1Index = it
+                        viewBinding.stack2List.adapter = getStack2Adapter(allStackList[it]!!)
+                        viewBinding.stack2List.visibility = View.VISIBLE
+                        isStack2ListVisible = true
+                    }
                     viewBinding.stack2List.adapter = getStack2Adapter(allStackList[selectedStack1Index]!!)
                     break
                 }
@@ -287,8 +294,12 @@ class AddNewStudyActivity : AppCompatActivity() {
             viewBinding.locationHead.dropdownTitle.text = oldStudy.location
             for (i in locationList){
                 if(i.name == oldStudy.location){
+                    selectedLocationIndex = locationList.indexOf(i)
                     i.isSelected = true
-                    viewBinding.locationList.adapter!!.notifyItemChanged(locationList.indexOf(i))
+                    viewBinding.locationList.adapter = CallbackSingleRVAdapter(locationList, selectedLocationIndex) {
+                        Log.d("location", it.toString())
+                        viewBinding.locationHead.dropdownTitle.text = locationList[it].name
+                    }
                     break
                 }
             }
