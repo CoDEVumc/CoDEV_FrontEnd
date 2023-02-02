@@ -1,6 +1,7 @@
 package com.example.codev
 
 import java.io.Serializable
+import java.sql.Timestamp
 
 data class ResGetRecruitDetail(
     val code:Int,
@@ -23,7 +24,7 @@ data class RecruitDetail(
     val co_mainImg: String,
     val co_process: String,
     val co_deadLine: String,
-    val updatedAt: String,
+    val updatedAt: Timestamp,
     val status: Boolean,
     val co_heartCount: Int,
     val co_heart: Boolean,
