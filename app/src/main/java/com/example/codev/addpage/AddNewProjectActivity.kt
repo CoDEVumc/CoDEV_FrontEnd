@@ -312,6 +312,12 @@ class AddNewProjectActivity : AppCompatActivity() {
 
             //setLocation
             viewBinding.locationHead.dropdownTitle.text = oldProject.location
+            for (i in locationList){
+                if(i.name == oldProject.location){
+                    i.isSelected = true
+                    viewBinding.locationList.adapter!!.notifyItemChanged(locationList.indexOf(i))
+                }
+            }
 
             //setDeadline
             dateJsonString = oldProject.deadLine

@@ -257,6 +257,15 @@ class AddNewStudyActivity : AppCompatActivity() {
 
             //setPartName(stack1Name)
             viewBinding.stack1Head.dropdownTitle.text = oldStudy.partName
+            for (i in stack1List){
+                if(i.name == oldStudy.partName){
+                    i.isSelected = true
+                    viewBinding.stack1List.adapter!!.notifyItemChanged(stack1List.indexOf(i))
+                    selectedStack1Index = stack1List.indexOf(i)
+                    viewBinding.stack2List.adapter = getStack2Adapter(allStackList[selectedStack1Index]!!)
+                    break
+                }
+            }
 
             //setPartNumber
             ////setPartNumber
@@ -276,7 +285,13 @@ class AddNewStudyActivity : AppCompatActivity() {
 
             //setLocation
             viewBinding.locationHead.dropdownTitle.text = oldStudy.location
-
+            for (i in locationList){
+                if(i.name == oldStudy.location){
+                    i.isSelected = true
+                    viewBinding.locationList.adapter!!.notifyItemChanged(locationList.indexOf(i))
+                    break
+                }
+            }
             //setDeadline
             dateJsonString = oldStudy.deadLine
             viewBinding.deadlineHead.dropdownTitle.text = oldStudy.deadLine.replace("-", "/")
