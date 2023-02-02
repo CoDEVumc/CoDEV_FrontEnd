@@ -53,7 +53,6 @@ class RecruitListFragment : Fragment() {
             0 -> loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag) //기본으로 0page PData 가져오기
             1 -> loadSData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag) //기본으로 0page PData 가져오기
         }
-
     }
     override fun onCreateView(
         inflater: LayoutInflater,

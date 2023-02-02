@@ -5,6 +5,8 @@ import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
@@ -16,11 +18,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AdapterRecruitProjectList(private val context: Context, private val listData: ArrayList<PData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterMyBookmarkProjectList(private val context: Context, private val listData: ArrayList<BookmarkPData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return  ProjectItemViewHolder(context,RecycleRecruitListBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return  ProjectItemViewHolder(context, RecycleRecruitListBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     //뷰 홀더에 데이터 바인딩
@@ -37,7 +39,7 @@ class AdapterRecruitProjectList(private val context: Context, private val listDa
 
     //Item의 ViewHolder 객체
     inner class ProjectItemViewHolder(val context: Context, private val binding: RecycleRecruitListBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: PData, position: Int){
+        fun bind(data: BookmarkPData, position: Int){
             //프로젝트 제목
             binding.title.text = data.co_title
 

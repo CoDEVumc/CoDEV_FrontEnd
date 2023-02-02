@@ -21,8 +21,12 @@
             android:name=".addpage.PfDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".activity_my_bookmark"
-            android:exported="false"/>
+            android:name=".MyBookmarkActivity"
+            android:exported="false">
+                <meta-data
+                    android:name="android.app.lib_name"
+                    android:value="" />
+        </activity>
         <activity
             android:name=".addpage.AddPfPageActivity"
             android:exported="false" />
