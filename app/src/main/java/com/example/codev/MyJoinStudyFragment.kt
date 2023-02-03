@@ -8,16 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.codev.databinding.FragmentMyApplyStudyBinding
+import com.example.codev.databinding.FragmentMyJoinStudyBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.ArrayList
 
-class MyApplyStudyFragment :Fragment(){
-    private lateinit var viewBinding: FragmentMyApplyStudyBinding
+class MyJoinStudyFragment :Fragment(){
+    private lateinit var viewBinding: FragmentMyJoinStudyBinding
 
-    private lateinit var adapterSData: AdapterMyApplyStudyList
+    private lateinit var adapterSData: AdapterMyJoinStudyList
 
     override fun onResume() {
         super.onResume()
@@ -29,38 +29,38 @@ class MyApplyStudyFragment :Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewBinding = FragmentMyApplyStudyBinding.inflate(layoutInflater)
+        viewBinding = FragmentMyJoinStudyBinding.inflate(layoutInflater)
 
         return viewBinding.root
     }
 
     private fun loadSData(context: Context){
-        RetrofitClient.service.getApplyList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
-            ,"study").enqueue(object:Callback<ResApplyList> {
-            override fun onResponse(call: Call<ResApplyList>, response: Response<ResApplyList>) {
+        RetrofitClient.service.getJoinList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+            ,"study").enqueue(object:Callback<ResJoinList> {
+            override fun onResponse(call: Call<ResJoinList>, response: Response<ResJoinList>) {
                 if(response.isSuccessful.not()){
-                    Log.d("test: 지원한 스터디 불러오기 실패",response.toString())
+                    Log.d("test: 참여한 스터디 불러오기 실패",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
                 when(response.code()){
                     200 -> {
                         response.body()?.let {
-                            Log.d("test: 지원한 스터디 불러오기 성공", "\n${it.toString()}")
+                            Log.d("test: 참여한 스터디 불러오기 성공", "\n${it.toString()}")
                             setSAdapter(it.result.Complete, context)
                         }
                     }
                 }
             }
 
-            override fun onFailure(call: Call<ResApplyList>, t: Throwable) {
+            override fun onFailure(call: Call<ResJoinList>, t: Throwable) {
                 Log.d("test", "[Fail]${t.toString()}")
             }
         })
     }
 
-    private fun setSAdapter(studyList: ArrayList<ApplyData>, context: Context){
+    private fun setSAdapter(studyList: ArrayList<JoinData>, context: Context){
         if(studyList.size != 0){
-            adapterSData = AdapterMyApplyStudyList(context, studyList)
+            adapterSData = AdapterMyJoinStudyList(context, studyList)
             viewBinding.listviewStudy.adapter = adapterSData
         }
     }

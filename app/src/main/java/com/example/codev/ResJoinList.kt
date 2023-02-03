@@ -3,14 +3,15 @@ package com.example.codev
 import java.util.*
 import kotlin.collections.ArrayList
 
-data class ResApplyStudyList(
+data class ResJoinList(
     val code : Int,
-    val result: ResponseOfGetApplyStudy
+    val result: ResponseOfGetJoinList
 )
-data class ResponseOfGetApplyStudy(
-    val Complete: ArrayList<ApplySData>
+data class ResponseOfGetJoinList(
+    val Complete: ArrayList<JoinData>
 )
-data class ApplySData(
+data class JoinData(
+    val co_projectId: Int,
     val co_studyId: Int,
     val co_email: String,
     val co_title: String,
@@ -25,6 +26,7 @@ data class ApplySData(
     val co_heartCount: Int,
     var co_heart: Boolean,
     val co_part: String,
+    val co_parts: String,
     val co_total: Int,
     val co_languages: String,
     val co_recruitStatus: Boolean,

@@ -80,6 +80,13 @@ class MyFragment:Fragment() {
             startActivity(intent)
         }
 
+        viewBinding.btnJoin.setOnClickListener {
+            val intent = Intent(mainAppActivity, MyJoinActivity::class.java)
+            startActivity(intent)
+        }
+
+
+
 
 
 
