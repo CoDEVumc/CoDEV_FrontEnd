@@ -6,10 +6,14 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.NestedScrollView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.codev.addpage.*
 import com.example.codev.databinding.ActivityRecruitDetailBinding
 import com.google.gson.JsonObject
@@ -18,7 +22,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
+
 
 class RecruitDetailActivity:AppCompatActivity() {
     private lateinit var viewBinding: ActivityRecruitDetailBinding
@@ -57,7 +61,25 @@ class RecruitDetailActivity:AppCompatActivity() {
             }
         }
 
-        //스크롤 위치가 이미지 indicator 정도 오면 툴바 배경 흰색으로 변경 필요
+        //스크롤 위치가 이미지 indicator 정도 오면 툴바 배경 흰색으로 변경
+        val toolbarHeight = dpToPx(this@RecruitDetailActivity,56.0f)
+        var toolbarColor: String = ""
+        viewBinding.scrollView.setOnScrollChangeListener(object: NestedScrollView.OnScrollChangeListener{
+            override fun onScrollChange(v: NestedScrollView, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int) {
+                Log.d("test", "indicator의 top Y좌표 : " +  viewBinding.indicator.top + ", 현재 스크롤 Y좌표 + 툴바 높이 : " + (scrollY + toolbarHeight))
+                if (scrollY + toolbarHeight >= viewBinding.indicator.top){
+                    if (toolbarColor != "WHITE"){
+                        viewBinding.toolbarRecruit.toolbar3.setBackgroundColor(getColor(R.color.white))
+                        toolbarColor = "WHITE"
+                    }
+                }else{
+                    if (toolbarColor != "TRANSPARENT"){
+                        viewBinding.toolbarRecruit.toolbar3.setBackgroundColor(getColor(R.color.transparent))
+                        toolbarColor = "TRANSPARENT"
+                    }
+                }
+            }
+        })
 
         setSupportActionBar(viewBinding.toolbarRecruit.toolbar3)
         supportActionBar?.apply {
@@ -356,6 +378,10 @@ class RecruitDetailActivity:AppCompatActivity() {
 
             })
         }
+    }
+
+    fun dpToPx(context: Context, dp: Float): Float {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics)
     }
 
     @SuppressLint("SimpleDateFormat")
