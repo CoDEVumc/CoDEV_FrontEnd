@@ -1,194 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="400dp"
-    android:layout_height="wrap_content"
-    android:background="@drawable/recruit_popup_dialog_background"
-    >
+    android:layout_height="wrap_content">
+
 
     <RadioGroup
-        android:id="@+id/radioGroup_loc"
+        android:id="@+id/rg1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="92dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.142"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="52dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_reset"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/btn16"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
-            android:button="@drawable/register_chk"
-            android:text="@string/filter_loc_16_text" />
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/btn17"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
-            android:button="@drawable/register_chk"
-            android:text="@string/filter_loc_17_text" />
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/btn18"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
-            android:button="@drawable/register_chk"
-            android:text="@string/filter_loc_18_text" />
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/btn13"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
-            android:button="@drawable/register_chk"
-            android:text="@string/filter_loc_13_text" />
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/btn14"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
-            android:button="@drawable/register_chk"
-            android:text="@string/filter_loc_14_text" />
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/btn15"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
-            android:button="@drawable/register_chk"
-            android:text="@string/filter_loc_15_text" />
-
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/btn10"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
-            android:button="@drawable/register_chk"
-            android:text="@string/filter_loc_10_text" />
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/btn11"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
-            android:button="@drawable/register_chk"
-            android:text="@string/filter_loc_11_text" />
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/btn12"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
-            android:button="@drawable/register_chk"
-            android:text="@string/filter_loc_12_text" />
-
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/btn7"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
-            android:button="@drawable/register_chk"
-            android:text="@string/filter_loc_7_text" />
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/btn8"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
-            android:button="@drawable/register_chk"
-            android:text="@string/filter_loc_8_text" />
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/btn9"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
-            android:button="@drawable/register_chk"
-            android:text="@string/filter_loc_9_text" />
-
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/btn4"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
-            android:button="@drawable/register_chk"
-            android:text="@string/filter_loc_4_text" />
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/btn5"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
-            android:button="@drawable/register_chk"
-            android:text="@string/filter_loc_5_text" />
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/btn6"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
-            android:button="@drawable/register_chk"
-            android:text="@string/filter_loc_6_text" />
-
+        app:layout_constraintTop_toBottomOf="@+id/logo_loc3">
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/btn1"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
             android:button="@drawable/register_chk"
-            android:text="@string/filter_loc_1_text" />
+            android:text="@string/filter_loc_1_text"
+            android:layout_marginBottom="12dp"/>
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn4"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_4_text"
+            android:layout_marginBottom="12dp"/>
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn7"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_7_text"
+            android:layout_marginBottom="12dp"/>
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn10"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_10_text"
+            android:layout_marginBottom="12dp"/>
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn13"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_13_text"
+            android:layout_marginBottom="12dp"/>
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn16"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_16_text" />
+    </RadioGroup>
+    <RadioGroup
+        android:id="@+id/rg2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="52dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_reset"
+        app:layout_constraintStart_toEndOf="@+id/rg1"
+        app:layout_constraintTop_toBottomOf="@+id/logo_loc3">
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/btn2"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
             android:button="@drawable/register_chk"
-            android:text="@string/filter_loc_2_text" />
+            android:text="@string/filter_loc_2_text"
+            android:layout_marginBottom="12dp"/>
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn5"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_5_text"
+            android:layout_marginBottom="12dp"/>
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn8"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_8_text"
+            android:layout_marginBottom="12dp"/>
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn11"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_11_text"
+            android:layout_marginBottom="12dp"/>
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn14"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_14_text"
+            android:layout_marginBottom="12dp"/>
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn17"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_17_text" />
+
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/rg3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="52dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_reset"
+        app:layout_constraintStart_toEndOf="@+id/rg2"
+        app:layout_constraintTop_toBottomOf="@+id/logo_loc3">
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/btn3"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
             android:button="@drawable/register_chk"
-            android:text="@string/filter_loc_3_text" />
+            android:text="@string/filter_loc_3_text"
+            android:layout_marginBottom="12dp"
+            />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn6"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_6_text"
+            android:layout_marginBottom="12dp"/>
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn9"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_9_text"
+            android:layout_marginBottom="12dp"/>
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn12"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_12_text"
+            android:layout_marginBottom="12dp"/>
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn15"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_15_text"
+            android:layout_marginBottom="12dp"/>
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/btn18"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:button="@drawable/register_chk"
+            android:text="@string/filter_loc_18_text" />
     </RadioGroup>
 
+
+
     <TextView
-        android:id="@+id/logo_loc2"
+        android:id="@+id/logo_loc3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -205,7 +204,7 @@
         app:layout_constraintVertical_bias="0.082" />
 
     <TextView
-        android:id="@+id/logo_part2"
+        android:id="@+id/logo_part3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
@@ -243,7 +242,7 @@
         android:id="@+id/btn_select"
         android:layout_width="172dp"
         android:layout_height="38dp"
-        android:layout_marginStart="164dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="323dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="36dp"
@@ -252,8 +251,7 @@
         android:text="적용하기"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.767"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_reset"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.908" />
 
