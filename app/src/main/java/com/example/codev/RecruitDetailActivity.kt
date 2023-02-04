@@ -112,6 +112,27 @@ class RecruitDetailActivity:AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    //글 작성자 설정
+    private fun setWriterMode(){
+        menuInflater.inflate(R.menu.menu_toolbar_detail, viewBinding.toolbarRecruit.toolbar3.menu)
+        viewBinding.btn1.text = "연장하기"
+        viewBinding.btn2.text = "지원현황"
+    }
+
+    //지원했으며 모집중인 상태와 심사중과 모집완료 상태 설정
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun setViewerMode(status: Boolean, process: String){
+        if (status && process == "ING"){
+            viewBinding.btn2.isSelected = true
+            viewBinding.btn2.text = "지원취소"
+        } else if(process!="ING"){
+            viewBinding.btn2.text = "지원마감"
+            viewBinding.btn2.setTextColor(getColor(R.color.black_500))
+            viewBinding.btn2.background = getDrawable(R.drawable.recruit_detail_btn2_disabled)
+            viewBinding.btn2.isEnabled = false
+        }
+    }
+
     //모집글 삭제
     private fun confirmDelete(context: Context, id: Int, finishPage: () -> Unit){
         // 다이얼로그를 생성하기 위해 Builder 클래스 생성자를 이용해 줍니다.
@@ -200,25 +221,11 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     viewBinding.heartCount.text = it.result.Complete.co_heartCount.toString()
                                     viewBinding.heart.isChecked = it.result.Complete.co_heart
 
-                                    //지원현황 activity로 전환, 연장하기 기능
+                                    //글 작성자, 글 관찰자 설정
                                     if (it.result.Complete.co_email == it.result.Complete.co_viewer){
-                                        menuInflater.inflate(R.menu.menu_toolbar_detail, viewBinding.toolbarRecruit.toolbar3.menu)
-                                        viewBinding.btn1.text = "연장하기"
-                                        viewBinding.btn2.text = "지원현황"
-                                    }
-
-                                    //지원취소
-                                    if (it.result.Complete.status){
-                                        viewBinding.btn2.isSelected = true
-                                        viewBinding.btn2.text = "지원취소"
-                                    }
-
-                                    //지원마감
-                                    if(it.result.Complete.co_process!="ING"){
-                                        viewBinding.btn2.text = "지원마감"
-                                        viewBinding.btn2.setTextColor(getColor(R.color.black_500))
-                                        viewBinding.btn2.background = getDrawable(R.drawable.recruit_detail_btn2_disabled)
-                                        viewBinding.btn2.isEnabled = false
+                                        setWriterMode()
+                                    }else{
+                                        setViewerMode(it.result.Complete.status, it.result.Complete.co_process)
                                     }
 
                                     val stackList = LinkedHashMap<Int, String>()
@@ -266,25 +273,11 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     viewBinding.heartCount.text = it.result.Complete.co_heartCount.toString()
                                     viewBinding.heart.isChecked = it.result.Complete.co_heart
 
-                                    //지원현황 activity로 전환, 연장하기 기능
+                                    //글 작성자, 글 관찰자 설정
                                     if (it.result.Complete.co_email == it.result.Complete.co_viewer){
-                                        menuInflater.inflate(R.menu.menu_toolbar_detail, viewBinding.toolbarRecruit.toolbar3.menu)
-                                        viewBinding.btn1.text = "연장하기"
-                                        viewBinding.btn2.text = "지원현황"
-                                    }
-
-                                    //지원취소
-                                    if (it.result.Complete.status){
-                                        viewBinding.btn2.isSelected = true
-                                        viewBinding.btn2.text = "지원취소"
-                                    }
-
-                                    //지원마감
-                                    if(it.result.Complete.co_process!="ING"){
-                                        viewBinding.btn2.text = "지원마감"
-                                        viewBinding.btn2.setTextColor(getColor(R.color.black_500))
-                                        viewBinding.btn2.background = getDrawable(R.drawable.recruit_detail_btn2_disabled)
-                                        viewBinding.btn2.isEnabled = false
+                                        setWriterMode()
+                                    }else{
+                                        setViewerMode(it.result.Complete.status, it.result.Complete.co_process)
                                     }
 
                                     val stackList = LinkedHashMap<Int, String>()
