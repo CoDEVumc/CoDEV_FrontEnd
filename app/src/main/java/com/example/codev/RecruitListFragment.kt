@@ -1,6 +1,8 @@
 package com.example.codev
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.core.app.NotificationCompat.getColor
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.codev.databinding.FragmentRecruitListBinding
@@ -179,9 +182,11 @@ class RecruitListFragment : Fragment() {
             coLocationTag = it
             if(coLocationTag != "") {
                 viewBinding.loc.text = coLocationTag
+                viewBinding.loc.setTextColor(resources.getColor(R.color.green_900))
             }
             else{
                 viewBinding.loc.text = "지역"
+                viewBinding.loc.setTextColor(resources.getColor(R.color.black_500))
             }
             when(now){
                 0 -> {
@@ -202,9 +207,11 @@ class RecruitListFragment : Fragment() {
             coPartTag = it
             if(coPartTag != "") {
                 viewBinding.part.text = coPartTag
+                viewBinding.loc.setTextColor(resources.getColor(R.color.green_900))
             }
             else{
                 viewBinding.part.text = "분야"
+                viewBinding.loc.setTextColor(resources.getColor(R.color.black_500))
             }
             when(now){
                 0 -> {

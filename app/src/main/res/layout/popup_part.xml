@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="360dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/recruit_popup_dialog_background"
-    >
+    android:background="@drawable/recruit_popup_dialog_background">
+
+    <View
+        android:id="@+id/btn_close"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="220dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/close_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/logo_part"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
         android:id="@+id/radioGroup_part"
@@ -93,7 +104,8 @@
         app:layout_constraintVertical_bias="0.082" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_reset2"
+        android:id="@+id/btn_reset"
+        style="@style/Text.Body4.SemiBold"
         android:layout_width="124dp"
         android:layout_height="38dp"
         android:layout_marginStart="24dp"
@@ -101,31 +113,28 @@
         android:layout_marginEnd="212dp"
         android:layout_marginBottom="36dp"
         android:background="@drawable/recruit_detail_btn1"
-        style="@style/Text.Body4.SemiBold"
         android:text="초기화"
         android:textColor="@color/black_500"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.091"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.908" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_select2"
+        android:id="@+id/btn_select"
         android:layout_width="172dp"
         android:layout_height="38dp"
-        android:layout_marginStart="164dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="323dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="36dp"
+        android:textColor="@color/white"
         android:background="@drawable/recruit_detail_btn2_unselected"
         android:fontFamily="@font/pretendard_regular"
         android:text="적용하기"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.767"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_reset"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.908" />
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

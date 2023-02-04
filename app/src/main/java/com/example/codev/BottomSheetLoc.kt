@@ -1,17 +1,25 @@
 package com.example.codev
 
+import android.app.Dialog
+import android.app.ProgressDialog.show
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import com.example.codev.databinding.PopupLocBinding
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class BottomSheetLoc(private val returnLoc: (String) -> Unit) : BottomSheetDialogFragment(){
-    //private lateinit var popupLocBinding: PopupLocBinding
     private lateinit var popupLocBinding: PopupLocBinding
+    private lateinit var dlg : BottomSheetDialog
 
     var loc: String=""
 
@@ -23,7 +31,8 @@ class BottomSheetLoc(private val returnLoc: (String) -> Unit) : BottomSheetDialo
         super.onCreateView(inflater, container, savedInstanceState)
         popupLocBinding = PopupLocBinding.inflate(layoutInflater)
 
-        //        //rg1
+
+        //rg1
         popupLocBinding.btn1.setOnClickListener{
             popupLocBinding.rg2.clearCheck()
             popupLocBinding.rg3.clearCheck()
@@ -284,17 +293,41 @@ class BottomSheetLoc(private val returnLoc: (String) -> Unit) : BottomSheetDialo
             popupLocBinding.rg2.clearCheck()
             popupLocBinding.rg3.clearCheck()
             //Log.d("test: ", "초기화 버튼 누름")
-            //popupLocBinding.radioGroupLoc.clearCheck()
+        }
+
+        popupLocBinding.btnClose.setOnClickListener {
+            dismiss()
+        }
+
+        popupLocBinding.logoPart.setOnClickListener {
+
         }
 
         return popupLocBinding.root
-        //return inflater.inflate(R.layout.popup_loc, container, false)
     }
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+    }
+
+    //배경 투명처리
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        // 이 코드를 실행하지 않으면
+        // XML에서 round 처리를 했어도 적용되지 않는다.
+        dlg = ( super.onCreateDialog(savedInstanceState).apply {
+            // window?.setDimAmount(0.2f) // Set dim amount here
+            setOnShowListener {
+                val bottomSheet = findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                bottomSheet.setBackgroundResource(android.R.color.transparent)
+
+                // 아래와 같이하면 Drag를 불가능하게 한다.
+                //val behavior = BottomSheetBehavior.from(bottomSheet!!)
+                //behavior.isDraggable = false
+            }
+        } ) as BottomSheetDialog
+        return dlg
     }
 
 
