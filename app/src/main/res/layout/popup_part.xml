@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/recruit_popup_dialog_background">
+    android:background="@drawable/recruit_popup_dialog1_background">
 
     <View
         android:id="@+id/btn_close"
