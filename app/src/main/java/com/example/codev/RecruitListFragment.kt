@@ -145,6 +145,48 @@ class RecruitListFragment : Fragment() {
             popupMenu.show()
         }
 
+        /*
+        viewBinding.toolbarRecruit.toolbarImg.setOnClickListener {
+            popupMenu.setOnMenuItemClickListener {
+                downpage = 0
+                lastPage = false //없으면 페이지 전환시 무한스크롤 작동x
+                // (이유: 스터디 화면에서 페이지 끝까지 닿으면 lastpage = true -> addOnScrollListener의 조건에 의해 더이상 downpage가 증가하지 x)
+                // S화면 끝까지 닿았다가 P화면 전환 시 P화면 무한스크롤 x
+                if(now == 0){ //현재 프로젝트 화면이면
+                    pdataList = ArrayList()
+                    sdataList = ArrayList()
+                    when (it.itemId) { //프->스
+                        R.id.m_study -> {
+                            now = 1
+                            Toast.makeText(mainAppActivity, "스터디", Toast.LENGTH_SHORT).show()
+                            viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_study)
+                            loadSData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
+                            Log.d("test: (1나와야 돼) now : ",now.toString())
+                            true
+                        }
+                        else -> false
+                    }
+                }
+                else { //현재 스터디 화면이면
+                    pdataList = ArrayList()
+                    sdataList = ArrayList()
+                    when (it.itemId) { //스->프
+                        R.id.m_project -> {
+                            now = 0
+                            Toast.makeText(mainAppActivity, "프로젝트", Toast.LENGTH_SHORT).show()
+                            viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_project)
+                            loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
+                            Log.d("test: (0나와야 돼) now : ",now.toString())
+                            true
+                        }
+                        else -> false
+                    }
+                }
+            }
+            popupMenu.show()
+        }
+        */
+
 
         viewBinding.toolbarRecruit.toolbar1.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -278,7 +320,6 @@ class RecruitListFragment : Fragment() {
         }
 
         //작성버튼 누르면 작성페이지로 이동
-        viewBinding.floatingActionButton.top
         val bottomSheetWrite = BottomSheetWrite(){
             write = it
             Log.d("test :", write+" 버튼 누름")
@@ -308,10 +349,12 @@ class RecruitListFragment : Fragment() {
             bottomSheetSort.show(childFragmentManager, bottomSheetSort.tag)
         }
 
+
         //플로팅 작성버튼
         viewBinding.floatingActionButton.setOnClickListener {
             bottomSheetWrite.show(childFragmentManager, bottomSheetWrite.tag)
         }
+
 
 
 

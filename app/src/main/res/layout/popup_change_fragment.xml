@@ -9,9 +9,7 @@
         android:id="@+id/select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="23dp"
         android:background="@drawable/recruit_popup_write_background"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -46,20 +44,6 @@
 
         </RadioGroup>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="76dp"
-        android:src="@drawable/recruit_fab_close"
-        app:backgroundTint="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/select"
-        app:layout_constraintTop_toBottomOf="@+id/select" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -84,53 +84,12 @@ class BottomSheetWrite(private val returnWrite: (String) -> Unit) : DialogFragme
         popupWriteBinding.btnWriteStudy.setOnClickListener {
             dismiss()
         }
-    }
-
-    fun View.dpToPx(dp: Float): Int = context.dpToPx(dp)
-    fun Context.dpToPx(dp: Float): Int = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics).toInt()
-
-    // pop을 관리하기 싫어서 closure로 생성함
-    data class PopupInfo(
-        val v : View,
-        val width  : Int,
-        val height : Int,
-        val x  : Int,
-        val y : Int
-    )
-
-    // makePopupClosure를 한 번에 실행
-    fun Context.quickPopup(toView: View, fnSetup : (()->Unit ) -> PopupInfo){
-        fun makePopupClosure(toView: View, fnSetup : (()->Unit ) -> PopupInfo) : ()->Unit{
-            var pop : PopupWindow? = null
-            fun dismiss() = pop?.dismiss()
-            return {
-
-                val popInfo = fnSetup(::dismiss)
-
-                val width  = if(popInfo.width == 0 ){
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                } else dpToPx(popInfo.width.toFloat())
-
-                val height = if(popInfo.height == 0 ){
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                } else dpToPx(popInfo.height.toFloat())
-
-                pop = PopupWindow(
-                    popInfo.v,
-                    width,
-                    height,
-                    true
-                ).apply {
-                    showAsDropDown(toView, popInfo.x, popInfo.y)
-                }
-            }
+        popupWriteBinding.floatingActionButton.setOnClickListener{
+            dismiss()
         }
-
-        makePopupClosure(toView){
-                dismiss ->
-            fnSetup(dismiss)
-        }.apply { this() }
     }
+
+
 
     //배경 투명처리
 //    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -151,5 +110,4 @@ class BottomSheetWrite(private val returnWrite: (String) -> Unit) : DialogFragme
 //    }
 
 }
-private fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 
