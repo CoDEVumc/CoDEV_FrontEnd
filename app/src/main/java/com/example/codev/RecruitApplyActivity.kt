@@ -25,7 +25,7 @@ class RecruitApplyActivity:AppCompatActivity() {
     private lateinit var adapter: AdapterPortfolio3
     private var portfolioId: Int = -1
     private var part: String = ""
-    private var chooseStatus: Int = -1
+    private var partchooseStatus: Int = -1
 
 
     @SuppressLint("SetTextI18n")
@@ -61,7 +61,7 @@ class RecruitApplyActivity:AppCompatActivity() {
 
             viewBinding.partList.adapter = CallbackSingleRVAdapter(partSelectList, -1){
                 Log.d("test", it.toString())
-                chooseStatus = it
+                partchooseStatus = it
                 viewBinding.part.dropdownTitle.text = partSelectList[it].name
                 part = partSelectList[it].name
                 if (viewBinding.part.dropdownTitle.currentTextColor != getColor(R.color.green_900)){
@@ -84,7 +84,7 @@ class RecruitApplyActivity:AppCompatActivity() {
             viewBinding.textPart.isGone = true
             viewBinding.part.root.isGone = true
             viewBinding.partList.isGone = true
-            chooseStatus = 0
+            partchooseStatus = 0
             checkNextBtn()
         }
 
@@ -149,7 +149,7 @@ class RecruitApplyActivity:AppCompatActivity() {
     }
 
     private fun checkNextBtn() {
-        if(chooseStatus != -1 && portfolioId != -1){
+        if(partchooseStatus != -1 && portfolioId != -1){
             nextBtnEnable(true)
         }else{
             nextBtnEnable(false)
