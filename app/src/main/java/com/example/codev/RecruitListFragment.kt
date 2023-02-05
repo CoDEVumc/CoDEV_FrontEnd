@@ -105,45 +105,81 @@ class RecruitListFragment : Fragment() {
 
 
         //툴바에서 프 <-> 스 전환
-        viewBinding.toolbarRecruit.toolbarImg.setOnClickListener {
-            popupMenu.setOnMenuItemClickListener {
-                downpage = 0
-                lastPage = false //없으면 페이지 전환시 무한스크롤 작동x
-                // (이유: 스터디 화면에서 페이지 끝까지 닿으면 lastpage = true -> addOnScrollListener의 조건에 의해 더이상 downpage가 증가하지 x)
-                // S화면 끝까지 닿았다가 P화면 전환 시 P화면 무한스크롤 x
-                if(now == 0){ //현재 프로젝트 화면이면
+        var chg: Int
+        val popupChangeFragment = PopupChangeFragment(){
+            chg = it //누른게 넘어와
+            Log.d("test : 0이면 플젝버튼누름 1이면 스터디버튼누름 :", now.toString())
+
+            downpage = 0
+            lastPage = false //없으면 페이지 전환시 무한스크롤 작동x
+            // (이유: 스터디 화면에서 페이지 끝까지 닿으면 lastpage = true -> addOnScrollListener의 조건에 의해 더이상 downpage가 증가하지 x)
+            // S화면 끝까지 닿았다가 P화면 전환 시 P화면 무한스크롤 x
+            when(chg){
+                0 -> { //0 넘어옴 스->프
                     pdataList = ArrayList()
                     sdataList = ArrayList()
-                    when (it.itemId) { //프->스
-                        R.id.m_study -> {
-                            now = 1
-                            Toast.makeText(mainAppActivity, "스터디", Toast.LENGTH_SHORT).show()
-                            viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_study)
-                            loadSData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
-                            Log.d("test: (1나와야 돼) now : ",now.toString())
-                            true
-                        }
-                        else -> false
-                    }
+                    now = 0
+                    Toast.makeText(mainAppActivity, "프로젝트", Toast.LENGTH_SHORT).show()
+                    viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_project)
+                    loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
+                    Log.d("test: (0나와야 돼) now : ",now.toString())
+                    true
                 }
-                else { //현재 스터디 화면이면
+                1 -> { //1넘어옴 프->스
                     pdataList = ArrayList()
                     sdataList = ArrayList()
-                    when (it.itemId) { //스->프
-                        R.id.m_project -> {
-                            now = 0
-                            Toast.makeText(mainAppActivity, "프로젝트", Toast.LENGTH_SHORT).show()
-                            viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_project)
-                            loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
-                            Log.d("test: (0나와야 돼) now : ",now.toString())
-                            true
-                        }
-                        else -> false
-                    }
+                    now = 1
+                    Toast.makeText(mainAppActivity, "스터디", Toast.LENGTH_SHORT).show()
+                    viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_study)
+                    loadSData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
+                    Log.d("test: (1나와야 돼) now : ",now.toString())
+                    true
                 }
             }
-            popupMenu.show()
         }
+        viewBinding.toolbarRecruit.toolbarImg.setOnClickListener {
+            popupChangeFragment.show(childFragmentManager, popupChangeFragment.tag)
+        }
+
+//        viewBinding.toolbarRecruit.toolbarImg.setOnClickListener {
+//            popupMenu.setOnMenuItemClickListener {
+//                downpage = 0
+//                lastPage = false //없으면 페이지 전환시 무한스크롤 작동x
+//                // (이유: 스터디 화면에서 페이지 끝까지 닿으면 lastpage = true -> addOnScrollListener의 조건에 의해 더이상 downpage가 증가하지 x)
+//                // S화면 끝까지 닿았다가 P화면 전환 시 P화면 무한스크롤 x
+//                if(now == 0){ //현재 프로젝트 화면이면
+//                    pdataList = ArrayList()
+//                    sdataList = ArrayList()
+//                    when (it.itemId) { //프->스
+//                        R.id.m_study -> {
+//                            now = 1
+//                            Toast.makeText(mainAppActivity, "스터디", Toast.LENGTH_SHORT).show()
+//                            viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_study)
+//                            loadSData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
+//                            Log.d("test: (1나와야 돼) now : ",now.toString())
+//                            true
+//                        }
+//                        else -> false
+//                    }
+//                }
+//                else { //현재 스터디 화면이면
+//                    pdataList = ArrayList()
+//                    sdataList = ArrayList()
+//                    when (it.itemId) { //스->프
+//                        R.id.m_project -> {
+//                            now = 0
+//                            Toast.makeText(mainAppActivity, "프로젝트", Toast.LENGTH_SHORT).show()
+//                            viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_project)
+//                            loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
+//                            Log.d("test: (0나와야 돼) now : ",now.toString())
+//                            true
+//                        }
+//                        else -> false
+//                    }
+//                }
+//            }
+//            popupMenu.show()
+//        }
 
         /*
         viewBinding.toolbarRecruit.toolbarImg.setOnClickListener {
