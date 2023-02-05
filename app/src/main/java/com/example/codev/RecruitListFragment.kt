@@ -141,94 +141,24 @@ class RecruitListFragment : Fragment() {
             popupChangeFragment.show(childFragmentManager, popupChangeFragment.tag)
         }
 
-//        viewBinding.toolbarRecruit.toolbarImg.setOnClickListener {
-//            popupMenu.setOnMenuItemClickListener {
-//                downpage = 0
-//                lastPage = false //없으면 페이지 전환시 무한스크롤 작동x
-//                // (이유: 스터디 화면에서 페이지 끝까지 닿으면 lastpage = true -> addOnScrollListener의 조건에 의해 더이상 downpage가 증가하지 x)
-//                // S화면 끝까지 닿았다가 P화면 전환 시 P화면 무한스크롤 x
-//                if(now == 0){ //현재 프로젝트 화면이면
-//                    pdataList = ArrayList()
-//                    sdataList = ArrayList()
-//                    when (it.itemId) { //프->스
-//                        R.id.m_study -> {
-//                            now = 1
-//                            Toast.makeText(mainAppActivity, "스터디", Toast.LENGTH_SHORT).show()
-//                            viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_study)
-//                            loadSData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
-//                            Log.d("test: (1나와야 돼) now : ",now.toString())
-//                            true
-//                        }
-//                        else -> false
-//                    }
-//                }
-//                else { //현재 스터디 화면이면
-//                    pdataList = ArrayList()
-//                    sdataList = ArrayList()
-//                    when (it.itemId) { //스->프
-//                        R.id.m_project -> {
-//                            now = 0
-//                            Toast.makeText(mainAppActivity, "프로젝트", Toast.LENGTH_SHORT).show()
-//                            viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_project)
-//                            loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
-//                            Log.d("test: (0나와야 돼) now : ",now.toString())
-//                            true
-//                        }
-//                        else -> false
-//                    }
-//                }
-//            }
-//            popupMenu.show()
-//        }
-
-        /*
-        viewBinding.toolbarRecruit.toolbarImg.setOnClickListener {
-            popupMenu.setOnMenuItemClickListener {
-                downpage = 0
-                lastPage = false //없으면 페이지 전환시 무한스크롤 작동x
-                // (이유: 스터디 화면에서 페이지 끝까지 닿으면 lastpage = true -> addOnScrollListener의 조건에 의해 더이상 downpage가 증가하지 x)
-                // S화면 끝까지 닿았다가 P화면 전환 시 P화면 무한스크롤 x
-                if(now == 0){ //현재 프로젝트 화면이면
-                    pdataList = ArrayList()
-                    sdataList = ArrayList()
-                    when (it.itemId) { //프->스
-                        R.id.m_study -> {
-                            now = 1
-                            Toast.makeText(mainAppActivity, "스터디", Toast.LENGTH_SHORT).show()
-                            viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_study)
-                            loadSData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
-                            Log.d("test: (1나와야 돼) now : ",now.toString())
-                            true
-                        }
-                        else -> false
-                    }
+        //알림 (알람) 버튼에 popup sample 프래그먼트 연결
+        var clicked: String = ""
+        val popupSampleFragment = PopupSampleFragment(){
+            clicked = it
+            Log.d("test : ", clicked+"버튼 누름")
+            when(clicked){
+                "yes" -> {
+                    Toast.makeText(mainAppActivity, "계속하기 누름", Toast.LENGTH_SHORT).show()
                 }
-                else { //현재 스터디 화면이면
-                    pdataList = ArrayList()
-                    sdataList = ArrayList()
-                    when (it.itemId) { //스->프
-                        R.id.m_project -> {
-                            now = 0
-                            Toast.makeText(mainAppActivity, "프로젝트", Toast.LENGTH_SHORT).show()
-                            viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_project)
-                            loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
-                            Log.d("test: (0나와야 돼) now : ",now.toString())
-                            true
-                        }
-                        else -> false
-                    }
+                "no" -> {
+                    Toast.makeText(mainAppActivity, "취소하기 누름", Toast.LENGTH_SHORT).show()
                 }
             }
-            popupMenu.show()
         }
-        */
-
-
         viewBinding.toolbarRecruit.toolbar1.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_search ->{
                     Toast.makeText(mainAppActivity, "검색", Toast.LENGTH_SHORT).show()
-
                     true
                 }
                 R.id.menu_bookmark ->{
@@ -245,11 +175,11 @@ class RecruitListFragment : Fragment() {
                             startActivity(intent)
                         }
                     }
-
                     true
                 }
                 R.id.menu_alarm ->{
                     Toast.makeText(mainAppActivity, "알람", Toast.LENGTH_SHORT).show()
+                    popupSampleFragment.show(childFragmentManager, popupSampleFragment.tag)
                     true
                 }
                 else -> false
