@@ -51,6 +51,11 @@ class RecruitDetailActivity:AppCompatActivity() {
         setContentView(viewBinding.root)
 
         viewBinding.toolbarRecruit.toolbar3.title = ""
+        setSupportActionBar(viewBinding.toolbarRecruit.toolbar3)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.left2)
+        }
 
         viewBinding.heart.setOnClickListener {
             request(this, type, id)
@@ -80,12 +85,6 @@ class RecruitDetailActivity:AppCompatActivity() {
                 }
             }
         })
-
-        setSupportActionBar(viewBinding.toolbarRecruit.toolbar3)
-        supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.left2)
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -112,16 +111,16 @@ class RecruitDetailActivity:AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    //글 작성자 설정
+    //글 작성자 설정, 연장히기와 지원현황 기능 필요
     private fun setWriterMode(){
         menuInflater.inflate(R.menu.menu_toolbar_detail, viewBinding.toolbarRecruit.toolbar3.menu)
         viewBinding.btn1.text = "연장하기"
         viewBinding.btn2.text = "지원현황"
     }
 
-    //지원했으며 모집중인 상태와 심사중과 모집완료 상태 설정
+    //지원했으며 모집중인 상태와 심사중과 모집완료 상태 설정, 지원취소 기능필요
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun setViewerMode(status: Boolean, process: String){
+    private fun setViewerMode(context: Context, type: String, status: Boolean, process: String){
         if (status && process == "ING"){
             viewBinding.btn2.isSelected = true
             viewBinding.btn2.text = "지원취소"
@@ -130,6 +129,17 @@ class RecruitDetailActivity:AppCompatActivity() {
             viewBinding.btn2.setTextColor(getColor(R.color.black_500))
             viewBinding.btn2.background = getDrawable(R.drawable.recruit_detail_btn2_disabled)
             viewBinding.btn2.isEnabled = false
+        }else{
+            //기본은 지원하기
+            viewBinding.btn2.setOnClickListener {
+                val intent = Intent(context, RecruitApplyActivity::class.java)
+                intent.putExtra("type",type)
+                startActivity(intent)
+            }
+        }
+        //기본은 문의하기
+        viewBinding.btn1.setOnClickListener {
+
         }
     }
 
@@ -225,7 +235,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     if (it.result.Complete.co_email == it.result.Complete.co_viewer){
                                         setWriterMode()
                                     }else{
-                                        setViewerMode(it.result.Complete.status, it.result.Complete.co_process)
+                                        setViewerMode(context, type, it.result.Complete.status, it.result.Complete.co_process)
                                     }
 
                                     val stackList = LinkedHashMap<Int, String>()
@@ -277,7 +287,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     if (it.result.Complete.co_email == it.result.Complete.co_viewer){
                                         setWriterMode()
                                     }else{
-                                        setViewerMode(it.result.Complete.status, it.result.Complete.co_process)
+                                        setViewerMode(context, type, it.result.Complete.status, it.result.Complete.co_process)
                                     }
 
                                     val stackList = LinkedHashMap<Int, String>()
