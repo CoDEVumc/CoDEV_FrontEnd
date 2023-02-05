@@ -58,6 +58,8 @@
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginTop="-8dp"
                 android:background="@drawable/dropdown_menu"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="vertical"
                 tools:listitem="@layout/list_item"
                 android:visibility="gone"/>
 
@@ -104,6 +106,7 @@
                 android:text="0/500"/>
 
             <TextView
+                android:id="@+id/text_portfolio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
@@ -114,6 +117,17 @@
                 android:textColor="@color/black_900"
                 style="@style/Text.Body4.SemiBold"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/text_portfolio"
+                app:layout_constraintBottom_toBottomOf="@+id/text_portfolio"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:textColor="@color/black_500"
+                style="@style/Text.Body6.Medium"
+                android:text="지원서 제목은 포트폴리오의 제목입니다."/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/portfolio"
                 android:layout_width="match_parent"
@@ -121,7 +135,10 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_content"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="54dp"/>
+                android:layout_marginTop="54dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="vertical"
+                tools:listitem="@layout/recycle_portfolio_item3"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/submit_button"
@@ -131,12 +148,13 @@
                 app:layout_constraintTop_toBottomOf="@id/portfolio"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginTop="52dp"
+                android:layout_marginTop="36dp"
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/register_button"
                 style="@style/Text.Body4.SemiBold"
-                android:textColor="@color/white"
-                android:text="지원하기"/>
+                android:textColor="@color/black_500"
+                android:text="지원하기"
+                android:enabled="false"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
