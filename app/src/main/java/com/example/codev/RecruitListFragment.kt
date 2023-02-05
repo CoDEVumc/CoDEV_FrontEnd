@@ -1,6 +1,7 @@
 package com.example.codev
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -10,11 +11,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.NotificationCompat.getColor
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.codev.addpage.AddNewProjectActivity
+import com.example.codev.databinding.FragmentMyBookmarkBinding
 import com.example.codev.databinding.FragmentRecruitListBinding
+import com.example.codev.databinding.PopupWriteBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -64,7 +71,8 @@ class RecruitListFragment : Fragment() {
     ): View? {
         viewBinding = FragmentRecruitListBinding.inflate(layoutInflater)
         var temp = viewBinding.toolbarRecruit.toolbar1
-        viewBinding.toolbarRecruit.toolbar1.inflateMenu(R.menu.menu_toolbar_2)
+        //viewBinding.toolbarRecruit.toolbar1.inflateMenu(R.menu.menu_toolbar_2)
+        viewBinding.toolbarRecruit.toolbar1.inflateMenu(R.menu.menu_toolbar_4)
         viewBinding.toolbarRecruit.toolbar1.title = ""
         var popupMenu = PopupMenu(mainAppActivity, temp)
         popupMenu.inflate(R.menu.menu_recruit)
@@ -142,6 +150,24 @@ class RecruitListFragment : Fragment() {
             when (it.itemId) {
                 R.id.menu_search ->{
                     Toast.makeText(mainAppActivity, "검색", Toast.LENGTH_SHORT).show()
+
+                    true
+                }
+                R.id.menu_bookmark ->{
+                    Toast.makeText(mainAppActivity, "북마크", Toast.LENGTH_SHORT).show()
+                    when(now) {
+                        0 -> {
+                            val intent = Intent(mainAppActivity, MyBookMarkActivity::class.java)
+                            intent.putExtra("now", now)
+                            startActivity(intent)
+                        }
+                        1 -> {
+                            val intent = Intent(mainAppActivity, MyBookMarkActivity::class.java)
+                            intent.putExtra("now", now)
+                            startActivity(intent)
+                        }
+                    }
+
                     true
                 }
                 R.id.menu_alarm ->{
@@ -182,11 +208,11 @@ class RecruitListFragment : Fragment() {
             coLocationTag = it
             if(coLocationTag != "") {
                 viewBinding.loc.text = coLocationTag
-                viewBinding.loc.setTextColor(resources.getColor(R.color.green_900))
+                viewBinding.loc.setTextColor(ContextCompat.getColor(requireActivity().applicationContext, R.color.green_900))
             }
             else{
                 viewBinding.loc.text = "지역"
-                viewBinding.loc.setTextColor(resources.getColor(R.color.black_500))
+                viewBinding.loc.setTextColor(ContextCompat.getColor(requireActivity().applicationContext, R.color.black_500))
             }
             when(now){
                 0 -> {
@@ -207,11 +233,12 @@ class RecruitListFragment : Fragment() {
             coPartTag = it
             if(coPartTag != "") {
                 viewBinding.part.text = coPartTag
-                viewBinding.loc.setTextColor(resources.getColor(R.color.green_900))
+                viewBinding.part.setTextColor(ContextCompat.getColor(requireActivity().applicationContext, R.color.green_900))
+
             }
             else{
                 viewBinding.part.text = "분야"
-                viewBinding.loc.setTextColor(resources.getColor(R.color.black_500))
+                viewBinding.part.setTextColor(ContextCompat.getColor(requireActivity().applicationContext, R.color.black_500))
             }
             when(now){
                 0 -> {
@@ -250,6 +277,13 @@ class RecruitListFragment : Fragment() {
             Log.d("coSortingTag: ",coSortingTag)
         }
 
+        //작성버튼 누르면 작성페이지로 이동
+        viewBinding.floatingActionButton.top
+        val bottomSheetWrite = BottomSheetWrite(){
+            write = it
+            Log.d("test :", write+" 버튼 누름")
+        }
+
         //지역 버튼 --> 선택 한거로 바껴있어야 됨(내용&색)
         viewBinding.loc.setOnClickListener {
             bottomSheetLoc.show(childFragmentManager, bottomSheetLoc.tag)
@@ -274,14 +308,12 @@ class RecruitListFragment : Fragment() {
             bottomSheetSort.show(childFragmentManager, bottomSheetSort.tag)
         }
 
-        val bottomSheetWrite = BottomSheetWrite(){
-            write = it
-            Log.d("test :", write+" 버튼 누름")
-        }
         //플로팅 작성버튼
         viewBinding.floatingActionButton.setOnClickListener {
             bottomSheetWrite.show(childFragmentManager, bottomSheetWrite.tag)
         }
+
+
 
         return viewBinding.root
     }

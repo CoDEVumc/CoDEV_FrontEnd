@@ -14,11 +14,13 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.codev.databinding.PopupLocBinding
+import com.example.codev.databinding.PopupPartBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class BottomSheetLoc(private val returnLoc: (String) -> Unit) : BottomSheetDialogFragment(){
     private lateinit var popupLocBinding: PopupLocBinding
+    private lateinit var popupPartBinding: PopupPartBinding
     private lateinit var dlg : BottomSheetDialog
 
     var loc: String=""
@@ -300,7 +302,8 @@ class BottomSheetLoc(private val returnLoc: (String) -> Unit) : BottomSheetDialo
         }
 
         popupLocBinding.logoPart.setOnClickListener {
-
+            loc = "change"
+            returnLoc(loc)
         }
 
         return popupLocBinding.root

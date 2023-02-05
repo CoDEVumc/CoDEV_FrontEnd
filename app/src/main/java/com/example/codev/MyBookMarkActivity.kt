@@ -27,6 +27,12 @@ class MyBookMarkActivity : AppCompatActivity() {
         viewBinding = ActivityMyBookmarkBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
+        val now = intent.getIntExtra("now", -1)
+        val bundle = Bundle()
+        bundle.putInt("now", now)
+        val fragment = MyBookMarkFragment()
+        fragment.arguments = bundle
+
         viewBinding.toolbarMy.toolbar2.title = ""
         viewBinding.toolbarMy.toolbarText.text = "북마크"
         setSupportActionBar(viewBinding.toolbarMy.toolbar2)
@@ -37,7 +43,7 @@ class MyBookMarkActivity : AppCompatActivity() {
 
         supportFragmentManager
             .beginTransaction()
-            .replace(viewBinding.container.id, MyBookMarkFragment())
+            .replace(viewBinding.container.id, fragment)
             .commitAllowingStateLoss()
 
     }
