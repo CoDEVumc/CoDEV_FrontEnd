@@ -165,4 +165,11 @@ interface RetrofitService {
 
     @DELETE("study/recruitment/{coStudyId}")
     fun cancelStudy(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int) : Call<JsonObject>
+
+    @PATCH("project/recruitment/extension/{coProjectId}")
+    fun extendProject(@Header("CoDev_Authorization") header: String, @Path("coProjectId") coProjectId: Int, @Body params: ReqExtendProject) : Call<JsonObject>
+
+    @PATCH("study/recruitment/extension/{coStudyId}")
+    fun extendStudy(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int, @Body params: ReqExtendStudy) : Call<JsonObject>
+
 }

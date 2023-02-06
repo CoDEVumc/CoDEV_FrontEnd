@@ -1,9 +1,11 @@
 package com.example.codev
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -38,7 +40,7 @@ class RecruitDetailActivity:AppCompatActivity() {
         type = intent.getStringExtra("type").toString()
         dday = intent.getStringExtra("dday").toString()
         Log.d("test: 상세페이지 넘어온 type, id", "$type : $id")
-        if (id != -1 && type != null && dday != null) {
+        if (id != -1) {
             loadRecruitDetail(this, type, id, dday)
         }
     }
@@ -111,10 +113,24 @@ class RecruitDetailActivity:AppCompatActivity() {
     }
 
     //글 작성자 설정, 연장히기와 지원현황 기능 필요
-    private fun setWriterMode(){
+    private fun setWriterMode(context: Context, type: String){
         menuInflater.inflate(R.menu.menu_toolbar_detail, viewBinding.toolbarRecruit.toolbar3.menu)
         viewBinding.btn1.text = "연장하기"
         viewBinding.btn2.text = "지원현황"
+        viewBinding.btn1.setOnClickListener {
+            val cal = Calendar.getInstance()    //캘린더뷰 만들기
+            val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                val dateShowString = "${year}/${month+1}/${dayOfMonth}"
+                val dateJsonString = String.format("%d-%02d-%d", year, month + 1, dayOfMonth)
+                Log.d("test",dateJsonString)
+                extend(context, type, id, dateJsonString)
+            }
+            val dpd = DatePickerDialog(this, dateSetListener, cal.get(Calendar.YEAR),cal.get(
+                Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH))
+            dpd.datePicker.minDate = System.currentTimeMillis()
+            dpd.datePicker.maxDate = (System.currentTimeMillis() + 3.156e+10).toLong()
+            dpd.show()
+        }
     }
 
     //지원했으며 모집중인 상태와 심사중과 모집완료 상태 설정, 지원취소 기능필요
@@ -125,9 +141,6 @@ class RecruitDetailActivity:AppCompatActivity() {
             viewBinding.btn2.text = "지원취소"
             viewBinding.btn2.setOnClickListener {
                 cancel(context, type, id)
-                val intent = intent
-                finish()
-                startActivity(intent)
             }
         } else if(process!="ING"){
             viewBinding.btn2.text = "지원마감"
@@ -241,7 +254,7 @@ class RecruitDetailActivity:AppCompatActivity() {
 
                                     //글 작성자, 글 관찰자 설정
                                     if (it.result.Complete.co_email == it.result.Complete.co_viewer){
-                                        setWriterMode()
+                                        setWriterMode(context, type)
                                     }else{
                                         setViewerMode(context, type, it.result.Complete.co_recruitStatus, it.result.Complete.co_process)
                                     }
@@ -294,7 +307,7 @@ class RecruitDetailActivity:AppCompatActivity() {
 
                                     //글 작성자, 글 관찰자 설정
                                     if (it.result.Complete.co_email == it.result.Complete.co_viewer){
-                                        setWriterMode()
+                                        setWriterMode(context, type)
                                     }else{
                                         setViewerMode(context, type, it.result.Complete.co_recruitStatus, it.result.Complete.co_process)
                                     }
@@ -404,6 +417,9 @@ class RecruitDetailActivity:AppCompatActivity() {
                         200 -> {
                             response.body()?.let {
                                 Log.d("test: 취소 성공", "\n${it.toString()}")
+                                val intent = intent
+                                finish()
+                                startActivity(intent)
                             }
                         }
                     }
@@ -424,6 +440,59 @@ class RecruitDetailActivity:AppCompatActivity() {
                         200 -> {
                             response.body()?.let {
                                 Log.d("test: 취소 성공", "\n${it.toString()}")
+                                val intent = intent
+                                finish()
+                                startActivity(intent)
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Log.d("test", "[Fail]${t.toString()}")
+                }
+            })
+        }
+    }
+
+    private fun extend(context: Context, type: String, id: Int, deadLine: String){
+        if (type == "PROJECT"){
+            RetrofitClient.service.extendProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqExtendProject(deadLine)).enqueue(object: Callback<JsonObject>{
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    if(response.isSuccessful.not()){
+                        Log.d("test: 연장 실패",response.toString())
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    when(response.code()){
+                        200 -> {
+                            response.body()?.let {
+                                Log.d("test: 연장 성공", "\n${it.toString()}")
+                                val intent = intent
+                                finish()
+                                startActivity(intent)
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Log.d("test", "[Fail]${t.toString()}")
+                }
+            })
+        }else if(type == "STUDY"){
+            RetrofitClient.service.extendStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqExtendStudy(deadLine)).enqueue(object: Callback<JsonObject>{
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    if(response.isSuccessful.not()){
+                        Log.d("test: 연장 실패",response.toString())
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    when(response.code()){
+                        200 -> {
+                            response.body()?.let {
+                                Log.d("test: 연장 성공", "\n${it.toString()}")
+                                val intent = intent
+                                finish()
+                                startActivity(intent)
                             }
                         }
                     }
