@@ -91,7 +91,8 @@
                 android:paddingStart="12dp"
                 android:paddingTop="9dp"
                 android:paddingEnd="12dp"
-                android:inputType="textMultiLine"/>
+                android:inputType="textMultiLine"
+                android:maxLength="500"/>
 
             <TextView
                 android:id="@+id/content_text_counter"
