@@ -153,4 +153,23 @@ interface RetrofitService {
 
     @DELETE("study/{coStudyId}")
     fun deleteStudy(@Path("coStudyId") coStudyId:Int,@Header("CoDev_Authorization") header: String) : Call<JsonObject>
+
+    @POST("project/submission/{coProjectId}")
+    fun applyProject(@Header("CoDev_Authorization") header: String, @Path("coProjectId") coProjectId: Int, @Body params: ReqApplyProject) : Call<JsonObject>
+
+    @POST("study/submission/{coStudyId}")
+    fun applyStudy(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int, @Body params: ReqApplyStudy) : Call<JsonObject>
+
+    @DELETE("project/recruitment/{coProjectId}")
+    fun cancelProject(@Header("CoDev_Authorization") header: String, @Path("coProjectId") coProjectId: Int) : Call<JsonObject>
+
+    @DELETE("study/recruitment/{coStudyId}")
+    fun cancelStudy(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int) : Call<JsonObject>
+
+    @PATCH("project/recruitment/extension/{coProjectId}")
+    fun extendProject(@Header("CoDev_Authorization") header: String, @Path("coProjectId") coProjectId: Int, @Body params: ReqExtendProject) : Call<JsonObject>
+
+    @PATCH("study/recruitment/extension/{coStudyId}")
+    fun extendStudy(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int, @Body params: ReqExtendStudy) : Call<JsonObject>
+
 }

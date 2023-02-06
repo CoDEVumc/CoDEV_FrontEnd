@@ -17,5 +17,5 @@ data class EditPF(
     val intro: String, //나를 표현하는 한 마디
     val content: String,
 
-    val linkListString: String, //리스트로 이미지 Url를 보내주세요, 없으면 null값으로
+    val linkListString: String?, //리스트로 이미지 Url를 보내주세요, 없으면 null값으로
 ) : Serializable
