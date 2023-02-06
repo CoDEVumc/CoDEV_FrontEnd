@@ -8,220 +8,239 @@
     <!-- Toolbar -->
     <include
         android:id="@+id/toolbar_my"
-        layout="@layout/toolbar1"/>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/profile"
-        android:layout_width="match_parent"
-        android:layout_height="84dp"
+        layout="@layout/toolbar1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_my"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-        <ImageView
-            android:id="@+id/profile_img"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="24dp"
-            android:src="@drawable/my_profile"/>
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@+id/profile_img"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="25dp"
-            style="@style/Text.Heading4"
-            android:textColor="@color/black_900"/>
-
-        <TextView
-            android:id="@+id/email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@+id/profile_img"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="46dp"
-            style="@style/Text.Body6.SemiBold"
-            android:textColor="@color/black_500"/>
-        
-        <ImageView
-            android:id="@+id/btn_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="24dp"
-            android:src="@drawable/right"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/my_bar"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/portfolio"
-        android:layout_width="match_parent"
-        android:layout_height="157dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:text="포트폴리오"
-            style="@style/Text.Body3.SemiBold"
-            android:textColor="@color/black_900"/>
-        
-        <TextView
-            android:id="@+id/btn_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="29dp"
-            android:layout_marginEnd="24dp"
-            android:text="더보기"
-            style="@style/Text.Body5.Regular"
-            android:textColor="@color/black_700"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycle_portfolio"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_more"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:orientation="horizontal"
-            tools:listitem="@layout/recycle_portfolio_item1"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:nestedScrollingEnabled="false"
-            android:overScrollMode="never"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/my_bar"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/portfolio"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_my"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:text="내 활동"
-            style="@style/Text.Body3.SemiBold"
-            android:textColor="@color/black_900"/>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_bookmark"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="65dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/my_button"
-            android:text="북마크"
-            style="@style/Text.Body4.SemiBold"
-            android:textColor="@color/black_700"
-            android:gravity="start"
-            android:paddingStart="14dp"
-            android:paddingTop="17dp"
-            tools:ignore="RtlSymmetry"/>
+            android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_write"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_bookmark"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/my_button"
-            android:text="작성한 글 / 댓글"
-            style="@style/Text.Body4.SemiBold"
-            android:textColor="@color/black_700"
-            android:gravity="start"
-            android:paddingStart="14dp"
-            android:paddingTop="17dp"
-            tools:ignore="RtlSymmetry"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/profile"
+                android:layout_width="match_parent"
+                android:layout_height="84dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_apply"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_write"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/my_button"
-            android:text="지원 현황"
-            style="@style/Text.Body4.SemiBold"
-            android:textColor="@color/black_700"
-            android:gravity="start"
-            android:paddingStart="14dp"
-            android:paddingTop="17dp"
-            tools:ignore="RtlSymmetry"/>
+                <ImageView
+                    android:id="@+id/profile_img"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginStart="24dp"
+                    android:src="@drawable/my_profile"/>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_part"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_apply"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/my_button"
-            android:text="참여 현황"
-            style="@style/Text.Body4.SemiBold"
-            android:textColor="@color/black_700"
-            android:gravity="start"
-            android:paddingStart="14dp"
-            android:paddingTop="17dp"
-            tools:ignore="RtlSymmetry"/>
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@+id/profile_img"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="25dp"
+                    style="@style/Text.Heading4"
+                    android:textColor="@color/black_900"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@+id/profile_img"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="46dp"
+                    style="@style/Text.Body6.SemiBold"
+                    android:textColor="@color/black_500"/>
+
+                <ImageView
+                    android:id="@+id/btn_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginEnd="24dp"
+                    android:src="@drawable/right"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:background="@drawable/my_bar"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/portfolio"
+                android:layout_width="match_parent"
+                android:layout_height="157dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profile"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:text="포트폴리오"
+                    style="@style/Text.Body3.SemiBold"
+                    android:textColor="@color/black_900"/>
+
+                <TextView
+                    android:id="@+id/btn_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="29dp"
+                    android:layout_marginEnd="24dp"
+                    android:text="더보기"
+                    style="@style/Text.Body5.Regular"
+                    android:textColor="@color/black_700"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycle_portfolio"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_more"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:orientation="horizontal"
+                    tools:listitem="@layout/recycle_portfolio_item1"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:background="@drawable/my_bar"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/portfolio"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="26dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:text="내 활동"
+                    style="@style/Text.Body3.SemiBold"
+                    android:textColor="@color/black_900"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_bookmark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="65dp"
+                    android:layout_marginEnd="24dp"
+                    android:background="@drawable/my_button"
+                    android:text="북마크"
+                    style="@style/Text.Body4.SemiBold"
+                    android:textColor="@color/black_700"
+                    android:gravity="start"
+                    android:paddingStart="14dp"
+                    android:paddingTop="17dp"
+                    tools:ignore="RtlSymmetry"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_write"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_bookmark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="24dp"
+                    android:background="@drawable/my_button"
+                    android:text="작성한 글 / 댓글"
+                    style="@style/Text.Body4.SemiBold"
+                    android:textColor="@color/black_700"
+                    android:gravity="start"
+                    android:paddingStart="14dp"
+                    android:paddingTop="17dp"
+                    tools:ignore="RtlSymmetry"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_apply"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_write"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="24dp"
+                    android:background="@drawable/my_button"
+                    android:text="지원 현황"
+                    style="@style/Text.Body4.SemiBold"
+                    android:textColor="@color/black_700"
+                    android:gravity="start"
+                    android:paddingStart="14dp"
+                    android:paddingTop="17dp"
+                    tools:ignore="RtlSymmetry"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_join"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_apply"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="24dp"
+                    android:background="@drawable/my_button"
+                    android:text="참여 현황"
+                    style="@style/Text.Body4.SemiBold"
+                    android:textColor="@color/black_700"
+                    android:gravity="start"
+                    android:paddingStart="14dp"
+                    android:paddingTop="17dp"
+                    tools:ignore="RtlSymmetry"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

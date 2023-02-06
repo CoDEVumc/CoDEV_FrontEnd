@@ -424,7 +424,9 @@ class AddNewProjectActivity : AppCompatActivity() {
 
                                     if(loadedImageNumber == allUrlNumber){
                                         val imageMultiPartListUsingFile = project2Server.createImageMultiPartListUsingFile(imageFileList)
-                                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartListUsingFile) { finish() }
+                                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartListUsingFile) {
+                                            for(deleteFile in imageFileList) deleteFile.delete()
+                                            finish() }
                                     }
                                 }
                                 override fun onLoadCleared(placeholder: Drawable?) {
