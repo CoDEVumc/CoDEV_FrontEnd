@@ -138,8 +138,7 @@ class PfDetailActivity : AppCompatActivity() {
     fun setData(context: Context, pfData: RealDataPF) {
 
         //setImage
-        Glide.with(context).load(pfData.profileImg).error(R.drawable.my_profile).circleCrop()
-            .fitCenter().into(viewBinding.userImage)
+        Glide.with(context).load(pfData.profileImg).error(R.drawable.my_profile).circleCrop().into(viewBinding.userImage)
 
         viewBinding.userName.setText(pfData.co_name) //name
 

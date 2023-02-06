@@ -1,9 +1,11 @@
 package com.example.codev
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -12,8 +14,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.NestedScrollView
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.codev.addpage.*
 import com.example.codev.databinding.ActivityRecruitDetailBinding
 import com.google.gson.JsonObject
@@ -31,6 +31,7 @@ class RecruitDetailActivity:AppCompatActivity() {
     private var dday: String = ""
     private lateinit var studyData: EditStudy
     private lateinit var projectData: EditProject
+    private var partList: ArrayList<RecruitPartLimit> = arrayListOf()
 
     override fun onResume() {
         super.onResume()
@@ -39,8 +40,8 @@ class RecruitDetailActivity:AppCompatActivity() {
         type = intent.getStringExtra("type").toString()
         dday = intent.getStringExtra("dday").toString()
         Log.d("test: 상세페이지 넘어온 type, id", "$type : $id")
-        if (id != -1 && type != null && dday != null) {
-            loadRecruitDetail(this,type,id,dday)
+        if (id != -1) {
+            loadRecruitDetail(this, type, id, dday)
         }
     }
 
@@ -51,6 +52,11 @@ class RecruitDetailActivity:AppCompatActivity() {
         setContentView(viewBinding.root)
 
         viewBinding.toolbarRecruit.toolbar3.title = ""
+        setSupportActionBar(viewBinding.toolbarRecruit.toolbar3)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.left2)
+        }
 
         viewBinding.heart.setOnClickListener {
             request(this, type, id)
@@ -80,12 +86,6 @@ class RecruitDetailActivity:AppCompatActivity() {
                 }
             }
         })
-
-        setSupportActionBar(viewBinding.toolbarRecruit.toolbar3)
-        supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.left2)
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -112,24 +112,54 @@ class RecruitDetailActivity:AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    //글 작성자 설정
-    private fun setWriterMode(){
+    //글 작성자 설정, 연장히기와 지원현황 기능 필요
+    private fun setWriterMode(context: Context, type: String){
         menuInflater.inflate(R.menu.menu_toolbar_detail, viewBinding.toolbarRecruit.toolbar3.menu)
         viewBinding.btn1.text = "연장하기"
         viewBinding.btn2.text = "지원현황"
+        viewBinding.btn1.setOnClickListener {
+            val cal = Calendar.getInstance()    //캘린더뷰 만들기
+            val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                val dateShowString = "${year}/${month+1}/${dayOfMonth}"
+                val dateJsonString = String.format("%d-%02d-%d", year, month + 1, dayOfMonth)
+                Log.d("test",dateJsonString)
+                extend(context, type, id, dateJsonString)
+            }
+            val dpd = DatePickerDialog(this, dateSetListener, cal.get(Calendar.YEAR),cal.get(
+                Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH))
+            dpd.datePicker.minDate = System.currentTimeMillis()
+            dpd.datePicker.maxDate = (System.currentTimeMillis() + 3.156e+10).toLong()
+            dpd.show()
+        }
     }
 
-    //지원했으며 모집중인 상태와 심사중과 모집완료 상태 설정
+    //지원했으며 모집중인 상태와 심사중과 모집완료 상태 설정, 지원취소 기능필요
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun setViewerMode(status: Boolean, process: String){
+    private fun setViewerMode(context: Context, type: String, status: Boolean, process: String){
         if (status && process == "ING"){
             viewBinding.btn2.isSelected = true
             viewBinding.btn2.text = "지원취소"
+            viewBinding.btn2.setOnClickListener {
+                cancel(context, type, id)
+            }
         } else if(process!="ING"){
             viewBinding.btn2.text = "지원마감"
             viewBinding.btn2.setTextColor(getColor(R.color.black_500))
             viewBinding.btn2.background = getDrawable(R.drawable.recruit_detail_btn2_disabled)
             viewBinding.btn2.isEnabled = false
+        }else{
+            //기본은 지원하기
+            viewBinding.btn2.setOnClickListener {
+                val intent = Intent(context, RecruitApplyActivity::class.java)
+                intent.putExtra("recruitId", id)
+                intent.putExtra("type", type)
+                intent.putExtra("partList", partList)
+                startActivity(intent)
+            }
+        }
+        //기본은 문의하기
+        viewBinding.btn1.setOnClickListener {
+
         }
     }
 
@@ -207,7 +237,8 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     Log.d("test: projectId",it.result.Complete.co_projectId.toString())
                                     Log.d("test: studyId",it.result.Complete.co_studyId.toString())
                                     setStackAdapter(context, it.result.Complete.co_languageList)
-                                    setPartAdapter(context,it.result.Complete.co_partList)
+                                    partList = it.result.Complete.co_partList
+                                    setPartAdapter(context,partList)
                                     setImageAdapter(context,it.result.Complete.co_photos)
                                     viewBinding.type.text = "프로젝트"
                                     viewBinding.name.text = it.result.Complete.co_nickname
@@ -223,9 +254,9 @@ class RecruitDetailActivity:AppCompatActivity() {
 
                                     //글 작성자, 글 관찰자 설정
                                     if (it.result.Complete.co_email == it.result.Complete.co_viewer){
-                                        setWriterMode()
+                                        setWriterMode(context, type)
                                     }else{
-                                        setViewerMode(it.result.Complete.status, it.result.Complete.co_process)
+                                        setViewerMode(context, type, it.result.Complete.co_recruitStatus, it.result.Complete.co_process)
                                     }
 
                                     val stackList = LinkedHashMap<Int, String>()
@@ -259,7 +290,8 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     Log.d("test: projectId",it.result.Complete.co_projectId.toString())
                                     Log.d("test: studyId",it.result.Complete.co_studyId.toString())
                                     setStackAdapter(context, it.result.Complete.co_languageList)
-                                    setPartAdapter(context,arrayListOf(RecruitPartLimit(it.result.Complete.co_part,it.result.Complete.co_total)))
+                                    partList = arrayListOf(RecruitPartLimit(it.result.Complete.co_part,it.result.Complete.co_total))
+                                    setPartAdapter(context, partList)
                                     setImageAdapter(context,it.result.Complete.co_photos)
                                     viewBinding.type.text = "스터디"
                                     viewBinding.name.text = it.result.Complete.co_nickname
@@ -275,9 +307,9 @@ class RecruitDetailActivity:AppCompatActivity() {
 
                                     //글 작성자, 글 관찰자 설정
                                     if (it.result.Complete.co_email == it.result.Complete.co_viewer){
-                                        setWriterMode()
+                                        setWriterMode(context, type)
                                     }else{
-                                        setViewerMode(it.result.Complete.status, it.result.Complete.co_process)
+                                        setViewerMode(context, type, it.result.Complete.co_recruitStatus, it.result.Complete.co_process)
                                     }
 
                                     val stackList = LinkedHashMap<Int, String>()
@@ -369,6 +401,106 @@ class RecruitDetailActivity:AppCompatActivity() {
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
 
+            })
+        }
+    }
+
+    private fun cancel(context: Context, type: String, id: Int){
+        if (type == "PROJECT"){
+            RetrofitClient.service.cancelProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<JsonObject>{
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    if(response.isSuccessful.not()){
+                        Log.d("test: 취소 실패",response.toString())
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    when(response.code()){
+                        200 -> {
+                            response.body()?.let {
+                                Log.d("test: 취소 성공", "\n${it.toString()}")
+                                val intent = intent
+                                finish()
+                                startActivity(intent)
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Log.d("test", "[Fail]${t.toString()}")
+                }
+            })
+        }else if(type == "STUDY"){
+            RetrofitClient.service.cancelStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<JsonObject>{
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    if(response.isSuccessful.not()){
+                        Log.d("test: 취소 실패",response.toString())
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    when(response.code()){
+                        200 -> {
+                            response.body()?.let {
+                                Log.d("test: 취소 성공", "\n${it.toString()}")
+                                val intent = intent
+                                finish()
+                                startActivity(intent)
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Log.d("test", "[Fail]${t.toString()}")
+                }
+            })
+        }
+    }
+
+    private fun extend(context: Context, type: String, id: Int, deadLine: String){
+        if (type == "PROJECT"){
+            RetrofitClient.service.extendProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqExtendProject(deadLine)).enqueue(object: Callback<JsonObject>{
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    if(response.isSuccessful.not()){
+                        Log.d("test: 연장 실패",response.toString())
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    when(response.code()){
+                        200 -> {
+                            response.body()?.let {
+                                Log.d("test: 연장 성공", "\n${it.toString()}")
+                                val intent = intent
+                                finish()
+                                startActivity(intent)
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Log.d("test", "[Fail]${t.toString()}")
+                }
+            })
+        }else if(type == "STUDY"){
+            RetrofitClient.service.extendStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqExtendStudy(deadLine)).enqueue(object: Callback<JsonObject>{
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    if(response.isSuccessful.not()){
+                        Log.d("test: 연장 실패",response.toString())
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    when(response.code()){
+                        200 -> {
+                            response.body()?.let {
+                                Log.d("test: 연장 성공", "\n${it.toString()}")
+                                val intent = intent
+                                finish()
+                                startActivity(intent)
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Log.d("test", "[Fail]${t.toString()}")
+                }
             })
         }
     }
