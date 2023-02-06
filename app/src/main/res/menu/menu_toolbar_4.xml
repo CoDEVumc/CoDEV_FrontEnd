@@ -8,9 +8,10 @@
         android:icon="@drawable/search"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/menu_mark"
+        android:id="@+id/menu_bookmark"
         android:enabled="true"
         android:title="@string/menu_mark"
+        android:icon="@drawable/bookmark"
         app:showAsAction="always"/>
     <item
         android:id="@+id/menu_alarm"

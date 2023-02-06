@@ -11,7 +11,7 @@ class AdapterMyBookMark(fragmentActivity: Fragment): FragmentStateAdapter(fragme
         return when(position){
             0 -> MyBookMarkProjectFragment()
             1 -> MyBookMarkStudyFragment()
-            else->MyBookMarkProjectFragment()
+            else -> MyBookMarkProjectFragment() //기본이 프로젝트
         }
     }
 

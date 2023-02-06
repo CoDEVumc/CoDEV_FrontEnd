@@ -25,6 +25,8 @@ class MyBookMarkFragment: Fragment() {
     ): View? {
         viewBinding = FragmentMyBookmarkBinding.inflate(layoutInflater)
 
+        val now = arguments?.getInt("now")
+
         viewBinding.viewpager.adapter = AdapterMyBookMark(this)
         val tabTitleArray = arrayOf(
             "프로젝트",
@@ -34,6 +36,10 @@ class MyBookMarkFragment: Fragment() {
         TabLayoutMediator(viewBinding.tabLayout, viewBinding.viewpager){tab, position ->
             tab.text = tabTitleArray[position]
         }.attach()
+
+        if (now != null) {
+            viewBinding.tabLayout.getTabAt(now)?.select()
+        }
 
 
         return viewBinding.root
