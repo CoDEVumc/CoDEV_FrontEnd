@@ -19,7 +19,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class HomeFragment:Fragment() {
+class HomeFragment():Fragment() {
     private lateinit var viewBinding: FragmentHomeBinding
     private lateinit var mainAppActivity: Context
 
@@ -85,6 +85,7 @@ class HomeFragment:Fragment() {
                 "https://w.namu.la/s/7f9203a6e7b7fb0f8df063e907fc54eaaf00b9cfeac023386da4f791c036859f07bd6eabbcb4e117a460744aae636effeacec15787a2209f2264f32d2fc92efd3a5c400d493236e123a75826ed3355de2b613f0fefc26e9437071855b49b976138efd60a63529822b85fde70a53bea7a", "2023 UMC 데모데이", "MakeUs")
         )
         setGameAdapter(tempGameList)
+
     }
     private fun setBannerAdapter(imgList: ArrayList<HomeBannerItem>){
         if(!imgList.isNullOrEmpty()){

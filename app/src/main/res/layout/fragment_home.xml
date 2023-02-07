@@ -11,13 +11,13 @@
         layout="@layout/toolbar1"/>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_home"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="58dp"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -218,6 +218,12 @@
                     tools:listitem="@layout/home_hot_game"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                app:layout_constraintTop_toBottomOf="@id/hot_game"/>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
