@@ -312,7 +312,6 @@ class AddPfPageActivity : AppCompatActivity() {
 
            viewBinding.inputPfContent.setText(oldPf.content)
 
-
            if(!oldPf.linkListString.isNullOrBlank()){
                val oldLinkList = oldPf.linkListString.split(",")
                for(i in oldLinkList){
@@ -341,7 +340,6 @@ class AddPfPageActivity : AppCompatActivity() {
                        linkTimeTextHashMap.remove(nowTime)
                        nowLinkNumber -= 1
                    }
-
                    linkView.inputOfTitle.hint = "링크를 입력하세요."
                    viewBinding.addLinkSection.addView(linkView.root)
                    nowLinkNumber += 1

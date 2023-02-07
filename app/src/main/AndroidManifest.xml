@@ -21,8 +21,12 @@
             android:name=".addpage.PfDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".activity_my_bookmark"
-            android:exported="false"/>
+            android:name=".MyBookMarkActivity"
+            android:exported="false">
+                <meta-data
+                    android:name="android.app.lib_name"
+                    android:value="" />
+        </activity>
         <activity
             android:name=".addpage.AddPfPageActivity"
             android:exported="false" />
@@ -128,6 +132,20 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".MyApplyActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".MyJoinActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".MyProfileActivity"
             android:exported="false">
             <meta-data
@@ -143,6 +161,25 @@
         </activity>
         <activity
             android:name=".RecruitDetailActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".RecruitDoneActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".RecruitApplyActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

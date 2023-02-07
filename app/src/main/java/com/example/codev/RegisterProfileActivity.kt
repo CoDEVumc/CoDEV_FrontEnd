@@ -57,19 +57,19 @@ class RegisterProfileActivity:AppCompatActivity() {
         reqSignUp = intent.getSerializableExtra("signUp") as ReqSignUp
 
         viewBinding.etNickname.addTextChangedListener(object: TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (viewBinding.etNickname.text.length <= 8){
-                    nextBtnEnable(true)
-                }else{
-                    nextBtnEnable(false)
-                }
-                viewBinding.count.text = (8 - viewBinding.etNickname.text.length).toString()
-            }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun afterTextChanged(p0: Editable?) {
+                if (p0 != null) {
+                    if (p0.length <= 8){
+                        nextBtnEnable(true)
+                    }else{
+                        nextBtnEnable(false)
+                    }
+                    viewBinding.count.text = (8 - p0.length).toString()
+                }
             }
         })
 

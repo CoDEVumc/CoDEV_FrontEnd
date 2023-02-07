@@ -39,6 +39,17 @@
                 android:textColor="@color/black_900"
                 style="@style/Text.Body4.SemiBold"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/text_pf_title"
+                app:layout_constraintBottom_toBottomOf="@+id/text_pf_title"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:textColor="@color/black_500"
+                style="@style/Text.Body6.Medium"
+                android:text="지원서 제목은 포트폴리오의 제목입니다."/>
+
             <include
                 android:id="@+id/input_pf_title"
                 android:layout_width="match_parent"

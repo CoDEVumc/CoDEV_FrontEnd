@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Toolbar -->
+    <include
+        android:id="@+id/toolbar_recruit"
+        layout="@layout/toolbar2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_recruit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp">
+
+            <TextView
+                android:id="@+id/text_part"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="4dp"
+                android:text="지원 분야"
+                android:textColor="@color/black_900"
+                style="@style/Text.Body4.SemiBold"/>
+
+            <include
+                android:id="@+id/part"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                layout="@layout/dropdown_layout"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginTop="50dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/part_list"
+                android:layout_width="match_parent"
+                android:layout_height="182dp"
+                app:layout_constraintTop_toBottomOf="@id/part"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginTop="-8dp"
+                android:background="@drawable/dropdown_menu"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="vertical"
+                tools:listitem="@layout/list_item"
+                android:visibility="gone"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/part_list"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="24dp"
+                android:text="지원 동기"
+                android:textColor="@color/black_900"
+                style="@style/Text.Body4.SemiBold"/>
+
+            <EditText
+                android:id="@+id/et_content"
+                android:layout_width="match_parent"
+                android:layout_height="178dp"
+                android:gravity="top"
+                app:layout_constraintTop_toBottomOf="@+id/part_list"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="54dp"
+                android:background="@drawable/recruit_et_background"
+                style="@style/Text.Body4.Regular"
+                android:textColor="@color/black_900"
+                android:hint="지원 동기를 작성해주세요"
+                android:textColorHint="@color/black_300"
+                android:paddingStart="12dp"
+                android:paddingTop="9dp"
+                android:paddingEnd="12dp"
+                android:inputType="textMultiLine"
+                android:maxLength="500"/>
+
+            <TextView
+                android:id="@+id/content_text_counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="@id/et_content"
+                app:layout_constraintBottom_toBottomOf="@id/et_content"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="10dp"
+                style="@style/Text.Body4.Regular"
+                android:textColor="@color/black_300"
+                android:text="0/500"/>
+
+            <TextView
+                android:id="@+id/text_portfolio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="24dp"
+                android:text="포트폴리오"
+                android:textColor="@color/black_900"
+                style="@style/Text.Body4.SemiBold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/text_portfolio"
+                app:layout_constraintBottom_toBottomOf="@+id/text_portfolio"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:textColor="@color/black_500"
+                style="@style/Text.Body6.Medium"
+                android:text="지원서 제목은 포트폴리오의 제목입니다."/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/portfolio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="54dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="vertical"
+                tools:listitem="@layout/recycle_portfolio_item3"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/submit_button"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/portfolio"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="36dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/register_button"
+                style="@style/Text.Body4.SemiBold"
+                android:textColor="@color/black_500"
+                android:text="지원하기"
+                android:enabled="false"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

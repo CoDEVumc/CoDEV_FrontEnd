@@ -107,5 +107,11 @@
     <string name="hot_qna_text">HOT한 질문글</string>
     <string name="hot_game_text">인기 공모전</string>
 
+    <string name="popup_txt">여기에 팝업 텍스트를 입력해주시면 됩니당아아아아아아아아아아아아아아아아아</string>
+
+    <string name="recruit_done1">모집 완료!</string>
+    <string name="recruit_done2">CODEV는 당신의 성장을 응원합니다.</string>
+    <string name="hint_chatroom">채팅방 이름 입력</string>
+
 
 </resources>

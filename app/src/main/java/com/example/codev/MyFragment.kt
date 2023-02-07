@@ -70,6 +70,26 @@ class MyFragment:Fragment() {
             startActivity(intent)
         }
 
+        viewBinding.btnBookmark.setOnClickListener {
+            val intent = Intent(mainAppActivity, MyBookMarkActivity::class.java)
+            startActivity(intent)
+        }
+
+        viewBinding.btnApply.setOnClickListener {
+            val intent = Intent(mainAppActivity, MyApplyActivity::class.java)
+            startActivity(intent)
+        }
+
+        viewBinding.btnJoin.setOnClickListener {
+            val intent = Intent(mainAppActivity, MyJoinActivity::class.java)
+            startActivity(intent)
+        }
+
+
+
+
+
+
         return viewBinding.root
     }
 
