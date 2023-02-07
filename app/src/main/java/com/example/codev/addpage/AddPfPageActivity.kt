@@ -312,38 +312,42 @@ class AddPfPageActivity : AppCompatActivity() {
 
            viewBinding.inputPfContent.setText(oldPf.content)
 
-           val oldLinkList = oldPf.linkListString.split(",")
-           for(i in oldLinkList){
-               val nowTime = System.currentTimeMillis()
-               linkTimeTextHashMap[nowTime] = i
-               val linkView = InputLayoutBinding.inflate(layoutInflater)
-               linkView.inputOfTitle.hint = "링크 입력 (최대 65536자)"
-               linkView.inputOfTitle.setText(i)
-               linkView.inputOfTitle.addTextChangedListener(object : TextWatcher {
-                   override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-                   override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-                   override fun afterTextChanged(s: Editable?) {
-                       linkTimeTextHashMap[nowTime] = s.toString()
-                       if(s.isNullOrBlank()) {
-                           linkView.inputOfTitle.error = "링크를 입력하세요."
-                       }else if(s.length > linkLimit){
-                           linkView.inputOfTitle.error = "링크가 ${linkLimit}자를 초과할 수 없습니다."
-                       }else{
-                           linkView.inputOfTitle.error = null
-                       }
-                   }
-               })
-               linkView.cancelButton.visibility = View.VISIBLE
-               linkView.cancelButton.setOnClickListener {
-                   viewBinding.addLinkSection.removeView(linkView.root)
-                   linkTimeTextHashMap.remove(nowTime)
-                   nowLinkNumber -= 1
-               }
 
-               linkView.inputOfTitle.hint = "링크를 입력하세요."
-               viewBinding.addLinkSection.addView(linkView.root)
-               nowLinkNumber += 1
+           if(!oldPf.linkListString.isNullOrBlank()){
+               val oldLinkList = oldPf.linkListString.split(",")
+               for(i in oldLinkList){
+                   val nowTime = System.currentTimeMillis()
+                   linkTimeTextHashMap[nowTime] = i
+                   val linkView = InputLayoutBinding.inflate(layoutInflater)
+                   linkView.inputOfTitle.hint = "링크 입력 (최대 65536자)"
+                   linkView.inputOfTitle.setText(i)
+                   linkView.inputOfTitle.addTextChangedListener(object : TextWatcher {
+                       override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+                       override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+                       override fun afterTextChanged(s: Editable?) {
+                           linkTimeTextHashMap[nowTime] = s.toString()
+                           if(s.isNullOrBlank()) {
+                               linkView.inputOfTitle.error = "링크를 입력하세요."
+                           }else if(s.length > linkLimit){
+                               linkView.inputOfTitle.error = "링크가 ${linkLimit}자를 초과할 수 없습니다."
+                           }else{
+                               linkView.inputOfTitle.error = null
+                           }
+                       }
+                   })
+                   linkView.cancelButton.visibility = View.VISIBLE
+                   linkView.cancelButton.setOnClickListener {
+                       viewBinding.addLinkSection.removeView(linkView.root)
+                       linkTimeTextHashMap.remove(nowTime)
+                       nowLinkNumber -= 1
+                   }
+
+                   linkView.inputOfTitle.hint = "링크를 입력하세요."
+                   viewBinding.addLinkSection.addView(linkView.root)
+                   nowLinkNumber += 1
+               }
            }
+
        }
 
 

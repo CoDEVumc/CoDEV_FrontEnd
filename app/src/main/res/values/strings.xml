@@ -101,6 +101,11 @@
     <string name="filter_part_3_text">디자인</string>
     <string name="filter_part_4_text">기획</string>
     <string name="filter_part_5_text">기타</string>
+    <string name="home_hot_project">인기 프로젝트</string>
+    <string name="hot_study_text">인기 스터디</string>
+    <string name="hot_post_text">실시간 인기 정보글</string>
+    <string name="hot_qna_text">HOT한 질문글</string>
+    <string name="hot_game_text">인기 공모전</string>
 
 
 </resources>
