@@ -51,41 +51,36 @@ class HomeFragment():Fragment() {
 
     private fun loadData(context: Context){
         var tempBannerList = ArrayList<HomeBannerItem>()
-        tempBannerList.add(
-            HomeBannerItem("https://w.namu.la/s/dc388bfca00f6fe727bd88f7489b11db7e431f56ff50c26bd692e7967f18563f8f726a524ef29bddba60f8828d2716063d6e3d8037608093bacab39ac69f6d425c02c191f036bdee450c791ece868a81c34926e8ad81c021cd4a0453dbbfddda29e77d03c8b242e55d45911da78433d8", "nayeon"))
-        tempBannerList.add(HomeBannerItem("https://w.namu.la/s/7f9203a6e7b7fb0f8df063e907fc54eaaf00b9cfeac023386da4f791c036859f07bd6eabbcb4e117a460744aae636effeacec15787a2209f2264f32d2fc92efd3a5c400d493236e123a75826ed3355de2b613f0fefc26e9437071855b49b976138efd60a63529822b85fde70a53bea7a", "Dahyun"))
+        tempBannerList.add(HomeBannerItem("http://semtle.catholic.ac.kr:8080/image?name=banner120230207154253.png", "banner1"))
+        tempBannerList.add(HomeBannerItem("http://semtle.catholic.ac.kr:8080/image?name=banner220230207154253.png", "banner2"))
+        tempBannerList.add(HomeBannerItem("http://semtle.catholic.ac.kr:8080/image?name=banner320230207154253.png", "banner3"))
+        tempBannerList.add(HomeBannerItem("http://semtle.catholic.ac.kr:8080/image?name=banner420230207154253.png", "banner4"))
+        tempBannerList.add(HomeBannerItem("http://semtle.catholic.ac.kr:8080/image?name=banner520230207154253.png", "banner5"))
         setBannerAdapter(tempBannerList)
 
         setProjectAdapter()
         setStudyAdapter()
 
         var tempPostList = ArrayList<HomeCommunityItem>()
-        tempPostList.add(HomeCommunityItem("현직자가 알려주는 면접 단골 질문 \uD83D\uDC68\uD83C\uDFFB\u200D\uD83D\uDCBB", "https://w.namu.la/s/dc388bfca00f6fe727bd88f7489b11db7e431f56ff50c26bd692e7967f18563f8f726a524ef29bddba60f8828d2716063d6e3d8037608093bacab39ac69f6d425c02c191f036bdee450c791ece868a81c34926e8ad81c021cd4a0453dbbfddda29e77d03c8b242e55d45911da78433d8", "02/04 20:45", 225, 3, 56))
+        tempPostList.add(HomeCommunityItem("현직자가 알려주는 면접 단골 질문 \uD83D\uDC68\uD83C\uDFFB\u200D\uD83D\uDCBB", "http://semtle.catholic.ac.kr:8080/image?name=post120230207155427.jpg", "02/04 20:45", 225, 3, 56))
         tempPostList.add(HomeCommunityItem("\uD83D\uDD0E 개발자를 위한 정보 검색 팁! ", null, "02/04 21:51", 100, 3, 45))
-        tempPostList.add(HomeCommunityItem("\uD83D\uDD25 UI/UX 디자이너 희망자라면 꼭 봐야 할 꿀팁!", "https://w.namu.la/s/7f9203a6e7b7fb0f8df063e907fc54eaaf00b9cfeac023386da4f791c036859f07bd6eabbcb4e117a460744aae636effeacec15787a2209f2264f32d2fc92efd3a5c400d493236e123a75826ed3355de2b613f0fefc26e9437071855b49b976138efd60a63529822b85fde70a53bea7a", "02/04 20:01", 103, 7, 56))
+        tempPostList.add(HomeCommunityItem("\uD83D\uDD25 UI/UX 디자이너 희망자라면 꼭 봐야 할 꿀팁!", "http://semtle.catholic.ac.kr:8080/image?name=post220230207155427.jpg", "02/04 20:01", 103, 7, 56))
         tempPostList.add(HomeCommunityItem("2023 블록체인 시리즈 세미나 \uD83C\uDF10", null, "02/04 20:00", 223, 2, 40))
         setPostView(tempPostList)
-        setQnaView(tempPostList)
+
+        var tempQnaList = ArrayList<HomeCommunityItem>()
+        tempQnaList.add(HomeCommunityItem("다들 개발 공부 어떤 식으로 하시나요?", null, "02/04 21:51", 2, 11, 5))
+        tempQnaList.add(HomeCommunityItem("이 에러 어떻게 해결하나요?", "http://semtle.catholic.ac.kr:8080/image?name=post320230207155427.jpg", "02/04 20:45", 1, 10, 5))
+        tempQnaList.add(HomeCommunityItem("개발자 취업 포트폴리오 어떻게 쌓나요?", "http://semtle.catholic.ac.kr:8080/image?name=post420230207155427.jpg", "02/04 20:01", 5, 16, 7))
+        tempQnaList.add(HomeCommunityItem("취업 시 학점 많이 중요한가요?", null, "02/04 20:00", 7, 7, 16))
+        setQnaView(tempQnaList)
 
         var tempGameList = ArrayList<HomeGameItem>()
-        tempGameList.add(
-            HomeGameItem(
-                "https://w.namu.la/s/dc388bfca00f6fe727bd88f7489b11db7e431f56ff50c26bd692e7967f18563f8f726a524ef29bddba60f8828d2716063d6e3d8037608093bacab39ac69f6d425c02c191f036bdee450c791ece868a81c34926e8ad81c021cd4a0453dbbfddda29e77d03c8b242e55d45911da78433d8", "2023 야간관광 특화도시 숏폼 공모전", "한국관광공사")
-        )
-        tempGameList.add(
-            HomeGameItem(
-                "https://w.namu.la/s/7f9203a6e7b7fb0f8df063e907fc54eaaf00b9cfeac023386da4f791c036859f07bd6eabbcb4e117a460744aae636effeacec15787a2209f2264f32d2fc92efd3a5c400d493236e123a75826ed3355de2b613f0fefc26e9437071855b49b976138efd60a63529822b85fde70a53bea7a", "2023 미래도서관 정책 아이디어 해커톤 대회", "국가도서관위원회")
-        )
-        tempGameList.add(
-            HomeGameItem(
-                "https://w.namu.la/s/dc388bfca00f6fe727bd88f7489b11db7e431f56ff50c26bd692e7967f18563f8f726a524ef29bddba60f8828d2716063d6e3d8037608093bacab39ac69f6d425c02c191f036bdee450c791ece868a81c34926e8ad81c021cd4a0453dbbfddda29e77d03c8b242e55d45911da78433d8", "2023 제 1 회 CCC 커튼콜 마케팅 공모전", "라이브콘테스트")
-        )
-        tempGameList.add(
-            HomeGameItem(
-                "https://w.namu.la/s/7f9203a6e7b7fb0f8df063e907fc54eaaf00b9cfeac023386da4f791c036859f07bd6eabbcb4e117a460744aae636effeacec15787a2209f2264f32d2fc92efd3a5c400d493236e123a75826ed3355de2b613f0fefc26e9437071855b49b976138efd60a63529822b85fde70a53bea7a", "2023 UMC 데모데이", "MakeUs")
-        )
+        tempGameList.add( HomeGameItem("http://semtle.catholic.ac.kr:8080/image?name=120230207155427.jpg", "2023 야간관광 특화도시 숏폼 공모전", "한국관광공사"))
+        tempGameList.add( HomeGameItem("http://semtle.catholic.ac.kr:8080/image?name=220230207155427.png", "2023 미래도서관 정책 아이디어 해커톤 대회", "국가도서관위원회"))
+        tempGameList.add( HomeGameItem("http://semtle.catholic.ac.kr:8080/image?name=320230207155427.jpg", "2023 제 1 회 CCC 커튼콜 마케팅 공모전", "라이브콘테스트"))
+        tempGameList.add( HomeGameItem("http://semtle.catholic.ac.kr:8080/image?name=420230207155427.jpg", "2023 UMC 데모데이", "MakeUs"))
         setGameAdapter(tempGameList)
-
     }
     private fun setBannerAdapter(imgList: ArrayList<HomeBannerItem>){
         if(!imgList.isNullOrEmpty()){

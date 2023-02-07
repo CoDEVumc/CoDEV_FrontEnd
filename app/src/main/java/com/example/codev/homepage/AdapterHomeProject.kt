@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.codev.AdapterRecruitStack
 import com.example.codev.PData
+import com.example.codev.R
 import com.example.codev.RecruitDetailActivity
 import com.example.codev.databinding.HomeHotPostBinding
 
@@ -26,15 +27,13 @@ class AdapterHomeProject(private val context: Context, private val listData: Lis
             //프로젝트 디데이
             if(data.co_deadLine.toInt() == 0) {
                 viewBinding.hotPostDday.text = "D-Day"
+            }else if(data.co_process == "TEST"){
+                viewBinding.hotPostDday.text = "심사중"
+            }else if(data.co_process == "FIN"){
+                viewBinding.hotPostDday.text = "모집 완료"
+            } else {
+                viewBinding.hotPostDday.text = "D-" + data.co_deadLine
             }
-            else if(data.co_deadLine.toInt() < 0){ //기간 지남
-
-                val deadline = data.co_deadLine
-                val dday = deadline.substring(1,deadline.length)
-
-                viewBinding.hotPostDday.text = "D+" + dday
-            }
-            else {viewBinding.hotPostDday.text = "D-" + data.co_deadLine}
 
             //프로젝트 총 인원
             viewBinding.peopleNumber.text = data.co_total.toString()
