@@ -131,6 +131,11 @@ class RecruitDetailActivity:AppCompatActivity() {
             dpd.datePicker.maxDate = (System.currentTimeMillis() + 3.156e+10).toLong()
             dpd.show()
         }
+        //지현현황 리스트
+        viewBinding.btn2.setOnClickListener {
+            val intent = Intent(context, RecruitApplyListActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     //지원했으며 모집중인 상태와 심사중과 모집완료 상태 설정, 지원취소 기능필요

@@ -7,7 +7,7 @@
 
     <!-- Toolbar -->
     <include
-        android:id="@+id/toolbar_recruit"
+        android:id="@+id/toolbar_apply"
         layout="@layout/toolbar2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_recruit"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_apply"
         app:layout_constraintEnd_toEndOf="parent">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/part"
@@ -56,15 +56,16 @@
             style="@style/Text.Body5.SemiBold"
             android:textColor="@color/black_500"
             android:text="현재 지원자 0"/>
+
         <TextView
+            style="@style/Text.Body5.SemiBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            style="@style/Text.Body5.SemiBold"
+            android:text="취소하기"
             android:textColor="@color/black_700"
-            android:text="선택하기"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -83,7 +84,22 @@
         android:nestedScrollingEnabled="false"
         android:overScrollMode="never"/>
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_select"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        style="@style/Text.Body4.SemiBold"
+        android:textColor="@color/black_500"
+        android:background="@drawable/recruit_apply_selectbtn"
+        />
+
+    <!-- android:visibility="gone" 이거 추가함 -->
+
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/bottom_btn"
         android:layout_width="match_parent"
         android:layout_height="56dp"

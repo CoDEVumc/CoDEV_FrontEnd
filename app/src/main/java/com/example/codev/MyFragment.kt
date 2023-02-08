@@ -115,7 +115,7 @@ class MyFragment:Fragment() {
                             userinfo = Userinfo(it.result.Complete.co_nickName,it.result.Complete.profileImg,it.result.Complete.co_email,it.result.Complete.co_name,it.result.Complete.co_gender,it.result.Complete.co_birth,it.result.Complete.co_loginType)
                             Glide.with(context)
                                 .load(it.result.Complete.profileImg).circleCrop()
-                                .into(viewBinding.profileImg)
+                                .into(viewBinding.profile)
                             setAdapter(it.result.Portfolio)
                         }
                     }

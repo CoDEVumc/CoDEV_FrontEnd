@@ -46,12 +46,26 @@
             android:layout_height="48dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:background="@drawable/register_profile"
+            android:background="@android:color/transparent"
+            android:src="@drawable/register_profile"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:visibility="invisible"
+            android:id="@+id/img_selected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/recruit_apply_selected_profile_background"
+            app:layout_constraintBottom_toBottomOf="@+id/applyer_profile"
+            app:layout_constraintEnd_toEndOf="@+id/applyer_profile"
+            app:layout_constraintStart_toStartOf="@+id/applyer_profile"
+            app:layout_constraintTop_toTopOf="@+id/applyer_profile" />
+
 
         <TextView
             android:id="@+id/applyer_porfolio_title"
