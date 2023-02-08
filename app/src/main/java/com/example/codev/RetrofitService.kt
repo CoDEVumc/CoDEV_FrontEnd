@@ -172,4 +172,6 @@ interface RetrofitService {
     @PATCH("study/recruitment/extension/{coStudyId}")
     fun extendStudy(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int, @Body params: ReqExtendStudy) : Call<JsonObject>
 
+    @GET("study/{coStudyId}")
+    fun getChatRoomList(@Header("CoDev_Authorization") header: String, @Body params: ReqGetChatRoomList) : Call<ResGetChatRoomList>
 }

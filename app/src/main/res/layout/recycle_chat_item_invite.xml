@@ -17,6 +17,6 @@
         style="@style/Text.Body5.Medium"
         android:textColor="@color/black_700"
         android:background="@drawable/chat_invite_background"
-        android:text="앨리님 환님을 초대하였습니다. 원스님, 수님, 양님, 데런님, 환님, 원스님, 수님, 데런님, 밍님, 와이지님, 헤더님, 한님을 초대하셨습니다."/>
+        android:text="앨리님 환님을 초대하였습니다. 원스님, 수님, 양님, 데런님, 환님, 원스님, 수님, 데런님, 밍님, 와이지님, 헤더님, 한님을 초대하셨습니다. 1231232131231232132131"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
