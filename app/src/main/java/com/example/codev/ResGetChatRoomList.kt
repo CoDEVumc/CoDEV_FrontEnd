@@ -1,14 +1,24 @@
 package com.example.codev
 
-import com.example.codev.addpage.PartNameAndPeople
-
 data class ResGetChatRoomList(
-    val co_title: String,
-    val co_content: String,
-    val co_location: String,
-    val co_languages: List<Int>,
-    val co_deadLine: String,
-    val co_parts: List<PartNameAndPeople>,
-    val co_process: String
+    val code: Int,
+    val result: ResponseOfGetChatRoomList
+)
+
+data class ResponseOfGetChatRoomList(
+    val complete: ArrayList<ResponseOfGetChatRoomListData>
+)
+
+data class ResponseOfGetChatRoomListData(
+    val roomId: String,
+    val room_type: String,
+    val room_title: String,
+    val status: Boolean,
+    val receiverCo_email: String,
+    val receiverCo_nickName: String,
+    val receiverProfileImg: String,
+    val people: Int,
+    val latestconv: String,
+    val read: Boolean
 )
 

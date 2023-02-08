@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AdapterChatRoomList(private val listData: ArrayList<PortFolio>, private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterChatRoomList(private val listData: ArrayList<ResponseOfGetChatRoomListData>, private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -34,15 +34,19 @@ class AdapterChatRoomList(private val listData: ArrayList<PortFolio>, private va
 
     //Item의 ViewHolder 객체
     inner class ChatRoomListViewHolder(private val binding: RecycleChatRoomListBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: PortFolio, position: Int){
-//            Glide.with(context)
-//                .load().circleCrop()
-//                .into(binding.oneImg1)
-//            binding.roomTitle.text =
-//
-//                binding.roomMemberNumber.text =
-//                binding.roomMessage.text =
-//                binding.roomChatDate.text =
+        fun bind(data: ResponseOfGetChatRoomListData, position: Int){
+            Glide.with(context)
+                .load(data.receiverProfileImg).circleCrop()
+                .into(binding.oneImg1)
+
+            binding.roomTitle.text = data.room_title
+            if (data.people == 2){
+                binding.roomMemberNumber.text = "1"
+            }else{
+                binding.roomMemberNumber.text = data.people.toString()
+            }
+            binding.roomMessage.text = data.latestconv
+//            binding.roomChatDate.text =
 
         }
     }

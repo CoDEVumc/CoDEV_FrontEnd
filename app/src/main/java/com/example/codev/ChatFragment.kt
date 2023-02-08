@@ -17,13 +17,19 @@ import retrofit2.Response
 
 class ChatFragment:Fragment() {
     private lateinit var viewBinding: FragmentChatBinding
-    var mainAppActivity: MainAppActivity? = null
+    private lateinit var mainAppActivity: Context
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if(context is MainAppActivity){
             mainAppActivity = context
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("test","onResume")
+        loadData(mainAppActivity)
     }
 
     override fun onCreateView(
@@ -35,20 +41,20 @@ class ChatFragment:Fragment() {
         viewBinding.toolbarChat.toolbar1.inflateMenu(R.menu.menu_toolbar_1)
         viewBinding.toolbarChat.toolbar1.title = ""
         viewBinding.toolbarChat.toolbarImg.setImageResource(R.drawable.logo_chat)
-        ChatClient
+        ChatClient2
+
         return viewBinding.root
     }
 
-    private fun setAdapter(dataList: ArrayList<PortFolio>, context: Context){
+    private fun setAdapter(dataList: ArrayList<ResponseOfGetChatRoomListData>, context: Context){
         val adapter = AdapterChatRoomList(dataList, context)
         viewBinding.chatRoomList.adapter = adapter
     }
 
     private fun loadData(context: Context){
-        RetrofitClient.service.getPortFolio(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).enqueue(object:
-            Callback<ResPortFolioList> {
-            @SuppressLint("SetTextI18n")
-            override fun onResponse(call: Call<ResPortFolioList>, response: Response<ResPortFolioList>) {
+        RetrofitClient.service.getChatRoomList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).enqueue(object:
+            Callback<ResGetChatRoomList> {
+            override fun onResponse(call: Call<ResGetChatRoomList>, response: Response<ResGetChatRoomList>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 채팅방 불러오기 실패",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
@@ -57,13 +63,13 @@ class ChatFragment:Fragment() {
                     200 -> {
                         response.body()?.let {
                             Log.d("test: 채팅방 불러오기 성공", "\n${it.toString()}")
-                            setAdapter(it.result.Portfolio, context)
+                            setAdapter(it.result.complete, context)
                         }
                     }
                 }
             }
 
-            override fun onFailure(call: Call<ResPortFolioList>, t: Throwable) {
+            override fun onFailure(call: Call<ResGetChatRoomList>, t: Throwable) {
                 Log.d("test", "[Fail]${t.toString()}")
             }
         })
