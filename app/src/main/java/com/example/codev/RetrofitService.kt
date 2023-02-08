@@ -172,4 +172,11 @@ interface RetrofitService {
     @PATCH("study/recruitment/extension/{coStudyId}")
     fun extendStudy(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int, @Body params: ReqExtendStudy) : Call<JsonObject>
 
+    @PUT("user/update/profile")
+    @Multipart
+    fun changeUserInfo(
+        @Header("CoDev_Authorization") authToken: String
+        ,@Part("user") userData: RequestBody
+        ,@Part file: MultipartBody.Part
+    ): Call<ResUserInfoChanged>
 }
