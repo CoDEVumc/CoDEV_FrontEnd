@@ -1,6 +1,5 @@
 package com.example.codev
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
 import com.example.codev.databinding.FragmentChatBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -41,8 +39,12 @@ class ChatFragment:Fragment() {
         viewBinding.toolbarChat.toolbar1.inflateMenu(R.menu.menu_toolbar_1)
         viewBinding.toolbarChat.toolbar1.title = ""
         viewBinding.toolbarChat.toolbarImg.setImageResource(R.drawable.logo_chat)
-        ChatClient2
-
+        ChatClient
+//        ChatClient.join("OTO_PROJECT_5_zxz4641@gmail.com")
+//        ChatClient.sendMessage("TALK","OTO_PROJECT_5_zxz4641@gmail.com", "zxz4641@gmail.com", "하하하123")
+//        ChatClient.exit()
+//
+//        ChatClient.sendMessage("TALK","OTO_PROJECT_5_zxz4641@gmail.com", "zxz4641@gmail.com", "exit 후 메세지 보내보기 테스트")
         return viewBinding.root
     }
 

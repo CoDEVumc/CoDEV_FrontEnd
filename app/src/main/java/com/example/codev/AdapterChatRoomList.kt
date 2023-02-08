@@ -46,7 +46,7 @@ class AdapterChatRoomList(private val listData: ArrayList<ResponseOfGetChatRoomL
                 binding.roomMemberNumber.text = data.people.toString()
             }
             binding.roomMessage.text = data.latestconv
-//            binding.roomChatDate.text =
+            binding.roomChatDate.text = convertTimestampToDate(data.latestDate)
 
         }
     }

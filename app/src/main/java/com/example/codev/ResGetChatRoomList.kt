@@ -1,5 +1,7 @@
 package com.example.codev
 
+import java.sql.Timestamp
+
 data class ResGetChatRoomList(
     val code: Int,
     val result: ResponseOfGetChatRoomList
@@ -19,6 +21,7 @@ data class ResponseOfGetChatRoomListData(
     val receiverProfileImg: String,
     val people: Int,
     val latestconv: String,
+    val latestDate: Timestamp,
     val read: Boolean
 )
 
