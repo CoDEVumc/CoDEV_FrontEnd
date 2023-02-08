@@ -26,7 +26,7 @@
             android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/profile"
+                android:id="@+id/applyer_profile"
                 android:layout_width="match_parent"
                 android:layout_height="84dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -91,7 +91,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="157dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profile"
+                app:layout_constraintTop_toBottomOf="@+id/applyer_profile"
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <TextView

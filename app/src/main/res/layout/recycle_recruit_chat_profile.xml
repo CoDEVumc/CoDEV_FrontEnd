@@ -7,7 +7,7 @@
     android:layout_marginRight="-20dp">
 
     <ImageView
-        android:id="@+id/profile"
+        android:id="@+id/applyer_profile"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

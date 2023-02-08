@@ -25,7 +25,7 @@
         android:background="@drawable/my_portfoliobox2">
 
         <TextView
-            android:id="@+id/portfolio_title"
+            android:id="@+id/applyer_porfolio_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +48,7 @@
             android:textColor="@color/black_500"/>
 
         <TextView
-            android:id="@+id/portfolio_updatedAt"
+            android:id="@+id/applyer_part"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"

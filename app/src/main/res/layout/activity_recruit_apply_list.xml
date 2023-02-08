@@ -32,7 +32,8 @@
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:orientation="horizontal"/>
+            android:orientation="horizontal"
+            tools:listitem="@layout/recycle_recruit_apply_part_item"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -77,7 +78,10 @@
         app:layout_constraintBottom_toTopOf="@+id/bottom_btn"
         android:layout_marginTop="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:orientation="vertical"/>
+        android:orientation="vertical"
+        tools:listitem="@layout/recycle_applyer_item2"
+        android:nestedScrollingEnabled="false"
+        android:overScrollMode="never"/>
 
     <LinearLayout
         android:id="@+id/bottom_btn"

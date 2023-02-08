@@ -4,34 +4,21 @@
     android:layout_width="wrap_content"
     android:layout_height="36dp"
     android:layout_marginEnd="12dp"
-    android:background="@drawable/recruit_partbox">
+    android:background="@drawable/recruit_apply_partbox">
 
     <ImageView
+        android:id="@+id/part"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/bar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="12dp"
-        android:src="@drawable/accept"/>
-
-
-    <TextView
-        android:id="@+id/part"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/num"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginStart="12dp"
-        style="@style/Text.Body5.Medium"
-        android:textColor="@color/black_900"
-        android:text="프론트엔드"/>
+        android:src="@drawable/recruit_apply_allpartbox"
+        />
 
     <View
-        android:id="@+id/bar"
         android:layout_width="1dp"
         android:layout_height="0dp"
         app:layout_constraintStart_toEndOf="@+id/part"
@@ -53,7 +40,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
         style="@style/Text.Body5.Medium"
-        android:textColor="@color/black_900"
+        android:textColor="@color/black_500"
         android:text="2명"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
