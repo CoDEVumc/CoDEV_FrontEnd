@@ -18,6 +18,8 @@ import com.bumptech.glide.request.transition.Transition
 import com.example.codev.addpage.AddPageFunction
 import com.example.codev.addpage.ImageItem
 import com.example.codev.databinding.ActivityMyProfileBinding
+import com.example.codev.databinding.ProfileAddImageLayoutBinding
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -113,13 +115,15 @@ class MyProfileActivity:AppCompatActivity() {
 
 
         viewBinding.profileImg.setOnClickListener {
+            //다이아로그 띄워주기
+            getBottomMenu()
             //팝업창이 뜨면서 해당 작업으로 넘어가
-            addPageFunction.checkSelfPermission(this, this)
-            getContent.launch(arrayOf(
-                "image/png",
-                "image/jpg",
-                "image/jpeg"
-            ))
+//            addPageFunction.checkSelfPermission(this, this)
+//            getContent.launch(arrayOf(
+//                "image/png",
+//                "image/jpg",
+//                "image/jpeg"
+//            ))
         }
 
         //프로필 변경 저장하기 기능 필요
@@ -205,6 +209,7 @@ class MyProfileActivity:AppCompatActivity() {
                         val fileBody = RequestBody.create(MediaType.parse("application/octet-stream"),newNameFile)
                         val filePart = MultipartBody.Part.createFormData("file", newNameFile.name, fileBody)
                         finalFile = filePart
+                        Log.d("TestUploadNewImage", "OldImageUploaded ")
                         uploadUserChange(context, userToken, requestBody, finalFile)
                     }
                     override fun onLoadCleared(placeholder: Drawable?) {
@@ -216,10 +221,14 @@ class MyProfileActivity:AppCompatActivity() {
                 val fileBody = RequestBody.create(MediaType.parse("application/octet-stream"),fileImage)
                 val filePart = MultipartBody.Part.createFormData("file", fileImage.name, fileBody)
                 finalFile = filePart
+                Log.d("TestUploadNewImage", "NewImageUploaded ")
                 uploadUserChange(context, userToken, requestBody, finalFile)
             }
         }else{
-            uploadUserChange(context, userToken, requestBody, finalFile)
+            Log.d("TestUploadNewImage", "NoImageUploaded ")
+            Log.d("TestUploadNewImage",  "${emptyFilePart.body()}")
+
+            uploadUserChange(context, userToken, requestBody, emptyFilePart)
         }
 
     }
@@ -244,9 +253,9 @@ class MyProfileActivity:AppCompatActivity() {
         }
     }
 
-    private fun uploadUserChange(context: Context, userToken: String, requestBody: RequestBody, finalFile: MultipartBody.Part){
+    private fun uploadUserChange(context: Context, userToken: String, requestBody: RequestBody, imageFile: MultipartBody.Part){
         //retrofit으로 올리고 사진 삭제하기
-        RetrofitClient.service.changeUserInfo(userToken, requestBody, finalFile).enqueue(object :
+        RetrofitClient.service.changeUserInfo(userToken, requestBody, imageFile).enqueue(object :
             Callback<ResUserInfoChanged> {
             override fun onResponse(
                 call: Call<ResUserInfoChanged>,
@@ -271,8 +280,56 @@ class MyProfileActivity:AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ResUserInfoChanged>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.d("uploadUserInfoFail", "onFailure: $t")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+
             }
         })
+    }
+
+    private fun getBottomMenu(){
+        // BottomSheetDialog 객체 생성. param : Context
+        val dialog = BottomSheetDialog(this)
+
+        val dialogLayout = ProfileAddImageLayoutBinding.inflate(layoutInflater)
+
+        dialogLayout.cameraSection.setOnClickListener {
+            Log.d("testClick", "getBottomMenu: Click Camera")
+
+
+            isDefaultImg = false
+            checkNextBtn()
+            dialog.dismiss()
+        }
+
+        dialogLayout.imageSection.setOnClickListener {
+            addPageFunction.checkSelfPermission(this, this)
+            getContent.launch(arrayOf(
+                "image/png",
+                "image/jpg",
+                "image/jpeg"
+            ))
+            isDefaultImg = false
+            checkNextBtn()
+            dialog.dismiss()
+        }
+
+        dialogLayout.defaultSection.setOnClickListener {
+            Glide.with(this).load(defaultImgUrl).into(viewBinding.profileImg)
+            isDefaultImg = true
+
+            checkNextBtn()
+            dialog.dismiss()
+
+        }
+
+        dialog.setContentView(dialogLayout.root)
+
+// BottomSheetdialog 외부 화면(회색) 터치 시 종료 여부 boolean(false : ㄴㄴ, true : 종료하자!)
+        dialog.setCanceledOnTouchOutside(true)
+
+// create()와 show()를 통해 출력!
+        dialog.create()
+        dialog.show()
     }
 }
