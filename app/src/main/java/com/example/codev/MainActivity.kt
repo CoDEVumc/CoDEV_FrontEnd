@@ -139,6 +139,7 @@ class MainActivity : AppCompatActivity() {
                                         //자동 로그인 설정
                                         UserSharedPreferences.setAutoLogin(context,"TRUE")
                                         //기존 로그인 로직
+                                        UserSharedPreferences.setKey(context, it.result.key)
                                         UserSharedPreferences.setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))
                                         UserSharedPreferences.setUserRefreshToken(context,AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
                                         Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)))
@@ -179,6 +180,7 @@ class MainActivity : AppCompatActivity() {
                                         //자동 로그인 설정
                                         UserSharedPreferences.setAutoLogin(context,"TRUE")
                                         //기존 로그인 로직
+                                        UserSharedPreferences.setKey(context, it.result.key)
                                         UserSharedPreferences.setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))
                                         UserSharedPreferences.setUserRefreshToken(context,AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
                                         Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)))
@@ -216,6 +218,7 @@ class MainActivity : AppCompatActivity() {
                             }
                             // 토큰 암호화
                             response.body()?.let {
+                                UserSharedPreferences.setKey(context, it.result.key)
                                 UserSharedPreferences.setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))
                                 UserSharedPreferences.setUserRefreshToken(context,AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
                                 Log.d("test: 로그인 성공", "\n${it.toString()}")

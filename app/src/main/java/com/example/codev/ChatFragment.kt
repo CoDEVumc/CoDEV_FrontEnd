@@ -30,6 +30,11 @@ class ChatFragment:Fragment() {
         loadData(mainAppActivity)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("test", "다른 탭 이동")
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,12 +44,9 @@ class ChatFragment:Fragment() {
         viewBinding.toolbarChat.toolbar1.inflateMenu(R.menu.menu_toolbar_1)
         viewBinding.toolbarChat.toolbar1.title = ""
         viewBinding.toolbarChat.toolbarImg.setImageResource(R.drawable.logo_chat)
+
         ChatClient
-//        ChatClient.join("OTO_PROJECT_5_zxz4641@gmail.com")
-//        ChatClient.sendMessage("TALK","OTO_PROJECT_5_zxz4641@gmail.com", "zxz4641@gmail.com", "하하하123")
-//        ChatClient.exit()
-//
-//        ChatClient.sendMessage("TALK","OTO_PROJECT_5_zxz4641@gmail.com", "zxz4641@gmail.com", "exit 후 메세지 보내보기 테스트")
+
         return viewBinding.root
     }
 
@@ -58,13 +60,13 @@ class ChatFragment:Fragment() {
             Callback<ResGetChatRoomList> {
             override fun onResponse(call: Call<ResGetChatRoomList>, response: Response<ResGetChatRoomList>) {
                 if(response.isSuccessful.not()){
-                    Log.d("test: 채팅방 불러오기 실패",response.toString())
+                    Log.d("test: 채팅방 리스트 불러오기 실패",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
                 when(response.code()){
                     200 -> {
                         response.body()?.let {
-                            Log.d("test: 채팅방 불러오기 성공", "\n${it.toString()}")
+                            Log.d("test: 채팅방 리스트 불러오기 성공", "\n${it.toString()}")
                             setAdapter(it.result.complete, context)
                         }
                     }

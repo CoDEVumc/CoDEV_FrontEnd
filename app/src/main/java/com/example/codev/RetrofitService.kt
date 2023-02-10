@@ -174,4 +174,7 @@ interface RetrofitService {
 
     @GET("chat/rooms")
     fun getChatRoomList(@Header("CoDev_Authorization") header: String) : Call<ResGetChatRoomList>
+
+    @GET("chat/room/{roomId}")
+    fun getChatList(@Header("CoDev_Authorization") header: String, @Path("roomId") roomId: String) : Call<ResGetChatList>
 }

@@ -11,6 +11,18 @@ import retrofit2.Response
 object UserSharedPreferences {
     private const val ACCOUNT : String = "account"
 
+    fun setKey(context: Context, key: String){
+        val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
+        val editor : SharedPreferences.Editor = prefs.edit()
+        editor.putString("key", key)
+        editor.commit()
+    }
+
+    fun getKey(context: Context): String {
+        val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
+        return prefs.getString("key", "").toString()
+    }
+
     fun setAutoLogin(context: Context, input: String) {
         val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
         val editor : SharedPreferences.Editor = prefs.edit()
