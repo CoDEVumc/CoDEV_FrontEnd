@@ -1,15 +1,22 @@
 package com.example.codev
 
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
+import com.example.codev.addpage.AddPageFunction
+import com.example.codev.addpage.ImageItem
 import com.example.codev.databinding.ActivityMyProfileBinding
 import com.google.gson.Gson
 import okhttp3.MediaType
@@ -18,11 +25,16 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.http.Multipart
+import java.io.File
 
 class MyProfileActivity:AppCompatActivity() {
     lateinit var viewBinding: ActivityMyProfileBinding
     private var isDefaultImg = false
     private val defaultImgUrl = "http://semtle.catholic.ac.kr:8080/image?name=Profile_Basic20230130012110.png"
+    private var selectedImageItem: ImageItem? = null
+
+    private var addPageFunction = AddPageFunction()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,9 +55,15 @@ class MyProfileActivity:AppCompatActivity() {
         Glide.with(this)
             .load(userinfo.profileImg).circleCrop()
             .into(viewBinding.profileImg)
-        if(userinfo.profileImg == defaultImgUrl) isDefaultImg = true
+        if(userinfo.profileImg == defaultImgUrl){
+            isDefaultImg = true
+        }
+        else{
+            selectedImageItem = ImageItem(Uri.EMPTY, "", userinfo.profileImg)
+        }
         viewBinding.countName.text = (5 - viewBinding.etName.text.length).toString()
         viewBinding.countNickname.text = (8 - viewBinding.etNickname.text.length).toString()
+
 
         //이름 검토
         viewBinding.warnName.isGone = true
@@ -93,6 +111,17 @@ class MyProfileActivity:AppCompatActivity() {
             }
         })
 
+
+        viewBinding.profileImg.setOnClickListener {
+            //팝업창이 뜨면서 해당 작업으로 넘어가
+            addPageFunction.checkSelfPermission(this, this)
+            getContent.launch(arrayOf(
+                "image/png",
+                "image/jpg",
+                "image/jpeg"
+            ))
+        }
+
         //프로필 변경 저장하기 기능 필요
         viewBinding.btnSave.setOnClickListener {
             uploadUserInfo(this)
@@ -109,6 +138,40 @@ class MyProfileActivity:AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    //imageSection - Start
+    private val getContent = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        if(uri != null){
+            checkNextBtn()
+            val imageInfo = addPageFunction.getInfoFromUri(this, uri)
+            val imageName = imageInfo[0]
+            val imageSize = imageInfo[1].toInt()
+            val imageSizeLimitByte = 2e+7
+            if(imageSize <= imageSizeLimitByte){
+                val copyImagePath = addPageFunction.createCopyAndReturnPath(this, uri, imageName)
+                val nowImageItem = ImageItem(uri, copyImagePath)
+
+                //원래 사진을 확인
+                if(isDefaultImg){ //원래 사진이 기본 사진이었으면
+                    isDefaultImg = false
+                }else if(selectedImageItem!!.imageUri != Uri.EMPTY){ //전에 선택된 사진이 원래 사진이 아닌 경우
+                    File(selectedImageItem!!.imageCopyPath).delete()
+                }
+                selectedImageItem = nowImageItem
+                Glide.with(this)
+                    .load(uri).circleCrop()
+                    .into(viewBinding.profileImg)
+            }
+        }
+    }
+    //imageSection - End
+
+    //ImageSection - Start
+    override fun onDestroy() {
+        super.onDestroy()
+        if(selectedImageItem!=null) File(selectedImageItem!!.imageCopyPath).delete()
+    }
+    //ImageSection - End
 
     private fun uploadUserInfo(context: Context){
         //토큰 가져오기
@@ -129,41 +192,36 @@ class MyProfileActivity:AppCompatActivity() {
         val emptyFilePart = MultipartBody.Part.createFormData("file", null, emptyFileBody)
         var finalFile = emptyFilePart
         if(!isDefaultImg){
-            //선택된 이미지 업로드
+            //원래 사진이면 임시로 다운로드하고 업로드
+            if(selectedImageItem!!.imageUri == Uri.EMPTY){
+                Glide.with(this).asFile().load(selectedImageItem!!.imageUrl).into(object : CustomTarget<File>(){
+                    override fun onResourceReady(resource: File, transition: Transition<in File>?) {
+                        val filename = selectedImageItem!!.imageUrl.split("http://semtle.catholic.ac.kr:8080/image?name=", limit = 2)[1]
+                        Log.d("filename", "run: filename is: $filename")
+                        val newNameFile = File(resource.parent!!, filename)
+                        resource.renameTo(newNameFile)
+                        selectedImageItem = ImageItem(Uri.EMPTY, newNameFile.path, "")
+                        //파일을 인코딩하고 올리자
+                        val fileBody = RequestBody.create(MediaType.parse("application/octet-stream"),newNameFile)
+                        val filePart = MultipartBody.Part.createFormData("file", newNameFile.name, fileBody)
+                        finalFile = filePart
+                        uploadUserChange(context, userToken, requestBody, finalFile)
+                    }
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                        Toast.makeText(context, "모집글 수정 시 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }else{ //기본 이미지도 아니고, 원래 수정전의 샂니도 아니고 -> 새로운 사진 -> copyPath이 있는 사진
+                val fileImage = File(selectedImageItem!!.imageCopyPath)
+                val fileBody = RequestBody.create(MediaType.parse("application/octet-stream"),fileImage)
+                val filePart = MultipartBody.Part.createFormData("file", fileImage.name, fileBody)
+                finalFile = filePart
+                uploadUserChange(context, userToken, requestBody, finalFile)
+            }
+        }else{
+            uploadUserChange(context, userToken, requestBody, finalFile)
         }
 
-
-        //retrofit으로 올리고 사진 삭제하기
-        RetrofitClient.service.changeUserInfo(userToken, requestBody, finalFile).enqueue(object :
-            Callback<ResUserInfoChanged> {
-            override fun onResponse(
-                call: Call<ResUserInfoChanged>,
-                response: Response<ResUserInfoChanged>
-            ) {
-                if(response.isSuccessful.not()){
-                    Log.d("fail", "유저 변경 정보 업로드 실패: ${response.toString()}")
-                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }
-                when(response.code()){
-                    200 -> {
-                        response.body().let {
-                            Log.d("success", "유저 변경 내용 업로드 성공: ${it.toString()}")
-                            if(!isDefaultImg){
-                                //업로드했던 이미지 삭제
-                            }
-
-
-                            finish()
-                        }
-                    }
-                }
-
-            }
-
-            override fun onFailure(call: Call<ResUserInfoChanged>, t: Throwable) {
-                TODO("Not yet implemented")
-            }
-        })
     }
 
     private fun checkNextBtn() {
@@ -184,5 +242,37 @@ class MyProfileActivity:AppCompatActivity() {
                 viewBinding.btnSave.setTextColor(getColor(R.color.black_500))
             }
         }
+    }
+
+    private fun uploadUserChange(context: Context, userToken: String, requestBody: RequestBody, finalFile: MultipartBody.Part){
+        //retrofit으로 올리고 사진 삭제하기
+        RetrofitClient.service.changeUserInfo(userToken, requestBody, finalFile).enqueue(object :
+            Callback<ResUserInfoChanged> {
+            override fun onResponse(
+                call: Call<ResUserInfoChanged>,
+                response: Response<ResUserInfoChanged>
+            ) {
+                if(response.isSuccessful.not()){
+                    Log.d("fail", "유저 변경 정보 업로드 실패: ${response.toString()}")
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+                when(response.code()){
+                    200 -> {
+                        response.body().let {
+                            Log.d("success", "유저 변경 내용 업로드 성공: ${it.toString()}")
+                            if(!isDefaultImg){
+                                //업로드했던 이미지 삭제
+                            }
+                            finish()
+                        }
+                    }
+                }
+
+            }
+
+            override fun onFailure(call: Call<ResUserInfoChanged>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 }

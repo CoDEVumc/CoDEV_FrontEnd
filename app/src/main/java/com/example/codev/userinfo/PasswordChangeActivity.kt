@@ -6,16 +6,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.view.isGone
-import com.example.codev.R
-import com.example.codev.RegisterProfileActivity
-import com.example.codev.ReqSignUp
+import com.example.codev.*
 import com.example.codev.databinding.ActivityPasswordChangeBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class PasswordChangeActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityPasswordChangeBinding
+    private var oldPasswordLength = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +41,27 @@ class PasswordChangeActivity : AppCompatActivity() {
         val regex = Regex("""^(?=.*[A-Za-z])(?=.*\d)(?=.*[~_!@#${'$'}%^&*()+|=])[A-Za-z\d~_!@#${'$'}%^&*()+|=]{8,}${'$'}""")
         viewBinding.warn1.isGone = true
         viewBinding.warn2.isGone = true
+        viewBinding.warnOld.isGone = true
+
+        viewBinding.etOldPassword.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//                if(viewBinding.etOldPassword.text.matches(regex)){
+//                    viewBinding.warnOld.isGone = true
+//                    viewBinding.etOldPassword.setBackgroundResource(R.drawable.login_et)
+//                }else{
+//                    viewBinding.warnOld.isGone = false
+//                    viewBinding.etOldPassword.setBackgroundResource(R.drawable.login_et_failed)
+//                }
+                oldPasswordLength = viewBinding.etOldPassword.text.length
+                checkNextBtn()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        })
 
         viewBinding.etPassword.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -81,10 +105,48 @@ class PasswordChangeActivity : AppCompatActivity() {
         })
 
         viewBinding.btnChangePassword.setOnClickListener {
+            val oldPassword = viewBinding.etOldPassword.text.toString()
             val newPassword = viewBinding.etPassword.text.toString()
+            nextBtnEnable(false) // 나중에 풀어줘야 해!
             //retrofit -> 원래 페이지로 돌아가기
-            Toast.makeText(this, "새로운 비번: $newPassword", Toast.LENGTH_SHORT).show()
-            finish()
+            Log.d("TestPassword", "옜 비번: $oldPassword")
+            Log.d("TestPassword", "새로운 비번: $newPassword")
+            Log.d("testChangePasswordToken",
+                AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(this))
+            )
+            RetrofitClient.service.changePassword(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(this)), ReqChangeUserPassword(oldPassword, newPassword)).enqueue(object:
+                Callback<ResChangeUserPassword> {
+                override fun onResponse(
+                    call: Call<ResChangeUserPassword>,
+                    response: Response<ResChangeUserPassword>
+                ) {
+                    if(response.isSuccessful.not()){
+                        Log.d("test: 비밀번호 변경 실패",response.toString())
+                        Toast.makeText(this@PasswordChangeActivity, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    when(response.code()){
+                        200 -> {
+                            response.body()?.let {
+                                if(it.code == 445){
+                                    Log.d("test: 비밀번호 변경 실패",response.toString())
+                                    Toast.makeText(this@PasswordChangeActivity, "기존 비밀번호가 다릅니다.", Toast.LENGTH_SHORT).show()
+                                }else if(it.code == 200){
+                                    Log.d("test: 비밀번호 변경 성공",response.toString())
+                                    Toast.makeText(this@PasswordChangeActivity, "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show()
+                                    finish()
+                                }
+                            }
+                        }
+                    }
+                    nextBtnEnable(true)
+                }
+
+                override fun onFailure(call: Call<ResChangeUserPassword>, t: Throwable) {
+                    Log.d("testChangePassword", "onFailure: ${t.toString()}")
+                    Toast.makeText(this@PasswordChangeActivity, "비밀번호 변경이 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    nextBtnEnable(true)
+                }
+            })
         }
     }
 
@@ -99,7 +161,7 @@ class PasswordChangeActivity : AppCompatActivity() {
     }
 
     private fun checkNextBtn() {
-        if(viewBinding.warn1.isGone and viewBinding.warn2.isGone){
+        if(viewBinding.warn1.isGone and viewBinding.warn2.isGone and (oldPasswordLength != 0) and (viewBinding.etPassword.text.length != 0) and (viewBinding.etPasswordChk.text.length != 0)){
             nextBtnEnable(true)
         }else{
             nextBtnEnable(false)

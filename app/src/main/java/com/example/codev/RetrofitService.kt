@@ -179,4 +179,7 @@ interface RetrofitService {
         ,@Part("user") userData: RequestBody
         ,@Part file: MultipartBody.Part
     ): Call<ResUserInfoChanged>
+
+    @PATCH("user/update/password")
+    fun changePassword(@Header("CoDev_Authorization") authToken: String, @Body params: ReqChangeUserPassword): Call<ResChangeUserPassword>
 }
