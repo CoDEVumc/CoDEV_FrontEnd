@@ -152,14 +152,14 @@ interface RetrofitService {
     fun getApplyerProjectList( // pm] 플젝 지원자 리스트
         @Header("CoDev_Authorization") header: String,
         @Path("coProjectId") coProjectId: Int,
-        @Query("coPart") type: String
+        @Query("coPart") coPart: String
     ) : Call<ResApplyerList>
 
     @GET("study/recruitment/{coStudyId}")
     fun getApplyerStudyList( //pm] 스터디 지원자 리스트
         @Header("CoDev_Authorization") header: String,
         @Path("coStudyId") coStudyId: Int,
-        @Query("coPart") type: String
+        @Query("coPart") coPart: String
     ) : Call<ResApplyerList>
 
     @PATCH("project/recruitment/pick/{coProjectId}") //프로젝트 지원자 선택 & 선택취소

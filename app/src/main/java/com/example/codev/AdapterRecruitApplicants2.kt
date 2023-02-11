@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.codev.addpage.AddPfPageActivity
 import com.example.codev.addpage.DefaultPf
 import com.example.codev.addpage.PfDetailActivity
@@ -22,56 +23,37 @@ import kotlin.collections.ArrayList
 
 //[바디_선택하기 안누름]
 //[바디] ITEM(체크 → 선택 & 선택 취소하기) : from 토글헤더 -> 선택취소 / from 토글아이템 -> 선택
-class AdapterRecruitApplicants2(private val context: Context, private val listData: ArrayList<ApplicantInfoData>, private val returnDeleteCount: (Int) -> Unit, private val returnRegistCount: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterRecruitApplicants2(private val context: Context, private val listData: ArrayList<ApplicantInfoData>, private val returnCount: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var isChecked: Array<Boolean> = Array(listData.size){false}
-
     private var EDIT: Boolean = false
-    private var DELETE: Boolean = false
-    private var SELECT: Boolean = false
+    private var COUNT: Int = 0
+    private var selectList: ArrayList<String> = arrayListOf()
 
-    private var DELETECOUNT: Int = 0
-    private var deleteList: ArrayList<Int> = arrayListOf()
-    private var REGISTCOUNT: Int = 0
-    private var registList: ArrayList<Int> = arrayListOf()
 
     fun setEdit(boolean: Boolean){
         EDIT = boolean
     }
-    fun setDelete(boolean: Boolean){
-        DELETE = boolean
-    }
-    fun setSelect(boolean: Boolean){
-        SELECT = boolean
-    }
 
-    fun setDeleteCount(int: Int){
-        DELETECOUNT = int
-    }
-    fun setRegistCount(int: Int){
-        REGISTCOUNT = int
+    fun setCount(int: Int){
+        COUNT = int
     }
 
     fun resetIsChecked(){
         Arrays.setAll(isChecked){false}
     }
 
+    fun resetSelectList(){
+        selectList.clear()
+    }
+
     fun getIsChecked(): Array<Boolean>{
         return isChecked
     }
 
-    fun resetDeleteList(){
-        deleteList.clear()
-    }
-    fun resetRegistList(){
-        registList.clear()
+    fun getSelectList(): ArrayList<String>{
+        return selectList
     }
 
-    fun getDeleteList(): ArrayList<Int>{
-        return deleteList
-    }
-    fun getRegistList(): ArrayList<Int>{
-        return registList
-    }
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -93,11 +75,15 @@ class AdapterRecruitApplicants2(private val context: Context, private val listDa
     //Item의 ViewHolder 객체
     //chk_choose(체크버튼)--applyer_num(지원자position) <-activity에서 해야될듯???????????
     inner class ApplicantItemViewHolder(private val binding: RecycleApplicantItem1Binding): RecyclerView.ViewHolder(binding.root){
+        @SuppressLint("SetTextI18n")
         fun bind(data: ApplicantInfoData, position: Int){
-            binding.applyerNum.text = position.toString()
-            //binding.applyerProfile.setImageURI(data.profileImg) //지원자 프로필사진
-            when(data.co_temporaryStorage){ //선택여부
-                //img_selected(선택된 지원자 한테만 보이게)
+            Glide.with(itemView.context)
+                .load(data.profileImg).circleCrop()
+                .into(binding.applyerProfile)
+
+            binding.applyerNum.text = (position + 1).toString()
+            //임시저장 여부
+            when(data.co_temporaryStorage){
                 true -> binding.imgSelected.isGone = false //선택된 지원자면 imgSelected.isGone = false
                 false -> binding.imgSelected.isGone = true //선택안된 지원자면 imgSelected.isGone = true
             }
@@ -106,100 +92,80 @@ class AdapterRecruitApplicants2(private val context: Context, private val listDa
             binding.applyerPart.text = data.co_part
 
             binding.chkChoose.isChecked = isChecked[position]
-            binding.portfolio.isSelected = isChecked[position]
+            binding.applicantPortfolio.isSelected = isChecked[position]
 
-            //선택 vs 선택취소
             changeEditMode(EDIT)
 
-            //선택취소 vs 선택
             binding.chkChoose.setOnClickListener {
-                //선택취소
                 isChecked[position] = binding.chkChoose.isChecked
                 if(binding.chkChoose.isChecked){
-                    deleteList.add(data.co_portfolioId)
+                    selectList.add(data.co_email)
                 }else{
-                    deleteList.remove(data.co_portfolioId)
+                    selectList.remove(data.co_email)
                 }
-
-                //선택
-
             }
 
             //포트폴리오 상세조회 & EDIT
-            binding.portfolio.setOnClickListener {
-                binding.portfolio.isSelected = true
+            binding.applicantPortfolio.setOnClickListener {
                 Log.d("AdapterRecruitApplyList: ", "포트폴리오 클릭 $position")
                 if (EDIT){
+                    binding.applicantPortfolio.isSelected = true
                     binding.chkChoose.isChecked = !binding.chkChoose.isChecked
                     isChecked[position] = binding.chkChoose.isChecked
                     if(binding.chkChoose.isChecked){
-                        deleteList.add(data.co_portfolioId)
+                        selectList.add(data.co_email)
                     }else{
-                        deleteList.remove(data.co_portfolioId)
+                        selectList.remove(data.co_email)
                     }
                     //선택취소
-                    deleteCounter()
+                    counter()
                     notifyItemChanged(position)
                 }else{
                     //포트폴리오 세부 페이지 이동
                     val intent = Intent(binding.portfolio.context, PfDetailActivity::class.java)
                     intent.putExtra("id", data.co_portfolioId.toString())
                     Log.d("test",data.co_portfolioId.toString())
-                    ContextCompat.startActivity(binding.portfolio.context, intent, null)
+                    startActivity(binding.portfolio.context, intent, null)
                 }
+            }
+
+            binding.chkChoose.setOnClickListener {
+                binding.applicantPortfolio.isSelected= binding.chkChoose.isChecked
+                isChecked[position] = binding.chkChoose.isChecked
+                if(binding.chkChoose.isChecked){
+                    selectList.add(data.co_email)
+                }else{
+                    selectList.remove(data.co_email)
+                }
+                counter()
+                notifyItemChanged(position)
             }
 
 
         }
+
         private fun changeEditMode(boolean: Boolean){
             binding.chkChoose.isGone = !boolean
             binding.applyerNum.isGone = boolean
         }
-        private fun changeDeleteMode(boolean: Boolean){
-            binding.chkChoose.isGone = !boolean
-        }
-        private fun changeSelectMode(boolean: Boolean){
-            binding.chkChoose.isGone = !boolean
-        }
 
-        private fun deleteCounter() {
+        private fun counter() {
             if (binding.chkChoose.isChecked){
-                DELETECOUNT += 1
-                Log.d("test", "삭제할 항목수: $DELETECOUNT")
-                if (DELETECOUNT == 1){
+                COUNT += 1
+                Log.d("test", "선택한 항목수: $COUNT")
+                if (COUNT == 1){
                     Log.d("test","리콜")
-                    returnDeleteCount(DELETECOUNT)
+                    returnCount(COUNT)
                 }
             }else{
-                DELETECOUNT -= 1
-                Log.d("test", "삭제할 항목수: $DELETECOUNT")
-                if (DELETECOUNT == 0){
+                COUNT -= 1
+                Log.d("test", "선택한 항목수: $COUNT")
+                if (COUNT == 0){
                     Log.d("test","리콜")
-                    returnDeleteCount(DELETECOUNT)
-                }
-            }
-        }
-        private fun registCounter() {
-            if (binding.chkChoose.isChecked){
-                REGISTCOUNT += 1
-                Log.d("test", "선택할 항목수: $REGISTCOUNT")
-                if (REGISTCOUNT == 1){
-                    Log.d("test","리콜")
-                    returnRegistCount(REGISTCOUNT)
-                }
-            }else{
-                REGISTCOUNT -= 1
-                Log.d("test", "선택할 항목수: $REGISTCOUNT")
-                if (REGISTCOUNT == 0){
-                    Log.d("test","리콜")
-                    returnRegistCount(REGISTCOUNT)
+                    returnCount(COUNT)
                 }
             }
         }
     }
-
-
-
-
 }
 

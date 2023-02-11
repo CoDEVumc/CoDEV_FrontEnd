@@ -57,30 +57,9 @@
             style="@style/Text.Body5.SemiBold"
             android:textColor="@color/black_500"
             android:text="현재 지원자 n"/>
-        <TextView
-            android:id="@+id/applicant_selected_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            style="@style/Text.Body5.SemiBold"
-            android:textColor="@color/black_500"
-            android:text="현재 선택된 지원자 n"/>
 
         <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/btn_cancel"
-            style="@style/Text.Body5.SemiBold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="취소하기"
-            android:textColor="@color/black_700"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:button="@null"/>
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/btn_choose"
+            android:id="@+id/btn_edit"
             style="@style/Text.Body5.SemiBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
