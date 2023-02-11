@@ -3,6 +3,7 @@ package com.example.codev
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,6 +11,10 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.codev.databinding.RecycleChatItemDateBinding
 import com.example.codev.databinding.RecycleChatItemEnterBinding
 import com.example.codev.databinding.RecycleChatItemLeaveBinding
@@ -18,6 +23,9 @@ import com.example.codev.databinding.RecycleChatItemMyFirstBinding
 import com.example.codev.databinding.RecycleChatItemOtherContinueBinding
 import com.example.codev.databinding.RecycleChatItemOtherFirstBinding
 import com.example.codev.databinding.RecycleChatRoomListBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -132,8 +140,35 @@ class AdapterChatList(private val listData: ArrayList<ResponseOfGetChatListData>
     inner class ChatOtherFirstViewHolder(private val binding: RecycleChatItemOtherFirstBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(data: ResponseOfGetChatListData, position: Int){
             Log.d("stomp data type",data.type)
-            Glide.with(context)
+            Glide.with(itemView.context)
                 .load(data.profileImg).circleCrop()
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            Glide.with(itemView.context)
+                                .load("http://semtle.catholic.ac.kr:8080/image?name=Profile_Basic20230130012110.png")
+                                .circleCrop()
+                                .into(binding.profileImg)
+                        }
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        return false
+                    }
+
+                })
                 .into(binding.profileImg)
             binding.chat.text = data.content
             binding.nickname.text = data.co_nickName
