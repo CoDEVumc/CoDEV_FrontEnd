@@ -1,6 +1,7 @@
 package com.example.codev
 
 import android.Manifest
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -14,6 +15,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
+import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -43,7 +45,6 @@ class MyProfileActivity:AppCompatActivity() {
     lateinit var viewBinding: ActivityMyProfileBinding
     private var isDefaultImg = false
     private val defaultImgUrl = "http://semtle.catholic.ac.kr:8080/image?name=Profile_Basic20230130012110.png"
-    private var cameraRequestCode = 1
     private var addPageFunction = AddPageFunction()
 
     private var selectedImageItem = ImageItem(Uri.EMPTY, "", defaultImgUrl)
@@ -144,27 +145,34 @@ class MyProfileActivity:AppCompatActivity() {
         if(cameraFile.exists()) cameraFile.delete()
     }
 
-    private val getContent = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         if(uri != null){
-            checkNextBtn()
-            val imageInfo = addPageFunction.getInfoFromUri(this, uri)
-            val imageName = imageInfo[0]
-            val imageSize = imageInfo[1].toInt()
-            val imageSizeLimitByte = 2e+7
-            if(imageSize <= imageSizeLimitByte){
-                val copyImagePath = addPageFunction.createCopyAndReturnPath(this, uri, imageName)
-                val nowImageItem = ImageItem(uri, copyImagePath)
+            val cR: ContentResolver = this.contentResolver
+            val mime: MimeTypeMap = MimeTypeMap.getSingleton()
+            val type: String? = cR.getType(uri)
+            if(type == "image/png" || type == "image/jpg" || type == "image/jpeg"){
+                checkNextBtn()
+                val imageInfo = addPageFunction.getInfoFromUri(this, uri)
+                val imageName = imageInfo[0]
+                val imageSize = imageInfo[1].toInt()
+                val imageSizeLimitByte = 2e+7
+                if(imageSize <= imageSizeLimitByte){
+                    val copyImagePath = addPageFunction.createCopyAndReturnPath(this, uri, imageName)
+                    val nowImageItem = ImageItem(uri, copyImagePath)
 
-                if(selectedImageItem.imageUri != Uri.EMPTY){ //전에 선택된 사진이 원래 사진이 아닌 경우
-                    File(selectedImageItem.imageCopyPath).delete()
-                    Log.d("TestPhoto", "Photo deleted")
+                    if(File(selectedImageItem.imageCopyPath).exists()) File(selectedImageItem.imageCopyPath).delete()
+
+                    selectedImageItem = nowImageItem
+                    isDefaultImg = false
+                    Glide.with(this)
+                        .load(uri).circleCrop()
+                        .into(viewBinding.profileImg)
                 }
-                selectedImageItem = nowImageItem
-                isDefaultImg = false
-                Glide.with(this)
-                    .load(uri).circleCrop()
-                    .into(viewBinding.profileImg)
+            }else{
+                Toast.makeText(this, "png 및 jpg(jpeg)형식의 사진만 지원합니다.", Toast.LENGTH_SHORT).show()
             }
+
+
         }
     }
     //imageSection - End
@@ -282,11 +290,8 @@ class MyProfileActivity:AppCompatActivity() {
         }
         dialogLayout.imageSection.setOnClickListener {
             addPageFunction.checkSelfPermission(this, this)
-            getContent.launch(arrayOf(
-                "image/png",
-                "image/jpg",
-                "image/jpeg"
-            ))
+            getContent.launch("image/*")
+
             isDefaultImg = false
             checkNextBtn()
             dialog.dismiss()

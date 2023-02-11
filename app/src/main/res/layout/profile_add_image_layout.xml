@@ -96,6 +96,7 @@
             />
 
         <TextView
+            android:id="@+id/Default_image_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@+id/default_icon"

@@ -182,4 +182,7 @@ interface RetrofitService {
 
     @PATCH("user/update/password")
     fun changePassword(@Header("CoDev_Authorization") authToken: String, @Body params: ReqChangeUserPassword): Call<ResChangeUserPassword>
+
+    @GET("project/recruitment/portfolio/{coProjectId}/{coPortfolioId}")
+    fun getAppliedDetail(@Header("CoDev_Authorization") header: String, @Path("coProjectId") coProjectId: Int, @Path("coPortfolioId") coPortfolioId: Int) : Call<ResAppliedUserDetail>
 }
