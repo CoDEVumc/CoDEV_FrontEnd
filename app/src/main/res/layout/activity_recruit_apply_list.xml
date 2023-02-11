@@ -48,6 +48,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginTop="8dp">
         <TextView
+            android:id="@+id/applicant_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -55,9 +56,20 @@
             app:layout_constraintBottom_toBottomOf="parent"
             style="@style/Text.Body5.SemiBold"
             android:textColor="@color/black_500"
-            android:text="현재 지원자 0"/>
-
+            android:text="현재 지원자 n"/>
         <TextView
+            android:id="@+id/applicant_selected_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="@style/Text.Body5.SemiBold"
+            android:textColor="@color/black_500"
+            android:text="현재 선택된 지원자 n"/>
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/btn_cancel"
             style="@style/Text.Body5.SemiBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -65,7 +77,20 @@
             android:textColor="@color/black_700"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:button="@null"/>
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/btn_choose"
+            style="@style/Text.Body5.SemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="선택하기"
+            android:textColor="@color/black_700"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:button="@null"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -80,12 +105,12 @@
         android:layout_marginTop="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="vertical"
-        tools:listitem="@layout/recycle_applyer_item2"
+        tools:listitem="@layout/recycle_applicant_item2"
         android:nestedScrollingEnabled="false"
         android:overScrollMode="never"/>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_select"
+        android:id="@+id/btn_select1"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -93,13 +118,23 @@
         app:layout_constraintBottom_toBottomOf="parent"
         style="@style/Text.Body4.SemiBold"
         android:textColor="@color/black_500"
-        android:background="@drawable/recruit_apply_selectbtn"
+        android:background="@drawable/recruit_apply_selectbtn1"
+        />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_select2"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        style="@style/Text.Body4.SemiBold"
+        android:textColor="@color/black_500"
+        android:background="@drawable/recruit_apply_selectbtn2"
         />
 
     <!-- android:visibility="gone" 이거 추가함 -->
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/bottom_btn"
         android:layout_width="match_parent"
         android:layout_height="56dp"

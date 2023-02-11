@@ -4,6 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="36dp"
     android:layout_marginEnd="12dp"
+    android:id="@+id/part_toggle"
     android:background="@drawable/recruit_apply_partbox">
 
     <ImageView
@@ -30,7 +31,7 @@
         android:background="@drawable/login_bar"/>
 
     <TextView
-        android:id="@+id/num"
+            android:id="@+id/num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@+id/part"

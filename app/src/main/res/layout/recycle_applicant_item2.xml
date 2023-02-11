@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/applicant_portfolio"
     android:background="@drawable/recruit_applyer_list_background"
     >
 
     <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/chk_delete"
+        android:id="@+id/chk_choose"
         android:layout_width="24dp"
         android:layout_height="24dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +28,7 @@
         android:layout_marginStart="32dp"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/applyer_portfolio"
+        android:id="@+id/portfolio"
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:layout_marginStart="24dp"
@@ -48,6 +49,15 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/img_selected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/recruit_apply_selected_profile_background"
+            app:layout_constraintBottom_toBottomOf="@+id/applyer_profile"
+            app:layout_constraintEnd_toEndOf="@+id/applyer_profile"
+            app:layout_constraintStart_toStartOf="@+id/applyer_profile"
+            app:layout_constraintTop_toTopOf="@+id/applyer_profile" />
 
         <TextView
             android:id="@+id/applyer_portfolio_title"

@@ -148,6 +148,34 @@ interface RetrofitService {
     @GET("study/{coStudyId}")
     fun getStudyDetail(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int) : Call<ResGetRecruitDetail>
 
+    @GET("project/recruitment/{coProjectId}")
+    fun getApplyerProjectList( // pm] 플젝 지원자 리스트
+        @Header("CoDev_Authorization") header: String,
+        @Path("coProjectId") coProjectId: Int,
+        @Query("coPart") type: String
+    ) : Call<ResApplyerList>
+
+    @GET("study/recruitment/{coStudyId}")
+    fun getApplyerStudyList( //pm] 스터디 지원자 리스트
+        @Header("CoDev_Authorization") header: String,
+        @Path("coStudyId") coStudyId: Int,
+        @Query("coPart") type: String
+    ) : Call<ResApplyerList>
+
+    @PATCH("project/recruitment/pick/{coProjectId}") //프로젝트 지원자 선택 & 선택취소
+    fun requestProjectApplicant(
+        @Header("CoDev_Authorization") header: String,
+        @Path("coProjectId") coProjectId: Int
+    ): Call<JsonObject>
+
+    @GET("project/recruitment/portfolio/{coProjectId}/{coPortfolioId}")
+    fun getProjectApplicantPorfolioDetail(
+        @Header("CoDev_Authorization") header: String,
+        @Path("coProjectId") coProjectId: Int,
+        @Path("coPortfolioId") coPortfolioId: Int,
+        ): Call<ResGetPFDetail2>
+
+
     @DELETE("project/out/{coProjectId}")
     fun deleteProject(@Path("coProjectId") coProjectId:Int,@Header("CoDev_Authorization") header: String) : Call<JsonObject>
 
