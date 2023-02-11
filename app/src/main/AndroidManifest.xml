@@ -20,6 +20,26 @@
         android:theme="@style/Theme.CODEV"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <!-- 카메라 관련(프로필 사진 변경)
+            androidx.core.content.FileProvider : 다른APP에 임시로 권한을 부여할 수 있는 API
+            android:authorities : privider에대한 id 정보
+                                 관례적으로 package.privider로 많이 사용
+                                 ${applicationId} : packiage id가 적용 된다.
+            meta-data : meta-data tag에는 android.support.FILE_PROVIDER_PATHS 를 정의해야 된다.
+                        이 PATH의 위치는 android:resource Tag에 존재 한다.
+        -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+
         <activity
             android:name=".userinfo.PasswordChangeActivity"
             android:exported="false" />

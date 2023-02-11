@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- external-files-path : 일반저장소
+         external-cache-path : 캐쉬저장소
+         path="." : /storage/emulated/Android/data/package nm...
+    -->
+    <external-files-path name="external_files" path="." />
+    <external-cache-path name="external_cache" path="." />
+
+</paths>
