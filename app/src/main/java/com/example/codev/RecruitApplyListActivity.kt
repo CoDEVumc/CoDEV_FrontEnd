@@ -6,11 +6,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import android.view.View.OnLayoutChangeListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.codev.addpage.AddNewProjectActivity
 import com.example.codev.addpage.AddNewStudyActivity
 import com.example.codev.addpage.EditProject
@@ -167,6 +171,11 @@ class RecruitApplyListActivity: AppCompatActivity() {
         }
     }
 
+//    Log.d("test","리콜받음 $it")
+//    loadData(context, type, id, it)
+//    viewBinding.btnEdit.isChecked = false
+//    viewBinding.btnEdit.text = "선택하기"
+
     private fun setAdapter1(dataList: ArrayList<ApplicantData>, context: Context, limit: Int){
         adapter1 = AdapterRecruitApplicants1(context, dataList, limit){
             Log.d("test","리콜받음 $it")
@@ -174,7 +183,9 @@ class RecruitApplyListActivity: AppCompatActivity() {
             viewBinding.btnEdit.isChecked = false
             viewBinding.btnEdit.text = "선택하기"
         }
+        val currentPosition = (viewBinding.part.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
         viewBinding.part.adapter = adapter1
+        viewBinding.part.scrollToPosition(currentPosition)
     }
 
     private fun setAdapter2(dataList: ArrayList<ApplicantInfoData>, context: Context){
