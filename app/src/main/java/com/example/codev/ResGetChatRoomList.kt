@@ -15,6 +15,7 @@ data class ResponseOfGetChatRoomListData(
     val roomId: String,
     val room_type: String,
     val room_title: String,
+    val mainImg: String,
     val status: Boolean,
     val receiverCo_email: String,
     val receiverCo_nickName: String,

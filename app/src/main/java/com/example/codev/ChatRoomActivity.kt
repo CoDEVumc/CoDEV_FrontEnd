@@ -27,14 +27,11 @@ class ChatRoomActivity:AppCompatActivity() {
     private lateinit var roomId: String
     private lateinit var adapter: AdapterChatList
 
-//    private var originalRecyclerViewBottom: Int = 0
-//    private var recyclerViewHeight: Int = 0
-
     override fun onDestroy() {
-        super.onDestroy()
         Log.d("stomp: etc", "다른 탭 이동")
         ChatClient.sendMessage("LEAVE", roomId, UserSharedPreferences.getKey(this),"LEAVE")
         ChatClient.exit()
+        super.onDestroy()
     }
 
     @SuppressLint("CheckResult")
@@ -79,71 +76,20 @@ class ChatRoomActivity:AppCompatActivity() {
             }
         })
 
-
-//        viewBinding.root.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-//            override fun onGlobalLayout() {
-//                val screenHeight = viewBinding.root.height
-//                val keyboardHeight = screenHeight - viewBinding.chatList.bottom
-//
-//                if (keyboardHeight > screenHeight * 0.15) {
-//                    viewBinding.chatList.smoothScrollBy(0, keyboardHeight)
-//                } else {
-//                    viewBinding.chatList.smoothScrollBy(0, -viewBinding.chatList.height)
-//                }
-//            }
-//        })
-
-//        viewBinding.root.viewTreeObserver.addOnGlobalLayoutListener {
-//            val rect = Rect()
-//            viewBinding.root.getWindowVisibleDisplayFrame(rect)
-//            val screenHeight = viewBinding.root.rootView.height
-//            val keyboardHeight = screenHeight - rect.bottom
-//            if (keyboardHeight > screenHeight * 0.15) {
-//                // Keyboard is open, scroll the RecyclerView up by the keyboard height
-//                viewBinding.chatList.smoothScrollBy(0, keyboardHeight)
-//            } else {
-//                // Keyboard is closed, scroll the RecyclerView back to its original position
-//                viewBinding.chatList.smoothScrollBy(0, -keyboardHeight)
-//            }
-//        }
-
-//        viewBinding.root.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-//            Log.d("test","bottom : $bottom, oldBottom: $oldBottom 차이는  ${bottom-oldBottom}")
-//            if (bottom < oldBottom) {
-//                // Keyboard has gone up, scroll the recycler view down to show the latest chat message
-//                viewBinding.chatList.smoothScrollBy(0, oldBottom - bottom)
-//            } else if (bottom > oldBottom) {
-//                // Keyboard has gone down, scroll the recycler view up to the original position
-//                viewBinding.chatList.smoothScrollBy(0, oldBottom - bottom)
-//            }
-//        }
-
-//        viewBinding.chatList.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
-//            Log.d("test", "$bottom and $oldBottom")
-//            if (bottom < oldBottom) {
-//                viewBinding.chatList.smoothScrollBy(0, oldBottom - bottom)
-//            }else{
-////                if(!viewBinding.chatList.canScrollVertically(1)) {
-////                    viewBinding.chatList.smoothScrollToPosition((viewBinding.chatList.adapter?.itemCount?: 1) - 1)
-////                }else{
-////                    viewBinding.chatList.smoothScrollBy(0, oldBottom - bottom)
-////                }
-//            }
-//        }
-
-//        viewBinding.chatList.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-//            val displayRect = Rect()
-//            window.decorView.getWindowVisibleDisplayFrame(displayRect)
-//            val screenHeight = window.decorView.rootView.height
-//            val keyboardHeight = screenHeight - displayRect.bottom
-//            if (keyboardHeight > 0) {
-//                // keyboard is up
-//                viewBinding.chatList.smoothScrollBy(0, -keyboardHeight)
-//            } else {
-//                // keyboard is down
-//                viewBinding.chatList.smoothScrollBy(0, keyboardHeight)
-//            }
-//        }
+        var recyclerViewPosition = 0
+        viewBinding.root.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            if (bottom < oldBottom) {
+                // Keyboard has gone up, save the position of the recycler view
+                recyclerViewPosition = (viewBinding.chatList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                Log.d("test 보여지는 아이템","$recyclerViewPosition")
+                Log.d("test 전체 아이템", viewBinding.chatList.adapter?.itemCount.toString())
+//                viewBinding.chatList.smoothScrollToPosition(viewBinding.chatList.adapter?.itemCount ?: 0)
+                viewBinding.chatList.smoothScrollBy(0, oldBottom - bottom)
+            } else if (bottom > oldBottom) {
+                // Keyboard has gone down, restore the original position of the recycler view
+                viewBinding.chatList.smoothScrollToPosition(recyclerViewPosition)
+            }
+        }
 
         viewBinding.btnSend.setOnClickListener {
             ChatClient.sendMessage("TALK", roomId, UserSharedPreferences.getKey(this), viewBinding.etChat.text.toString())

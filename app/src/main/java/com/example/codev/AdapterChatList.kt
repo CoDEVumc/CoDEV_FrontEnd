@@ -1,13 +1,10 @@
 package com.example.codev
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -16,21 +13,15 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.codev.databinding.RecycleChatItemDateBinding
-import com.example.codev.databinding.RecycleChatItemEnterBinding
-import com.example.codev.databinding.RecycleChatItemLeaveBinding
 import com.example.codev.databinding.RecycleChatItemMyContinueBinding
 import com.example.codev.databinding.RecycleChatItemMyFirstBinding
 import com.example.codev.databinding.RecycleChatItemOtherContinueBinding
 import com.example.codev.databinding.RecycleChatItemOtherFirstBinding
-import com.example.codev.databinding.RecycleChatRoomListBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.sql.Timestamp
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 import kotlin.collections.ArrayList
 
 class AdapterChatList(private val listData: ArrayList<ResponseOfGetChatListData>, private val context: Context, private val people: Int, private val returnDataListSize: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -41,8 +32,6 @@ class AdapterChatList(private val listData: ArrayList<ResponseOfGetChatListData>
     private val DAY = 5
     private val INVITE = 6
     private val EXIT = 7
-    private val ENTER = 8
-    private val LEAVE = 9
 
 
     fun addData(data: ResponseOfGetChatListData){
@@ -70,12 +59,6 @@ class AdapterChatList(private val listData: ArrayList<ResponseOfGetChatListData>
             }
             OTHER_CONTINUE ->{
                 ChatOtherContinueViewHolder(RecycleChatItemOtherContinueBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            }
-            ENTER -> {
-                ChatEnterViewHolder(RecycleChatItemEnterBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            }
-            LEAVE -> {
-                ChatLeaveViewHolder(RecycleChatItemLeaveBinding.inflate(LayoutInflater.from(parent.context), parent, false))
             }
             DAY ->{
                 ChatDayViewHolder(RecycleChatItemDateBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -111,11 +94,7 @@ class AdapterChatList(private val listData: ArrayList<ResponseOfGetChatListData>
     override fun getItemCount(): Int = listData.size
 
     override fun getItemViewType(position: Int): Int {
-        if (listData[position].type == "ENTER"){
-            return ENTER
-        }else if(listData[position].type == "LEAVE"){
-            return LEAVE
-        }else if (listData[position].type == "DAY"){
+        if (listData[position].type == "DAY"){
             return DAY
         }else if (UserSharedPreferences.getKey(context) == listData[position].sender) {
             if(position == 0){
@@ -201,18 +180,6 @@ class AdapterChatList(private val listData: ArrayList<ResponseOfGetChatListData>
             binding.time.isGone = true
 //            binding.time.text = stringToTime(data.createdDate)
 
-        }
-    }
-
-    inner class ChatEnterViewHolder(private val binding: RecycleChatItemEnterBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: ResponseOfGetChatListData, position: Int){
-            Log.d("stomp data type",data.type)
-        }
-    }
-
-    inner class ChatLeaveViewHolder(private val binding: RecycleChatItemLeaveBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: ResponseOfGetChatListData, position: Int){
-            Log.d("stomp data type",data.type)
         }
     }
 

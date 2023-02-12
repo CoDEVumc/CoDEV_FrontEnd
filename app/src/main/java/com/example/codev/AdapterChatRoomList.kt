@@ -42,16 +42,28 @@ class AdapterChatRoomList(private val listData: ArrayList<ResponseOfGetChatRoomL
     inner class ChatRoomListViewHolder(private val binding: RecycleChatRoomListBinding): RecyclerView.ViewHolder(binding.root){
         @SuppressLint("SetTextI18n")
         fun bind(data: ResponseOfGetChatRoomListData, position: Int){
-            Glide.with(context)
-                .load(data.receiverProfileImg).circleCrop()
-                .into(binding.oneImg1)
+
+            if (data.room_type == "OTM"){
+                Glide.with(itemView.context)
+                    .load(data.mainImg).circleCrop()
+                    .into(binding.oneImg1)
+
+                if (data.people == 3){
+                    binding.roomMemberNumber.text = "2"
+                }else{
+                    binding.roomMemberNumber.text = (data.people -1).toString()
+                }
+
+            }else{
+                Glide.with(itemView.context)
+                    .load(data.receiverProfileImg).circleCrop()
+                    .into(binding.oneImg1)
+
+                binding.roomMemberNumber.text = "1"
+            }
 
             binding.roomTitle.text = data.room_title
-            if (data.people == 2){
-                binding.roomMemberNumber.text = "1"
-            }else{
-                binding.roomMemberNumber.text = data.people.toString()
-            }
+
             binding.roomMessage.text = data.latestconv
             if (data.latestDate.isNullOrBlank()){
                 binding.roomChatDate.text = " "
