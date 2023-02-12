@@ -9,14 +9,14 @@
         android:id="@+id/select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="23dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="52dp"
         android:background="@drawable/recruit_popup_write_background"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <RadioGroup
-            android:id="@+id/radioGroup_write"
+            android:id="@+id/radioGroup_change"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="18dp"
@@ -28,7 +28,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatRadioButton
-                android:id="@+id/btn_write_project"
+                android:id="@+id/btn_project"
                 android:layout_width="100dp"
                 android:layout_height="18dp"
                 android:layout_marginBottom="16dp"
@@ -37,7 +37,7 @@
                 android:textColor="@color/black_900" />
 
             <androidx.appcompat.widget.AppCompatRadioButton
-                android:id="@+id/btn_write_study"
+                android:id="@+id/btn_study"
                 android:layout_width="100dp"
                 android:layout_height="18dp"
                 android:button="@null"
@@ -46,20 +46,6 @@
 
         </RadioGroup>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="76dp"
-        android:src="@drawable/recruit_fab_close"
-        app:backgroundTint="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/select"
-        app:layout_constraintTop_toBottomOf="@+id/select" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

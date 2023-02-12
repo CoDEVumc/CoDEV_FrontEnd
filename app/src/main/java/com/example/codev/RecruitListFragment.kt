@@ -1,6 +1,9 @@
 package com.example.codev
 
 import android.content.Context
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,10 +11,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.NotificationCompat.getColor
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.codev.addpage.AddNewProjectActivity
+import com.example.codev.databinding.FragmentMyBookmarkBinding
 import com.example.codev.databinding.FragmentRecruitListBinding
+import com.example.codev.databinding.PopupWriteBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -61,7 +71,8 @@ class RecruitListFragment : Fragment() {
     ): View? {
         viewBinding = FragmentRecruitListBinding.inflate(layoutInflater)
         var temp = viewBinding.toolbarRecruit.toolbar1
-        viewBinding.toolbarRecruit.toolbar1.inflateMenu(R.menu.menu_toolbar_2)
+        //viewBinding.toolbarRecruit.toolbar1.inflateMenu(R.menu.menu_toolbar_2)
+        viewBinding.toolbarRecruit.toolbar1.inflateMenu(R.menu.menu_toolbar_4)
         viewBinding.toolbarRecruit.toolbar1.title = ""
         var popupMenu = PopupMenu(mainAppActivity, temp)
         popupMenu.inflate(R.menu.menu_recruit)
@@ -94,55 +105,81 @@ class RecruitListFragment : Fragment() {
 
 
         //툴바에서 프 <-> 스 전환
-        viewBinding.toolbarRecruit.toolbarImg.setOnClickListener {
-            popupMenu.setOnMenuItemClickListener {
-                downpage = 0
-                lastPage = false //없으면 페이지 전환시 무한스크롤 작동x
-                // (이유: 스터디 화면에서 페이지 끝까지 닿으면 lastpage = true -> addOnScrollListener의 조건에 의해 더이상 downpage가 증가하지 x)
-                // S화면 끝까지 닿았다가 P화면 전환 시 P화면 무한스크롤 x
-                if(now == 0){ //현재 프로젝트 화면이면
+        var chg: Int
+        val popupChangeFragment = PopupChangeFragment(){
+            chg = it //누른게 넘어와
+            Log.d("test : 0이면 플젝버튼누름 1이면 스터디버튼누름 :", now.toString())
+
+            downpage = 0
+            lastPage = false //없으면 페이지 전환시 무한스크롤 작동x
+            // (이유: 스터디 화면에서 페이지 끝까지 닿으면 lastpage = true -> addOnScrollListener의 조건에 의해 더이상 downpage가 증가하지 x)
+            // S화면 끝까지 닿았다가 P화면 전환 시 P화면 무한스크롤 x
+            when(chg){
+                0 -> { //0 넘어옴 스->프
                     pdataList = ArrayList()
                     sdataList = ArrayList()
-                    when (it.itemId) { //프->스
-                        R.id.m_study -> {
-                            now = 1
-                            Toast.makeText(mainAppActivity, "스터디", Toast.LENGTH_SHORT).show()
-                            viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_study)
-                            loadSData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
-                            Log.d("test: (1나와야 돼) now : ",now.toString())
-                            true
-                        }
-                        else -> false
-                    }
+                    now = 0
+                    Toast.makeText(mainAppActivity, "프로젝트", Toast.LENGTH_SHORT).show()
+                    viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_project)
+                    loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
+                    Log.d("test: (0나와야 돼) now : ",now.toString())
+                    true
                 }
-                else { //현재 스터디 화면이면
+                1 -> { //1넘어옴 프->스
                     pdataList = ArrayList()
                     sdataList = ArrayList()
-                    when (it.itemId) { //스->프
-                        R.id.m_project -> {
-                            now = 0
-                            Toast.makeText(mainAppActivity, "프로젝트", Toast.LENGTH_SHORT).show()
-                            viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_project)
-                            loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
-                            Log.d("test: (0나와야 돼) now : ",now.toString())
-                            true
-                        }
-                        else -> false
-                    }
+                    now = 1
+                    Toast.makeText(mainAppActivity, "스터디", Toast.LENGTH_SHORT).show()
+                    viewBinding.toolbarRecruit.toolbarImg.setImageResource(R.drawable.logo_study)
+                    loadSData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
+                    Log.d("test: (1나와야 돼) now : ",now.toString())
+                    true
                 }
             }
-            popupMenu.show()
+        }
+        viewBinding.toolbarRecruit.toolbarImg.setOnClickListener {
+            popupChangeFragment.show(childFragmentManager, popupChangeFragment.tag)
         }
 
-
+        //알림 (알람) 버튼에 popup sample 프래그먼트 연결
+        var clicked: String = ""
+        val popupSampleFragment = PopupSampleFragment(){
+            clicked = it
+            Log.d("test : ", clicked+"버튼 누름")
+            when(clicked){
+                "yes" -> {
+                    Toast.makeText(mainAppActivity, "계속하기 누름", Toast.LENGTH_SHORT).show()
+                }
+                "no" -> {
+                    Toast.makeText(mainAppActivity, "취소하기 누름", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
         viewBinding.toolbarRecruit.toolbar1.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_search ->{
                     Toast.makeText(mainAppActivity, "검색", Toast.LENGTH_SHORT).show()
                     true
                 }
+                R.id.menu_bookmark ->{
+                    Toast.makeText(mainAppActivity, "북마크", Toast.LENGTH_SHORT).show()
+                    when(now) {
+                        0 -> {
+                            val intent = Intent(mainAppActivity, MyBookMarkActivity::class.java)
+                            intent.putExtra("now", now)
+                            startActivity(intent)
+                        }
+                        1 -> {
+                            val intent = Intent(mainAppActivity, MyBookMarkActivity::class.java)
+                            intent.putExtra("now", now)
+                            startActivity(intent)
+                        }
+                    }
+                    true
+                }
                 R.id.menu_alarm ->{
                     Toast.makeText(mainAppActivity, "알람", Toast.LENGTH_SHORT).show()
+                    popupSampleFragment.show(childFragmentManager, popupSampleFragment.tag)
                     true
                 }
                 else -> false
@@ -179,9 +216,11 @@ class RecruitListFragment : Fragment() {
             coLocationTag = it
             if(coLocationTag != "") {
                 viewBinding.loc.text = coLocationTag
+                viewBinding.loc.setTextColor(ContextCompat.getColor(requireActivity().applicationContext, R.color.green_900))
             }
             else{
                 viewBinding.loc.text = "지역"
+                viewBinding.loc.setTextColor(ContextCompat.getColor(requireActivity().applicationContext, R.color.black_500))
             }
             when(now){
                 0 -> {
@@ -202,9 +241,12 @@ class RecruitListFragment : Fragment() {
             coPartTag = it
             if(coPartTag != "") {
                 viewBinding.part.text = coPartTag
+                viewBinding.part.setTextColor(ContextCompat.getColor(requireActivity().applicationContext, R.color.green_900))
+
             }
             else{
                 viewBinding.part.text = "분야"
+                viewBinding.part.setTextColor(ContextCompat.getColor(requireActivity().applicationContext, R.color.black_500))
             }
             when(now){
                 0 -> {
@@ -243,6 +285,12 @@ class RecruitListFragment : Fragment() {
             Log.d("coSortingTag: ",coSortingTag)
         }
 
+        //작성버튼 누르면 작성페이지로 이동
+        val bottomSheetWrite = BottomSheetWrite(){
+            write = it
+            Log.d("test :", write+" 버튼 누름")
+        }
+
         //지역 버튼 --> 선택 한거로 바껴있어야 됨(내용&색)
         viewBinding.loc.setOnClickListener {
             bottomSheetLoc.show(childFragmentManager, bottomSheetLoc.tag)
@@ -267,14 +315,14 @@ class RecruitListFragment : Fragment() {
             bottomSheetSort.show(childFragmentManager, bottomSheetSort.tag)
         }
 
-        val bottomSheetWrite = BottomSheetWrite(){
-            write = it
-            Log.d("test :", write+" 버튼 누름")
-        }
+
         //플로팅 작성버튼
         viewBinding.floatingActionButton.setOnClickListener {
             bottomSheetWrite.show(childFragmentManager, bottomSheetWrite.tag)
         }
+
+
+
 
         return viewBinding.root
     }
