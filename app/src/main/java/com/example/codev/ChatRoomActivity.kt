@@ -26,11 +26,13 @@ class ChatRoomActivity:AppCompatActivity() {
     private lateinit var viewBinding: ActivityChatRoomBinding
     private lateinit var roomId: String
     private lateinit var adapter: AdapterChatList
+    private var recyclerViewPosition = 0
 
     override fun onDestroy() {
         Log.d("stomp: etc", "다른 탭 이동")
         ChatClient.sendMessage("LEAVE", roomId, UserSharedPreferences.getKey(this),"LEAVE")
         ChatClient.exit()
+        ChatClient.disconnect()
         super.onDestroy()
     }
 
@@ -69,7 +71,7 @@ class ChatRoomActivity:AppCompatActivity() {
             }
         })
 
-        var recyclerViewPosition = 0
+
         viewBinding.chatList.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
             if((viewBinding.chatList.adapter?.itemCount ?: 0) != 0){
                 if (bottom < oldBottom) {
@@ -108,11 +110,11 @@ class ChatRoomActivity:AppCompatActivity() {
             adapter = AdapterChatList(arrayListOf(), context, people){
                 Log.d("stomp 추가후 데이터 크기", it.toString())
                 runOnUiThread(Runnable { adapter.notifyItemInserted(it) })
-
                 //최하단일때 새 메시지(TALK, INVITE, DAY, EXIT 들어오면 추가된 데이터로 스크롤이동
                 if(!viewBinding.chatList.canScrollVertically(1)) {
                     viewBinding.chatList.smoothScrollToPosition(it - 1)
                 }
+                recyclerViewPosition = (viewBinding.chatList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
             }
         }else{
             adapter = AdapterChatList(dataList, context, people){
@@ -123,6 +125,7 @@ class ChatRoomActivity:AppCompatActivity() {
                 if(!viewBinding.chatList.canScrollVertically(1)) {
                     viewBinding.chatList.smoothScrollToPosition(it - 1)
                 }
+                recyclerViewPosition = (viewBinding.chatList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
             }
         }
         ChatClient.setAdapter(adapter)

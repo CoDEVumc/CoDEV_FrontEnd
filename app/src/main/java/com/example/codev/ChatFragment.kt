@@ -45,8 +45,6 @@ class ChatFragment:Fragment() {
         viewBinding.toolbarChat.toolbar1.title = ""
         viewBinding.toolbarChat.toolbarImg.setImageResource(R.drawable.logo_chat)
 
-        ChatClient
-
         return viewBinding.root
     }
 

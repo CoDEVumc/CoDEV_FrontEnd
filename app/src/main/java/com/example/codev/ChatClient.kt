@@ -5,7 +5,6 @@ import android.content.Context
 import android.util.Log
 import com.gmail.bishoybasily.stomp.lib.Event
 import com.gmail.bishoybasily.stomp.lib.StompClient
-import com.google.android.material.internal.ContextUtils.getActivity
 import io.reactivex.disposables.Disposable
 import okhttp3.OkHttpClient
 import org.json.JSONObject
@@ -17,25 +16,26 @@ object ChatClient{
     private const val BASE_URL = "ws://semtle.catholic.ac.kr:8080/ws-codev"
     private var mStompClient: StompClient
     private const val intervalMillis = 1000L
-    private val client = OkHttpClient()
+    private val oKClient = OkHttpClient()
     private lateinit var room: Disposable
+    private lateinit var Client: Disposable
     private lateinit var adapter: AdapterChatList
 
     init {
-        mStompClient = StompClient(client, intervalMillis)
+        mStompClient = StompClient(oKClient, intervalMillis)
         mStompClient.url = BASE_URL
-        mStompClient.connect().subscribe {
+        Client = mStompClient.connect().subscribe {
             Log.d("stomp connect: type", it.type.toString())
             Log.d("stomp connect: exception", it.exception.toString())
             when (it.type) {
                 Event.Type.OPENED -> {
-
+                    Log.d("stomp opened", Event.Type.OPENED.toString())
                 }
                 Event.Type.CLOSED -> {
-
+                    Log.d("stomp closed", Event.Type.CLOSED.toString())
                 }
                 Event.Type.ERROR -> {
-
+                    Log.d("stomp error", Event.Type.ERROR.toString())
                 }
                 else -> {}
             }
@@ -73,7 +73,10 @@ object ChatClient{
 
     fun exit(){
         room.dispose()
-        Log.d("stomp: disconnect", "join 해지")
+    }
+
+    fun disconnect(){
+        Client.dispose()
     }
 
     fun sendMessage(type: String, roomId: String, sender: String, msg: String){
