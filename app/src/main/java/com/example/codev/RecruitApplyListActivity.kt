@@ -42,33 +42,33 @@ class RecruitApplyListActivity: AppCompatActivity() {
     //private var coPart: String=""//백엔드, 프론트엔드, 기획, 디자인, 기타, TEMP(임시저장)
     //토글에서 선택한게 part에 저장되어야 함
 
-//    override fun onResume() {
-//        super.onResume()
-//        //툴바 설정
-//        viewBinding.toolbarApply.toolbar2.title = ""
-//        viewBinding.toolbarApply.toolbarText.text = "지원현황 보기"
-//        setSupportActionBar(viewBinding.toolbarApply.toolbar2)
-//        supportActionBar?.apply {
-//            setDisplayHomeAsUpEnabled(true)
-//            setHomeAsUpIndicator(R.drawable.left2)
+    override fun onResume() {
+        super.onResume()
+        //툴바 설정
+        viewBinding.toolbarApply.toolbar2.title = ""
+        viewBinding.toolbarApply.toolbarText.text = "지원현황 보기"
+        setSupportActionBar(viewBinding.toolbarApply.toolbar2)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.left2)
+        }
+
+
+        loadData(this, type , id, "TEMP")
+
+
+//        when(type){
+//            "PROJECT" -> {
+//                Log.d("test: 상세페이지 넘어온 part, id", "$type : $id")
+//                if (id != -1) {
+//                    loadData(this,type , id, "TEMP") //(처음엔 기본)누른 토글의 part넘겨줘야됨
+//                }
+//            }
+//            "STUDY" -> {
+//
+//            }
 //        }
-//
-//
-//        loadData(this, type , id, "TEMP")
-//
-//
-////        when(type){
-////            "PROJECT" -> {
-////                Log.d("test: 상세페이지 넘어온 part, id", "$type : $id")
-////                if (id != -1) {
-////                    loadData(this,type , id, "TEMP") //(처음엔 기본)누른 토글의 part넘겨줘야됨
-////                }
-////            }
-////            "STUDY" -> {
-////
-////            }
-////        }
-//    }
+    }
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {

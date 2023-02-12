@@ -5,13 +5,135 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Toolbar -->
     <include
         android:id="@+id/toolbar_apply"
         layout="@layout/toolbar2"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/btn_collect"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btn_select1"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/recruit_apply_selectbtn1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="168dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="168dp"
+                android:layout_marginBottom="24dp"
+                android:src="@drawable/coupon2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                style="@style/Text.Body6.SemiBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="160dp"
+                android:layout_marginTop="34dp"
+                android:layout_marginEnd="160dp"
+                android:layout_marginBottom="8dp"
+                android:text="선택 취소하기"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.52"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.8" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btn_select2"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/recruit_apply_selectbtn2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="168dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="168dp"
+                android:layout_marginBottom="24dp"
+                android:src="@drawable/coupon2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                style="@style/Text.Body6.SemiBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="160dp"
+                android:layout_marginTop="34dp"
+                android:layout_marginEnd="160dp"
+                android:layout_marginBottom="8dp"
+                android:text="선택하기"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.52"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.8" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/bottom_btn"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/nav_bottom_background"
+            android:elevation="16dp"
+            android:gravity="center"
+            android:weightSum="2.38"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_1"
+                style="@style/Text.Body4.SemiBold"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_marginStart="24dp"
+                android:layout_weight="1"
+                android:background="@drawable/recruit_apply_btn1_unselected"
+                android:text="초기화"
+                android:textColor="@color/black_300" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_2"
+                style="@style/Text.Body4.SemiBold"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="24dp"
+                android:layout_weight="1.38"
+                android:background="@drawable/recruit_apply_btn2"
+                android:text="모집 마감하기"
+                android:textColor="@color/black_500" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header1"
@@ -69,84 +191,26 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:button="@null"/>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/applyList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="0dp"
+        android:nestedScrollingEnabled="false"
+        android:orientation="vertical"
+        android:overScrollMode="never"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/btn_collect"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_btn"
-        android:layout_marginTop="8dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:orientation="vertical"
-        tools:listitem="@layout/recycle_applicant_item2"
-        android:nestedScrollingEnabled="false"
-        android:overScrollMode="never"/>
+        tools:listitem="@layout/recycle_applicant_item1" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_select1"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        style="@style/Text.Body4.SemiBold"
-        android:textColor="@color/black_500"
-        android:background="@drawable/recruit_apply_selectbtn1"
-        />
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_select2"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        style="@style/Text.Body4.SemiBold"
-        android:textColor="@color/black_500"
-        android:background="@drawable/recruit_apply_selectbtn2"
-        />
+
 
     <!-- android:visibility="gone" 이거 추가함 -->
-
-    <LinearLayout
-        android:id="@+id/bottom_btn"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:elevation="16dp"
-        android:background="@drawable/nav_bottom_background"
-        android:weightSum="2.38"
-        android:gravity="center">
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_1"
-            android:layout_width="0dp"
-            android:layout_height="38dp"
-            android:layout_weight="1"
-            android:layout_marginStart="24dp"
-            style="@style/Text.Body4.SemiBold"
-            android:textColor="@color/black_300"
-            android:background="@drawable/recruit_apply_btn1_unselected"
-            android:text="초기화"/>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_2"
-            android:layout_width="0dp"
-            android:layout_height="38dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="24dp"
-            android:layout_weight="1.38"
-            style="@style/Text.Body4.SemiBold"
-            android:textColor="@color/black_500"
-            android:background="@drawable/recruit_apply_btn2"
-            android:text="모집 마감하기"/>
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

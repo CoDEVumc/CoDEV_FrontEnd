@@ -83,10 +83,10 @@ class AdapterRecruitApplicants2(private val context: Context, private val listDa
 
             binding.applyerNum.text = (position + 1).toString()
             //임시저장 여부
-            when(data.co_temporaryStorage){
-                true -> binding.imgSelected.isGone = false //선택된 지원자면 imgSelected.isGone = false
-                false -> binding.imgSelected.isGone = true //선택안된 지원자면 imgSelected.isGone = true
-            }
+//            when(data.co_temporaryStorage){
+//                true -> binding.imgSelected.isGone = false //선택된 지원자면 imgSelected.isGone = false
+//                false -> binding.imgSelected.isGone = true //선택안된 지원자면 imgSelected.isGone = true
+//            }
             binding.applyerPortfolioTitle.text = data.co_title
             binding.applyerName.text = data.co_name
             binding.applyerPart.text = data.co_part

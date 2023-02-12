@@ -22,6 +22,7 @@
     <color name="black_50">#F8F8F8</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FF5959</color>
+    <color name="red2">#FF6F6F</color>
     <color name="opacity_black_900">#33333333</color>
     <color name="transparent">#00ff0000</color>
 </resources>

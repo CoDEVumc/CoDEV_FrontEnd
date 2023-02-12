@@ -56,16 +56,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
-        <ImageView
-            android:id="@+id/img_selected"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/recruit_apply_selected_profile_background"
-            app:layout_constraintBottom_toBottomOf="@+id/applyer_profile"
-            app:layout_constraintEnd_toEndOf="@+id/applyer_profile"
-            app:layout_constraintStart_toStartOf="@+id/applyer_profile"
-            app:layout_constraintTop_toTopOf="@+id/applyer_profile" />
-
 
         <TextView
             android:id="@+id/applyer_portfolio_title"
