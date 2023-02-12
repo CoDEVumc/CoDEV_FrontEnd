@@ -8,6 +8,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.core.view.isGone
 import com.example.codev.databinding.ActivityRegisterEmailBinding
@@ -19,6 +20,8 @@ import retrofit2.Response
 class RegisterEmailActivity:AppCompatActivity() {
     private lateinit var viewBinding: ActivityRegisterEmailBinding
     private lateinit var reqSignUp: ReqSignUp
+    private var isLoaded = true
+    private var isLegal = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,13 +47,15 @@ class RegisterEmailActivity:AppCompatActivity() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                isLegal = false
+                nextBtnEnable(false)
                 if (viewBinding.etEmail.text.matches(regex)){
                     viewBinding.warn.isGone = true
-                    nextBtnEnable(true)
+                    emailCheckBtnEnable(true)
                     viewBinding.etEmail.setBackgroundResource(R.drawable.login_et)
                 } else{
                     viewBinding.warn.isGone = false
-                    nextBtnEnable(false)
+                    emailCheckBtnEnable(false)
                     viewBinding.etEmail.setBackgroundResource(R.drawable.login_et_failed)
                 }
             }
@@ -58,6 +63,10 @@ class RegisterEmailActivity:AppCompatActivity() {
             override fun afterTextChanged(p0: Editable?) {
             }
         })
+
+        viewBinding.btnEmailCheck.setOnClickListener {
+            checkEmail()
+        }
 
         viewBinding.btnRegisterNext.setOnClickListener {
             reqSignUp.co_email = viewBinding.etEmail.text.toString()
@@ -100,6 +109,44 @@ class RegisterEmailActivity:AppCompatActivity() {
         })
     }
 
+    private fun checkEmail(){
+        isLoaded = false
+        val finalEmail = viewBinding.etEmail.text.toString()
+        RetrofitClient.service.checkEmail(finalEmail).enqueue(object : Callback<ResCheckEmail>{
+            override fun onResponse(call: Call<ResCheckEmail>, response: Response<ResCheckEmail>) {
+                isLoaded = true
+                if(response.isSuccessful.not()){
+                    Log.d("test: 이메일 중복체크 실패(서버)",response.toString())
+                    Toast.makeText(this@RegisterEmailActivity, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    return
+                }else {
+                    when (response.code()) {
+                        200 -> {
+                            emailCheckBtnEnable(false)
+                            response.body()?.let {
+                                if(it.code == 200){
+                                    isLegal = true
+                                    Toast.makeText(this@RegisterEmailActivity, "이메일 사용 가늡합니다", Toast.LENGTH_SHORT).show()
+                                    nextBtnEnable(true)
+                                }else{
+                                    isLegal = false
+                                    Toast.makeText(this@RegisterEmailActivity, "이메일이 중복되었습니다", Toast.LENGTH_SHORT).show()
+                                    viewBinding.etEmail.setBackgroundResource(R.drawable.login_et_failed)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResCheckEmail>, t: Throwable) {
+                isLoaded = true
+                Log.d("test: 이메일 중복체크 실패(클라이언트)",t.toString())
+                Toast.makeText(this@RegisterEmailActivity, "오류로 인해 서버와 연결을 시도하지 못했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
             android.R.id.home ->{
@@ -116,8 +163,25 @@ class RegisterEmailActivity:AppCompatActivity() {
             viewBinding.btnRegisterNext.isEnabled = boolean
             if(boolean){
                 viewBinding.btnRegisterNext.setTextColor(getColor(R.color.white))
+                viewBinding.etEmailChkImg.visibility = View.VISIBLE
             }else{
                 viewBinding.btnRegisterNext.setTextColor(getColor(R.color.black_500))
+                viewBinding.etEmailChkImg.visibility = View.GONE
+
+            }
+
+        }
+    }
+
+    private fun emailCheckBtnEnable(status: Boolean){
+        if(viewBinding.btnEmailCheck.isSelected != status){
+            viewBinding.btnEmailCheck.isSelected = status
+            viewBinding.btnEmailCheck.isEnabled = status
+            if(status){
+                viewBinding.btnEmailCheck.setTextColor(getColor(R.color.green_900))
+            }else{
+                viewBinding.btnEmailCheck.setTextColor(getColor(R.color.black_500))
+
             }
         }
     }

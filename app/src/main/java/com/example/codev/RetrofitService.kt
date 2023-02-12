@@ -38,6 +38,9 @@ interface RetrofitService {
     @GET("user/code/mail")
     fun getEmailCode(@Query("email") value1: String) : Call<ResGetEmailCode>
 
+    @POST("user/duplication")
+    fun checkEmail(@Query("email") value1: String) : Call<ResCheckEmail>
+
     @POST("project")
     @Multipart
     fun createNewProject(
