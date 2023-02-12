@@ -52,17 +52,10 @@ class ChatRoomActivity:AppCompatActivity() {
         val isRead = intent.getIntExtra("isRead", -1)
 
         viewBinding.toolbarChat.toolbar4.title = ""
-
         viewBinding.toolbarChat.toolbarText1.text = title
-        if (people == 2){
-            viewBinding.toolbarChat.toolbarText2.text = "1"
-        }else{
-            viewBinding.toolbarChat.toolbarText2.text = people.toString()
-        }
+        viewBinding.toolbarChat.toolbarText2.text = people.toString()
 
-        if (roomId != null) {
-            loadData(this, roomId, isRead, people)
-        }
+        loadData(this, roomId, isRead, people)
 
         viewBinding.etChat.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -77,17 +70,19 @@ class ChatRoomActivity:AppCompatActivity() {
         })
 
         var recyclerViewPosition = 0
-        viewBinding.root.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-            if (bottom < oldBottom) {
-                // Keyboard has gone up, save the position of the recycler view
-                recyclerViewPosition = (viewBinding.chatList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                Log.d("test 보여지는 아이템","$recyclerViewPosition")
-                Log.d("test 전체 아이템", viewBinding.chatList.adapter?.itemCount.toString())
+        viewBinding.chatList.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            if((viewBinding.chatList.adapter?.itemCount ?: 0) != 0){
+                if (bottom < oldBottom) {
+                    // Keyboard has gone up, save the position of the recycler view
+                    recyclerViewPosition = (viewBinding.chatList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                    Log.d("test 보여지는 아이템","$recyclerViewPosition")
+                    Log.d("test 전체 아이템", viewBinding.chatList.adapter?.itemCount.toString())
 //                viewBinding.chatList.smoothScrollToPosition(viewBinding.chatList.adapter?.itemCount ?: 0)
-                viewBinding.chatList.smoothScrollBy(0, oldBottom - bottom)
-            } else if (bottom > oldBottom) {
-                // Keyboard has gone down, restore the original position of the recycler view
-                viewBinding.chatList.smoothScrollToPosition(recyclerViewPosition)
+                    viewBinding.chatList.smoothScrollBy(0, oldBottom - bottom)
+                } else if (bottom > oldBottom) {
+                    // Keyboard has gone down, restore the original position of the recycler view
+                    viewBinding.chatList.smoothScrollToPosition(recyclerViewPosition)
+                }
             }
         }
 

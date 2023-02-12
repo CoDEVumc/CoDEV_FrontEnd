@@ -54,9 +54,12 @@ object ChatClient{
                 val createdDate = json.get("createdDate").toString()
                 val profileImg = json.get("profileImg").toString()
                 val co_nickName = json.get("co_nickName").toString()
+                val pm = json.get("pm") as Boolean
                 Log.d("stomp", json.toString())
                 Log.d("stomp", type)
-                adapter.addData(ResponseOfGetChatListData(type,roomId,sender,content,createdDate,profileImg,co_nickName))
+                if (type != "ENTER" && type != "LEAVE"){
+                    adapter.addData(ResponseOfGetChatListData(type,roomId,sender,content,createdDate,profileImg,co_nickName, pm))
+                }
             }catch (e: java.lang.Exception){
                 Log.d("stomp join: 에러", e.toString())
                 e.printStackTrace()

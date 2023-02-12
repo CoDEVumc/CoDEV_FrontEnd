@@ -20,6 +20,7 @@ data class ResponseOfGetChatListData(
     val content: String,
     val createdDate: String,
     val profileImg: String,
-    val co_nickName: String
+    val co_nickName: String,
+    val pm: Boolean
 )
 

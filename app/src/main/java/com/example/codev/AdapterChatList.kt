@@ -13,6 +13,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.codev.databinding.RecycleChatItemDateBinding
+import com.example.codev.databinding.RecycleChatItemInviteBinding
 import com.example.codev.databinding.RecycleChatItemMyContinueBinding
 import com.example.codev.databinding.RecycleChatItemMyFirstBinding
 import com.example.codev.databinding.RecycleChatItemOtherContinueBinding
@@ -63,6 +64,9 @@ class AdapterChatList(private val listData: ArrayList<ResponseOfGetChatListData>
             DAY ->{
                 ChatDayViewHolder(RecycleChatItemDateBinding.inflate(LayoutInflater.from(parent.context), parent, false))
             }
+            INVITE ->{
+                ChatInviteViewHolder(RecycleChatItemInviteBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            }
             else -> {
                 ChatOtherFirstViewHolder(RecycleChatItemOtherFirstBinding.inflate(LayoutInflater.from(parent.context), parent, false))
             }
@@ -87,6 +91,9 @@ class AdapterChatList(private val listData: ArrayList<ResponseOfGetChatListData>
             is ChatDayViewHolder -> {
                 holder.bind(listData[position], position)
             }
+            is ChatInviteViewHolder -> {
+                holder.bind(listData[position], position)
+            }
         }
     }
 
@@ -96,6 +103,8 @@ class AdapterChatList(private val listData: ArrayList<ResponseOfGetChatListData>
     override fun getItemViewType(position: Int): Int {
         if (listData[position].type == "DAY"){
             return DAY
+        }else if(listData[position].type == "INVITE"){
+            return INVITE
         }else if (UserSharedPreferences.getKey(context) == listData[position].sender) {
             if(position == 0){
                 return MY
@@ -149,10 +158,11 @@ class AdapterChatList(private val listData: ArrayList<ResponseOfGetChatListData>
 
                 })
                 .into(binding.profileImg)
+
             binding.chat.text = data.content
             binding.nickname.text = data.co_nickName
             binding.time.text = stringToTime(data.createdDate)
-            binding.profileHost.isGone = true
+            binding.profileHost.isGone = !data.pm
         }
     }
 
@@ -179,13 +189,18 @@ class AdapterChatList(private val listData: ArrayList<ResponseOfGetChatListData>
             binding.chat.text = data.content
             binding.time.isGone = true
 //            binding.time.text = stringToTime(data.createdDate)
-
         }
     }
 
     inner class ChatDayViewHolder(private val binding: RecycleChatItemDateBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(data: ResponseOfGetChatListData, position: Int){
             binding.day.text = data.content
+        }
+    }
+
+    inner class ChatInviteViewHolder(private val binding: RecycleChatItemInviteBinding): RecyclerView.ViewHolder(binding.root){
+        fun bind(data: ResponseOfGetChatListData, position: Int){
+            binding.content.text = data.content
         }
     }
 

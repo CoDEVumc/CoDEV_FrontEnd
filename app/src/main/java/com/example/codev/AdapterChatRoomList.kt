@@ -43,26 +43,24 @@ class AdapterChatRoomList(private val listData: ArrayList<ResponseOfGetChatRoomL
         @SuppressLint("SetTextI18n")
         fun bind(data: ResponseOfGetChatRoomListData, position: Int){
 
+            var title = ""
             if (data.room_type == "OTM"){
                 Glide.with(itemView.context)
                     .load(data.mainImg).circleCrop()
                     .into(binding.oneImg1)
 
-                if (data.people == 3){
-                    binding.roomMemberNumber.text = "2"
-                }else{
-                    binding.roomMemberNumber.text = (data.people -1).toString()
-                }
-
-            }else{
+                binding.roomMemberNumber.text = (data.people -1).toString()
+                title = data.room_title
+                binding.roomTitle.text = title
+            }else if (data.room_type == "OTO"){
                 Glide.with(itemView.context)
                     .load(data.receiverProfileImg).circleCrop()
                     .into(binding.oneImg1)
 
                 binding.roomMemberNumber.text = "1"
+                title = data.receiverCo_nickName
+                binding.roomTitle.text = title
             }
-
-            binding.roomTitle.text = data.room_title
 
             binding.roomMessage.text = data.latestconv
             if (data.latestDate.isNullOrBlank()){
@@ -84,15 +82,14 @@ class AdapterChatRoomList(private val listData: ArrayList<ResponseOfGetChatRoomL
             }
 
             binding.room.setOnClickListener {
-                Log.d("test", data.roomId)
-                ChatClient.join(context, data.roomId)
-                ChatClient.sendMessage("ENTER", data.roomId, UserSharedPreferences.getKey(context), "ENTER")
-                val intent = Intent(context, ChatRoomActivity::class.java)
-                intent.putExtra("title", data.room_title)
+                ChatClient.join(itemView.context, data.roomId)
+                ChatClient.sendMessage("ENTER", data.roomId, UserSharedPreferences.getKey(itemView.context), "ENTER")
+                val intent = Intent(itemView.context, ChatRoomActivity::class.java)
+                intent.putExtra("title", title)
                 intent.putExtra("roomId", data.roomId)
-                intent.putExtra("people", data.people)
+                intent.putExtra("people", binding.roomMemberNumber.text.toString().toInt())
                 intent.putExtra("isRead", data.isRead)
-                startActivity(binding.room.context, intent,null)
+                itemView.context.startActivity(intent)
             }
         }
     }
