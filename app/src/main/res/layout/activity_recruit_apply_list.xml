@@ -131,7 +131,6 @@
                 android:text="모집 마감하기"
                 android:textColor="@color/black_500" />
         </LinearLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

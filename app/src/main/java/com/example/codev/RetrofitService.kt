@@ -162,18 +162,33 @@ interface RetrofitService {
         @Query("coPart") coPart: String
     ) : Call<ResApplyerList>
 
-    @PATCH("project/recruitment/pick/{coProjectId}") //프로젝트 지원자 선택 & 선택취소
+    @PATCH("project/recruitment/pick/{coProjectId}") //프로젝트 지원자 선택 & 선택취소 (임시저장)
     fun requestProjectApplicant(
         @Header("CoDev_Authorization") header: String,
-        @Path("coProjectId") coProjectId: Int
+        @Path("coProjectId") coProjectId: Int,
+        @Body params: ReqUpdateApplicant
+    ): Call<JsonObject>
+
+    @PATCH("study/recruitment/pick/{coStudyId}") //스터디 지원자 선택 & 선택취소 (임시저장)
+    fun requestStudyApplicant(
+        @Header("CoDev_Authorization") header: String,
+        @Path("coProjectId") coProjectId: Int,
+        @Body params: ReqUpdateApplicant
     ): Call<JsonObject>
 
     @GET("project/recruitment/portfolio/{coProjectId}/{coPortfolioId}")
-    fun getProjectApplicantPorfolioDetail(
+    fun getProjectApplicantPorfolioDetail( //프로젝트 지원자 포트폴리오 상세조회
         @Header("CoDev_Authorization") header: String,
         @Path("coProjectId") coProjectId: Int,
         @Path("coPortfolioId") coPortfolioId: Int,
         ): Call<ResGetPFDetail2>
+
+    @GET("study/recruitment/portfolio/{coStudyId}/{coPortfolioId}")
+    fun getStudyApplicantPorfolioDetail( //스터디 지원자 포트폴리오 상세조회
+        @Header("CoDev_Authorization") header: String,
+        @Path("coProjectId") coProjectId: Int,
+        @Path("coPortfolioId") coPortfolioId: Int,
+    ): Call<ResGetPFDetail2>
 
 
     @DELETE("project/out/{coProjectId}")

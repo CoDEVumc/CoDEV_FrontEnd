@@ -20,6 +20,7 @@ import com.example.codev.addpage.AddNewStudyActivity
 import com.example.codev.addpage.EditProject
 import com.example.codev.addpage.EditStudy
 import com.example.codev.databinding.ActivityRecruitApplyListBinding
+import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,8 +31,8 @@ class RecruitApplyListActivity: AppCompatActivity() {
     private lateinit var adapter2: AdapterRecruitApplicants2
 
     //private lateinit var studyData: EditStudy
-    private lateinit var projectData: ApplicantData
-    private var partList: ArrayList<ApplicantData> = arrayListOf()
+//    private lateinit var projectData: ApplicantData
+//    private var partList: ArrayList<ApplicantData> = arrayListOf()
     private var id: Int = -1
     private var type: String = "" //초기는 TEMP
     private var limit: Int = -1
@@ -54,20 +55,8 @@ class RecruitApplyListActivity: AppCompatActivity() {
         }
 
 
-        loadData(this, type , id, "TEMP")
+        loadData(this, type , id, "TEMP") //처음에 기본으로 현재 선택된 지원자 보이게
 
-
-//        when(type){
-//            "PROJECT" -> {
-//                Log.d("test: 상세페이지 넘어온 part, id", "$type : $id")
-//                if (id != -1) {
-//                    loadData(this,type , id, "TEMP") //(처음엔 기본)누른 토글의 part넘겨줘야됨
-//                }
-//            }
-//            "STUDY" -> {
-//
-//            }
-//        }
     }
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
@@ -119,30 +108,51 @@ class RecruitApplyListActivity: AppCompatActivity() {
         //btnSelect2 : 토글아이템 선택된 상태에서 btnChhose 눌렀을 때만 보이게 (지원자 선택 버튼)
         //bottomBtn : 토글헤더 눌려있을 때만 보이게 (모집완료/초기화 버튼)
 
-        //isChecked 된 항목들 삭제기능
-//        viewBinding.btnSelect1.setOnClickListener {
-//            Log.d("test", "삭제")
-//            Log.d("test",adapter2.getIsChecked().toString())
-//            Log.d("test",adapter2.getDeleteList().size.toString())
-//            for (i:Int in 0 until adapter2.getDeleteList().size){
-//                Log.d("test: 삭제 목록",adapter2.getDeleteList()[i].toString())
-//                deletePortfolio(this,adapter2.getDeleteList()[i])
-//            }
-//            viewBinding.btnChoose.isChecked = !viewBinding.btnChoose.isChecked
-//            viewBinding.btnSelect1.isGone = !viewBinding.btnChoose.isChecked
-//        }
+        //isChecked 된 항목들 편집기능
+        viewBinding.btnSelect1.setOnClickListener {
+            Log.d("test", "삭제")
+            Log.d("test",adapter2.getIsChecked().toString())
+            Log.d("test",adapter2.getSelectList().size.toString())
+            for (i:Int in 0 until adapter2.getSelectList().size){
+                Log.d("test: 지원자 삭제 목록",adapter2.getSelectList()[i].toString())
+                //editApplicant(this,adapter2.getSelectList()[i])
+            }
+            editApplicant(this, type, id, adapter2.getSelectList())
+            loadData(this, type, id, part)
 
-//        //isChecked 된 항목들 선택기능
-//        viewBinding.btnSelect2.setOnClickListener {
-//            Log.d("test:","지원자 선택")
-//            Log.d("test",adapter2.getIsChecked().toString())
-//            for(i:Int in 0 until adapter2.getRegistList().size){
-//                Log.d("test: 지원자 선택 목록", adapter2.getRegistList()[i].toString())
-//                registPortfolio(this, adapter2.getRegistList()[i])
-//            }
-//            viewBinding.btnChoose.isChecked = !viewBinding.btnChoose.isChecked
-//            viewBinding.btnSelect2.isGone = !viewBinding.btnChoose.isChecked
-//        }
+            viewBinding.btnEdit.isChecked = !viewBinding.btnEdit.isChecked
+            viewBinding.btnSelect1.isGone = !viewBinding.btnEdit.isChecked
+            viewBinding.btnEdit.text = "선택하기"
+            adapter2.setEdit(viewBinding.btnEdit.isChecked)
+            adapter2.setCount(0)
+            adapter2.resetSelectList()
+            adapter2.resetIsChecked()
+            adapter2.notifyDataSetChanged()
+            enableDelete(false)
+            enableRegist(false)
+        }
+        viewBinding.btnSelect2.setOnClickListener {
+            Log.d("test", "선택")
+            Log.d("test",adapter2.getIsChecked().toString())
+            Log.d("test",adapter2.getSelectList().size.toString())
+            for (i:Int in 0 until adapter2.getSelectList().size){
+                Log.d("test: 지원자 선택 목록",adapter2.getSelectList()[i].toString())
+//                editApplicant(this,adapter2.getSelectList()[i])
+            }
+            editApplicant(this, type, id, adapter2.getSelectList())
+            loadData(this, type, id, part)
+
+            viewBinding.btnEdit.isChecked = !viewBinding.btnEdit.isChecked
+            viewBinding.btnSelect2.isGone = !viewBinding.btnEdit.isChecked
+            viewBinding.btnEdit.text = "선택하기"
+            adapter2.setEdit(viewBinding.btnEdit.isChecked)
+            adapter2.setCount(0)
+            adapter2.resetSelectList()
+            adapter2.resetIsChecked()
+            adapter2.notifyDataSetChanged()
+            enableDelete(false)
+            enableRegist(false)
+        }
 
 
     }
@@ -238,67 +248,102 @@ class RecruitApplyListActivity: AppCompatActivity() {
                     }
                 }
 
-
                 override fun onFailure(call: Call<ResApplyerList>, t: Throwable) {
-                    Log.d("test: 조회실패 - RPF > loadPData(플젝 지원자 전체조회): ", "[Fail]${t.toString()}")
+                    Log.d("test: 조회실패 - loadData(플젝 지원자 전체조회): ", "[Fail]${t.toString()}")
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
             })
         }
         else if(type == "STUDY"){
+            RetrofitClient.service.getApplyerStudyList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, coPart).enqueue(object : Callback<ResApplyerList> {
+                @SuppressLint("SetTextI18n")
+                override fun onResponse(call: Call<ResApplyerList>, response: Response<ResApplyerList>) {
+                    if (response.isSuccessful.not()) {
+                        Log.d("test: 조회실패", response.toString())
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        when (response.code()) {
+                            200 -> {
+                                response.body()?.let {
+                                    Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.toString()}")
+                                    Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.result.message.co_appllicantsInfo}")
+                                    setAdapter1(it.result.message.co_applicantsCount, context, limit)
+                                    setAdapter2(it.result.message.co_appllicantsInfo, context)
+                                    part = it.result.message.co_part
+                                    if (part == "TEMP"){
+                                        viewBinding.bottomBtn.isGone = false
+                                        viewBinding.btnSelect1.isGone = true
+                                        viewBinding.btnSelect2.isGone = true
+                                        peopleNum = it.result.message.co_tempSavedApplicantsCount
+                                        viewBinding.applicantNum.text = "현재 선택한 지원자 $peopleNum"
+                                    }else{
+                                        viewBinding.bottomBtn.isGone = true
+                                        viewBinding.btnSelect1.isGone = true
+                                        viewBinding.btnSelect2.isGone = true
+                                        peopleNum = it.result.message.co_appllicantsInfo.size
+                                        viewBinding.applicantNum.text = "현재 파트 지원자 $peopleNum"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
+                override fun onFailure(call: Call<ResApplyerList>, t: Throwable) {
+                    Log.d("test: 조회실패 - loadData(스터디 지원자 전체조회): ", "[Fail]${t.toString()}")
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
     }
 
 
-    //지원자 선택취소
-//    private fun deletePortfolio(context: Context,coPortfolioId: Int){
-//        RetrofitClient.service.deletePortFolio(coPortfolioId,AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).enqueue(object:
-//            Callback<ResDeletePortfolio> {
-//            override fun onResponse(call: Call<ResDeletePortfolio>, response: Response<ResDeletePortfolio>) {
-//                if(response.isSuccessful.not()){
-//                    Log.d("test: 포트폴리오 삭제 실패",response.toString())
-//                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-//                }
-//                when(response.code()){
-//                    200 -> {
-//                        response.body()?.let {
-//                            Log.d("test: 포트폴리오 삭제 성공", "\n${it}")
-//                            loadData(context,coPortfolioId)
-//                        }
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ResDeletePortfolio>, t: Throwable) {
-//                Log.d("test", "[Fail]${t.toString()}")
-//            }
-//        })
-//    }
-//
-//    //지원자 선택
-//    private fun registPortfolio(context: Context,coPortfolioId: Int){
-//        RetrofitClient.service.deletePortFolio(coPortfolioId,AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).enqueue(object:
-//            Callback<ResDeletePortfolio> {
-//            override fun onResponse(call: Call<ResDeletePortfolio>, response: Response<ResDeletePortfolio>) {
-//                if(response.isSuccessful.not()){
-//                    Log.d("test: 포트폴리오 삭제 실패",response.toString())
-//                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-//                }
-//                when(response.code()){
-//                    200 -> {
-//                        response.body()?.let {
-//                            Log.d("test: 포트폴리오 삭제 성공", "\n${it}")
-//                            loadData(context,coPortfolioId)
-//                        }
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ResDeletePortfolio>, t: Throwable) {
-//                Log.d("test", "[Fail]${t.toString()}")
-//            }
-//        })
-//    }
+    //지원자 EDIT
+    private fun editApplicant(context: Context, type: String, id: Int, editList: List<String>){
+        if (type == "PROJECT"){
+            RetrofitClient.service.requestProjectApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqUpdateApplicant(editList)).enqueue(object: Callback<JsonObject>{
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    if(response.isSuccessful.not()){
+                        Log.d("test: 지원자 편집 실패",response.toString())
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    when(response.code()){
+                        200 -> {
+                            response.body()?.let {
+                                Log.d("test: 지원자 편집 성공", "\n${it.toString()}")
+
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Log.d("test", "[Fail]${t.toString()}")
+                }
+            })
+        }
+        else if(type == "STUDY"){
+            RetrofitClient.service.requestStudyApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqUpdateApplicant(editList)).enqueue(object: Callback<JsonObject>{
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    if(response.isSuccessful.not()){
+                        Log.d("test: 지원자 편집  실패",response.toString())
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    when(response.code()){
+                        200 -> {
+                            response.body()?.let {
+                                Log.d("test: 지원자 편집  성공", "\n${it.toString()}")
+
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Log.d("test", "[Fail]${t.toString()}")
+                }
+            })
+        }
+    }
 
 }

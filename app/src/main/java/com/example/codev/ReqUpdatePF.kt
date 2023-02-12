@@ -1,6 +1,6 @@
 package com.example.codev
 
-data class ReqUpdatePF(
+data class  ReqUpdatePF(
     val co_title: String,
     val co_rank: String,
     val co_headLine: String,

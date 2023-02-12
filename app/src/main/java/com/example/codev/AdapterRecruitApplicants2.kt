@@ -29,7 +29,6 @@ class AdapterRecruitApplicants2(private val context: Context, private val listDa
     private var COUNT: Int = 0
     private var selectList: ArrayList<String> = arrayListOf()
 
-
     fun setEdit(boolean: Boolean){
         EDIT = boolean
     }
