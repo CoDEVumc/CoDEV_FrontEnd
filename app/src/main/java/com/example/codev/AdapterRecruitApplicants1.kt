@@ -83,8 +83,26 @@ class AdapterRecruitApplicants1(private val context: Context, private val listDa
             binding.partToggle.setOnClickListener {
                 Log.d("ApaterRecruitApplyList: ","분야 토글 클릭 $position")
                 returnData("TEMP") //토글헤더 클릭 시 TEMP 넘겨줌
+                binding.partToggle.isSelected = true
+                Log.d("(OnClickListener안)partTogle 의 상태 : ", binding.partToggle.isSelected.toString()) //여기서 true주면 안돼
             }
+            Log.d("partTogle 의 상태 : ", binding.partToggle.isSelected.toString())
+
         }
     }
 }
 
+
+
+//if(binding.partToggle.isSelected){
+//    Log.d("partToggle : ", "isSelected. ")
+//    binding.partToggle.isSelected = true //토글 배경색 바꿀라고
+//    binding.part.isSelected = true //아이콘 색 바꿀라고
+//    binding.num.setTextColor(ContextCompat.getColor(context!!,R.color.black_900)) //글씨색 바꿀라고
+//}
+//else{
+//    Log.d("partToggle : ", "notSelected. ")
+//    binding.partToggle.isSelected = false
+//    binding.part.isSelected = false
+//    binding.num.setTextColor(ContextCompat.getColor(context!!,R.color.black_500)) //글씨색 바꿀라고
+//}

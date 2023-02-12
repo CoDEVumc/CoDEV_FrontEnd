@@ -21,7 +21,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-//[바디_선택하기 안누름]
 //[바디] ITEM(체크 → 선택 & 선택 취소하기) : from 토글헤더 -> 선택취소 / from 토글아이템 -> 선택
 class AdapterRecruitApplicants2(private val context: Context, private val listData: ArrayList<ApplicantInfoData>, private val returnCount: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var isChecked: Array<Boolean> = Array(listData.size){false}
@@ -72,7 +71,6 @@ class AdapterRecruitApplicants2(private val context: Context, private val listDa
     override fun getItemCount(): Int = listData.size
 
     //Item의 ViewHolder 객체
-    //chk_choose(체크버튼)--applyer_num(지원자position) <-activity에서 해야될듯???????????
     inner class ApplicantItemViewHolder(private val binding: RecycleApplicantItem1Binding): RecyclerView.ViewHolder(binding.root){
         @SuppressLint("SetTextI18n")
         fun bind(data: ApplicantInfoData, position: Int){

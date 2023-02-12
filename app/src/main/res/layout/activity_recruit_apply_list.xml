@@ -109,18 +109,18 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_1"
+                android:id="@+id/btn_reset"
                 style="@style/Text.Body4.SemiBold"
                 android:layout_width="0dp"
                 android:layout_height="38dp"
                 android:layout_marginStart="24dp"
                 android:layout_weight="1"
-                android:background="@drawable/recruit_apply_btn1_unselected"
+                android:background="@drawable/recruit_apply_btn1"
                 android:text="초기화"
                 android:textColor="@color/black_300" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_2"
+                android:id="@+id/btn_done_recruit"
                 style="@style/Text.Body4.SemiBold"
                 android:layout_width="0dp"
                 android:layout_height="38dp"

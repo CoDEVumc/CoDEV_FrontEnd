@@ -11,6 +11,7 @@ import android.view.View.OnLayoutChangeListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -57,6 +58,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
         loadData(this, type , id, "TEMP") //처음에 기본으로 현재 선택된 지원자 보이게
 
+
     }
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
@@ -78,6 +80,12 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
 
         loadData(this, type , id, "TEMP")
+
+        //if TEMP의 데이터가 1개 이상이면 btn_reset, btn_done_recruit 활성화
+//        if(viewBinding.bottomBtn.isEnabled){
+//            viewBinding.btnReset.textCo
+//        }
+        //여기
 
         //선택하기 버튼
         viewBinding.btnEdit.setOnClickListener {
@@ -181,6 +189,18 @@ class RecruitApplyListActivity: AppCompatActivity() {
         }
     }
 
+    private fun enableResetOrDone(boolean: Boolean){ //true가 넘어왔다 일단
+        if(boolean == viewBinding.bottomBtn.isEnabled){
+            viewBinding.btnReset.isEnabled = boolean
+            viewBinding.btnDoneRecruit.isEnabled = boolean
+            viewBinding.btnReset.isSelected = boolean
+            viewBinding.btnDoneRecruit.isSelected = boolean
+            viewBinding.bottomBtn.isEnabled = !boolean
+            viewBinding.btnReset.setTextColor(ContextCompat.getColor(this!!,R.color.black_700))
+            viewBinding.btnDoneRecruit.setTextColor(ContextCompat.getColor(this!!,R.color.white))
+        }
+    }
+
 //    Log.d("test","리콜받음 $it")
 //    loadData(context, type, id, it)
 //    viewBinding.btnEdit.isChecked = false
@@ -235,6 +255,16 @@ class RecruitApplyListActivity: AppCompatActivity() {
                                         viewBinding.btnSelect2.isGone = true
                                         peopleNum = it.result.message.co_tempSavedApplicantsCount
                                         viewBinding.applicantNum.text = "현재 선택한 지원자 $peopleNum"
+                                        if(peopleNum != 0){ //초기화, 모집완료 활성화
+//                                            viewBinding.btnReset.isEnabled = true
+//                                            viewBinding.btnDoneRecruit.isEnabled = true
+                                            enableResetOrDone(true)
+                                            Log.d("enableResetOrDone 되나? ", "chk")
+                                        }else{
+                                            enableResetOrDone(false)
+                                            viewBinding.btnReset.setTextColor(ContextCompat.getColor(context!!,R.color.black_300))
+                                            viewBinding.btnDoneRecruit.setTextColor(ContextCompat.getColor(context!!,R.color.black_500))
+                                        }
                                     }else{
                                         viewBinding.bottomBtn.isGone = true
                                         viewBinding.btnSelect1.isGone = true
