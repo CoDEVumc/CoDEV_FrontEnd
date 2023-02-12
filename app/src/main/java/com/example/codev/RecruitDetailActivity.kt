@@ -32,6 +32,9 @@ class RecruitDetailActivity:AppCompatActivity() {
     private lateinit var studyData: EditStudy
     private lateinit var projectData: EditProject
     private var partList: ArrayList<RecruitPartLimit> = arrayListOf()
+    private var recruitStatus: Boolean = false
+    private var writer: String = ""
+    private var process: String = ""
 
     override fun onResume() {
         super.onResume()
@@ -153,6 +156,9 @@ class RecruitDetailActivity:AppCompatActivity() {
                 val intent = Intent(context, RecruitApplyActivity::class.java)
                 intent.putExtra("recruitId", id)
                 intent.putExtra("type", type)
+                intent.putExtra("writer", writer)
+                intent.putExtra("process", process)
+                intent.putExtra("recruitStatus", recruitStatus)
                 intent.putExtra("partList", partList)
                 startActivity(intent)
             }
@@ -240,6 +246,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     partList = it.result.Complete.co_partList
                                     setPartAdapter(context,partList)
                                     setImageAdapter(context,it.result.Complete.co_photos)
+
                                     viewBinding.type.text = "프로젝트"
                                     viewBinding.name.text = it.result.Complete.co_nickname
                                     viewBinding.title.text = it.result.Complete.co_title
@@ -252,11 +259,15 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     viewBinding.heartCount.text = it.result.Complete.co_heartCount.toString()
                                     viewBinding.heart.isChecked = it.result.Complete.co_heart
 
+                                    process = it.result.Complete.co_process
+                                    recruitStatus = it.result.Complete.co_recruitStatus
+                                    writer = it.result.Complete.co_email
+
                                     //글 작성자, 글 관찰자 설정
-                                    if (it.result.Complete.co_email == it.result.Complete.co_viewer){
+                                    if (writer == it.result.Complete.co_viewer){
                                         setWriterMode(context, type)
                                     }else{
-                                        setViewerMode(context, type, it.result.Complete.co_recruitStatus, it.result.Complete.co_process)
+                                        setViewerMode(context, type, recruitStatus, process)
                                     }
 
                                     val stackList = LinkedHashMap<Int, String>()
@@ -305,11 +316,15 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     viewBinding.heartCount.text = it.result.Complete.co_heartCount.toString()
                                     viewBinding.heart.isChecked = it.result.Complete.co_heart
 
+                                    process = it.result.Complete.co_process
+                                    recruitStatus = it.result.Complete.co_recruitStatus
+                                    writer = it.result.Complete.co_email
+
                                     //글 작성자, 글 관찰자 설정
-                                    if (it.result.Complete.co_email == it.result.Complete.co_viewer){
+                                    if (writer == it.result.Complete.co_viewer){
                                         setWriterMode(context, type)
                                     }else{
-                                        setViewerMode(context, type, it.result.Complete.co_recruitStatus, it.result.Complete.co_process)
+                                        setViewerMode(context, type, recruitStatus, process)
                                     }
 
                                     val stackList = LinkedHashMap<Int, String>()
@@ -406,8 +421,9 @@ class RecruitDetailActivity:AppCompatActivity() {
     }
 
     private fun cancel(context: Context, type: String, id: Int){
+        Log.d("test",process)
         if (type == "PROJECT"){
-            RetrofitClient.service.cancelProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.cancelProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqCancelRecruit(recruitStatus, writer, process)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 취소 실패",response.toString())
@@ -430,7 +446,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                 }
             })
         }else if(type == "STUDY"){
-            RetrofitClient.service.cancelStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.cancelStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqCancelRecruit(recruitStatus, writer, process)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 취소 실패",response.toString())
