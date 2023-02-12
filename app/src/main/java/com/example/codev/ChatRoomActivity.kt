@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.View.OnLayoutChangeListener
+import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,14 +26,9 @@ class ChatRoomActivity:AppCompatActivity() {
     private lateinit var viewBinding: ActivityChatRoomBinding
     private lateinit var roomId: String
     private lateinit var adapter: AdapterChatList
-    private var isOpen = false
-    private val onLayoutChangeListener =
-        View.OnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
-            // 키보드가 올라와 높이가 변함
-            if (bottom < oldBottom) {
-                viewBinding.chatList.smoothScrollBy(0, oldBottom - bottom) // 스크롤 유지를 위해 추가
-            }
-        }
+
+//    private var originalRecyclerViewBottom: Int = 0
+//    private var recyclerViewHeight: Int = 0
 
     override fun onDestroy() {
         super.onDestroy()
@@ -84,32 +80,69 @@ class ChatRoomActivity:AppCompatActivity() {
         })
 
 
+//        viewBinding.root.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+//            override fun onGlobalLayout() {
+//                val screenHeight = viewBinding.root.height
+//                val keyboardHeight = screenHeight - viewBinding.chatList.bottom
+//
+//                if (keyboardHeight > screenHeight * 0.15) {
+//                    viewBinding.chatList.smoothScrollBy(0, keyboardHeight)
+//                } else {
+//                    viewBinding.chatList.smoothScrollBy(0, -viewBinding.chatList.height)
+//                }
+//            }
+//        })
 
-        viewBinding.chatList.apply {
-            addOnLayoutChangeListener(onLayoutChangeListener)
-            viewTreeObserver.addOnScrollChangedListener {
-                if (isScrollable() && !isOpen) { // 스크롤이 가능하면서 키보드가 닫힌 상태일 떄만
-                    removeOnLayoutChangeListener(onLayoutChangeListener)
-                }
-            }
-        }
+//        viewBinding.root.viewTreeObserver.addOnGlobalLayoutListener {
+//            val rect = Rect()
+//            viewBinding.root.getWindowVisibleDisplayFrame(rect)
+//            val screenHeight = viewBinding.root.rootView.height
+//            val keyboardHeight = screenHeight - rect.bottom
+//            if (keyboardHeight > screenHeight * 0.15) {
+//                // Keyboard is open, scroll the RecyclerView up by the keyboard height
+//                viewBinding.chatList.smoothScrollBy(0, keyboardHeight)
+//            } else {
+//                // Keyboard is closed, scroll the RecyclerView back to its original position
+//                viewBinding.chatList.smoothScrollBy(0, -keyboardHeight)
+//            }
+//        }
+
+//        viewBinding.root.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+//            Log.d("test","bottom : $bottom, oldBottom: $oldBottom 차이는  ${bottom-oldBottom}")
+//            if (bottom < oldBottom) {
+//                // Keyboard has gone up, scroll the recycler view down to show the latest chat message
+//                viewBinding.chatList.smoothScrollBy(0, oldBottom - bottom)
+//            } else if (bottom > oldBottom) {
+//                // Keyboard has gone down, scroll the recycler view up to the original position
+//                viewBinding.chatList.smoothScrollBy(0, oldBottom - bottom)
+//            }
+//        }
 
 //        viewBinding.chatList.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
 //            Log.d("test", "$bottom and $oldBottom")
 //            if (bottom < oldBottom) {
 //                viewBinding.chatList.smoothScrollBy(0, oldBottom - bottom)
-//            }
-////            else if(bottom > oldBottom){
-////                Log.d("test",viewBinding.chatList.canScrollVertically(1).toString())
-////                Log.d("test",(viewBinding.chatList.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition().toString())
-////
+//            }else{
 ////                if(!viewBinding.chatList.canScrollVertically(1)) {
-////
 ////                    viewBinding.chatList.smoothScrollToPosition((viewBinding.chatList.adapter?.itemCount?: 1) - 1)
 ////                }else{
 ////                    viewBinding.chatList.smoothScrollBy(0, oldBottom - bottom)
 ////                }
-////            }
+//            }
+//        }
+
+//        viewBinding.chatList.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+//            val displayRect = Rect()
+//            window.decorView.getWindowVisibleDisplayFrame(displayRect)
+//            val screenHeight = window.decorView.rootView.height
+//            val keyboardHeight = screenHeight - displayRect.bottom
+//            if (keyboardHeight > 0) {
+//                // keyboard is up
+//                viewBinding.chatList.smoothScrollBy(0, -keyboardHeight)
+//            } else {
+//                // keyboard is down
+//                viewBinding.chatList.smoothScrollBy(0, keyboardHeight)
+//            }
 //        }
 
         viewBinding.btnSend.setOnClickListener {
@@ -117,22 +150,6 @@ class ChatRoomActivity:AppCompatActivity() {
             viewBinding.chatList.scrollToPosition((viewBinding.chatList.adapter?.itemCount ?: 1) - 1)
             viewBinding.etChat.text.clear()
         }
-    }
-
-    private fun setupView() {
-        // 키보드 Open/Close 체크
-        viewBinding.chatList.viewTreeObserver.addOnGlobalLayoutListener {
-            val rect = Rect()
-            viewBinding.chatList.getWindowVisibleDisplayFrame(rect)
-
-            val rootViewHeight = viewBinding.chatList.rootView.height
-            val heightDiff = rootViewHeight - rect.height()
-            isOpen = heightDiff > rootViewHeight * 0.25 // true == 키보드 올라감
-        }
-    }
-
-    fun RecyclerView.isScrollable(): Boolean {
-        return canScrollVertically(1) || canScrollVertically(-1)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
