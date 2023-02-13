@@ -81,7 +81,7 @@
             tools:listitem="@layout/recycle_recruit_chat_profile" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/recruited_num"
             style="@style/Text.Body1"
             android:layout_width="85dp"
             android:layout_height="wrap_content"

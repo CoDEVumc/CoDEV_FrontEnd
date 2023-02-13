@@ -28,6 +28,8 @@ class AdapterRecruitApplicants2(private val context: Context, private val listDa
     private var COUNT: Int = 0
     private var selectList: ArrayList<String> = arrayListOf()
 
+    private var partList: ArrayList<ApplicantData> = arrayListOf()
+
     fun setEdit(boolean: Boolean){
         EDIT = boolean
     }
@@ -79,11 +81,6 @@ class AdapterRecruitApplicants2(private val context: Context, private val listDa
                 .into(binding.applyerProfile)
 
             binding.applyerNum.text = (position + 1).toString()
-            //임시저장 여부
-//            when(data.co_temporaryStorage){
-//                true -> binding.imgSelected.isGone = false //선택된 지원자면 imgSelected.isGone = false
-//                false -> binding.imgSelected.isGone = true //선택안된 지원자면 imgSelected.isGone = true
-//            }
             binding.applyerPortfolioTitle.text = data.co_title
             binding.applyerName.text = data.co_name
             binding.applyerPart.text = data.co_part
@@ -139,6 +136,7 @@ class AdapterRecruitApplicants2(private val context: Context, private val listDa
             }
 
 
+
         }
 
         private fun changeEditMode(boolean: Boolean){
@@ -146,6 +144,7 @@ class AdapterRecruitApplicants2(private val context: Context, private val listDa
             binding.applyerNum.isGone = boolean
         }
 
+        //COUNT <= 파트별 제한인원 일때만 체크가 되어야 함
         private fun counter() {
             if (binding.chkChoose.isChecked){
                 COUNT += 1

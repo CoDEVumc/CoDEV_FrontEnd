@@ -47,6 +47,11 @@ class RecruitDoneActivity: AppCompatActivity() {
             override fun afterTextChanged(p0: Editable?) {
             }
         })
+
+        //채팅방 인원
+        //viewBinding.recruitedNum.text = "외 "+ +"명"
+
+
     }
 
 

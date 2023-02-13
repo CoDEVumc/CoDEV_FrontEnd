@@ -11,6 +11,18 @@ import retrofit2.Response
 object UserSharedPreferences {
     private const val ACCOUNT : String = "account"
 
+    fun setFCMToken(context: Context, input: String) {
+        val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
+        val editor : SharedPreferences.Editor = prefs.edit()
+        editor.putString("token", input)
+        editor.commit()
+    }
+
+    fun getFCMToken(context: Context): String {
+        val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
+        return prefs.getString("token", "").toString()
+    }
+
     fun setAutoLogin(context: Context, input: String) {
         val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
         val editor : SharedPreferences.Editor = prefs.edit()

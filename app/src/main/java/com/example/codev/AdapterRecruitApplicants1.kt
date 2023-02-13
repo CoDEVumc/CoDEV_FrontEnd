@@ -90,7 +90,9 @@ class AdapterRecruitApplicants1(private val context: Context, private val listDa
 
         }
     }
+
 }
+
 
 
 

@@ -97,6 +97,8 @@ class RecruitApplyListActivity: AppCompatActivity() {
             adapter2.notifyDataSetChanged()
             enableDelete(false)
             enableRegist(false)
+
+
         }
 
 
@@ -158,7 +160,6 @@ class RecruitApplyListActivity: AppCompatActivity() {
         viewBinding.btnDoneRecruit.setOnClickListener {
             val intent = Intent(this, RecruitDoneActivity::class.java)
             startActivity(intent)
-            //기능연결 해야돼
             doneRecruit(this, type, id, applicantList)
         }
 
@@ -277,16 +278,26 @@ class RecruitApplyListActivity: AppCompatActivity() {
                                         peopleNum = it.result.message.co_tempSavedApplicantsCount
                                         viewBinding.applicantNum.text = "현재 선택한 지원자 $peopleNum"
 
+
+                                        for (i in it.result.message.co_applicantsCount){ //선택된 지원자 수 만큼
+                                            Log.d("확인 :", "파트 : "+i.co_part+" "+"제한인원 : "+i.co_limit+" "+"지원 인원: "+i.co_applicantsCount)
+                                            if(i.co_limit >= i.co_applicantsCount){ //제한인원 >= 선택된 인원
+                                                enableDone(true)
+                                                Log.d("for문 내부 if문 ", "onResponse: ")
+                                            }
+                                        }
+
+
+
                                         if(peopleNum != 0){ //초기화, 모집완료 활성화 (담은 인원이 1명 이상)
                                             enableReset(true)
+
+                                            //여기지금 의미가 없어
                                             //제한 인원 넘지 않았는지 체크 co_limit >= co_applicantsCount
                                             for (i in it.result.message.co_applicantsCount){ //선택된 지원자 수 만큼
                                                 if(i.co_limit >= i.co_applicantsCount){
                                                     enableDone(true)
                                                     Log.d("여기 오면 성공 ", "onResponse: ")
-                                                }
-                                                else{
-                                                    Log.d("if문 안돌아감", "onResponse: ")
                                                 }
                                             }
                                             Log.d("enableResetOrDone 되나? ", "")
@@ -356,8 +367,8 @@ class RecruitApplyListActivity: AppCompatActivity() {
                                             Log.d("enableResetOrDone 되나? ", "")
                                         }else{
                                             enableReset(false)
-                                            enableDone(false)
                                             viewBinding.btnReset.setTextColor(ContextCompat.getColor(context!!,R.color.black_300))
+                                            enableDone(false)
                                             viewBinding.btnDoneRecruit.setTextColor(ContextCompat.getColor(context!!,R.color.black_500))
                                         }
                                     }
