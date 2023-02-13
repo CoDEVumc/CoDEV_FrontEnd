@@ -6,16 +6,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
-import android.view.View.OnLayoutChangeListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.codev.addpage.AddNewProjectActivity
 import com.example.codev.addpage.AddNewStudyActivity
 import com.example.codev.addpage.EditProject
@@ -32,8 +27,9 @@ class RecruitApplyListActivity: AppCompatActivity() {
     private lateinit var adapter2: AdapterRecruitApplicants2
 
     //private lateinit var studyData: EditStudy
-//    private lateinit var projectData: ApplicantData
-//    private var partList: ArrayList<ApplicantData> = arrayListOf()
+    private lateinit var projectData: ApplicantData
+    private var applicantList: ArrayList<String> = arrayListOf()
+    private var partList: ArrayList<ApplicantData> = arrayListOf()
     private var id: Int = -1
     private var type: String = "" //초기는 TEMP
     private var limit: Int = -1
@@ -55,9 +51,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
-
         loadData(this, type , id, "TEMP") //처음에 기본으로 현재 선택된 지원자 보이게
-
 
     }
 
@@ -80,12 +74,6 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
 
         loadData(this, type , id, "TEMP")
-
-        //if TEMP의 데이터가 1개 이상이면 btn_reset, btn_done_recruit 활성화
-//        if(viewBinding.bottomBtn.isEnabled){
-//            viewBinding.btnReset.textCo
-//        }
-        //여기
 
         //선택하기 버튼
         viewBinding.btnEdit.setOnClickListener {
@@ -144,9 +132,11 @@ class RecruitApplyListActivity: AppCompatActivity() {
             Log.d("test",adapter2.getIsChecked().toString())
             Log.d("test",adapter2.getSelectList().size.toString())
             for (i:Int in 0 until adapter2.getSelectList().size){
-                Log.d("test: 지원자 선택 목록",adapter2.getSelectList()[i].toString())
-//                editApplicant(this,adapter2.getSelectList()[i])
+                Log.d("btnSelect2: 지원자 선택 목록",adapter2.getSelectList()[i].toString())
+                //editApplicant(this,editList: List<String>)
             }
+            Log.d("applicantList: 선택된 지원자 email 목록", applicantList.toString())
+
             editApplicant(this, type, id, adapter2.getSelectList())
             loadData(this, type, id, part)
 
@@ -160,6 +150,27 @@ class RecruitApplyListActivity: AppCompatActivity() {
             adapter2.notifyDataSetChanged()
             enableDelete(false)
             enableRegist(false)
+
+
+        }
+
+        //모집완료 버튼
+        viewBinding.btnDoneRecruit.setOnClickListener {
+            val intent = Intent(this, RecruitDoneActivity::class.java)
+            startActivity(intent)
+            //기능연결 해야돼
+        }
+
+        //초기화 버튼
+        viewBinding.btnReset.setOnClickListener {
+            //선택완료된 지원자 전체 리스트
+            //Log.d("선택된 지원자 all: ", applicantList.toString())
+            editApplicant(this, type, id, applicantList)
+            loadData(this, type, id, part)
+
+            //selectList.clear()
+            Log.d("초기화 버튼 눌림. ", " ")
+            loadData(this,type,id,part)
         }
 
 
@@ -224,6 +235,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
             if (it == 1){
                 enableDelete(true)
                 enableRegist(true)
+
             }else if (it == 0){
                 enableDelete(false)
                 enableRegist(false)
@@ -248,6 +260,14 @@ class RecruitApplyListActivity: AppCompatActivity() {
                                     Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.result.message.co_appllicantsInfo}")
                                     setAdapter1(it.result.message.co_applicantsCount, context, limit)
                                     setAdapter2(it.result.message.co_appllicantsInfo, context)
+
+                                    //해결할거) applicantList에 co_appllicantsInfo.co_email +++++
+                                    
+
+                                    //Log.d("emailList : ", emailList.toString())
+                                    //applicantList.addAll(emailList)
+
+
                                     part = it.result.message.co_part
                                     if (part == "TEMP"){
                                         viewBinding.bottomBtn.isGone = false
@@ -255,10 +275,13 @@ class RecruitApplyListActivity: AppCompatActivity() {
                                         viewBinding.btnSelect2.isGone = true
                                         peopleNum = it.result.message.co_tempSavedApplicantsCount
                                         viewBinding.applicantNum.text = "현재 선택한 지원자 $peopleNum"
+
+
+
                                         if(peopleNum != 0){ //초기화, 모집완료 활성화
-//                                            viewBinding.btnReset.isEnabled = true
-//                                            viewBinding.btnDoneRecruit.isEnabled = true
                                             enableResetOrDone(true)
+                                            //선택된 지원자 email list로 저장
+//                                            applicantList.addAll(it.result.message.co_appllicantsInfo.co_email)
                                             Log.d("enableResetOrDone 되나? ", "chk")
                                         }else{
                                             enableResetOrDone(false)

@@ -63,6 +63,7 @@ class RecruitListFragment : Fragment() {
             0 -> loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag) //기본으로 0page PData 가져오기
             1 -> loadSData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag) //기본으로 0page PData 가져오기
         }
+
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -93,7 +94,7 @@ class RecruitListFragment : Fragment() {
                 val lastVisibleItemPosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition() - 2
                 val lastPosition = recyclerView.adapter!!.itemCount - 3 //원래 1
 
-                if((lastVisibleItemPosition == lastPosition) && !lastPage){
+                if((lastVisibleItemPosition == lastPosition) && !lastPage){ //처음에 false
                     downpage += 1
                     when(now){ //프/스 분리 해야 됨
                         0 -> loadPData(mainAppActivity, downpage, coLocationTag, coPartTag, coKeyword, coProcessTag, coSortingTag)
@@ -108,14 +109,16 @@ class RecruitListFragment : Fragment() {
         var chg: Int
         val popupChangeFragment = PopupChangeFragment(){
             chg = it //누른게 넘어와
+            Log.d("chg", chg.toString())
             Log.d("test : 0이면 플젝버튼누름 1이면 스터디버튼누름 :", now.toString())
 
             downpage = 0
-            lastPage = false //없으면 페이지 전환시 무한스크롤 작동x
+            lastPage = false //없으면 페이지 전환시 무한스크롤 작동 x
             // (이유: 스터디 화면에서 페이지 끝까지 닿으면 lastpage = true -> addOnScrollListener의 조건에 의해 더이상 downpage가 증가하지 x)
             // S화면 끝까지 닿았다가 P화면 전환 시 P화면 무한스크롤 x
             when(chg){
                 0 -> { //0 넘어옴 스->프
+                    Log.d("여기  0", "onCreateView: ")
                     pdataList = ArrayList()
                     sdataList = ArrayList()
                     now = 0
@@ -126,6 +129,7 @@ class RecruitListFragment : Fragment() {
                     true
                 }
                 1 -> { //1넘어옴 프->스
+                    Log.d("여기  1", "onCreateView: ")
                     pdataList = ArrayList()
                     sdataList = ArrayList()
                     now = 1
