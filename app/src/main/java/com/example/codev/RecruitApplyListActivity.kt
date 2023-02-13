@@ -159,6 +159,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
             val intent = Intent(this, RecruitDoneActivity::class.java)
             startActivity(intent)
             //기능연결 해야돼
+            doneRecruit(this, type, id, applicantList)
         }
 
         //초기화 버튼
@@ -200,22 +201,22 @@ class RecruitApplyListActivity: AppCompatActivity() {
         }
     }
 
-    private fun enableResetOrDone(boolean: Boolean){ //true가 넘어왔다 일단
+    private fun enableReset(boolean: Boolean){ //true가 넘어왔다 일단
         if(boolean == viewBinding.bottomBtn.isEnabled){
             viewBinding.btnReset.isEnabled = boolean
-            viewBinding.btnDoneRecruit.isEnabled = boolean
             viewBinding.btnReset.isSelected = boolean
-            viewBinding.btnDoneRecruit.isSelected = boolean
             viewBinding.bottomBtn.isEnabled = !boolean
             viewBinding.btnReset.setTextColor(ContextCompat.getColor(this!!,R.color.black_700))
+        }
+    }
+    private fun enableDone(boolean: Boolean){ //true가 넘어왔다 일단
+        if(boolean != viewBinding.bottomBtn.isEnabled){
+            viewBinding.btnDoneRecruit.isEnabled = boolean
+            viewBinding.btnDoneRecruit.isSelected = boolean
+            viewBinding.bottomBtn.isEnabled = !boolean
             viewBinding.btnDoneRecruit.setTextColor(ContextCompat.getColor(this!!,R.color.white))
         }
     }
-
-//    Log.d("test","리콜받음 $it")
-//    loadData(context, type, id, it)
-//    viewBinding.btnEdit.isChecked = false
-//    viewBinding.btnEdit.text = "선택하기"
 
     private fun setAdapter1(dataList: ArrayList<ApplicantData>, context: Context, limit: Int){
         adapter1 = AdapterRecruitApplicants1(context, dataList, limit){
@@ -261,12 +262,12 @@ class RecruitApplyListActivity: AppCompatActivity() {
                                     setAdapter1(it.result.message.co_applicantsCount, context, limit)
                                     setAdapter2(it.result.message.co_appllicantsInfo, context)
 
-                                    //해결할거) applicantList에 co_appllicantsInfo.co_email +++++
-                                    
+                                    applicantList= ArrayList()
+                                    for (i in it.result.message.co_appllicantsInfo){ //선택된 지원자 수 만큼
+                                        applicantList.add(i.co_email)
+                                    }
 
-                                    //Log.d("emailList : ", emailList.toString())
-                                    //applicantList.addAll(emailList)
-
+                                    Log.d("applicantList", applicantList.toString())
 
                                     part = it.result.message.co_part
                                     if (part == "TEMP"){
@@ -276,19 +277,29 @@ class RecruitApplyListActivity: AppCompatActivity() {
                                         peopleNum = it.result.message.co_tempSavedApplicantsCount
                                         viewBinding.applicantNum.text = "현재 선택한 지원자 $peopleNum"
 
-
-
-                                        if(peopleNum != 0){ //초기화, 모집완료 활성화
-                                            enableResetOrDone(true)
-                                            //선택된 지원자 email list로 저장
-//                                            applicantList.addAll(it.result.message.co_appllicantsInfo.co_email)
-                                            Log.d("enableResetOrDone 되나? ", "chk")
+                                        if(peopleNum != 0){ //초기화, 모집완료 활성화 (담은 인원이 1명 이상)
+                                            enableReset(true)
+                                            //제한 인원 넘지 않았는지 체크 co_limit >= co_applicantsCount
+                                            for (i in it.result.message.co_applicantsCount){ //선택된 지원자 수 만큼
+                                                if(i.co_limit >= i.co_applicantsCount){
+                                                    enableDone(true)
+                                                    Log.d("여기 오면 성공 ", "onResponse: ")
+                                                }
+                                                else{
+                                                    Log.d("if문 안돌아감", "onResponse: ")
+                                                }
+                                            }
+                                            Log.d("enableResetOrDone 되나? ", "")
                                         }else{
-                                            enableResetOrDone(false)
+                                            enableReset(false)
                                             viewBinding.btnReset.setTextColor(ContextCompat.getColor(context!!,R.color.black_300))
+                                            enableDone(false)
                                             viewBinding.btnDoneRecruit.setTextColor(ContextCompat.getColor(context!!,R.color.black_500))
                                         }
-                                    }else{
+
+
+                                    }
+                                    else{
                                         viewBinding.bottomBtn.isGone = true
                                         viewBinding.btnSelect1.isGone = true
                                         viewBinding.btnSelect2.isGone = true
@@ -329,7 +340,28 @@ class RecruitApplyListActivity: AppCompatActivity() {
                                         viewBinding.btnSelect2.isGone = true
                                         peopleNum = it.result.message.co_tempSavedApplicantsCount
                                         viewBinding.applicantNum.text = "현재 선택한 지원자 $peopleNum"
-                                    }else{
+
+                                        if(peopleNum != 0){ //초기화, 모집완료 활성화 (담은 인원이 1명 이상)
+                                            enableReset(true)
+                                            //제한 인원 넘지 않았는지 체크 co_limit >= co_applicantsCount
+                                            for (i in it.result.message.co_applicantsCount){ //선택된 지원자 수 만큼
+                                                if(i.co_limit >= i.co_applicantsCount){
+                                                    enableDone(true)
+                                                    Log.d("여기 오면 성공 ", "onResponse: ")
+                                                }
+                                                else{
+                                                    Log.d("if문 안돌아감", "onResponse: ")
+                                                }
+                                            }
+                                            Log.d("enableResetOrDone 되나? ", "")
+                                        }else{
+                                            enableReset(false)
+                                            enableDone(false)
+                                            viewBinding.btnReset.setTextColor(ContextCompat.getColor(context!!,R.color.black_300))
+                                            viewBinding.btnDoneRecruit.setTextColor(ContextCompat.getColor(context!!,R.color.black_500))
+                                        }
+                                    }
+                                    else{
                                         viewBinding.bottomBtn.isGone = true
                                         viewBinding.btnSelect1.isGone = true
                                         viewBinding.btnSelect2.isGone = true
@@ -345,6 +377,54 @@ class RecruitApplyListActivity: AppCompatActivity() {
                 override fun onFailure(call: Call<ResApplyerList>, t: Throwable) {
                     Log.d("test: 조회실패 - loadData(스터디 지원자 전체조회): ", "[Fail]${t.toString()}")
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+    }
+
+    //모집완료 function *****지원자가 제한 인원 넘지 않는지 확인 필요
+    private fun doneRecruit(context: Context, type: String, id: Int, recruitedList: ArrayList<String>){
+        if (type == "PROJECT"){
+            RetrofitClient.service.doneRecruitProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqRecruitedApplicantList(recruitedList)).enqueue(object: Callback<JsonObject>{
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    if(response.isSuccessful.not()){
+                        Log.d("test: 모집완료 실패",response.toString())
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    when(response.code()){
+                        200 -> {
+                            response.body()?.let {
+                                Log.d("test: 모집완료 성공", "\n${it.toString()}")
+
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Log.d("test", "[Fail]${t.toString()}")
+                }
+            })
+        }
+        else if(type == "STUDY"){
+            RetrofitClient.service.doneRecruitProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqRecruitedApplicantList(recruitedList)).enqueue(object: Callback<JsonObject>{
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    if(response.isSuccessful.not()){
+                        Log.d("test: 지원자 편집  실패",response.toString())
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    when(response.code()){
+                        200 -> {
+                            response.body()?.let {
+                                Log.d("test: 지원자 편집  성공", "\n${it.toString()}")
+
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Log.d("test", "[Fail]${t.toString()}")
                 }
             })
         }

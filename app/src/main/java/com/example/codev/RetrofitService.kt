@@ -215,4 +215,11 @@ interface RetrofitService {
     @PATCH("study/recruitment/extension/{coStudyId}")
     fun extendStudy(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int, @Body params: ReqExtendStudy) : Call<JsonObject>
 
+    @PATCH("project/recruitment/dead-line/{coProjectId}")
+    fun doneRecruitProject(
+        @Header("CoDev_Authorization") header: String,
+        @Path("coProjectId") coProjectId: Int,
+        @Body params: ReqRecruitedApplicantList
+    ): Call<JsonObject>
+
 }
