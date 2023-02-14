@@ -31,7 +31,7 @@ class AdapterChatRoomList(private val listData: ArrayList<ResponseOfGetChatRoomL
             val temp = listData[index]
             temp.latestconv = data.latestconv
             temp.latestDate = data.latestDate
-            temp.isRead++
+            temp.isRead = temp.isRead + 1
             listData.add(0, temp)
             listData.removeAt(index+1)
             returnToActivity(0, index+1)
