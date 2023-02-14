@@ -96,8 +96,6 @@ class AppliedDetailActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-<<<<<<< HEAD
     private fun loadData(nowType: String, id: Int, portfolioId: Int){
         if(nowType == "PROJECT"){
             RetrofitClient.service.getProjectAppliedDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(this)), id, portfolioId).enqueue(object:
@@ -121,30 +119,6 @@ class AppliedDetailActivity : AppCompatActivity() {
                                 setDataOnPage(this@AppliedDetailActivity, it.result.message)
                                 isLoaded = true
                             }
-=======
-    private fun loadData(projectId: Int, portfolioId: Int){
-        RetrofitClient.service.getAppliedDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(this)), projectId, portfolioId).enqueue(object:
-            Callback<ResAppliedUserDetail> {
-            override fun onResponse(
-                call: Call<ResAppliedUserDetail>,
-                response: Response<ResAppliedUserDetail>
-            ) {
-                if (response.isSuccessful.not()) {
-                    Log.d("test: 포트폴리오 불러오기 실패", response.toString())
-                    Toast.makeText(
-                        this@AppliedDetailActivity,
-                        "서버와 연결을 시도했으나 실패했습니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                when (response.code()) {
-                    200 -> {
-                        response.body()?.let {
-                            Log.d("test: 포트폴리오 불러오기 성공", response.toString())
-                            Log.d("testCallback",it.toString())
-                            setDataOnPage(this@AppliedDetailActivity, it.result.message)
-                            isLoaded = true
->>>>>>> 5f2c8c991ebc31e451c1b5dab0a2e7fdc3dd6e68
                         }
                         400 -> {
                             Toast.makeText(this@AppliedDetailActivity, "지원자가 해당 포트폴리오를 삭제했습니다.", Toast.LENGTH_SHORT).show()
@@ -199,14 +173,6 @@ class AppliedDetailActivity : AppCompatActivity() {
                 }
             })
         }
-
-<<<<<<< HEAD
-=======
-            override fun onFailure(call: Call<ResAppliedUserDetail>, t: Throwable) {
-                Log.d("test", "onFailure: ${t.toString()}")
-            }
-        })
->>>>>>> 5f2c8c991ebc31e451c1b5dab0a2e7fdc3dd6e68
     }
 
     private fun setDataOnPage(context: Context, pfData: AllAppliedUserDetailMessage){
