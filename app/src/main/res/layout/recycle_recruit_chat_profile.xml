@@ -6,7 +6,7 @@
     android:layout_height="60dp"
     android:layout_marginRight="-20dp">
 
-    <ImageView
+        <ImageView
         android:id="@+id/applyer_profile"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

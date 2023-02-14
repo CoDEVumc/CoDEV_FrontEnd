@@ -1,5 +1,6 @@
 package com.example.codev
 
+import java.io.Serializable
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -30,4 +31,4 @@ data class ApplicantInfoData( //파트별 지원자 정보 (프로필+포트폴�
     val co_part: String,
     val co_temporaryStorage: Boolean, //선택된 여부
     val createdAt: String
-)
+): Serializable

@@ -178,6 +178,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
             if(plan>=0 && design>=0 && frontEnd>=0 && backEnd>=0 && etc>=0){
                 val intent = Intent(this, RecruitDoneActivity::class.java)
+                intent.putExtra("selectList", selectList)
                 startActivity(intent)
                 doneRecruit(this, type, id, applicantList)
             }else{
