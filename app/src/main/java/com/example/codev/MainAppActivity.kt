@@ -11,6 +11,7 @@ class MainAppActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         Log.d("test", "강제종료")
+        Log.d("stomp", "연결종료")
         ChatClient.disconnect()
         super.onDestroy()
     }
