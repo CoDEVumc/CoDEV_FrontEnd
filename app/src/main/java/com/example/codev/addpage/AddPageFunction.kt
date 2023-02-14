@@ -62,6 +62,38 @@ class AddPageFunction {
         }
     }
 
+    fun checkSelfCameraPermission(context: Context, nowActivity: AppCompatActivity, runFunction: () -> Unit) {
+        var temp = ""
+
+        //카메라 권한 확인
+        if (ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            temp += Manifest.permission.CAMERA + " "
+        }
+//        //파일 쓰기 권한 확인
+//        if (ContextCompat.checkSelfPermission(
+//                context,
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            temp += Manifest.permission.WRITE_EXTERNAL_STORAGE + " "
+//        }
+        if (!TextUtils.isEmpty(temp)) {
+            Log.d("permission", "checkSelfPermission: 권한을 요청합니다.")
+            // 권한 요청
+            ActivityCompat.requestPermissions(
+                nowActivity,
+                temp.trim { it <= ' ' }.split(" ".toRegex()).dropLastWhile { it.isEmpty() }
+                    .toTypedArray(),
+                0)
+        }else{
+            runFunction()
+        }
+    }
+
     fun setStackChip(
         context: Context,
         addItem: AddListItem
@@ -193,7 +225,7 @@ class AddPageFunction {
             context.applicationInfo.dataDir + File.separator + SimpleDateFormat(
                 "HHmmss",
                 Locale.getDefault()
-            ).format(Date()) + "-" + fileName
+            ).format(Date()) + "-" + fileName.replace("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.]".toRegex(), "_")
         val file = File(filePath)
 
         val inputStream = contentResolver.openInputStream(uri)!!

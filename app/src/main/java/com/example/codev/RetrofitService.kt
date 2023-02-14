@@ -38,6 +38,9 @@ interface RetrofitService {
     @GET("user/code/mail")
     fun getEmailCode(@Query("email") value1: String) : Call<ResGetEmailCode>
 
+    @POST("user/duplication")
+    fun checkEmail(@Query("email") value1: String) : Call<ResCheckEmail>
+
     @POST("project")
     @Multipart
     fun createNewProject(
@@ -215,13 +218,26 @@ interface RetrofitService {
     @PATCH("study/recruitment/extension/{coStudyId}")
     fun extendStudy(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int, @Body params: ReqExtendStudy) : Call<ResExtendRecruit>
 
-
     @PATCH("project/recruitment/dead-line/{coProjectId}")
     fun doneRecruitProject(
         @Header("CoDev_Authorization") header: String,
         @Path("coProjectId") coProjectId: Int,
         @Body params: ReqRecruitedApplicantList
     ): Call<JsonObject>
+
+    @PUT("user/update/profile")
+    @Multipart
+    fun changeUserInfo(
+        @Header("CoDev_Authorization") authToken: String
+        ,@Part("user") userData: RequestBody
+        ,@Part file: MultipartBody.Part
+    ): Call<ResUserInfoChanged>
+
+    @PATCH("user/update/password")
+    fun changePassword(@Header("CoDev_Authorization") authToken: String, @Body params: ReqChangeUserPassword): Call<ResChangeUserPassword>
+
+    @GET("project/recruitment/portfolio/{coProjectId}/{coPortfolioId}")
+    fun getAppliedDetail(@Header("CoDev_Authorization") header: String, @Path("coProjectId") coProjectId: Int, @Path("coPortfolioId") coPortfolioId: Int) : Call<ResAppliedUserDetail>
 
 
     @GET("chat/rooms")

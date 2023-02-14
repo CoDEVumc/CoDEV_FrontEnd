@@ -1,5 +1,6 @@
 package com.example.codev.addpage
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -19,13 +20,13 @@ class CallbackSingleRVAdapter(private var itemList: ArrayList<AddListItem>, priv
 
             viewBinding.stackName.text = item.name
             viewBinding.root.setOnClickListener {
-
+                Log.d("debugIndex", "first: selectIdx: $selectedIdx")
                 if(selectedIdx != -1 && selectedIdx != adapterPosition){ //이미 클릭한 다른 항목을 선택 해제하기
                     itemList[selectedIdx].isSelected = false
                     notifyItemChanged(selectedIdx)
                 }
                 selectedIdx = adapterPosition
-
+                Log.d("debugIndex", "end: selectIdx: $selectedIdx")
                 item.isSelected = true
                 notifyItemChanged(adapterPosition)
 

@@ -2,6 +2,7 @@ package com.example.codev.addpage
 
 import android.content.Context
 import android.util.Log
+import android.widget.Button
 import android.widget.Toast
 import com.example.codev.*
 import com.google.gson.Gson
@@ -33,7 +34,8 @@ class Project2Server {
         for (i in imagePathList) {
             var fileFromPath = File(i)
             var fileBody = RequestBody.create(MediaType.parse("application/octet-stream"),fileFromPath)
-            val filePart = MultipartBody.Part.createFormData("files", fileFromPath.name, fileBody)
+            val filePart = MultipartBody.Part.createFormData("files", fileFromPath.name.replace("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.]".toRegex(), "_"), fileBody)
+            Log.d("copyimagename", fileFromPath.name.replace("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.]".toRegex(), "_"))
             fileMultipartList.add(filePart)
         }
         return fileMultipartList.toList()
@@ -43,13 +45,14 @@ class Project2Server {
         val fileMultipartList = ArrayList<MultipartBody.Part>()
         for (i in imageFileList) {
             val fileBody = RequestBody.create(MediaType.parse("application/octet-stream"),i)
-            val filePart = MultipartBody.Part.createFormData("files", i.name, fileBody)
+            val filePart = MultipartBody.Part.createFormData("files", i.name.replace("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.]".toRegex(), "_"), fileBody)
+            Log.d("test: copyImageName", i.name.replace("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.]", "_"))
             fileMultipartList.add(filePart)
         }
         return fileMultipartList.toList()
     }
 
-    fun postNewProject(context: Context, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>, finishPage: () -> Unit){
+    fun postNewProject(context: Context, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>, submitBtn: Button, finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
         val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
         Log.d("postAuth", userToken)
@@ -85,6 +88,8 @@ class Project2Server {
                 if(response.isSuccessful.not()){
                     Log.d("Fail",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    submitBtn.isSelected = true
+                    submitBtn.isEnabled = true
 
                 }
                 response.body()?.let { Log.d("Success: testCreateNewProject", "\n${it.result.message}")}
@@ -92,11 +97,14 @@ class Project2Server {
             }
             override fun onFailure(call: Call<ResCreateNewProject>, t: Throwable) {
                 Log.d("FAIL", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                submitBtn.isSelected = true
+                submitBtn.isEnabled = true
             }
         })
     }
 
-    fun updateProject(context: Context, projectId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>, finishPage: () -> Unit){
+    fun updateProject(context: Context, projectId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>, submitBtn: Button, finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
         val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
         Log.d("postAuth", userToken)
@@ -132,7 +140,8 @@ class Project2Server {
                 if(response.isSuccessful.not()){
                     Log.d("Fail",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-
+                    submitBtn.isSelected = true
+                    submitBtn.isEnabled = true
                 }
                 response.body()?.let { Log.d("Success: testCreateNewProject", "\n${it.result.message}")}
                 finishPage()
@@ -140,11 +149,13 @@ class Project2Server {
 
             override fun onFailure(call: Call<ResCreateNewProject>, t: Throwable) {
                 Log.d("FAIL", "[Fail]${t.toString()}")
+                submitBtn.isSelected = true
+                submitBtn.isEnabled = true
             }
         })
     }
 
-    fun postNewStudy(context: Context, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, stack1Name: String, peopleNumber: Int, imagePartList: List<MultipartBody.Part>, finishPage: () -> Unit){
+    fun postNewStudy(context: Context, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, stack1Name: String, peopleNumber: Int, imagePartList: List<MultipartBody.Part>, submitBtn: Button, finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
         val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
         Log.d("postAuth", userToken)
@@ -180,6 +191,8 @@ class Project2Server {
                 if(response.isSuccessful.not()){
                     Log.d("FailOnResponse",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    submitBtn.isSelected = true
+                    submitBtn.isEnabled = true
 
                 }
                 Toast.makeText(context, "업로드 성공!!!", Toast.LENGTH_SHORT).show()
@@ -189,12 +202,14 @@ class Project2Server {
 
             override fun onFailure(call: Call<ResCreateNewStudy>, t: Throwable) {
                 Log.d("OnFailure", "[Fail]${t.toString()}")
+                submitBtn.isSelected = true
+                submitBtn.isEnabled = true
 
             }
         })
     }
 
-    fun updateStudy(context: Context, studyId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, stack1Name: String, peopleNumber: Int, imagePartList: List<MultipartBody.Part>, finishPage: () -> Unit){
+    fun updateStudy(context: Context, studyId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, stack1Name: String, peopleNumber: Int, imagePartList: List<MultipartBody.Part>, submitBtn: Button, finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
         val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
         Log.d("postAuth", userToken)
@@ -231,6 +246,8 @@ class Project2Server {
                 if(response.isSuccessful.not()){
                     Log.d("FailOnResponse",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    submitBtn.isSelected = true
+                    submitBtn.isEnabled = true
 
                 }
                 Toast.makeText(context, "업로드 성공!!!", Toast.LENGTH_SHORT).show()
@@ -240,13 +257,14 @@ class Project2Server {
 
             override fun onFailure(call: Call<ResCreateNewStudy>, t: Throwable) {
                 Log.d("OnFailure", "[Fail]${t.toString()}")
-
+                submitBtn.isSelected = true
+                submitBtn.isEnabled = true
             }
         })
     }
 
 
-    fun postNewPF(context: Context, title: String, level: String, intro: String, content: String, stackList: List<Int>, linkList: List<String>, finishPage: () -> Unit){
+    fun postNewPF(context: Context, title: String, level: String, intro: String, content: String, stackList: List<Int>, linkList: List<String>, submitBtn: Button, finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
         val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
         Log.d("postAuth", userToken)
@@ -268,7 +286,8 @@ class Project2Server {
                 if(response.isSuccessful.not()){
                     Log.d("FailOnResponse",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-
+                    submitBtn.isSelected = true
+                    submitBtn.isEnabled = true
                 }
                 response.body()?.let { Log.d("Success: testCreateNewStudy", "\n${it.result.message}")}
                 finishPage()
@@ -276,11 +295,13 @@ class Project2Server {
 
             override fun onFailure(call: Call<ResCreateNewPF>, t: Throwable) {
                 Log.d("OnFailure", "[Fail]${t.toString()}")
+                submitBtn.isSelected = true
+                submitBtn.isEnabled = true
             }
         })
     }
 
-    fun updatePF(context: Context, pfId: String, title: String, level: String, intro: String, content: String, stackList: List<Int>, linkList: List<String>, finishPage: () -> Unit){
+    fun updatePF(context: Context, pfId: String, title: String, level: String, intro: String, content: String, stackList: List<Int>, linkList: List<String>,submitBtn: Button, finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
         val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
         Log.d("postAuth", userToken)
@@ -302,6 +323,8 @@ class Project2Server {
                 if(response.isSuccessful.not()){
                     Log.d("FailOnResponse",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    submitBtn.isSelected = true
+                    submitBtn.isEnabled = true
 
                 }
                 response.body()?.let { Log.d("Success: testCreateNewStudy", "\n${it.result.message}")}
@@ -310,6 +333,8 @@ class Project2Server {
 
             override fun onFailure(call: Call<ResCreateNewPF>, t: Throwable) {
                 Log.d("OnFailure", "[Fail]${t.toString()}")
+                submitBtn.isSelected = true
+                submitBtn.isEnabled = true
             }
         })
     }

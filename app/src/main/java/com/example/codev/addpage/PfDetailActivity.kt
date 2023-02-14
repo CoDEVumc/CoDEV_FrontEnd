@@ -32,6 +32,8 @@ class PfDetailActivity : AppCompatActivity() {
     private var loadedObject: RealDataPF? = null
     private var stackMap = LinkedHashMap<Int, String>()
 
+    private var isLoadEd = false
+
     override fun onResume() {
         super.onResume()
         viewBinding.addLinkSection.removeAllViews()
@@ -60,8 +62,6 @@ class PfDetailActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.left2)
         }
-
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -127,7 +127,6 @@ class PfDetailActivity : AppCompatActivity() {
                     confirmDelete(this, pfId.toInt()) { finish() }
                 }else{
                     Toast.makeText(this, "잠시 후 시도해보세요", Toast.LENGTH_SHORT).show()
-
                 }
                 true
             }
