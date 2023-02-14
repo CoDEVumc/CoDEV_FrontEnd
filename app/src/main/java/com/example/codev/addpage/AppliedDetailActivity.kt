@@ -25,7 +25,6 @@ class AppliedDetailActivity : AppCompatActivity() {
     private var partName = ""
     private var isSelected = false
     private var nowPageType = "PROJECT"
-    private var nowEmail = ""
     private var nowId = -1
     private var name = ""
     private var receiver_email = ""
@@ -199,7 +198,6 @@ class AppliedDetailActivity : AppCompatActivity() {
                             response.body()?.let {
                                 Log.d("test: 포트폴리오 불러오기 성공", response.toString())
                                 nowPageType = "PROJECT"
-                                nowEmail = it.result.message.co_email
                                 setDataOnPage(this@AppliedDetailActivity, it.result.message)
                                 isLoaded = true
                             }
@@ -238,7 +236,6 @@ class AppliedDetailActivity : AppCompatActivity() {
                             response.body()?.let {
                                 Log.d("test: 포트폴리오 불러오기 성공", response.toString())
                                 nowPageType = "STUDY"
-                                nowEmail = it.result.message.co_email
                                 setDataOnPage(this@AppliedDetailActivity, it.result.message)
                                 isLoaded = true
                             }
@@ -346,7 +343,7 @@ class AppliedDetailActivity : AppCompatActivity() {
         viewBinding.btnRight.isSelected = false
         viewBinding.btnRight.isEnabled = false
         if(nowPageType == "PROJECT"){
-            RetrofitClient.service.requestProjectApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), nowId, ReqUpdateApplicant(listOf(nowEmail))).enqueue(
+            RetrofitClient.service.requestProjectApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), nowId, ReqUpdateApplicant(listOf(receiver_email))).enqueue(
                 object : Callback<JsonObject>{
                     override fun onResponse(
                         call: Call<JsonObject>,
@@ -376,7 +373,7 @@ class AppliedDetailActivity : AppCompatActivity() {
                     }
                 })
         }else if(nowPageType == "STUDY"){
-            RetrofitClient.service.requestStudyApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), nowId, ReqUpdateApplicant(listOf(nowEmail))).enqueue(
+            RetrofitClient.service.requestStudyApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), nowId, ReqUpdateApplicant(listOf(receiver_email))).enqueue(
                 object : Callback<JsonObject>{
                     override fun onResponse(
                         call: Call<JsonObject>,
