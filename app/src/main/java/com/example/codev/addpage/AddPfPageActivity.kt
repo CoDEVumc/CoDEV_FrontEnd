@@ -8,7 +8,9 @@ import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -221,6 +223,19 @@ class AddPfPageActivity : AppCompatActivity() {
                 }
             }
         })
+
+        viewBinding.inputPfContent.setOnTouchListener(OnTouchListener { v, event ->
+            if (viewBinding.inputPfContent.hasFocus()) {
+                v.parent.requestDisallowInterceptTouchEvent(true)
+                when (event.action and MotionEvent.ACTION_MASK) {
+                    MotionEvent.ACTION_SCROLL -> {
+                        v.parent.requestDisallowInterceptTouchEvent(false)
+                        return@OnTouchListener true
+                    }
+                }
+            }
+            false
+        })
         //contentSection - End
 
         //LinkSection - Start
@@ -404,9 +419,13 @@ class AddPfPageActivity : AppCompatActivity() {
 
             if(isTitleOk and isLevelOk and isIntroOk and isContentOk and isLinkOk){
                 if(isOld){
-                    project2Server.updatePF(this, oldPfId, finalTitle, finalLevel, finalIntro, finalContent, finalStackList, finalLinkList) { finish() }
+                    viewBinding.submitButton.isEnabled = false
+                    viewBinding.submitButton.isSelected = false
+                    project2Server.updatePF(this, oldPfId, finalTitle, finalLevel, finalIntro, finalContent, finalStackList, finalLinkList, viewBinding.submitButton) { finish() }
                 }else{
-                    project2Server.postNewPF(this, finalTitle, finalLevel, finalIntro, finalContent, finalStackList, finalLinkList) { finish() }
+                    viewBinding.submitButton.isEnabled = false
+                    viewBinding.submitButton.isSelected = false
+                    project2Server.postNewPF(this, finalTitle, finalLevel, finalIntro, finalContent, finalStackList, finalLinkList, viewBinding.submitButton) { finish() }
                 }
 
             }else{

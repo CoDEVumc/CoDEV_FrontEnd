@@ -15,6 +15,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.Toast
@@ -122,6 +123,19 @@ class AddNewStudyActivity : AppCompatActivity() {
                     }
                 }
             }
+        })
+
+        viewBinding.inputOfContent.setOnTouchListener(View.OnTouchListener { v, event ->
+            if (viewBinding.inputOfContent.hasFocus()) {
+                v.parent.requestDisallowInterceptTouchEvent(true)
+                when (event.action and MotionEvent.ACTION_MASK) {
+                    MotionEvent.ACTION_SCROLL -> {
+                        v.parent.requestDisallowInterceptTouchEvent(false)
+                        return@OnTouchListener true
+                    }
+                }
+            }
+            false
         })
         //DesSection - End
 
@@ -382,7 +396,6 @@ class AddNewStudyActivity : AppCompatActivity() {
             }
 
             if(isTitleOk and isContentOk and isPartPeopleOk and isLocationOk and isDeadlineOk){
-
                 if(isOld){
                     val imageFileList = ArrayList<File>()
                     //getOldImageNumber
@@ -412,7 +425,9 @@ class AddNewStudyActivity : AppCompatActivity() {
 
                                     if(loadedImageNumber == allUrlNumber){
                                         val imageMultiPartListUsingFile = project2Server.createImageMultiPartListUsingFile(imageFileList)
-                                        project2Server.updateStudy(this@AddNewStudyActivity, oldStudyId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartListUsingFile) {
+                                        viewBinding.submitButton.isEnabled = false
+                                        viewBinding.submitButton.isSelected = false
+                                        project2Server.updateStudy(this@AddNewStudyActivity, oldStudyId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartListUsingFile, viewBinding.submitButton) {
                                             for(deleteFile in imageFileList) deleteFile.delete()
                                             finish()
                                         }
@@ -427,7 +442,9 @@ class AddNewStudyActivity : AppCompatActivity() {
 
                     if(allUrlNumber == 0){
                         val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
-                        project2Server.updateStudy(this@AddNewStudyActivity, oldStudyId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartList) { finish() }
+                        viewBinding.submitButton.isEnabled = false
+                        viewBinding.submitButton.isSelected = false
+                        project2Server.updateStudy(this@AddNewStudyActivity, oldStudyId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartList, viewBinding.submitButton) { finish() }
                     }
 
                     Log.d("deadlineServerJson", dateJsonString)
@@ -436,7 +453,9 @@ class AddNewStudyActivity : AppCompatActivity() {
                     val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
                     Log.d("finalImageMultiPartList", imageMultiPartList.toString())
                     Log.d("deadlineServerJson", dateJsonString)
-                    project2Server.postNewStudy(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartList) { finish() }
+                    viewBinding.submitButton.isEnabled = false
+                    viewBinding.submitButton.isSelected = false
+                    project2Server.postNewStudy(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartList, viewBinding.submitButton) { finish() }
                 }
             }else{
                 toastString = toastString.substring(0, toastString.length-2) + "을 확인하세요."

@@ -244,6 +244,8 @@ class MyProfileActivity:AppCompatActivity() {
     }
 
     private fun uploadUserChange(context: Context, userToken: String, requestBody: RequestBody, imageFile: MultipartBody.Part){
+        viewBinding.btnSave.isEnabled = false
+        viewBinding.btnSave.isSelected = false
         //retrofit으로 올리고 사진 삭제하기
         RetrofitClient.service.changeUserInfo(userToken, requestBody, imageFile).enqueue(object :
             Callback<ResUserInfoChanged> {
@@ -254,6 +256,8 @@ class MyProfileActivity:AppCompatActivity() {
                 if(response.isSuccessful.not()){
                     Log.d("fail", "유저 변경 정보 업로드 실패: ${response.toString()}")
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    viewBinding.btnSave.isEnabled = true
+                    viewBinding.btnSave.isSelected = true
                 }
                 when(response.code()){
                     200 -> {
@@ -272,6 +276,8 @@ class MyProfileActivity:AppCompatActivity() {
             override fun onFailure(call: Call<ResUserInfoChanged>, t: Throwable) {
                 Log.d("uploadUserInfoFail", "onFailure: $t")
                 Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                viewBinding.btnSave.isEnabled = true
+                viewBinding.btnSave.isSelected = true
 
             }
         })

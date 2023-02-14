@@ -302,17 +302,38 @@
                 android:textColor="@color/black_900"
                 style="@style/Text.Body4.SemiBold"/>
 
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/pf_content_top_divider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/text_pf_content"
+                android:layout_marginTop="10dp"
+                app:dividerColor="#000000"
+                />
+
             <EditText
                 android:id="@+id/input_pf_content"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:gravity="top"
                 app:layout_constraintTop_toBottomOf="@id/text_pf_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="22dp"
                 android:textSize="14sp"
                 android:hint="@string/pf_content_hint"
-                android:inputType="textMultiLine"/>
+                android:inputType="textMultiLine"
+                android:background="@null"
+                android:overScrollMode="always"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical"/>
 
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/pf_content_bottom_divider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/input_pf_content"
+                android:layout_marginTop="10dp"
+                app:dividerColor="#000000"
+                />
 
             <TextView
                 android:id="@+id/content_text_counter"
@@ -320,15 +341,15 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintRight_toRightOf="@id/input_pf_content"
                 android:layout_marginEnd="12dp"
-                app:layout_constraintTop_toBottomOf="@id/input_pf_content"
-                android:layout_marginBottom="18dp"
+                app:layout_constraintTop_toBottomOf="@id/pf_content_bottom_divider"
+                android:layout_marginTop="6dp"
                 android:text="0/500"/>
 
             <TextView
                 android:id="@+id/text_pf_link"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/input_pf_content"
+                app:layout_constraintTop_toBottomOf="@id/pf_content_bottom_divider"
                 android:layout_marginTop="24dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginStart="4dp"

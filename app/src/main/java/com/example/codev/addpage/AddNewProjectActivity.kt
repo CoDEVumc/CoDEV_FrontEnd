@@ -15,6 +15,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.Toast
@@ -62,6 +63,7 @@ class AddNewProjectActivity : AppCompatActivity() {
     //Camera
     private var tempCameraFile = File("")
     private var tempUri = Uri.EMPTY
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -127,6 +129,19 @@ class AddNewProjectActivity : AppCompatActivity() {
                     }
                 }
             }
+        })
+
+        viewBinding.inputOfContent.setOnTouchListener(View.OnTouchListener { v, event ->
+            if (viewBinding.inputOfContent.hasFocus()) {
+                v.parent.requestDisallowInterceptTouchEvent(true)
+                when (event.action and MotionEvent.ACTION_MASK) {
+                    MotionEvent.ACTION_SCROLL -> {
+                        v.parent.requestDisallowInterceptTouchEvent(false)
+                        return@OnTouchListener true
+                    }
+                }
+            }
+            false
         })
         //contentSection - End
 
@@ -356,8 +371,6 @@ class AddNewProjectActivity : AppCompatActivity() {
         //setSubmitButton
         viewBinding.submitButton.setOnClickListener {
 
-
-
             val finalTitle = viewBinding.inputOfTitle.text.toString()
             Log.d("finalTitle", finalTitle)
 
@@ -414,7 +427,6 @@ class AddNewProjectActivity : AppCompatActivity() {
             }
 
             if(isTitleOk and isContentOk and isPartPeopleOk and isLocationOk and isDeadlineOk){
-
                 val finalNumOfPartList = project2Server.createPartNumList(finalPartNumList)
                 Log.d("finalPartList", finalNumOfPartList.toString())
 
@@ -452,27 +464,33 @@ class AddNewProjectActivity : AppCompatActivity() {
 
                                     if(loadedImageNumber == allUrlNumber){
                                         val imageMultiPartListUsingFile = project2Server.createImageMultiPartListUsingFile(imageFileList)
-                                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartListUsingFile) {
+                                        viewBinding.submitButton.isEnabled = false
+                                        viewBinding.submitButton.isSelected = false
+                                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartListUsingFile, viewBinding.submitButton) {
                                             for(deleteFile in imageFileList) deleteFile.delete()
                                             finish() }
                                     }
                                 }
                                 override fun onLoadCleared(placeholder: Drawable?) {
-                                    Toast.makeText(this@AddNewProjectActivity, "모집글 수정 시 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this@AddNewProjectActivity, "사진 수정 시 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                                 }
                             })
                         }
                     }
                     if(allUrlNumber == 0){
                         val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
-                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList) { finish() }
+                        viewBinding.submitButton.isEnabled = false
+                        viewBinding.submitButton.isSelected = false
+                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList, viewBinding.submitButton) { finish() }
                     }
 
                 }else{
                     val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
                     Log.d("finalImageMultiPartList", imageMultiPartList.toString())
                     Log.d("deadlineServerJson", dateJsonString)
-                    project2Server.postNewProject(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList) { finish() }
+                    viewBinding.submitButton.isEnabled = false
+                    viewBinding.submitButton.isSelected = false
+                    project2Server.postNewProject(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList, viewBinding.submitButton) { finish() }
                 }
 
             }else{
@@ -713,8 +731,12 @@ class AddNewProjectActivity : AppCompatActivity() {
             Toast.makeText(this, "취소 되었습니다", Toast.LENGTH_SHORT).show()
         }
     }
-
     //Bottom DiaLog - End
+
+    private fun changeButtonStatus(nowStatus: Boolean){
+        viewBinding.submitButton.isEnabled = nowStatus
+        viewBinding.submitButton.isSelected = nowStatus
+    }
 
 
 

@@ -123,6 +123,7 @@ class PasswordChangeActivity : AppCompatActivity() {
                     if(response.isSuccessful.not()){
                         Log.d("test: 비밀번호 변경 실패",response.toString())
                         Toast.makeText(this@PasswordChangeActivity, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                        nextBtnEnable(true)
                     }
                     when(response.code()){
                         200 -> {
@@ -133,9 +134,9 @@ class PasswordChangeActivity : AppCompatActivity() {
                         401 -> {
                             Log.d("test: 비밀번호 변경 실패",response.toString())
                             Toast.makeText(this@PasswordChangeActivity, "기존 비밀번호가 다릅니다.", Toast.LENGTH_SHORT).show()
+                            nextBtnEnable(true)
                         }
                     }
-                    nextBtnEnable(true)
                 }
 
                 override fun onFailure(call: Call<ResChangeUserPassword>, t: Throwable) {
