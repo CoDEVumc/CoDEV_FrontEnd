@@ -82,7 +82,6 @@ object ChatClient{
         this.adapterChatRoomList = adapter
     }
 
-
     fun exit(){
         room.dispose()
     }
