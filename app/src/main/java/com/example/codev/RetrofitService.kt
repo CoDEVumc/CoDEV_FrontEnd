@@ -175,7 +175,7 @@ interface RetrofitService {
     @PATCH("study/recruitment/pick/{coStudyId}") //스터디 지원자 선택 & 선택취소 (임시저장)
     fun requestStudyApplicant(
         @Header("CoDev_Authorization") header: String,
-        @Path("coProjectId") coProjectId: Int,
+        @Path("coStudyId") coStudyId: Int,
         @Body params: ReqUpdateApplicant
     ): Call<JsonObject>
 
