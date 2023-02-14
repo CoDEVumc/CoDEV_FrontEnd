@@ -467,11 +467,12 @@ class AddNewProjectActivity : AppCompatActivity() {
                                         viewBinding.submitButton.isEnabled = false
                                         viewBinding.submitButton.isSelected = false
                                         project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartListUsingFile, viewBinding.submitButton) {
-                                            for(deleteFile in imageFileList) deleteFile.delete()
+//                                            for(deleteFile in imageFileList) deleteFile.delete()
                                             finish() }
                                     }
                                 }
                                 override fun onLoadCleared(placeholder: Drawable?) {
+                                    Log.d("finalDownloadOldImage", "onLoadCleared: $placeholder")
                                     Toast.makeText(this@AddNewProjectActivity, "사진 수정 시 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                                 }
                             })
@@ -525,7 +526,7 @@ class AddNewProjectActivity : AppCompatActivity() {
         for (i in imageItemList){
             Log.d("delete", i.toString())
             val deleteFile = File(i.imageCopyPath)
-            deleteFile.delete()
+//            deleteFile.delete()
         }
     }
     //ImageSection - End

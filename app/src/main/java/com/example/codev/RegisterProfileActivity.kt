@@ -104,7 +104,7 @@ class RegisterProfileActivity:AppCompatActivity() {
             }else{
                 val fileImage = File(selectedImageItem!!.imageCopyPath)
                 val fileBody = RequestBody.create(MediaType.parse("application/octet-stream"),fileImage)
-                val filePart = MultipartBody.Part.createFormData("file", fileImage.name, fileBody)
+                val filePart = MultipartBody.Part.createFormData("file", fileImage.name.replace("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.]".toRegex(), "_"), fileBody)
                 signUp(this,requestBody,filePart)
             }
         }

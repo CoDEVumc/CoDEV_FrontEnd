@@ -34,7 +34,8 @@ class Project2Server {
         for (i in imagePathList) {
             var fileFromPath = File(i)
             var fileBody = RequestBody.create(MediaType.parse("application/octet-stream"),fileFromPath)
-            val filePart = MultipartBody.Part.createFormData("files", fileFromPath.name, fileBody)
+            val filePart = MultipartBody.Part.createFormData("files", fileFromPath.name.replace("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.]".toRegex(), "_"), fileBody)
+            Log.d("copyimagename", fileFromPath.name.replace("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.]".toRegex(), "_"))
             fileMultipartList.add(filePart)
         }
         return fileMultipartList.toList()
@@ -44,7 +45,8 @@ class Project2Server {
         val fileMultipartList = ArrayList<MultipartBody.Part>()
         for (i in imageFileList) {
             val fileBody = RequestBody.create(MediaType.parse("application/octet-stream"),i)
-            val filePart = MultipartBody.Part.createFormData("files", i.name, fileBody)
+            val filePart = MultipartBody.Part.createFormData("files", i.name.replace("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.]".toRegex(), "_"), fileBody)
+            Log.d("test: copyImageName", i.name.replace("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.]", "_"))
             fileMultipartList.add(filePart)
         }
         return fileMultipartList.toList()

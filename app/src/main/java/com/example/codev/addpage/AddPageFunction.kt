@@ -225,7 +225,7 @@ class AddPageFunction {
             context.applicationInfo.dataDir + File.separator + SimpleDateFormat(
                 "HHmmss",
                 Locale.getDefault()
-            ).format(Date()) + "-" + fileName
+            ).format(Date()) + "-" + fileName.replace("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.]".toRegex(), "_")
         val file = File(filePath)
 
         val inputStream = contentResolver.openInputStream(uri)!!

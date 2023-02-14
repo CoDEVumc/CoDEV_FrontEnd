@@ -217,7 +217,7 @@ class MyProfileActivity:AppCompatActivity() {
                         selectedImageItem = ImageItem(Uri.EMPTY, newNameFile.path, "")
                         //파일을 인코딩하고 올리자
                         val fileBody = RequestBody.create(MediaType.parse("application/octet-stream"),newNameFile)
-                        val filePart = MultipartBody.Part.createFormData("file", newNameFile.name, fileBody)
+                        val filePart = MultipartBody.Part.createFormData("file", newNameFile.name.replace("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.]".toRegex(), "_"), fileBody)
                         finalFile = filePart
                         Log.d("TestUploadNewImage", "OldImageUploaded ")
                         uploadUserChange(context, userToken, requestBody, finalFile)
@@ -229,7 +229,7 @@ class MyProfileActivity:AppCompatActivity() {
             }else{ //기본 이미지도 아니고, 원래 수정전의 샂니도 아니고 -> 새로운 사진 -> copyPath이 있는 사진
                 val fileImage = File(selectedImageItem!!.imageCopyPath)
                 val fileBody = RequestBody.create(MediaType.parse("application/octet-stream"),fileImage)
-                val filePart = MultipartBody.Part.createFormData("file", fileImage.name, fileBody)
+                val filePart = MultipartBody.Part.createFormData("file", fileImage.name.replace("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.]".toRegex(), "_"), fileBody)
                 finalFile = filePart
                 Log.d("TestUploadNewImage", "NewImageUploaded ")
                 uploadUserChange(context, userToken, requestBody, finalFile)
