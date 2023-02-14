@@ -4,19 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/toolbar2"
+    android:id="@+id/toolbar4"
     app:title="@string/app_name"
     android:background="?attr/colorOnPrimary"
     app:titleTextColor="@color/black"
     app:titleTextAppearance="@style/Text.Heading3">
 
     <TextView
-        android:id="@+id/toolbar_text"
+        android:id="@+id/toolbar_text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         style="@style/Text.Heading4"
         android:textColor="@color/black_900"/>
+
+    <TextView
+        android:id="@+id/toolbar_text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        style="@style/Text.Heading4"
+        android:textColor="@color/black_500"
+        android:paddingStart="4dp"/>
 
 </androidx.appcompat.widget.Toolbar>
 
