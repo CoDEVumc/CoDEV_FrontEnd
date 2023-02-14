@@ -16,6 +16,7 @@ import retrofit2.Response
 class ChatFragment:Fragment() {
     private lateinit var viewBinding: FragmentChatBinding
     private lateinit var mainAppActivity: Context
+    private lateinit var adapter: AdapterChatRoomList
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -25,14 +26,17 @@ class ChatFragment:Fragment() {
     }
 
     override fun onResume() {
-        super.onResume()
+        Log.d("stomp join 본인 이메일",UserSharedPreferences.getKey(mainAppActivity))
+        ChatClient.join(mainAppActivity, UserSharedPreferences.getKey(mainAppActivity))
         Log.d("test","onResume")
         loadData(mainAppActivity)
+        super.onResume()
     }
 
     override fun onDestroy() {
-        super.onDestroy()
+        ChatClient.exit()
         Log.d("test", "다른 탭 이동")
+        super.onDestroy()
     }
 
     override fun onCreateView(
@@ -49,7 +53,12 @@ class ChatFragment:Fragment() {
     }
 
     private fun setAdapter(dataList: ArrayList<ResponseOfGetChatRoomListData>, context: Context){
-        val adapter = AdapterChatRoomList(dataList, context)
+        adapter = AdapterChatRoomList(dataList, context){
+            if (it != -1){
+                activity?.runOnUiThread(Runnable { adapter.notifyItemChanged(it) })
+            }
+        }
+        ChatClient.setChatRoomAdapter(adapter)
         viewBinding.chatRoomList.adapter = adapter
     }
 
