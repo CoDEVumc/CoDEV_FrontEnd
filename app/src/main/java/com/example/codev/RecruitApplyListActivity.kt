@@ -27,6 +27,8 @@ class RecruitApplyListActivity: AppCompatActivity() {
     private lateinit var adapter2: AdapterRecruitApplicants2
 
     //private lateinit var studyData: EditStudy
+    private var loadStatus = false
+
     private lateinit var projectData: ApplicantData
     private var applicantList: ArrayList<String> = arrayListOf()
     private var partList: ArrayList<ApplicantData> = arrayListOf()
@@ -354,6 +356,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
                                 response.body()?.let {
                                     Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.toString()}")
                                     Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.result.message.co_applicantsInfo}")
+
                                     setAdapter1(it.result.message.co_applicantsCount, context, limit)
                                     setAdapter2(it.result.message.co_applicantsInfo, context)
 
@@ -440,7 +443,10 @@ class RecruitApplyListActivity: AppCompatActivity() {
                                 response.body()?.let {
                                     Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.toString()}")
                                     Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.result.message.co_applicantsInfo}")
-                                    setAdapter1(it.result.message.co_applicantsCount, context, limit)
+                                    if(!loadStatus){
+                                        setAdapter1(it.result.message.co_applicantsCount, context, limit)
+                                        loadStatus = true
+                                    }
 
                                     var temp = ArrayList<ApplicantInfoData>()
                                     if(it.result.message.co_applicantsInfo != null){

@@ -27,6 +27,9 @@ class AdapterRecruitApplicants1(private val context: Context, private val listDa
     private val HEADER = 0
     private val ITEM = 1
 
+    private val isSelectedList : Array<Boolean> = Array(listData.size + 1){false}
+    private var colored: Boolean = false
+
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType){
@@ -70,8 +73,10 @@ class AdapterRecruitApplicants1(private val context: Context, private val listDa
 
             binding.partToggle.setOnClickListener{
                 Log.d("AdapterRecruitApplyList: ", "분야 토글 클릭 $position")
+                colored = true
                 returnData(binding.part.text.toString()) //토글아이템 클릭 시 "프론트엔드, 백엔드, 기획, 디자인, 기타" 넘겨줌
             }
+            binding.partToggle.isSelected = colored
         }
     }
 
@@ -83,9 +88,14 @@ class AdapterRecruitApplicants1(private val context: Context, private val listDa
             binding.partToggle.setOnClickListener {
                 Log.d("ApaterRecruitApplyList: ","분야 토글 클릭 $position")
                 returnData("TEMP") //토글헤더 클릭 시 TEMP 넘겨줌
+                isSelectedList[0] = true
                 binding.partToggle.isSelected = true
+                colored = true
+                notifyItemChanged(0)
                 Log.d("(OnClickListener안)partTogle 의 상태 : ", binding.partToggle.isSelected.toString()) //여기서 true주면 안돼
             }
+            binding.partToggle.isSelected = isSelectedList[0]
+            binding.partToggle.isSelected = colored
             Log.d("partTogle 의 상태 : ", binding.partToggle.isSelected.toString())
 
         }
