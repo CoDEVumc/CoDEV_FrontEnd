@@ -100,18 +100,25 @@ class RecruitDetailActivity:AppCompatActivity() {
                 finish()
             }
             R.id.menu_modify -> {
-                if (type == "PROJECT"){
-                    val intent = Intent(this,AddNewProjectActivity::class.java)
-                    intent.putExtra("project",projectData)
-                    startActivity(intent)
-                }else if(type == "STUDY"){
-                    val intent = Intent(this,AddNewStudyActivity::class.java)
-                    intent.putExtra("study",studyData)
-                    startActivity(intent)
-                }
+                if(process != "FIN"){
+                    if (type == "PROJECT"){
+                        val intent = Intent(this,AddNewProjectActivity::class.java)
+                        intent.putExtra("project",projectData)
+                        intent.putExtra("process",process)
+                        startActivity(intent)
+                    }else if(type == "STUDY"){
+                        val intent = Intent(this,AddNewStudyActivity::class.java)
+                        intent.putExtra("study",studyData)
+                        intent.putExtra("process",process)
+                        startActivity(intent)
+                    }
+                }else Toast.makeText(this, "모집완료인 글은 수정하실 수 없습니다.", Toast.LENGTH_SHORT).show()
+
             }
             R.id.menu_delete -> {
-                confirmDelete(this, id) { finish() }
+                if(process != "FIN"){
+                    confirmDelete(this, id) { finish() }
+                }else Toast.makeText(this, "모집완료인 글은 삭제하실 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -122,6 +129,10 @@ class RecruitDetailActivity:AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_toolbar_detail, viewBinding.toolbarRecruit.toolbar3.menu)
         viewBinding.btn1.text = "연장하기"
         viewBinding.btn2.text = "지원현황"
+        if(process == "FIN"){
+            viewBinding.btn1.isEnabled = false
+            viewBinding.btn1.isSelected = false
+        }
         viewBinding.btn1.setOnClickListener {
             val cal = Calendar.getInstance()    //캘린더뷰 만들기
             val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
