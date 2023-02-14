@@ -19,7 +19,23 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AdapterChatRoomList(private val listData: ArrayList<ResponseOfGetChatRoomListData>, private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterChatRoomList(private val listData: ArrayList<ResponseOfGetChatRoomListData>, private val context: Context, private val returnToActivity: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    fun findRoomId(data: ResponseOfGetChatRoomListData, content: String){
+        listData.filter { it.roomId == data.roomId }
+
+        for((temp, i) in listData.withIndex()){
+            Log.d("test", temp.toString())
+            if(i.roomId == data.roomId){
+                i.latestconv = content
+                i.latestDate = data.latestDate
+                i.isRead++
+                returnToActivity(temp)
+                break
+            }
+        }
+        returnToActivity(-1)
+    }
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

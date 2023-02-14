@@ -19,7 +19,8 @@ object ChatClient{
     private val oKClient = OkHttpClient()
     private lateinit var room: Disposable
     private lateinit var Client: Disposable
-    private lateinit var adapter: AdapterChatList
+    private lateinit var adapterChatList: AdapterChatList
+    private lateinit var adapterChatRoomList: AdapterChatRoomList
 
     init {
         mStompClient = StompClient(oKClient, intervalMillis)
@@ -58,9 +59,10 @@ object ChatClient{
                 Log.d("stomp", json.toString())
                 Log.d("stomp", type)
                 if (type != "ENTER" && type != "LEAVE" && type != "TAB"){
-                    adapter.addData(ResponseOfGetChatListData(type,roomId,sender,content,createdDate,profileImg,co_nickName, pm))
+                    adapterChatList.addData(ResponseOfGetChatListData(type,roomId,sender,content,createdDate,profileImg,co_nickName, pm))
                 }else if(type == "TAB"){
-                    //메세지 내용 가공후
+                    Log.d("stomp TAB","TAB 타입 메세지 수신완료")
+                    adapterChatRoomList.findRoomId(ResponseOfGetChatRoomListData(profileImg," "," ", " ", false, " ", " "," ", -1, " ", createdDate, -1), content)
                 }
             }catch (e: java.lang.Exception){
                 Log.d("stomp join: 에러", e.toString())
@@ -69,9 +71,14 @@ object ChatClient{
         }
     }
 
-    fun setAdapter(adapter: AdapterChatList){
-        this.adapter = adapter
+    fun setChatListAdapter(adapter: AdapterChatList){
+        this.adapterChatList = adapter
     }
+
+    fun setChatRoomAdapter(adapter: AdapterChatRoomList){
+        this.adapterChatRoomList = adapter
+    }
+
 
     fun exit(){
         room.dispose()
