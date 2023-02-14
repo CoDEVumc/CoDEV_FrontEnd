@@ -8,6 +8,9 @@ import com.gmail.bishoybasily.stomp.lib.StompClient
 import io.reactivex.disposables.Disposable
 import okhttp3.OkHttpClient
 import org.json.JSONObject
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -62,7 +65,7 @@ object ChatClient{
                     adapterChatList.addData(ResponseOfGetChatListData(type,roomId,sender,content,createdDate,profileImg,co_nickName, pm))
                 }else if(type == "TAB"){
                     Log.d("stomp TAB","TAB 타입 메세지 수신완료")
-                    adapterChatRoomList.findRoomId(ResponseOfGetChatRoomListData(profileImg," "," ", " ", false, " ", " "," ", -1, " ", createdDate, -1), content)
+                    adapterChatRoomList.findRoomId(ResponseOfGetChatRoomListData(profileImg, profileImg.split("_")[0], co_nickName, sender, false, " ", " "," ", createdDate.toInt(), content, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), 1))
                 }
             }catch (e: java.lang.Exception){
                 Log.d("stomp join: 에러", e.toString())
@@ -78,7 +81,6 @@ object ChatClient{
     fun setChatRoomAdapter(adapter: AdapterChatRoomList){
         this.adapterChatRoomList = adapter
     }
-
 
     fun exit(){
         room.dispose()

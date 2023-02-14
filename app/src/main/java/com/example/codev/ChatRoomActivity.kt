@@ -99,7 +99,8 @@ class ChatRoomActivity:AppCompatActivity() {
 
     fun setAdapter(dataList: ArrayList<ResponseOfGetChatListData>, context: Context, people: Int){
         if (dataList.isNullOrEmpty()){
-            adapter = AdapterChatList(arrayListOf(), context, people){
+            val temp = arrayListOf<ResponseOfGetChatListData>()
+            adapter = AdapterChatList(temp, context, people){
                 Log.d("stomp 추가후 데이터 크기", it.toString())
                 runOnUiThread(Runnable { adapter.notifyItemInserted(it) })
                 //최하단일때 새 메시지(TALK, INVITE, DAY, EXIT 들어오면 추가된 데이터로 스크롤이동

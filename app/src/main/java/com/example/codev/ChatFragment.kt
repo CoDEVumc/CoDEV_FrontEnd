@@ -1,5 +1,6 @@
 package com.example.codev
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -54,8 +55,13 @@ class ChatFragment:Fragment() {
 
     private fun setAdapter(dataList: ArrayList<ResponseOfGetChatRoomListData>, context: Context){
         adapter = AdapterChatRoomList(dataList, context){
-            if (it != -1){
-                activity?.runOnUiThread(Runnable { adapter.notifyItemChanged(it) })
+            index: Int, itemCount: Int -> if(itemCount != -1) {
+                Log.d("stomp 기존 채팅방 새로운 메세지", "$index, $itemCount")
+                (mainAppActivity as Activity).runOnUiThread(Runnable { adapter.notifyItemRangeChanged(index,itemCount) })
+            }else{
+                Log.d("stomp 새로운 채팅방 새로운 메세지", "$index, $itemCount")
+                (mainAppActivity as Activity).runOnUiThread(Runnable { adapter.notifyItemInserted(index) })
+                viewBinding.chatRoomList.smoothScrollToPosition(index)
             }
         }
         ChatClient.setChatRoomAdapter(adapter)
