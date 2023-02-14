@@ -61,6 +61,7 @@ class AppliedDetailActivity : AppCompatActivity() {
         if(coProjectId < 0 || coPortfolioId < 0 || partName == ""){
             Toast.makeText(this, "조회 실패: 다시 시도해주세요(초기값 오류)", Toast.LENGTH_SHORT).show()
         }else{
+            Log.d("testIntent", "$coProjectId + $coProjectId + $partName + $isSelected")
             loadData(coProjectId, coPortfolioId)
         }
 
@@ -116,6 +117,7 @@ class AppliedDetailActivity : AppCompatActivity() {
                     200 -> {
                         response.body()?.let {
                             Log.d("test: 포트폴리오 불러오기 성공", response.toString())
+                            Log.d("testCallback",it.toString())
                             setDataOnPage(this@AppliedDetailActivity, it.result.message)
                             isLoaded = true
                         }
@@ -126,7 +128,7 @@ class AppliedDetailActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ResAppliedUserDetail>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.d("test", "onFailure: ${t.toString()}")
             }
         })
     }

@@ -225,6 +225,15 @@ interface RetrofitService {
         @Body params: ReqRecruitedApplicantList
     ): Call<JsonObject>
 
+    @PATCH("project/recruitment/{coStudyId}")
+    fun doneRecruitStudy(
+        @Header("CoDev_Authorization") header: String,
+        @Path("coStudyId") coStudyId: Int,
+        @Body params: ReqRecruitedApplicantList
+    ): Call<JsonObject>
+
+
+
     @PUT("user/update/profile")
     @Multipart
     fun changeUserInfo(
