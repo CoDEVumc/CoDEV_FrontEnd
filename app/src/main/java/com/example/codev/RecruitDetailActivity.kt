@@ -37,6 +37,7 @@ class RecruitDetailActivity:AppCompatActivity() {
     private var recruitStatus: Boolean = false
     private var writer: String = ""
     private var process: String = ""
+    private var mainImg = " "
 
     override fun onResume() {
         super.onResume()
@@ -150,6 +151,8 @@ class RecruitDetailActivity:AppCompatActivity() {
         //지현현황 리스트
         viewBinding.btn2.setOnClickListener {
             val intent = Intent(context, RecruitApplyListActivity::class.java)
+            intent.putExtra("mainImg", mainImg)
+            intent.putExtra("title", viewBinding.name.text.toString())
             intent.putExtra("limit", limit)
             intent.putExtra("type", type)
             intent.putExtra("id", id)
@@ -347,6 +350,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     viewBinding.heartCount.text = it.result.Complete.co_heartCount.toString()
                                     viewBinding.heart.isChecked = it.result.Complete.co_heart
 
+                                    mainImg = it.result.Complete.co_photos[0].co_fileUrl
                                     process = it.result.Complete.co_process
                                     recruitStatus = it.result.Complete.co_recruitStatus
                                     writer = it.result.Complete.co_email
@@ -405,6 +409,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     viewBinding.heartCount.text = it.result.Complete.co_heartCount.toString()
                                     viewBinding.heart.isChecked = it.result.Complete.co_heart
 
+                                    mainImg = it.result.Complete.co_photos[0].co_fileUrl
                                     process = it.result.Complete.co_process
                                     recruitStatus = it.result.Complete.co_recruitStatus
                                     writer = it.result.Complete.co_email
