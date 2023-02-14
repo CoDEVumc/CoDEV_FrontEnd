@@ -18,7 +18,7 @@ data class ApplyerData(
 )
 data class ApplicantData( //파트별 지원자 수 (토글 정보)
     val co_part: String,
-    val co_limit: Int, //모집 인원
+    val co_limit: Int, //모집 제한 인원
     val co_applicantsCount: Int //선택한 지원자 수
 )
 data class ApplicantInfoData( //파트별 지원자 정보 (프로필+포트폴리오)

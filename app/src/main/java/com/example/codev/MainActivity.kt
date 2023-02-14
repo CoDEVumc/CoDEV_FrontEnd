@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         AndroidKeyStoreUtil.init(this)
-        UserSharedPreferences.clearUser(this)
 
 
         MyFirebaseMessagingService()

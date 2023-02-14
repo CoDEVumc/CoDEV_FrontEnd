@@ -54,6 +54,9 @@ class AdapterRecruitApplicants2(private val context: Context, private val listDa
         return selectList
     }
 
+    fun getListData(): ArrayList<ApplicantInfoData>{
+        return listData
+    }
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -148,14 +151,14 @@ class AdapterRecruitApplicants2(private val context: Context, private val listDa
         private fun counter() {
             if (binding.chkChoose.isChecked){
                 COUNT += 1
-                Log.d("test", "선택한 항목수: $COUNT")
+                Log.d("counter()", "선택한 항목수: $COUNT")
                 if (COUNT == 1){
                     Log.d("test","리콜")
                     returnCount(COUNT)
                 }
             }else{
                 COUNT -= 1
-                Log.d("test", "선택한 항목수: $COUNT")
+                Log.d("counter()", "선택한 항목수: $COUNT")
                 if (COUNT == 0){
                     Log.d("test","리콜")
                     returnCount(COUNT)

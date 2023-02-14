@@ -36,6 +36,13 @@ class RecruitApplyListActivity: AppCompatActivity() {
     private var peopleNum: Int = -1
     private var part: String = ""
 
+    private var partLimitLoadStatus = false
+    private var backEnd = 0
+    private var frontEnd = 0
+    private var plan = 0
+    private var design = 0
+    private var etc = 0
+
 
     //private var coPart: String=""//백엔드, 프론트엔드, 기획, 디자인, 기타, TEMP(임시저장)
     //토글에서 선택한게 part에 저장되어야 함
@@ -158,9 +165,39 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
         //모집완료 버튼
         viewBinding.btnDoneRecruit.setOnClickListener {
-            val intent = Intent(this, RecruitDoneActivity::class.java)
-            startActivity(intent)
-            doneRecruit(this, type, id, applicantList)
+
+            val selectList = adapter2.getListData()
+
+            for (i in selectList){
+                when(i.co_part){
+                    "기획" ->{
+                        plan--
+                    }
+                    "디자인" -> {
+                        design--
+                    }
+                    "프론트엔드" -> {
+                        frontEnd--
+                    }
+                    "백엔드" -> {
+                        backEnd--
+                    }
+                    "기타" -> {
+                        etc--
+                    }
+                }
+            }
+
+            if(plan>=0 && design>=0 && frontEnd>=0 && backEnd>=0 && etc>=0){
+                val intent = Intent(this, RecruitDoneActivity::class.java)
+                startActivity(intent)
+                doneRecruit(this, type, id, applicantList)
+            }else{
+                Toast.makeText(this, "파트별 제한인원을 다시 확인해주세요", Toast.LENGTH_SHORT).show()
+            }
+
+
+
         }
 
         //초기화 버튼
@@ -220,6 +257,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
     }
 
     private fun setAdapter1(dataList: ArrayList<ApplicantData>, context: Context, limit: Int){
+        Log.d("test", "어댑터 1")
         adapter1 = AdapterRecruitApplicants1(context, dataList, limit){
             Log.d("test","리콜받음 $it")
             loadData(context, type, id, it)
@@ -232,12 +270,13 @@ class RecruitApplyListActivity: AppCompatActivity() {
     }
 
     private fun setAdapter2(dataList: ArrayList<ApplicantInfoData>, context: Context){
+        Log.d("test", "어댑터 2")
         adapter2 = AdapterRecruitApplicants2(context, dataList){
             Log.d("test","리콜받음")
+            Log.d("setAdapter2 : returnCount :",it.toString())
             if (it == 1){
                 enableDelete(true)
                 enableRegist(true)
-
             }else if (it == 0){
                 enableDelete(false)
                 enableRegist(false)
@@ -264,8 +303,31 @@ class RecruitApplyListActivity: AppCompatActivity() {
                                     setAdapter2(it.result.message.co_appllicantsInfo, context)
 
                                     applicantList= ArrayList()
-                                    for (i in it.result.message.co_appllicantsInfo){ //선택된 지원자 수 만큼
+                                    for (i in it.result.message.co_appllicantsInfo){
                                         applicantList.add(i.co_email)
+                                    }
+
+                                    if (!partLimitLoadStatus){
+                                        partLimitLoadStatus = true
+                                        for(i in  it.result.message.co_applicantsCount){
+                                            when (i.co_part){
+                                                "기획" ->{
+                                                    plan = i.co_limit
+                                                }
+                                                "디자인" ->{
+                                                    design = i.co_limit
+                                                }
+                                                "프론트엔드" -> {
+                                                    frontEnd = i.co_limit
+                                                }
+                                                "백엔드" -> {
+                                                    backEnd = i.co_limit
+                                                }
+                                                "기타" ->{
+                                                    etc = i.co_limit
+                                                }
+                                            }
+                                        }
                                     }
 
                                     Log.d("applicantList", applicantList.toString())
@@ -279,28 +341,9 @@ class RecruitApplyListActivity: AppCompatActivity() {
                                         viewBinding.applicantNum.text = "현재 선택한 지원자 $peopleNum"
 
 
-                                        for (i in it.result.message.co_applicantsCount){ //선택된 지원자 수 만큼
-                                            Log.d("확인 :", "파트 : "+i.co_part+" "+"제한인원 : "+i.co_limit+" "+"지원 인원: "+i.co_applicantsCount)
-                                            if(i.co_limit >= i.co_applicantsCount){ //제한인원 >= 선택된 인원
-                                                enableDone(true)
-                                                Log.d("for문 내부 if문 ", "onResponse: ")
-                                            }
-                                        }
-
-
-
-                                        if(peopleNum != 0){ //초기화, 모집완료 활성화 (담은 인원이 1명 이상)
+                                        if(peopleNum > 0){ //초기화, 모집완료 활성화 (담은 인원이 1명 이상)
                                             enableReset(true)
-
-                                            //여기지금 의미가 없어
-                                            //제한 인원 넘지 않았는지 체크 co_limit >= co_applicantsCount
-                                            for (i in it.result.message.co_applicantsCount){ //선택된 지원자 수 만큼
-                                                if(i.co_limit >= i.co_applicantsCount){
-                                                    enableDone(true)
-                                                    Log.d("여기 오면 성공 ", "onResponse: ")
-                                                }
-                                            }
-                                            Log.d("enableResetOrDone 되나? ", "")
+                                            enableDone(true)
                                         }else{
                                             enableReset(false)
                                             viewBinding.btnReset.setTextColor(ContextCompat.getColor(context!!,R.color.black_300))
