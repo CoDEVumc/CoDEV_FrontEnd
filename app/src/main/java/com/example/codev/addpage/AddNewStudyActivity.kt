@@ -264,6 +264,7 @@ class AddNewStudyActivity : AppCompatActivity() {
             //checkIsNew
             isOld = true
             oldStudyId = oldStudy.studyId
+            Log.d("oldStudyId", oldStudyId)
             viewBinding.toolbarTitle.toolbarText.text = getString(R.string.edit_new_study)
             viewBinding.submitButton.text = "스터디 수정하기"
 
@@ -440,7 +441,7 @@ class AddNewStudyActivity : AppCompatActivity() {
                                     }
                                 }
                                 override fun onLoadCleared(placeholder: Drawable?) {
-                                    Toast.makeText(this@AddNewStudyActivity, "모집글 수정 시 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+//                                    Toast.makeText(this@AddNewStudyActivity, "모집글 수정 시 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                                 }
                             })
                         }

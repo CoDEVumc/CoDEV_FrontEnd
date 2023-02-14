@@ -423,7 +423,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                         stackList[it.result.Complete.co_languageList[i].co_languageId] = it.result.Complete.co_languageList[i].co_language
                                     }
 
-                                    studyData = EditStudy(it.result.Complete.co_projectId.toString(),it.result.Complete.co_title,it.result.Complete.co_content,it.result.Complete.co_photos,it.result.Complete.co_part, it.result.Complete.co_total,stackList,it.result.Complete.co_location,it.result.Complete.co_deadLine.split(" ")[0])
+                                    studyData = EditStudy(it.result.Complete.co_studyId.toString(),it.result.Complete.co_title,it.result.Complete.co_content,it.result.Complete.co_photos,it.result.Complete.co_part, it.result.Complete.co_total,stackList,it.result.Complete.co_location,it.result.Complete.co_deadLine.split(" ")[0])
                                 }
                             }
                         }

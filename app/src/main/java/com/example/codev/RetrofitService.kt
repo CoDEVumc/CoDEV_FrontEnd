@@ -66,10 +66,10 @@ interface RetrofitService {
         ,@Part files: List<MultipartBody.Part?>
     ): Call<ResCreateNewStudy>
 
-    @PUT("study/update/{id}")
+    @PUT("study/update/{coStudyId}")
     @Multipart
     fun updateStudy(
-        @Path("id") id: String
+        @Path("coStudyId") id: String
         ,@Header("CoDev_Authorization") authToken: String
         ,@Part("study") study: RequestBody
         ,@Part files: List<MultipartBody.Part?>

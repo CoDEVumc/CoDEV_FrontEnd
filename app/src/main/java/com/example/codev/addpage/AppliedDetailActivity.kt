@@ -74,7 +74,6 @@ class AppliedDetailActivity : AppCompatActivity() {
 
         viewBinding.btnRight.setOnClickListener {
             if(isLoaded){
-
                 if(isSelected){
                     Toast.makeText(this, "선택 취소하기", Toast.LENGTH_SHORT).show()
                 }else{
