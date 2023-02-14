@@ -166,11 +166,13 @@ class RecruitDetailActivity:AppCompatActivity() {
         }
         //기본은 문의하기
         viewBinding.btn1.setOnClickListener {
+
             val roomType = "OTO"
             val roomId = "${roomType}_${type}_${id}_${UserSharedPreferences.getKey(this)}"
             val inviteList = arrayListOf<String>(writer)
             Log.d("test",roomId)
-            createChat(this, roomId, roomType, inviteList)
+            ChatClient.join(this, roomId)
+//            createChat(this, roomId, roomType, inviteList)
         }
     }
 

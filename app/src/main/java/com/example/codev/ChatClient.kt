@@ -57,8 +57,10 @@ object ChatClient{
                 val pm = json.get("pm") as Boolean
                 Log.d("stomp", json.toString())
                 Log.d("stomp", type)
-                if (type != "ENTER" && type != "LEAVE"){
+                if (type != "ENTER" && type != "LEAVE" && type != "TAB"){
                     adapter.addData(ResponseOfGetChatListData(type,roomId,sender,content,createdDate,profileImg,co_nickName, pm))
+                }else if(type == "TAB"){
+                    //메세지 내용 가공후
                 }
             }catch (e: java.lang.Exception){
                 Log.d("stomp join: 에러", e.toString())
