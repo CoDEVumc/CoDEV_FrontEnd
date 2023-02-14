@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.example.codev.*
 import com.example.codev.databinding.ActivityAppliedDetailBinding
 import com.example.codev.databinding.InputLayoutBinding
+import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,6 +23,24 @@ class AppliedDetailActivity : AppCompatActivity() {
     private var isLoaded = false
     private var partName = ""
     private var isSelected = false
+    private var nowPageType = "PROJECT"
+    private var nowEmail = ""
+    private var nowId = -1
+
+    override fun onResume() {
+        super.onResume()
+        nowPageType = intent.getStringExtra("type")!!
+        nowId = intent.getIntExtra("id", -1) // intent.putExtra("coProjectId", 값)
+        val coPortfolioId = intent.getIntExtra("coPortfolioId", -1) // intent.putExtra("coPortfolioId", 값)
+        partName = intent.getStringExtra("coPart").toString() // intent.putExtra("coPart", 값)
+        isSelected = intent.getBooleanExtra("coTemporaryStorage", false) // intent.putExtra("coTemporaryStorage", 값)
+
+        if(nowId < 0 || coPortfolioId < 0 || partName == ""){
+            Toast.makeText(this, "조회 실패: 다시 시도해주세요(초기값 오류)", Toast.LENGTH_SHORT).show()
+        }else{
+            loadData(nowPageType, nowId, coPortfolioId)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,17 +71,7 @@ class AppliedDetailActivity : AppCompatActivity() {
 //        intent.putExtra("coTemporaryStorage", false)
 //        startActivity(intent)
         //테스트 코드
-        val type = intent.getStringExtra("type")
-        val id = intent.getIntExtra("id", -1) // intent.putExtra("coProjectId", 값)
-        val coPortfolioId = intent.getIntExtra("coPortfolioId", -1) // intent.putExtra("coPortfolioId", 값)
-        partName = intent.getStringExtra("coPart").toString() // intent.putExtra("coPart", 값)
-        isSelected = intent.getBooleanExtra("coTemporaryStorage", false) // intent.putExtra("coTemporaryStorage", 값)
 
-        if(id < 0 || coPortfolioId < 0 || partName == ""){
-            Toast.makeText(this, "조회 실패: 다시 시도해주세요(초기값 오류)", Toast.LENGTH_SHORT).show()
-        }else{
-            loadData(type!!, id, coPortfolioId)
-        }
 
         viewBinding.btnLeft.setOnClickListener {
             if(isLoaded){
@@ -75,8 +84,10 @@ class AppliedDetailActivity : AppCompatActivity() {
         viewBinding.btnRight.setOnClickListener {
             if(isLoaded){
                 if(isSelected){
+                    changePickStatus(this)
                     Toast.makeText(this, "선택 취소하기", Toast.LENGTH_SHORT).show()
                 }else{
+                    changePickStatus(this)
                     Toast.makeText(this, "선택하기", Toast.LENGTH_SHORT).show()
                 }
             }else{
@@ -115,6 +126,8 @@ class AppliedDetailActivity : AppCompatActivity() {
                         200 -> {
                             response.body()?.let {
                                 Log.d("test: 포트폴리오 불러오기 성공", response.toString())
+                                nowPageType = "PROJECT"
+                                nowEmail = it.result.message.co_email
                                 setDataOnPage(this@AppliedDetailActivity, it.result.message)
                                 isLoaded = true
                             }
@@ -152,6 +165,8 @@ class AppliedDetailActivity : AppCompatActivity() {
                         200 -> {
                             response.body()?.let {
                                 Log.d("test: 포트폴리오 불러오기 성공", response.toString())
+                                nowPageType = "STUDY"
+                                nowEmail = it.result.message.co_email
                                 setDataOnPage(this@AppliedDetailActivity, it.result.message)
                                 isLoaded = true
                             }
@@ -253,5 +268,71 @@ class AppliedDetailActivity : AppCompatActivity() {
 //            viewBinding.btnRight.text = "선택 취소하기"
 //            viewBinding.btnRight.background = getDrawable(R.drawable.recruit_detail_btn2_selected)
 //        }
+    }
+
+    private fun changePickStatus(context: Context){
+        viewBinding.btnRight.isSelected = false
+        viewBinding.btnRight.isEnabled = false
+        if(nowPageType == "PROJECT"){
+            RetrofitClient.service.requestProjectApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), nowId, ReqUpdateApplicant(listOf(nowEmail))).enqueue(
+                object : Callback<JsonObject>{
+                    override fun onResponse(
+                        call: Call<JsonObject>,
+                        response: Response<JsonObject>
+                    ) {
+                        if(response.isSuccessful.not()){
+                            Log.d("test: 지원자 편집 실패",response.toString())
+                            Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                            viewBinding.btnRight.isSelected = true
+                            viewBinding.btnRight.isEnabled = true
+                        }
+                        when(response.code()){
+                            200 -> {
+                                response.body()?.let {
+                                    Log.d("test: 지원자 편집 성공", "\n${it.toString()}")
+                                    finish()
+                                }
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                        Log.d("pickFail", t.toString())
+                        viewBinding.btnRight.isSelected = true
+                        viewBinding.btnRight.isEnabled = true
+                    }
+                })
+        }else if(nowPageType == "STUDY"){
+            RetrofitClient.service.requestStudyApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), nowId, ReqUpdateApplicant(listOf(nowEmail))).enqueue(
+                object : Callback<JsonObject>{
+                    override fun onResponse(
+                        call: Call<JsonObject>,
+                        response: Response<JsonObject>
+                    ) {
+                        if(response.isSuccessful.not()){
+                            Log.d("test: 지원자 편집 실패",response.toString())
+                            Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                            viewBinding.btnRight.isSelected = true
+                            viewBinding.btnRight.isEnabled = true
+                        }
+                        when(response.code()){
+                            200 -> {
+                                response.body()?.let {
+                                    Log.d("test: 지원자 편집 성공", "\n${it.toString()}")
+                                    finish()
+                                }
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                        Log.d("pickFail", t.toString())
+                        viewBinding.btnRight.isSelected = true
+                        viewBinding.btnRight.isEnabled = true
+                    }
+                })
+        }
     }
 }
