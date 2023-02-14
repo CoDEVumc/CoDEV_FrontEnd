@@ -126,6 +126,8 @@ class AdapterRecruitApplicants2(private val context: Context, private val listDa
                     intent.putExtra("coPortfolioId", data.co_portfolioId)
                     intent.putExtra("coPart", data.co_part)
                     intent.putExtra("coTemporaryStorage", data.co_temporaryStorage)
+                    intent.putExtra("name", data.co_name)
+                    intent.putExtra("receiver_email", data.co_email)
                     startActivity(binding.portfolio.context, intent, null)
                 }
             }

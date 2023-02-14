@@ -170,7 +170,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
         //모집완료 버튼
         viewBinding.btnDoneRecruit.setOnClickListener {
             val roomType = "OTM"
-            val roomId = "${roomType}_${type}_${id}_${UserSharedPreferences.getKey(this)}"
+            val roomId = "${roomType}_${type}_${id}"
             val inviteList = arrayListOf<String>()
             val selectList = adapter2.getListData()
             for (i in selectList){
