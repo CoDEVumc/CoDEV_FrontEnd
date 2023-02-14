@@ -287,12 +287,12 @@ class RecruitApplyListActivity: AppCompatActivity() {
                             200 -> {
                                 response.body()?.let {
                                     Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.toString()}")
-                                    Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.result.message.co_appllicantsInfo}")
+                                    Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.result.message.co_applicantsInfo}")
                                     setAdapter1(it.result.message.co_applicantsCount, context, limit)
-                                    setAdapter2(it.result.message.co_appllicantsInfo, context)
+                                    setAdapter2(it.result.message.co_applicantsInfo, context)
 
                                     applicantList= ArrayList()
-                                    for (i in it.result.message.co_appllicantsInfo){
+                                    for (i in it.result.message.co_applicantsInfo){
                                         applicantList.add(i.co_email)
                                     }
 
@@ -346,7 +346,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
                                         viewBinding.bottomBtn.isGone = true
                                         viewBinding.btnSelect1.isGone = true
                                         viewBinding.btnSelect2.isGone = true
-                                        peopleNum = it.result.message.co_appllicantsInfo.size
+                                        peopleNum = it.result.message.co_applicantsInfo.size
                                         viewBinding.applicantNum.text = "현재 파트 지원자 $peopleNum"
                                     }
                                 }
@@ -373,12 +373,12 @@ class RecruitApplyListActivity: AppCompatActivity() {
                             200 -> {
                                 response.body()?.let {
                                     Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.toString()}")
-                                    Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.result.message.co_appllicantsInfo}")
+                                    Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.result.message.co_applicantsInfo}")
                                     setAdapter1(it.result.message.co_applicantsCount, context, limit)
 
                                     var temp = ArrayList<ApplicantInfoData>()
-                                    if(it.result.message.co_appllicantsInfo != null){
-                                        temp = it.result.message.co_appllicantsInfo
+                                    if(it.result.message.co_applicantsInfo != null){
+                                        temp = it.result.message.co_applicantsInfo
                                     }
                                     setAdapter2(temp, context)
 
