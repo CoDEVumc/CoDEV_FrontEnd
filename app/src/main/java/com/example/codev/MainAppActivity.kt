@@ -20,7 +20,12 @@ class MainAppActivity : AppCompatActivity() {
         viewBinding = ActivityMainAppBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
+
+        /** DynamicLink 수신확인 */
+        initDynamicLink()
+
         ChatClient
+
 
         supportFragmentManager
             .beginTransaction()
@@ -68,5 +73,19 @@ class MainAppActivity : AppCompatActivity() {
             selectedItemId = R.id.menu_home
         }
 
+
+
+    }
+
+    /** DynamicLink */
+    private fun initDynamicLink() {
+        val dynamicLinkData = intent.extras
+        if (dynamicLinkData != null) {
+            var dataStr = "DynamicLink 수신받은 값\n"
+            for (key in dynamicLinkData.keySet()) {
+                dataStr += "key: $key / value: ${dynamicLinkData.getString(key)}\n"
+            }
+
+        }
     }
 }

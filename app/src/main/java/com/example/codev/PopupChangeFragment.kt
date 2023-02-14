@@ -38,15 +38,16 @@ class PopupChangeFragment(private val returnWrite: (Int) -> Unit): DialogFragmen
                 R.id.btn_project -> {
                     fragment = 0
                     popupChangeFragmentBinding.radioGroupChange.clearCheck()
+                    returnWrite(fragment)
 
                 }
                 R.id.btn_study -> {
                     fragment = 1
                     popupChangeFragmentBinding.radioGroupChange.clearCheck()
+                    returnWrite(fragment)
                 }
             }
 
-            returnWrite(fragment)
         }
 
 

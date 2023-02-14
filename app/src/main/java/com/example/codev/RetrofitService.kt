@@ -151,6 +151,49 @@ interface RetrofitService {
     @GET("study/{coStudyId}")
     fun getStudyDetail(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int) : Call<ResGetRecruitDetail>
 
+    @GET("project/recruitment/{coProjectId}")
+    fun getApplyerProjectList( // pm] 플젝 지원자 리스트
+        @Header("CoDev_Authorization") header: String,
+        @Path("coProjectId") coProjectId: Int,
+        @Query("coPart") coPart: String
+    ) : Call<ResApplyerList>
+
+    @GET("study/recruitment/{coStudyId}")
+    fun getApplyerStudyList( //pm] 스터디 지원자 리스트
+        @Header("CoDev_Authorization") header: String,
+        @Path("coStudyId") coStudyId: Int,
+        @Query("coPart") coPart: String
+    ) : Call<ResApplyerList>
+
+    @PATCH("project/recruitment/pick/{coProjectId}") //프로젝트 지원자 선택 & 선택취소 (임시저장)
+    fun requestProjectApplicant(
+        @Header("CoDev_Authorization") header: String,
+        @Path("coProjectId") coProjectId: Int,
+        @Body params: ReqUpdateApplicant
+    ): Call<JsonObject>
+
+    @PATCH("study/recruitment/pick/{coStudyId}") //스터디 지원자 선택 & 선택취소 (임시저장)
+    fun requestStudyApplicant(
+        @Header("CoDev_Authorization") header: String,
+        @Path("coProjectId") coProjectId: Int,
+        @Body params: ReqUpdateApplicant
+    ): Call<JsonObject>
+
+    @GET("project/recruitment/portfolio/{coProjectId}/{coPortfolioId}")
+    fun getProjectApplicantPorfolioDetail( //프로젝트 지원자 포트폴리오 상세조회
+        @Header("CoDev_Authorization") header: String,
+        @Path("coProjectId") coProjectId: Int,
+        @Path("coPortfolioId") coPortfolioId: Int,
+        ): Call<ResGetPFDetail2>
+
+    @GET("study/recruitment/portfolio/{coStudyId}/{coPortfolioId}")
+    fun getStudyApplicantPorfolioDetail( //스터디 지원자 포트폴리오 상세조회
+        @Header("CoDev_Authorization") header: String,
+        @Path("coProjectId") coProjectId: Int,
+        @Path("coPortfolioId") coPortfolioId: Int,
+    ): Call<ResGetPFDetail2>
+
+
     @DELETE("project/out/{coProjectId}")
     fun deleteProject(@Path("coProjectId") coProjectId:Int,@Header("CoDev_Authorization") header: String) : Call<JsonObject>
 
@@ -175,6 +218,13 @@ interface RetrofitService {
     @PATCH("study/recruitment/extension/{coStudyId}")
     fun extendStudy(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int, @Body params: ReqExtendStudy) : Call<ResExtendRecruit>
 
+    @PATCH("project/recruitment/dead-line/{coProjectId}")
+    fun doneRecruitProject(
+        @Header("CoDev_Authorization") header: String,
+        @Path("coProjectId") coProjectId: Int,
+        @Body params: ReqRecruitedApplicantList
+    ): Call<JsonObject>
+
     @PUT("user/update/profile")
     @Multipart
     fun changeUserInfo(
@@ -189,6 +239,7 @@ interface RetrofitService {
     @GET("project/recruitment/portfolio/{coProjectId}/{coPortfolioId}")
     fun getAppliedDetail(@Header("CoDev_Authorization") header: String, @Path("coProjectId") coProjectId: Int, @Path("coPortfolioId") coPortfolioId: Int) : Call<ResAppliedUserDetail>
 
+
     @GET("chat/rooms")
     fun getChatRoomList(@Header("CoDev_Authorization") header: String) : Call<ResGetChatRoomList>
 
@@ -200,4 +251,5 @@ interface RetrofitService {
 
     @POST("chat/invite")
     fun inviteChat(@Header("CoDev_Authorization") header: String, @Body params: ReqInviteChat) : Call<JsonObject>
+
 }

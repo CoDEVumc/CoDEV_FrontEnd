@@ -30,6 +30,7 @@ class RecruitDetailActivity:AppCompatActivity() {
     private var id: Int = -1
     private var type: String = ""
     private var dday: String = ""
+    private var limit: Int = -1
     private lateinit var studyData: EditStudy
     private lateinit var projectData: EditProject
     private var partList: ArrayList<RecruitPartLimit> = arrayListOf()
@@ -134,6 +135,14 @@ class RecruitDetailActivity:AppCompatActivity() {
             dpd.datePicker.minDate = System.currentTimeMillis()
             dpd.datePicker.maxDate = (System.currentTimeMillis() + 3.156e+10).toLong()
             dpd.show()
+        }
+        //지현현황 리스트
+        viewBinding.btn2.setOnClickListener {
+            val intent = Intent(context, RecruitApplyListActivity::class.java)
+            intent.putExtra("limit", limit)
+            intent.putExtra("type", type)
+            intent.putExtra("id", id)
+            startActivity(intent)
         }
     }
 
@@ -324,6 +333,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     viewBinding.text.text = it.result.Complete.co_content
                                     viewBinding.date.text = convertTimestampToDate(it.result.Complete.updatedAt)
                                     viewBinding.deadline.text = it.result.Complete.co_deadLine.split(" ")[0].replace("-",".")
+                                    limit = it.result.Complete.co_total
                                     viewBinding.total.text = it.result.Complete.co_total.toString() + "명 모집중"
                                     viewBinding.heartCount.text = it.result.Complete.co_heartCount.toString()
                                     viewBinding.heart.isChecked = it.result.Complete.co_heart
@@ -381,6 +391,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     viewBinding.text.text = it.result.Complete.co_content
                                     viewBinding.date.text = convertTimestampToDate(it.result.Complete.updatedAt)
                                     viewBinding.deadline.text = it.result.Complete.co_deadLine.split(" ")[0].replace("-",".")
+                                    limit = it.result.Complete.co_total
                                     viewBinding.total.text = it.result.Complete.co_total.toString() + "명 모집중"
                                     viewBinding.heartCount.text = it.result.Complete.co_heartCount.toString()
                                     viewBinding.heart.isChecked = it.result.Complete.co_heart

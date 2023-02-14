@@ -47,6 +47,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
         AndroidKeyStoreUtil.init(this)
 
+
+        MyFirebaseMessagingService()
+
+        /** FCM설정, Token값 가져오기 */
+        MyFirebaseMessagingService().getFirebaseToken(this)
+
         // 자동 로그인 방지
         //UserSharedPreferences.clearUser(this)
 
@@ -89,6 +95,17 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this,MainAppActivity::class.java)
             startActivity(intent)
             finish()
+        }
+    }
+    /** DynamicLink */
+    private fun initDynamicLink() {
+        val dynamicLinkData = intent.extras
+        if (dynamicLinkData != null) {
+            var dataStr = "DynamicLink 수신받은 값\n"
+            for (key in dynamicLinkData.keySet()) {
+                dataStr += "key: $key / value: ${dynamicLinkData.getString(key)}\n"
+            }
+
         }
     }
 
@@ -209,7 +226,8 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun signIn(context:Context, email:String, pwd:String) {
-        RetrofitClient.service.signIn(ReqSignIn(email,pwd)).enqueue(object: Callback<ResSignIn>{
+
+        RetrofitClient.service.signIn(ReqSignIn(email,pwd,UserSharedPreferences.getFCMToken(context))).enqueue(object: Callback<ResSignIn>{
             override fun onResponse(call: Call<ResSignIn>, response: Response<ResSignIn>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 로그인 실패1",response.toString())
@@ -217,6 +235,9 @@ class MainActivity : AppCompatActivity() {
                 }else{
                     when(response.code()){
                         200->{
+
+
+
                             if(viewBinding.loginAuto.isChecked){
                                 UserSharedPreferences.setAutoLogin(context,"TRUE")
                             }
