@@ -25,7 +25,7 @@ class RecruitApplyActivity:AppCompatActivity() {
     private lateinit var adapter: AdapterPortfolio3
     private var portfolioId: Int = -1
     private var part: String = ""
-    private var partchooseStatus: Int = -1
+    private var partChooseStatus: Int = -1
 
 
     @SuppressLint("SetTextI18n")
@@ -42,6 +42,9 @@ class RecruitApplyActivity:AppCompatActivity() {
 
         val recruitId = intent.getIntExtra("recruitId",-1)
         val type = intent.getStringExtra("type")
+        val writer = intent.getStringExtra("writer")
+        val process = intent.getStringExtra("process")
+        val recruitStatus = intent.getBooleanExtra("recruitStatus", false)
         val partList = intent.getSerializableExtra("partList") as ArrayList<RecruitPartLimit>
 
 
@@ -61,7 +64,7 @@ class RecruitApplyActivity:AppCompatActivity() {
 
             viewBinding.partList.adapter = CallbackSingleRVAdapter(partSelectList, -1){
                 Log.d("test", it.toString())
-                partchooseStatus = it
+                partChooseStatus = it
                 viewBinding.part.dropdownTitle.text = partSelectList[it].name
                 part = partSelectList[it].name
                 if (viewBinding.part.dropdownTitle.currentTextColor != getColor(R.color.green_900)){
@@ -84,7 +87,7 @@ class RecruitApplyActivity:AppCompatActivity() {
             viewBinding.textPart.isGone = true
             viewBinding.part.root.isGone = true
             viewBinding.partList.isGone = true
-            partchooseStatus = 0
+            partChooseStatus = 0
             checkNextBtn()
         }
 
@@ -102,8 +105,8 @@ class RecruitApplyActivity:AppCompatActivity() {
 
         viewBinding.submitButton.setOnClickListener {
             Log.d("test", "지원")
-            if (type != null) {
-                apply(this, type, recruitId)
+            if (type != null && writer != null && process != null) {
+                apply(this, type, recruitId, recruitStatus, writer, process)
             }
             finish()
         }
@@ -153,7 +156,7 @@ class RecruitApplyActivity:AppCompatActivity() {
     }
 
     private fun checkNextBtn() {
-        if(partchooseStatus != -1 && portfolioId != -1){
+        if(partChooseStatus != -1 && portfolioId != -1){
             nextBtnEnable(true)
         }else{
             nextBtnEnable(false)
@@ -172,9 +175,9 @@ class RecruitApplyActivity:AppCompatActivity() {
         }
     }
 
-    private fun apply(context: Context, type: String, id:Int){
+    private fun apply(context: Context, type: String, id:Int, recruitStatus: Boolean, writer: String, process: String){
         if (type == "PROJECT"){
-            RetrofitClient.service.applyProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),id, ReqApplyProject(portfolioId, part, viewBinding.etContent.text.toString())).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.applyProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),id, ReqApplyProject(portfolioId, part, viewBinding.etContent.text.toString(), recruitStatus, writer, process)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 지원 실패",response.toString())
@@ -194,7 +197,7 @@ class RecruitApplyActivity:AppCompatActivity() {
                 }
             })
         }else if (type == "STUDY"){
-            RetrofitClient.service.applyStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),id, ReqApplyStudy(portfolioId, viewBinding.etContent.text.toString())).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.applyStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),id, ReqApplyStudy(portfolioId, viewBinding.etContent.text.toString(), recruitStatus, writer, process)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 지원 실패",response.toString())

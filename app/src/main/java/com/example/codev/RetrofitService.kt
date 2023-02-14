@@ -203,17 +203,18 @@ interface RetrofitService {
     @POST("study/submission/{coStudyId}")
     fun applyStudy(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int, @Body params: ReqApplyStudy) : Call<JsonObject>
 
-    @DELETE("project/recruitment/{coProjectId}")
-    fun cancelProject(@Header("CoDev_Authorization") header: String, @Path("coProjectId") coProjectId: Int) : Call<JsonObject>
+    @HTTP(method = "DELETE", path="project/recruitment/{coProjectId}", hasBody = true)
+    fun cancelProject(@Header("CoDev_Authorization") header: String, @Path("coProjectId") coProjectId: Int, @Body params: ReqCancelRecruit) : Call<JsonObject>
 
-    @DELETE("study/recruitment/{coStudyId}")
-    fun cancelStudy(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int) : Call<JsonObject>
+    @HTTP(method = "DELETE", path="study/recruitment/{coStudyId}", hasBody = true)
+    fun cancelStudy(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int, @Body params: ReqCancelRecruit) : Call<JsonObject>
 
     @PATCH("project/recruitment/extension/{coProjectId}")
-    fun extendProject(@Header("CoDev_Authorization") header: String, @Path("coProjectId") coProjectId: Int, @Body params: ReqExtendProject) : Call<JsonObject>
+    fun extendProject(@Header("CoDev_Authorization") header: String, @Path("coProjectId") coProjectId: Int, @Body params: ReqExtendProject) : Call<ResExtendRecruit>
 
     @PATCH("study/recruitment/extension/{coStudyId}")
-    fun extendStudy(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int, @Body params: ReqExtendStudy) : Call<JsonObject>
+    fun extendStudy(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int, @Body params: ReqExtendStudy) : Call<ResExtendRecruit>
+
 
     @PATCH("project/recruitment/dead-line/{coProjectId}")
     fun doneRecruitProject(
@@ -221,5 +222,18 @@ interface RetrofitService {
         @Path("coProjectId") coProjectId: Int,
         @Body params: ReqRecruitedApplicantList
     ): Call<JsonObject>
+
+
+    @GET("chat/rooms")
+    fun getChatRoomList(@Header("CoDev_Authorization") header: String) : Call<ResGetChatRoomList>
+
+    @GET("chat/room/{roomId}")
+    fun getChatList(@Header("CoDev_Authorization") header: String, @Path("roomId") roomId: String) : Call<ResGetChatList>
+
+    @POST("chat/create/room")
+    fun createChatRoom(@Header("CoDev_Authorization") header: String, @Body params: ReqCreateChatRoom) : Call<JsonObject>
+
+    @POST("chat/invite")
+    fun inviteChat(@Header("CoDev_Authorization") header: String, @Body params: ReqInviteChat) : Call<JsonObject>
 
 }

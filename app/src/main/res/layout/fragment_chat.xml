@@ -8,18 +8,21 @@
     <!-- Toolbar -->
     <include
         android:id="@+id/toolbar_chat"
-        layout="@layout/toolbar1"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        layout="@layout/toolbar1"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chatRoomList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_chat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:text="Chat Fragment"
-        android:textSize="30dp"
-        android:fontFamily="@font/halogen_black"
-        android:textColor="@color/black"/>
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="vertical"
+        tools:listitem="@layout/recycle_chat_room_list"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

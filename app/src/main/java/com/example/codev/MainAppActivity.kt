@@ -3,18 +3,29 @@ package com.example.codev
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.example.codev.databinding.ActivityMainAppBinding
 
 class MainAppActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityMainAppBinding
+
+    override fun onDestroy() {
+        Log.d("test", "강제종료")
+        ChatClient.disconnect()
+        super.onDestroy()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMainAppBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
+
         /** DynamicLink 수신확인 */
         initDynamicLink()
+
+        ChatClient
+
 
         supportFragmentManager
             .beginTransaction()
