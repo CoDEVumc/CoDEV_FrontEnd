@@ -260,7 +260,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
     private fun setAdapter2(dataList: ArrayList<ApplicantInfoData>, context: Context){
         Log.d("test", "어댑터 2")
-        adapter2 = AdapterRecruitApplicants2(context, dataList){
+        adapter2 = AdapterRecruitApplicants2(context, dataList, id, type){
             Log.d("test","리콜받음")
             Log.d("setAdapter2 : returnCount :",it.toString())
             if (it == 1){
@@ -361,7 +361,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
                 }
             })
         }
-        else if(type == "STUDY"){
+        else if(type == "STUDY") {
             RetrofitClient.service.getApplyerStudyList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, coPart).enqueue(object : Callback<ResApplyerList> {
                 @SuppressLint("SetTextI18n")
                 override fun onResponse(call: Call<ResApplyerList>, response: Response<ResApplyerList>) {
@@ -376,6 +376,37 @@ class RecruitApplyListActivity: AppCompatActivity() {
                                     Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.result.message.co_appllicantsInfo}")
                                     setAdapter1(it.result.message.co_applicantsCount, context, limit)
                                     setAdapter2(it.result.message.co_appllicantsInfo, context)
+
+                                    applicantList= ArrayList()
+                                    for (i in it.result.message.co_appllicantsInfo){
+                                        applicantList.add(i.co_email)
+                                    }
+
+                                    if (!partLimitLoadStatus){
+                                        partLimitLoadStatus = true
+                                        for (i in it.result.message.co_applicantsCount){
+                                            when (i.co_part){
+                                                "기획" ->{
+                                                    plan = i.co_limit
+                                                }
+                                                "디자인" ->{
+                                                    design = i.co_limit
+                                                }
+                                                "프론트엔드" -> {
+                                                    frontEnd = i.co_limit
+                                                }
+                                                "백엔드" -> {
+                                                    backEnd = i.co_limit
+                                                }
+                                                "기타" ->{
+                                                    etc = i.co_limit
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    Log.d("applicantList", applicantList.toString())
+
                                     part = it.result.message.co_part
                                     if (part == "TEMP"){
                                         viewBinding.bottomBtn.isGone = false
@@ -384,25 +415,18 @@ class RecruitApplyListActivity: AppCompatActivity() {
                                         peopleNum = it.result.message.co_tempSavedApplicantsCount
                                         viewBinding.applicantNum.text = "현재 선택한 지원자 $peopleNum"
 
-                                        if(peopleNum != 0){ //초기화, 모집완료 활성화 (담은 인원이 1명 이상)
+
+                                        if(peopleNum > 0){ //초기화, 모집완료 활성화 (담은 인원이 1명 이상)
                                             enableReset(true)
-                                            //제한 인원 넘지 않았는지 체크 co_limit >= co_applicantsCount
-                                            for (i in it.result.message.co_applicantsCount){ //선택된 지원자 수 만큼
-                                                if(i.co_limit >= i.co_applicantsCount){
-                                                    enableDone(true)
-                                                    Log.d("여기 오면 성공 ", "onResponse: ")
-                                                }
-                                                else{
-                                                    Log.d("if문 안돌아감", "onResponse: ")
-                                                }
-                                            }
-                                            Log.d("enableResetOrDone 되나? ", "")
+                                            enableDone(true)
                                         }else{
                                             enableReset(false)
                                             viewBinding.btnReset.setTextColor(ContextCompat.getColor(context!!,R.color.black_300))
                                             enableDone(false)
                                             viewBinding.btnDoneRecruit.setTextColor(ContextCompat.getColor(context!!,R.color.black_500))
                                         }
+
+
                                     }
                                     else{
                                         viewBinding.bottomBtn.isGone = true
@@ -450,7 +474,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
             })
         }
         else if(type == "STUDY"){
-            RetrofitClient.service.doneRecruitProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqRecruitedApplicantList(recruitedList)).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.doneRecruitStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqRecruitedApplicantList(recruitedList)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 지원자 편집  실패",response.toString())
