@@ -52,16 +52,16 @@ class AppliedDetailActivity : AppCompatActivity() {
 //        intent.putExtra("coTemporaryStorage", false)
 //        startActivity(intent)
         //테스트 코드
-
-        val coProjectId = intent.getIntExtra("coProjectId", -1) // intent.putExtra("coProjectId", 값)
+        val type = intent.getStringExtra("type")
+        val id = intent.getIntExtra("id", -1) // intent.putExtra("coProjectId", 값)
         val coPortfolioId = intent.getIntExtra("coPortfolioId", -1) // intent.putExtra("coPortfolioId", 값)
         partName = intent.getStringExtra("coPart").toString() // intent.putExtra("coPart", 값)
         isSelected = intent.getBooleanExtra("coTemporaryStorage", false) // intent.putExtra("coTemporaryStorage", 값)
 
-        if(coProjectId < 0 || coPortfolioId < 0 || partName == ""){
+        if(id < 0 || coPortfolioId < 0 || partName == ""){
             Toast.makeText(this, "조회 실패: 다시 시도해주세요(초기값 오류)", Toast.LENGTH_SHORT).show()
         }else{
-            loadData(coProjectId, coPortfolioId)
+            loadData(type!!, id, coPortfolioId)
         }
 
         viewBinding.btnLeft.setOnClickListener {
@@ -97,38 +97,84 @@ class AppliedDetailActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun loadData(projectId: Int, portfolioId: Int){
-        RetrofitClient.service.getAppliedDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(this)), projectId, portfolioId).enqueue(object:
-            Callback<ResAppliedUserDetail> {
-            override fun onResponse(
-                call: Call<ResAppliedUserDetail>,
-                response: Response<ResAppliedUserDetail>
-            ) {
-                if (response.isSuccessful.not()) {
-                    Log.d("test: 포트폴리오 불러오기 실패", response.toString())
-                    Toast.makeText(
-                        this@AppliedDetailActivity,
-                        "서버와 연결을 시도했으나 실패했습니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                when (response.code()) {
-                    200 -> {
-                        response.body()?.let {
-                            Log.d("test: 포트폴리오 불러오기 성공", response.toString())
-                            setDataOnPage(this@AppliedDetailActivity, it.result.message)
-                            isLoaded = true
+    private fun loadData(nowType: String, id: Int, portfolioId: Int){
+        if(nowType == "PROJECT"){
+            RetrofitClient.service.getProjectAppliedDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(this)), id, portfolioId).enqueue(object:
+                Callback<ResAppliedUserDetail> {
+                override fun onResponse(
+                    call: Call<ResAppliedUserDetail>,
+                    response: Response<ResAppliedUserDetail>
+                ) {
+                    if (response.isSuccessful.not()) {
+                        Log.d("test: 포트폴리오 불러오기 실패", response.toString())
+                        Toast.makeText(
+                            this@AppliedDetailActivity,
+                            "서버와 연결을 시도했으나 실패했습니다.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    when (response.code()) {
+                        200 -> {
+                            response.body()?.let {
+                                Log.d("test: 포트폴리오 불러오기 성공", response.toString())
+                                setDataOnPage(this@AppliedDetailActivity, it.result.message)
+                                isLoaded = true
+                            }
                         }
+                        400 -> {
+                            Toast.makeText(this@AppliedDetailActivity, "지원자가 해당 포트폴리오를 삭제했습니다.", Toast.LENGTH_SHORT).show()
+                            setEmptyPage(this@AppliedDetailActivity)
+                            //isLoaded 처리 필요
+                        }
+
                     }
 
                 }
 
-            }
+                override fun onFailure(call: Call<ResAppliedUserDetail>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+            })
+        }else if(nowType == "STUDY"){
+            RetrofitClient.service.getStudyAppliedDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(this)), id, portfolioId).enqueue(object:
+                Callback<ResAppliedUserDetail> {
+                override fun onResponse(
+                    call: Call<ResAppliedUserDetail>,
+                    response: Response<ResAppliedUserDetail>
+                ) {
+                    if (response.isSuccessful.not()) {
+                        Log.d("test: 포트폴리오 불러오기 실패", response.toString())
+                        Toast.makeText(
+                            this@AppliedDetailActivity,
+                            "서버와 연결을 시도했으나 실패했습니다.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    when (response.code()) {
+                        200 -> {
+                            response.body()?.let {
+                                Log.d("test: 포트폴리오 불러오기 성공", response.toString())
+                                setDataOnPage(this@AppliedDetailActivity, it.result.message)
+                                isLoaded = true
+                            }
+                        }
+                        400 -> {
+                            Toast.makeText(this@AppliedDetailActivity, "지원자가 해당 포트폴리오를 삭제했습니다.", Toast.LENGTH_SHORT).show()
+                            setEmptyPage(this@AppliedDetailActivity)
+                            //isLoaded 처리 필요
 
-            override fun onFailure(call: Call<ResAppliedUserDetail>, t: Throwable) {
-                TODO("Not yet implemented")
-            }
-        })
+                        }
+
+                    }
+
+                }
+
+                override fun onFailure(call: Call<ResAppliedUserDetail>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+            })
+        }
+
     }
 
     private fun setDataOnPage(context: Context, pfData: AllAppliedUserDetailMessage){
@@ -180,5 +226,35 @@ class AppliedDetailActivity : AppCompatActivity() {
             viewBinding.btnRight.text = "선택 취소하기"
             viewBinding.btnRight.background = getDrawable(R.drawable.recruit_detail_btn2_selected)
         }
+    }
+
+    private fun setEmptyPage(context: Context){
+        //setImage
+        Glide.with(context).load(R.drawable.my_profile).circleCrop().into(viewBinding.userImage)
+
+        viewBinding.userName.setText("삭제된 포토폴리오입니다.") //name
+
+        //gender
+        var genderText = "삭제된 포토폴리오입니다."
+//        genderText = if (pfData.co_gender == "MALE") "남성"
+//        else "여성"
+        viewBinding.userGender.text = genderText
+        viewBinding.userBirth.text = "없음"
+        viewBinding.applyPartText.text = "삭제된 포토폴리오입니다."
+        viewBinding.editApplyContent.text = "삭제된 포토폴리오입니다."
+
+        viewBinding.pfTitle.text = "삭제된 포토폴리오입니다."
+        viewBinding.editPfLevel.text = "삭제된 포토폴리오입니다."
+
+        viewBinding.editPfIntro.text = "삭제된 포토폴리오입니다."
+        viewBinding.editPfContent.text = "삭제된 포토폴리오입니다."
+        viewBinding.textCounter.text = "0"
+
+        //불러오지 못하면 선택하기 및 문의하기를 처리하는 방법 필요
+
+//        if(isSelected){
+//            viewBinding.btnRight.text = "선택 취소하기"
+//            viewBinding.btnRight.background = getDrawable(R.drawable.recruit_detail_btn2_selected)
+//        }
     }
 }

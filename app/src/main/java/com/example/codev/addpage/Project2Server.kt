@@ -104,7 +104,7 @@ class Project2Server {
         })
     }
 
-    fun updateProject(context: Context, projectId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>, submitBtn: Button, finishPage: () -> Unit){
+    fun updateProject(context: Context, projectId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>, submitBtn: Button, nowProcess: String, finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
         val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
         Log.d("postAuth", userToken)
@@ -115,7 +115,7 @@ class Project2Server {
             stackList,
             deadLine,
             numPerPart,
-            "ING"
+            nowProcess
         )
         val jsonObject = Gson().toJson(reqUpdateProject)
         var requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject)
@@ -209,7 +209,7 @@ class Project2Server {
         })
     }
 
-    fun updateStudy(context: Context, studyId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, stack1Name: String, peopleNumber: Int, imagePartList: List<MultipartBody.Part>, submitBtn: Button, finishPage: () -> Unit){
+    fun updateStudy(context: Context, studyId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, stack1Name: String, peopleNumber: Int, imagePartList: List<MultipartBody.Part>, submitBtn: Button, nowProcess: String , finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
         val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
         Log.d("postAuth", userToken)
@@ -221,7 +221,7 @@ class Project2Server {
             deadLine,
             stack1Name,
             peopleNumber,
-            "ING"
+            nowProcess
         )
         val jsonObject = Gson().toJson(reqUpdateStudy)
         var requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject)

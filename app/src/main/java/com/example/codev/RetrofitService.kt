@@ -237,7 +237,10 @@ interface RetrofitService {
     fun changePassword(@Header("CoDev_Authorization") authToken: String, @Body params: ReqChangeUserPassword): Call<ResChangeUserPassword>
 
     @GET("project/recruitment/portfolio/{coProjectId}/{coPortfolioId}")
-    fun getAppliedDetail(@Header("CoDev_Authorization") header: String, @Path("coProjectId") coProjectId: Int, @Path("coPortfolioId") coPortfolioId: Int) : Call<ResAppliedUserDetail>
+    fun getProjectAppliedDetail(@Header("CoDev_Authorization") header: String, @Path("coProjectId") coProjectId: Int, @Path("coPortfolioId") coPortfolioId: Int) : Call<ResAppliedUserDetail>
+
+    @GET("study/recruitment/portfolio/{coStudyId}/{coPortfolioId}")
+    fun getStudyAppliedDetail(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int, @Path("coPortfolioId") coPortfolioId: Int) : Call<ResAppliedUserDetail>
 
 
     @GET("chat/rooms")
