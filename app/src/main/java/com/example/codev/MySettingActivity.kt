@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.codev.databinding.ActivityMySettingBinding
+import com.example.codev.userinfo.UserInfoActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -28,6 +29,13 @@ class MySettingActivity:AppCompatActivity() {
         val userinfo = intent.getSerializableExtra("userinfo") as Userinfo
 
         loginTypeBindingToLogOut(userinfo.co_loginType)
+
+        //회원 정보 수정 연결(김유정)
+        viewBinding.btnEditUser.setOnClickListener {
+            val intent = Intent(this, UserInfoActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

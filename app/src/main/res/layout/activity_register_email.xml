@@ -49,6 +49,30 @@
         android:background="@drawable/login_et"
         android:inputType="textEmailAddress"/>
 
+    <ImageView
+        android:id="@+id/et_email_chk_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/et_email"
+        app:layout_constraintEnd_toEndOf="@+id/et_email"
+        app:layout_constraintBottom_toBottomOf="@+id/et_email"
+        android:layout_marginEnd="14dp"
+        android:src="@drawable/register_chk_checked"
+        android:visibility="gone"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_email_check"
+        android:layout_width="82dp"
+        android:layout_height="40dp"
+        app:layout_constraintEnd_toEndOf="@+id/et_email"
+        app:layout_constraintTop_toBottomOf="@+id/et_email"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/register_email_check"
+        android:text="중복확인"
+        style="@style/Text.Body4.SemiBold"
+        android:textColor="@color/black_500"
+        />
+
     <TextView
         android:id="@+id/warn"
         android:layout_width="wrap_content"

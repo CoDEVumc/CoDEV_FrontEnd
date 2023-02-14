@@ -4,6 +4,10 @@
     <!-- 인터넷 -->
     <uses-permission android:name="android.permission.INTERNET" /> <!-- glide -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- 사진 촬영 -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -18,14 +22,42 @@
         android:requestLegacyExternalStorage="true"
         tools:targetApi="31">
         <activity
+            android:name=".addpage.AppliedDetailActivity"
+            android:exported="false" />
+        <!--
+         카메라 관련(프로필 사진 변경)
+            androidx.core.content.FileProvider : 다른APP에 임시로 권한을 부여할 수 있는 API
+            android:authorities : privider에대한 id 정보
+                                 관례적으로 package.privider로 많이 사용
+                                 ${applicationId} : packiage id가 적용 된다.
+            meta-data : meta-data tag에는 android.support.FILE_PROVIDER_PATHS 를 정의해야 된다.
+                        이 PATH의 위치는 android:resource Tag에 존재 한다.
+        -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+        <activity
+            android:name=".userinfo.PasswordChangeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".userinfo.UserInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".addpage.PfDetailActivity"
             android:exported="false" />
         <activity
             android:name=".MyBookMarkActivity"
             android:exported="false">
-                <meta-data
-                    android:name="android.app.lib_name"
-                    android:value="" />
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
         </activity>
         <activity
             android:name=".addpage.AddPfPageActivity"
@@ -172,12 +204,13 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".RecruitApplyActivity"
             android:exported="false">

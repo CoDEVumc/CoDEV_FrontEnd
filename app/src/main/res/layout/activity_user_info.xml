@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".userinfo.UserInfoActivity">
+
+    <!-- Toolbar -->
+    <include
+        android:id="@+id/toolbar_title"
+        layout="@layout/toolbar_add_page"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+        
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/user_login_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="24dp">
+
+                <TextView
+                    android:id="@+id/text_user_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="@string/user_info_text"
+                    android:textColor="@color/black_900"
+                    style="@style/Text.Body3.SemiBold"/>
+
+                <TextView
+                    android:id="@+id/text_login_method"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/text_user_info"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="로딩중..."
+                    android:textColor="@color/green_900"
+                    style="@style/Text.Body4.SemiBold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@id/text_login_method"
+                    app:layout_constraintBottom_toBottomOf="@id/text_login_method"
+                    app:layout_constraintStart_toEndOf="@id/text_login_method"
+                    android:text="@string/login_noti_text"
+                    android:textColor="@color/black_900"
+                    style="@style/Text.Body4.SemiBold"/>
+
+                <TextView
+                    android:id="@+id/text_password_noti"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/text_login_method"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="로그인 방식에 따라 비밀번호를 변경하실 수 있습니다."
+                    android:textColor="@color/black_500"
+                    style="@style/Text.Body5.SemiBold"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/user_login_section"
+                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="24dp"/>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/user_info_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/divider"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="28dp"
+                android:layout_marginEnd="24dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/user_gender_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/gender_display_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="@string/user_gender_text"
+                        android:textColor="@color/black_900"
+                        style="@style/Text.Body4.SemiBold"/>
+
+                    <TextView
+                        android:id="@+id/user_gender_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/gender_display_text"
+                        android:layout_marginTop="12dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="Loading..."
+                        android:textColor="@color/black_500"
+                        style="@style/Text.Body4.SemiBold"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/user_birth_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/user_gender_section"
+                    android:layout_marginTop="20dp">
+
+                    <TextView
+                        android:id="@+id/birth_display_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="@string/user_birth_text"
+                        android:textColor="@color/black_900"
+                        style="@style/Text.Body4.SemiBold"/>
+
+                    <TextView
+                        android:id="@+id/user_birth_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/birth_display_text"
+                        android:layout_marginTop="12dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="Loading..."
+                        android:textColor="@color/black_500"
+                        style="@style/Text.Body4.SemiBold"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/user_email_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/user_birth_section"
+                    android:layout_marginTop="20dp">
+
+                    <TextView
+                        android:id="@+id/email_display_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="@string/user_email_text"
+                        android:textColor="@color/black_900"
+                        style="@style/Text.Body4.SemiBold"/>
+
+                    <TextView
+                        android:id="@+id/user_email_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/email_display_text"
+                        android:layout_marginTop="12dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="Loading..."
+                        android:textColor="@color/black_500"
+                        style="@style/Text.Body4.SemiBold"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/user_password_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/user_email_section"
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/password_display_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="@string/user_password_text"
+                        android:textColor="@color/black_900"
+                        style="@style/Text.Body4.SemiBold"/>
+
+                    <ImageView
+                        android:id="@+id/user_password_image"
+                        android:layout_width="124dp"
+                        android:layout_height="12dp"
+                        app:layout_constraintTop_toBottomOf="@id/password_display_text"
+                        android:layout_marginTop="12dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:src="@drawable/password_display"/>
+                    
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/password_change_button_section"
+                        android:layout_width="48dp"
+                        android:layout_height="28dp"
+                        app:layout_constraintTop_toTopOf="@id/user_password_image"
+                        app:layout_constraintBottom_toBottomOf="@id/user_password_image"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:background="@drawable/password_change_button_round">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:text="변경"
+                            android:textColor="@color/green_900"
+                            style="@style/Text.Body5.SemiBold"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

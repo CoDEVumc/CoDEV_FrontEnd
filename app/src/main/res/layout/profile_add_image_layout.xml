@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/profile_add_image_background"
+    >
+    
+    <ImageButton
+        android:id="@+id/cancel_button"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/close_icon"
+        android:background="#00000000"
+        />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/camera_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="52dp"
+        android:layout_marginStart="24dp">
+
+        <ImageView
+            android:id="@+id/camera_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/camera_icon"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/camera_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/camera_icon"
+            app:layout_constraintStart_toEndOf="@id/camera_icon"
+            android:layout_marginStart="8dp"
+            android:text="카메라"
+            android:textColor="@color/black_900"
+            style="@style/Text.Body4.SemiBold"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/image_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/camera_section"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="24dp">
+
+        <ImageView
+            android:id="@+id/image_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/image_icon"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/image_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/image_icon"
+            app:layout_constraintStart_toEndOf="@id/image_icon"
+            android:layout_marginStart="8dp"
+            android:text="앨범에서 선택"
+            android:textColor="@color/black_900"
+            style="@style/Text.Body4.SemiBold"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/default_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/image_section"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="24dp">
+
+        <ImageView
+            android:id="@+id/default_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/trash_icon_red"
+            />
+
+        <TextView
+            android:id="@+id/Default_image_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/default_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/default_icon"
+            app:layout_constraintStart_toEndOf="@id/default_icon"
+            android:layout_marginStart="8dp"
+            android:text="이미지 삭제"
+            android:textColor="#FF5959"
+            style="@style/Text.Body4.SemiBold"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        app:layout_constraintTop_toBottomOf="@id/default_section"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

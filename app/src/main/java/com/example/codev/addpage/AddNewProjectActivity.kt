@@ -1,25 +1,39 @@
 package com.example.codev.addpage
 
+import android.Manifest
 import android.app.DatePickerDialog
+import android.content.ContentResolver
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
+import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.codev.AndroidKeyStoreUtil
+import com.example.codev.BuildConfig
 import com.example.codev.R
 import com.example.codev.databinding.ActivityAddNewProjectBinding
+import com.example.codev.databinding.ProfileAddImageLayoutBinding
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.File
 import java.util.*
 
@@ -45,6 +59,12 @@ class AddNewProjectActivity : AppCompatActivity() {
 
     //oldProject
     private var oldProjectId = ""
+
+    //Camera
+    private var tempCameraFile = File("")
+    private var tempUri = Uri.EMPTY
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,6 +130,19 @@ class AddNewProjectActivity : AppCompatActivity() {
                 }
             }
         })
+
+        viewBinding.inputOfContent.setOnTouchListener(View.OnTouchListener { v, event ->
+            if (viewBinding.inputOfContent.hasFocus()) {
+                v.parent.requestDisallowInterceptTouchEvent(true)
+                when (event.action and MotionEvent.ACTION_MASK) {
+                    MotionEvent.ACTION_SCROLL -> {
+                        v.parent.requestDisallowInterceptTouchEvent(false)
+                        return@OnTouchListener true
+                    }
+                }
+            }
+            false
+        })
         //contentSection - End
 
         //
@@ -127,11 +160,15 @@ class AddNewProjectActivity : AppCompatActivity() {
                 Toast.makeText(this, "사진은 최대 ${imageLimit}개를 추가할 수 있습니다.", Toast.LENGTH_SHORT).show()
             }else {
                 addPageFunction.checkSelfPermission(this, this)
-                getContent.launch(arrayOf(
-                    "image/png",
-                    "image/jpg",
-                    "image/jpeg"
-                ))
+                getBottomMenu()
+//                getContent.launch("image/*")
+//                getContent.launch(
+//                    arrayOf(
+//                        "image/png",
+//                        "image/jpg",
+//                        "image/jpeg"
+//                    )
+//                )
             }
 
         }
@@ -314,8 +351,14 @@ class AddNewProjectActivity : AppCompatActivity() {
             viewBinding.locationHead.dropdownTitle.text = oldProject.location
             for (i in locationList){
                 if(i.name == oldProject.location){
+                    selectedLocationIndex = locationList.indexOf(i)
                     i.isSelected = true
-                    viewBinding.locationList.adapter!!.notifyItemChanged(locationList.indexOf(i))
+                    //selectedLocationIndex 초기화를 위한 코드
+                    viewBinding.locationList.adapter = CallbackSingleRVAdapter(locationList, selectedLocationIndex) {
+                        Log.d("location", it.toString())
+                        viewBinding.locationHead.dropdownTitle.text = locationList[it].name
+                    }
+                    break
                 }
             }
 
@@ -327,8 +370,6 @@ class AddNewProjectActivity : AppCompatActivity() {
 
         //setSubmitButton
         viewBinding.submitButton.setOnClickListener {
-
-
 
             val finalTitle = viewBinding.inputOfTitle.text.toString()
             Log.d("finalTitle", finalTitle)
@@ -386,7 +427,6 @@ class AddNewProjectActivity : AppCompatActivity() {
             }
 
             if(isTitleOk and isContentOk and isPartPeopleOk and isLocationOk and isDeadlineOk){
-
                 val finalNumOfPartList = project2Server.createPartNumList(finalPartNumList)
                 Log.d("finalPartList", finalNumOfPartList.toString())
 
@@ -424,27 +464,34 @@ class AddNewProjectActivity : AppCompatActivity() {
 
                                     if(loadedImageNumber == allUrlNumber){
                                         val imageMultiPartListUsingFile = project2Server.createImageMultiPartListUsingFile(imageFileList)
-                                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartListUsingFile) {
-                                            for(deleteFile in imageFileList) deleteFile.delete()
+                                        viewBinding.submitButton.isEnabled = false
+                                        viewBinding.submitButton.isSelected = false
+                                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartListUsingFile, viewBinding.submitButton) {
+//                                            for(deleteFile in imageFileList) deleteFile.delete()
                                             finish() }
                                     }
                                 }
                                 override fun onLoadCleared(placeholder: Drawable?) {
-                                    Toast.makeText(this@AddNewProjectActivity, "모집글 수정 시 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                                    Log.d("finalDownloadOldImage", "onLoadCleared: $placeholder")
+                                    Toast.makeText(this@AddNewProjectActivity, "사진 수정 시 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                                 }
                             })
                         }
                     }
                     if(allUrlNumber == 0){
                         val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
-                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList) { finish() }
+                        viewBinding.submitButton.isEnabled = false
+                        viewBinding.submitButton.isSelected = false
+                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList, viewBinding.submitButton) { finish() }
                     }
 
                 }else{
                     val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
                     Log.d("finalImageMultiPartList", imageMultiPartList.toString())
                     Log.d("deadlineServerJson", dateJsonString)
-                    project2Server.postNewProject(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList) { finish() }
+                    viewBinding.submitButton.isEnabled = false
+                    viewBinding.submitButton.isSelected = false
+                    project2Server.postNewProject(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList, viewBinding.submitButton) { finish() }
                 }
 
             }else{
@@ -479,7 +526,7 @@ class AddNewProjectActivity : AppCompatActivity() {
         for (i in imageItemList){
             Log.d("delete", i.toString())
             val deleteFile = File(i.imageCopyPath)
-            deleteFile.delete()
+//            deleteFile.delete()
         }
     }
     //ImageSection - End
@@ -495,22 +542,30 @@ class AddNewProjectActivity : AppCompatActivity() {
     }
 
     //imageSection - Start
-    private val getContent = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         if(uri != null){
-            val imageInfo = addPageFunction.getInfoFromUri(this, uri)
-            val imageName = imageInfo[0]
-            val imageSize = imageInfo[1].toInt()
-            val imageSizeLimitByte = 2e+7
-            if(imageSize <= imageSizeLimitByte){
-                val copyImagePath = addPageFunction.createCopyAndReturnPath(this, uri, imageName)
-                val nowImageItem = ImageItem(uri, copyImagePath)
-                imageItemList.add(nowImageItem)
-                viewBinding.addImageSection.adapter!!.notifyItemInserted(imageItemList.lastIndex)
+            val cR: ContentResolver = this.contentResolver
+            val mime: MimeTypeMap = MimeTypeMap.getSingleton()
+            val type: String? = cR.getType(uri)
+            if(type == "image/png" || type == "image/jpg" || type == "image/jpeg"){
+                val imageInfo = addPageFunction.getInfoFromUri(this, uri)
+                val imageName = imageInfo[0]
+                val imageSize = imageInfo[1].toInt()
+                val imageSizeLimitByte = 2e+7
+                if(imageSize <= imageSizeLimitByte){
+                    val copyImagePath = addPageFunction.createCopyAndReturnPath(this, uri, imageName)
+                    val nowImageItem = ImageItem(uri, copyImagePath)
+                    imageItemList.add(nowImageItem)
+                    viewBinding.addImageSection.adapter!!.notifyItemInserted(imageItemList.lastIndex)
 
-                //subImageCounter
-                viewBinding.addImageNum.text = "${imageItemList.size}/${imageLimit}"
+                    //subImageCounter
+                    viewBinding.addImageNum.text = "${imageItemList.size}/${imageLimit}"
 
+                }
+            }else{
+                Toast.makeText(this, "png 및 jpg(jpeg)형식의 사진만 지원합니다.", Toast.LENGTH_SHORT).show()
             }
+
         }
     }
     //imageSection - End
@@ -549,6 +604,140 @@ class AddNewProjectActivity : AppCompatActivity() {
     }
     //SetStack2Function - End
 
+    //Bottom DiaLog - Start
+    private fun getBottomMenu(){
+        // BottomSheetDialog 객체 생성. param : Context
+        val dialog = BottomSheetDialog(this)
+        val dialogLayout = ProfileAddImageLayoutBinding.inflate(layoutInflater)
+        dialogLayout.cameraSection.setOnClickListener {
+            Log.d("testClick", "getBottomMenu: Click Camera")
+            getImageFromCamera()
+            dialog.dismiss()
+        }
+        dialogLayout.imageSection.setOnClickListener {
+            addPageFunction.checkSelfPermission(this, this)
+            getContent.launch("image/*")
+            dialog.dismiss()
+        }
+        dialogLayout.cancelButton.setOnClickListener {
+            dialog.cancel()
+        }
+        dialogLayout.defaultSection.visibility = View.GONE
+        dialog.setContentView(dialogLayout.root)
+        dialog.setCanceledOnTouchOutside(true)  // BottomSheetdialog 외부 화면(회색) 터치 시 종료 여부 boolean(false : ㄴㄴ, true : 종료하자!)
+        dialog.create() // create()와 show()를 통해 출력!
+        dialog.show()
+    }
+
+    private fun getImageFromCamera(){
+        addPageFunction.checkSelfCameraPermission(this, this) {openCamera()}
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode){
+            0 -> {
+                if (grantResults.isNotEmpty()){
+                    var isAllGranted = true
+                    // 요청한 권한 허용/거부 상태 한번에 체크
+                    for (grant in grantResults) {
+                        if (grant != PackageManager.PERMISSION_GRANTED) {
+                            isAllGranted = false
+                            break;
+                        }
+                    }
+                    // 요청한 권한을 모두 허용했음.
+                    if (isAllGranted) {
+                        // 다음 step으로 ~
+                        openCamera()
+                    }
+                    // 허용하지 않은 권한이 있음. 필수권한/선택권한 여부에 따라서 별도 처리를 해주어야 함.
+                    else {
+                        if(!ActivityCompat.shouldShowRequestPermissionRationale(this,
+                                Manifest.permission.CAMERA)){
+                            //권한 거부하면서 다시 묻지 않기를 체크함.
+                            Toast.makeText(this, "설정에서 카메라 권한을 직접 추가하셔야 카메라를 실행할 수 있습니다.", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                .setData(Uri.parse("package:" + BuildConfig.APPLICATION_ID))
+                            startActivity(intent)
+                        } else {
+                            //접근 권한 거부하였음.
+                            Toast.makeText(this, "카메라 권한이 없습니다.", Toast.LENGTH_SHORT).show()
+
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    //3. 카메라 OPEN
+    private fun openCamera() {
+        //MediaStore.ACTION_IMAGE_CAPTURE
+        //  - 이 Intent filter를 이용하면 camea app을 실행시킬 수 있다.
+        //intent.resolveActivity(packageManager)
+        //  - 현재 폰에 MediaStore.ACTION_IMAGE_CAPTURE  기능이 존재 하는지 한번 더 확인
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+
+        //저장소에 저장할 파일을 임시로 만들어준다.
+        //Environment.DIRECTORY_PICTURES: 사진을 저장 할 수 있는 일반 저장소 위치
+        //   - val dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        //externalCacheDir :  캐시 저장소
+        val dir = externalCacheDir
+
+        //File.createTempFile : 파일명생성 (photo_ + random 숫자 + .jpg)
+        val file = File.createTempFile("photo_", ".jpg", dir)
+
+        //photoFile
+        //  - onActivityResult( )인 callback함수에서 사용될 file id
+        tempCameraFile = file
+
+        //FileProvider.getUriForFile : provider에 대한 uri를 얻어 온다.
+        val uri = FileProvider.getUriForFile(this, "$packageName.provider", file)
+        Log.d("testUri", "openCamera: $uri")
+        tempUri = uri
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+        //startActivityForResult(intent, REQUEST_CODE_FOR_IMAGE_CAPTURE)
+        //getResult.launch()을 호출 하면
+        //  - callback으로 registerForActivityResult( )와 onActivityResult( ) 함수가 호출 된다
+        //  - ActivityResultLauncher class 사용 이후 부터는 requestCode 코드를 넘길 수가 없다. 아니 넘길 필요가 없어 졌다.
+        //    이유는, registerForActivityResult( ) 함수내부에 직접 기술 하는 방식으로 개발 하면 되기 때문이다.
+        //  - requestCode를 지정할 수 없기 때문에 onActivityResult( ) 함수 내부에 소스를 개발 할 수 없게 되었다.
+        //  - 원하는 Activity Request마다 registerForActivityResult를 실행하기 때문에 requestCode가 존재 하지 않는다.
+        getResult.launch(intent)
+
+    }
+
+    private val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == RESULT_OK) {
+            val uri = tempUri
+            val imageInfo = addPageFunction.getInfoFromUri(this, uri)
+            val imageName = imageInfo[0]
+            val imageSize = imageInfo[1].toInt()
+            val imageSizeLimitByte = 2e+7
+            if(imageSize <= imageSizeLimitByte){
+                val nowImageItem = ImageItem(uri, tempCameraFile.path)
+                imageItemList.add(nowImageItem)
+                viewBinding.addImageSection.adapter!!.notifyItemInserted(imageItemList.lastIndex)
+                //subImageCounter
+                viewBinding.addImageNum.text = "${imageItemList.size}/${imageLimit}"
+            }
+        } else {
+            Toast.makeText(this, "취소 되었습니다", Toast.LENGTH_SHORT).show()
+        }
+    }
+    //Bottom DiaLog - End
+
+    private fun changeButtonStatus(nowStatus: Boolean){
+        viewBinding.submitButton.isEnabled = nowStatus
+        viewBinding.submitButton.isSelected = nowStatus
+    }
 
 
 

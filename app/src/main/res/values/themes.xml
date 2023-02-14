@@ -112,4 +112,9 @@
         <item name="android:textSize">8sp</item>
     </style>
 
+<!--    HomeImage-->
+    <style name="homeImage">
+        <item name="cornerSizeTopLeft">8dp</item>
+        <item name="cornerSizeTopRight">8dp</item>
+    </style>
 </resources>
