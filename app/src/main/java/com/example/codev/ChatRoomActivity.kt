@@ -28,12 +28,10 @@ class ChatRoomActivity:AppCompatActivity() {
     private lateinit var adapter: AdapterChatList
     private var recyclerViewPosition = 0
 
-    override fun onDestroy() {
-        Log.d("stomp: etc", "다른 탭 이동")
+    override fun onPause() {
+        super.onPause()
         ChatClient.sendMessage("LEAVE", roomId, UserSharedPreferences.getKey(this),"LEAVE")
         ChatClient.exit()
-        ChatClient.disconnect()
-        super.onDestroy()
     }
 
     @SuppressLint("CheckResult")
@@ -130,6 +128,7 @@ class ChatRoomActivity:AppCompatActivity() {
         }
         ChatClient.setAdapter(adapter)
         viewBinding.chatList.adapter = adapter
+        ChatClient.sendMessage("ENTER", roomId, UserSharedPreferences.getKey(context), "ENTER")
     }
 
     private fun loadData(context: Context, roomId: String, isRead: Int, people: Int){

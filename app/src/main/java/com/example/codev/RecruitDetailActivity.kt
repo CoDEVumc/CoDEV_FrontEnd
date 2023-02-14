@@ -217,7 +217,6 @@ class RecruitDetailActivity:AppCompatActivity() {
                             response.body()?.let {
                                 Log.d("test: 채팅방초대 성공! ", "\n${it.toString()}")
                                 ChatClient.join(context, roomId)
-                                ChatClient.sendMessage("ENTER", roomId, UserSharedPreferences.getKey(context), "ENTER")
                                 val intent = Intent(context, ChatRoomActivity::class.java)
                                 intent.putExtra("title", viewBinding.name.text.toString())
                                 intent.putExtra("roomId", roomId)

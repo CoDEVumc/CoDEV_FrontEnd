@@ -97,7 +97,6 @@ class AdapterChatRoomList(private val listData: ArrayList<ResponseOfGetChatRoomL
 
             binding.room.setOnClickListener {
                 ChatClient.join(itemView.context, data.roomId)
-                ChatClient.sendMessage("ENTER", data.roomId, UserSharedPreferences.getKey(itemView.context), "ENTER")
                 val intent = Intent(itemView.context, ChatRoomActivity::class.java)
                 intent.putExtra("title", title)
                 intent.putExtra("roomId", data.roomId)
