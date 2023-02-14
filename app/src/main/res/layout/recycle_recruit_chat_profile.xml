@@ -15,6 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteY="26dp"
+        android:background="@drawable/register_profile"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

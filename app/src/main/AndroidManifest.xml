@@ -169,7 +169,8 @@
         </activity>
         <activity
             android:name=".RecruitDoneActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

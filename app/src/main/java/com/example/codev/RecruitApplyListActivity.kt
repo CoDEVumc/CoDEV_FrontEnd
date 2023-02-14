@@ -165,26 +165,14 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
         //모집완료 버튼
         viewBinding.btnDoneRecruit.setOnClickListener {
-
             val selectList = adapter2.getListData()
-
             for (i in selectList){
                 when(i.co_part){
-                    "기획" ->{
-                        plan--
-                    }
-                    "디자인" -> {
-                        design--
-                    }
-                    "프론트엔드" -> {
-                        frontEnd--
-                    }
-                    "백엔드" -> {
-                        backEnd--
-                    }
-                    "기타" -> {
-                        etc--
-                    }
+                    "기획" -> plan--
+                    "디자인" -> design--
+                    "프론트엔드" -> frontEnd--
+                    "백엔드" -> backEnd--
+                    "기타" -> etc--
                 }
             }
 
@@ -436,7 +424,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
         }
     }
 
-    //모집완료 function *****지원자가 제한 인원 넘지 않는지 확인 필요
+    //모집완료 function
     private fun doneRecruit(context: Context, type: String, id: Int, recruitedList: ArrayList<String>){
         if (type == "PROJECT"){
             RetrofitClient.service.doneRecruitProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqRecruitedApplicantList(recruitedList)).enqueue(object: Callback<JsonObject>{

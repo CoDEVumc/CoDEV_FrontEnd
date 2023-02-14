@@ -13,6 +13,7 @@
         android:layout_marginStart="91dp"
         android:layout_marginTop="56dp"
         android:layout_marginEnd="91dp"
+        app:layout_constraintBottom_toTopOf="@+id/downlayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -66,8 +67,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/uplayout"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/uplayout">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_profiles"
@@ -100,17 +100,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
+            android:layout_marginBottom="240dp"
             android:background="@drawable/login_et"
             android:hint="@string/hint_chatroom"
             android:inputType="text"
             android:maxLength="30"
             android:textColor="@color/black_900"
             android:textColorHint="@color/black_500"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/list_profiles" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/count"
@@ -138,10 +138,8 @@
             android:textColor="@color/black_500"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_roomname"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

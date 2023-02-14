@@ -51,6 +51,11 @@ class RecruitDoneActivity: AppCompatActivity() {
         //채팅방 인원
         //viewBinding.recruitedNum.text = "외 "+ +"명"
 
+        //채팅방 사용자 프로필들 adapter 필요
+
+
+
+
 
     }
 
