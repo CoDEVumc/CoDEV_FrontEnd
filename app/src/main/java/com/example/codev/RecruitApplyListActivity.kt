@@ -186,11 +186,12 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
             if(plan>=0 && design>=0 && frontEnd>=0 && backEnd>=0 && etc>=0){
                 Log.d("test",roomId)
+                doneRecruit(this, type, id, applicantList)
                 createChat(this, roomId, roomType, inviteList)
                 val intent = Intent(this, RecruitDoneActivity::class.java)
+                intent.putExtra("roomId", roomId)
                 intent.putExtra("selectList", selectList)
                 startActivity(intent)
-                doneRecruit(this, type, id, applicantList)
             }else{
                 Toast.makeText(this, "파트별 제한인원을 다시 확인해주세요", Toast.LENGTH_SHORT).show()
             }

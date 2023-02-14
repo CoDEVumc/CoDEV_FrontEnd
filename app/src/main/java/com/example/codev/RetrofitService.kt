@@ -264,4 +264,7 @@ interface RetrofitService {
     @POST("chat/invite")
     fun inviteChat(@Header("CoDev_Authorization") header: String, @Body params: ReqInviteChat) : Call<JsonObject>
 
+    @POST("chat/update/room_title")
+    fun renameChatRoom(@Header("CoDev_Authorization") header: String, @Body params: ReqRenameChatRoom) : Call<JsonObject>
+
 }

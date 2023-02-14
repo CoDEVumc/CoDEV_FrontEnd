@@ -3,6 +3,7 @@ package com.example.codev
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,13 +19,18 @@ import com.bumptech.glide.Glide
 import com.example.codev.databinding.ActivityRecruitDoneBinding
 import com.example.codev.databinding.ActivityRegisterProfileBinding
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import okhttp3.MediaType
 import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RecruitDoneActivity: AppCompatActivity() {
     private lateinit var viewBinding: ActivityRecruitDoneBinding
     private lateinit var adapter: AdapterRecruitProfiles
-
+    private lateinit var selectList: ArrayList<ApplicantInfoData>
+    private lateinit var roomId: String
 
     @SuppressLint("ObjectAnimatorBinding")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +41,9 @@ class RecruitDoneActivity: AppCompatActivity() {
 
 
         //채팅방 인원
-        var selectList = intent.getSerializableExtra("selectList") as ArrayList<ApplicantInfoData>
+        selectList = intent.getSerializableExtra("selectList") as ArrayList<ApplicantInfoData>
+        roomId = intent.getStringExtra("roomId").toString()
+
         if(selectList.size > 4){
             viewBinding.recruitedNum.text = "외 ${selectList.size - 4}명"
             val slicedList = selectList.take(4)
@@ -50,6 +58,7 @@ class RecruitDoneActivity: AppCompatActivity() {
 
         //Log.d("From AdapterRecruitProfiles :", selectList.toString())
 
+        splashAnimation() //애니메이션
 
         //채팅방 이름 입력 -> db에 전달 부분 필요
         viewBinding.etRoomname.addTextChangedListener(object: TextWatcher {
@@ -69,13 +78,9 @@ class RecruitDoneActivity: AppCompatActivity() {
             }
         })
 
-
-
-
-        splashAnimation() //애니메이션
-
-
-
+        viewBinding.btnMoveToChat.setOnClickListener {
+            renameAndMoveToChat(this, viewBinding.etRoomname.text.toString())
+        }
     }
 
     private fun setAdapter(dataList: ArrayList<ApplicantInfoData>){
@@ -87,13 +92,13 @@ class RecruitDoneActivity: AppCompatActivity() {
 
 
     private fun nextBtnEnable(boolean: Boolean){
-        if (viewBinding.btnMovetoChat.isSelected != boolean){
-            viewBinding.btnMovetoChat.isSelected = boolean
-            viewBinding.btnMovetoChat.isEnabled = boolean
+        if (viewBinding.btnMoveToChat.isSelected != boolean){
+            viewBinding.btnMoveToChat.isSelected = boolean
+            viewBinding.btnMoveToChat.isEnabled = boolean
             if(boolean){
-                viewBinding.btnMovetoChat.setTextColor(getColor(R.color.white))
+                viewBinding.btnMoveToChat.setTextColor(getColor(R.color.white))
             }else{
-                viewBinding.btnMovetoChat.setTextColor(getColor(R.color.black_500))
+                viewBinding.btnMoveToChat.setTextColor(getColor(R.color.black_500))
             }
         }
     }
@@ -104,6 +109,40 @@ class RecruitDoneActivity: AppCompatActivity() {
         viewBinding.uplayout.startAnimation(upAnim)
         val downAnim = AnimationUtils.loadAnimation(this,R.anim.anim_splash_downlayout)
         viewBinding.downlayout.startAnimation(downAnim)
+    }
+
+    fun renameAndMoveToChat(context: Context, roomTitle: String){
+        RetrofitClient.service.renameChatRoom(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), ReqRenameChatRoom(roomId, roomTitle)).enqueue(object:
+            Callback<JsonObject> {
+            @SuppressLint("UseCompatLoadingForDrawables")
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 채팅방초대 실패",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }else{
+                    when(response.code()){
+                        200->{
+                            response.body()?.let {
+                                Log.d("test: 채팅방초대 성공! ", "\n${it.toString()}")
+                                ChatClient.join(context, roomId)
+                                val intent = Intent(context, ChatRoomActivity::class.java)
+                                intent.putExtra("title", roomTitle)
+                                intent.putExtra("roomId", roomId)
+                                intent.putExtra("people", selectList.size+1)
+                                intent.putExtra("isRead", 0)
+                                startActivity(intent)
+                                finish()
+                            }
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                Log.d("test: 채팅방초대 실패", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
 }
