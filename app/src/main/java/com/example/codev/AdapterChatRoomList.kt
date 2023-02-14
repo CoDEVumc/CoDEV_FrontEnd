@@ -49,17 +49,31 @@ class AdapterChatRoomList(private val listData: ArrayList<ResponseOfGetChatRoomL
                     .load(data.mainImg).circleCrop()
                     .into(binding.oneImg1)
 
-                binding.roomMemberNumber.text = (data.people -1).toString()
+                //채팅방에 TEMP랑 둘이 있을 경우
+                if(data.people == 2){
+                    binding.roomMemberNumber.text = 0.toString()
+                }else{
+                    binding.roomMemberNumber.text = (data.people -1).toString()
+                }
+
                 title = data.room_title
                 binding.roomTitle.text = title
+
             }else if (data.room_type == "OTO"){
                 Glide.with(itemView.context)
                     .load(data.receiverProfileImg).circleCrop()
                     .into(binding.oneImg1)
 
-                binding.roomMemberNumber.text = "1"
-                title = data.receiverCo_nickName
+                //채팅방에 TEMP랑 둘이 있을 경우
+                if(data.people == 2){
+                    binding.roomMemberNumber.text = 0.toString()
+                    title = "상대방이 대화방에서 나갔습니다"
+                }else{
+                    binding.roomMemberNumber.text = (data.people -2).toString()
+                    title = data.receiverCo_nickName
+                }
                 binding.roomTitle.text = title
+
             }
 
             binding.roomMessage.text = data.latestconv
