@@ -1,6 +1,5 @@
 package com.example.codev
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,10 +9,10 @@ class MainAppActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityMainAppBinding
 
     override fun onDestroy() {
+        super.onDestroy()
         Log.d("test", "강제종료")
         Log.d("stomp", "연결종료")
         ChatClient.disconnect()
-        super.onDestroy()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,9 +23,6 @@ class MainAppActivity : AppCompatActivity() {
 
         /** DynamicLink 수신확인 */
         initDynamicLink()
-
-        ChatClient
-
 
         supportFragmentManager
             .beginTransaction()

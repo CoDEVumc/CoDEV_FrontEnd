@@ -27,17 +27,17 @@ class ChatFragment:Fragment() {
     }
 
     override fun onResume() {
+        super.onResume()
         Log.d("stomp join 본인 이메일",UserSharedPreferences.getKey(mainAppActivity))
         ChatClient.join(mainAppActivity, UserSharedPreferences.getKey(mainAppActivity))
         Log.d("test","onResume")
         loadData(mainAppActivity)
-        super.onResume()
     }
 
     override fun onDestroy() {
+        super.onDestroy()
         ChatClient.exit()
         Log.d("test", "다른 탭 이동")
-        super.onDestroy()
     }
 
     override fun onCreateView(

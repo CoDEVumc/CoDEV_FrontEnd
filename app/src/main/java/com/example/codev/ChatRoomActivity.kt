@@ -23,9 +23,9 @@ class ChatRoomActivity:AppCompatActivity() {
     private var recyclerViewPosition = 0
 
     override fun onPause() {
+        super.onPause()
         ChatClient.sendMessage("LEAVE", roomId, UserSharedPreferences.getKey(this),"LEAVE")
         ChatClient.exit()
-        super.onPause()
     }
 
     @SuppressLint("CheckResult")
