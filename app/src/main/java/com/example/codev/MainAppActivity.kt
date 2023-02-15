@@ -43,12 +43,12 @@ class MainAppActivity : AppCompatActivity() {
                             .commitAllowingStateLoss()
                     }
                     R.id.menu_community->{
-//                        supportFragmentManager
-//                            .beginTransaction()
-//                            .replace(viewBinding.content.id,RecruitDoneActivity())
-//                            .commitAllowingStateLoss()
-                        val intent = Intent(this@MainAppActivity, RecruitDoneActivity::class.java)
-                        startActivity(intent)
+                        supportFragmentManager
+                            .beginTransaction()
+                            .replace(viewBinding.content.id, CommunityFragment())
+                            .commitAllowingStateLoss()
+//                        val intent = Intent(this@MainAppActivity, RecruitDoneActivity::class.java)
+//                        startActivity(intent)
                     }
                     R.id.menu_home->{
                         supportFragmentManager
