@@ -10,16 +10,15 @@ class MainAppActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("test", "강제종료")
-        Log.d("stomp", "연결종료")
-        ChatClient.disconnect()
+//        Log.d("test", "강제종료")
+//        Log.d("stomp", "연결종료")
+//        ChatClient.disconnect()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMainAppBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
-
 
         /** DynamicLink 수신확인 */
         initDynamicLink()

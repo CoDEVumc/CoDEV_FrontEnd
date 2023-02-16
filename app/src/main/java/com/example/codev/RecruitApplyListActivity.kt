@@ -435,6 +435,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
 
                                         if(peopleNum > 0){ //초기화, 모집완료 활성화 (담은 인원이 1명 이상)
+
                                             enableReset(true)
                                             enableDone(true)
                                         }else{
