@@ -1,5 +1,6 @@
 package com.example.codev
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -15,18 +16,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AdapterRecruitSearchList(private val context: Context, private val listPData: ArrayList<PData>, private val listSData: ArrayList<SData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var STATUS = 0
+class AdapterRecruitSearchList(private val context: Context, private val listPData: ArrayList<PData>, private val listSData: ArrayList<SData>, private val now: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val PROJECT = 0
     private val STUDY = 1
-
-
-    fun changeStatus(string: String){
-        when(string){
-            "PROJECT" -> STATUS = 0
-            "STUDY" -> STATUS = 1
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType){
@@ -54,7 +46,7 @@ class AdapterRecruitSearchList(private val context: Context, private val listPDa
     }
 
     override fun getItemCount(): Int {
-        return when(STATUS){
+        return when(now){
             0 -> listPData.size
             1 -> listSData.size
             else -> listPData.size
@@ -62,7 +54,7 @@ class AdapterRecruitSearchList(private val context: Context, private val listPDa
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when(STATUS){
+        return when(now){
             0 -> PROJECT
             1 -> STUDY
             else -> PROJECT
