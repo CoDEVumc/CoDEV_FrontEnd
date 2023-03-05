@@ -1,6 +1,5 @@
 package com.example.codev
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -43,12 +42,16 @@ class MainAppActivity : AppCompatActivity() {
                             .commitAllowingStateLoss()
                     }
                     R.id.menu_community->{
-//                        supportFragmentManager
-//                            .beginTransaction()
-//                            .replace(viewBinding.content.id,RecruitDoneActivity())
-//                            .commitAllowingStateLoss()
-                        val intent = Intent(this@MainAppActivity, RecruitDoneActivity::class.java)
-                        startActivity(intent)
+                        val now = intent.getIntExtra("now", -1)
+                        val bundle = Bundle()
+                        bundle.putInt("now", now)
+                        val fragment = CommunityFragment()
+                        fragment.arguments = bundle
+
+                        supportFragmentManager
+                            .beginTransaction()
+                            .replace(viewBinding.content.id,fragment)
+                            .commitAllowingStateLoss()
                     }
                     R.id.menu_home->{
                         supportFragmentManager
