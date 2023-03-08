@@ -65,6 +65,19 @@
 
     </FrameLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="23dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/recruit_floating_btn"
+        app:backgroundTint="@color/green_900"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="@color/white"
+        app:tint="@android:color/white" />
+
 
 
 

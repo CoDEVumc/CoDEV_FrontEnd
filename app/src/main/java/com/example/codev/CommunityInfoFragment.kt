@@ -66,4 +66,5 @@ class CommunityInfoFragment :Fragment(){
 //            viewBinding.listviewProject.adapter = adapterPData
 //        }
 //    }
+
 }

@@ -75,6 +75,11 @@ class MyFragment:Fragment() {
             startActivity(intent)
         }
 
+        viewBinding.btnWrite.setOnClickListener {
+            val intent = Intent(mainAppActivity, MyWriteActivity::class.java)
+            startActivity(intent)
+        }
+
         viewBinding.btnApply.setOnClickListener {
             val intent = Intent(mainAppActivity, MyApplyActivity::class.java)
             startActivity(intent)
