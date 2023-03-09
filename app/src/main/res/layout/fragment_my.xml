@@ -129,7 +129,10 @@
                     tools:listitem="@layout/recycle_portfolio_item1"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:nestedScrollingEnabled="false"
-                    android:overScrollMode="never"/>
+                    android:overScrollMode="never"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    tools:ignore="RtlSymmetry" />
 
                 <View
                     android:layout_width="match_parent"
