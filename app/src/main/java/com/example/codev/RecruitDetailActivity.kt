@@ -37,6 +37,7 @@ class RecruitDetailActivity:AppCompatActivity() {
     private var recruitStatus: Boolean = false
     private var writer: String = ""
     private var process: String = ""
+    private var mainImg = " "
 
     override fun onResume() {
         super.onResume()
@@ -100,18 +101,25 @@ class RecruitDetailActivity:AppCompatActivity() {
                 finish()
             }
             R.id.menu_modify -> {
-                if (type == "PROJECT"){
-                    val intent = Intent(this,AddNewProjectActivity::class.java)
-                    intent.putExtra("project",projectData)
-                    startActivity(intent)
-                }else if(type == "STUDY"){
-                    val intent = Intent(this,AddNewStudyActivity::class.java)
-                    intent.putExtra("study",studyData)
-                    startActivity(intent)
-                }
+                if(process != "FIN"){
+                    if (type == "PROJECT"){
+                        val intent = Intent(this,AddNewProjectActivity::class.java)
+                        intent.putExtra("project",projectData)
+                        intent.putExtra("process",process)
+                        startActivity(intent)
+                    }else if(type == "STUDY"){
+                        val intent = Intent(this,AddNewStudyActivity::class.java)
+                        intent.putExtra("study",studyData)
+                        intent.putExtra("process",process)
+                        startActivity(intent)
+                    }
+                }else Toast.makeText(this, "모집완료인 글은 수정하실 수 없습니다.", Toast.LENGTH_SHORT).show()
+
             }
             R.id.menu_delete -> {
-                confirmDelete(this, id) { finish() }
+                if(process != "FIN"){
+                    confirmDelete(this, id) { finish() }
+                }else Toast.makeText(this, "모집완료인 글은 삭제하실 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -122,6 +130,10 @@ class RecruitDetailActivity:AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_toolbar_detail, viewBinding.toolbarRecruit.toolbar3.menu)
         viewBinding.btn1.text = "연장하기"
         viewBinding.btn2.text = "지원현황"
+        if(process == "FIN"){
+            viewBinding.btn1.isEnabled = false
+            viewBinding.btn1.isSelected = false
+        }
         viewBinding.btn1.setOnClickListener {
             val cal = Calendar.getInstance()    //캘린더뷰 만들기
             val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
@@ -139,6 +151,8 @@ class RecruitDetailActivity:AppCompatActivity() {
         //지현현황 리스트
         viewBinding.btn2.setOnClickListener {
             val intent = Intent(context, RecruitApplyListActivity::class.java)
+            intent.putExtra("mainImg", mainImg)
+            intent.putExtra("title", viewBinding.name.text.toString())
             intent.putExtra("limit", limit)
             intent.putExtra("type", type)
             intent.putExtra("id", id)
@@ -175,14 +189,47 @@ class RecruitDetailActivity:AppCompatActivity() {
         }
         //기본은 문의하기
         viewBinding.btn1.setOnClickListener {
-
             val roomType = "OTO"
             val roomId = "${roomType}_${type}_${id}_${UserSharedPreferences.getKey(this)}"
             val inviteList = arrayListOf<String>(writer)
             Log.d("test",roomId)
-            ChatClient.join(this, roomId)
-//            createChat(this, roomId, roomType, inviteList)
+            conFirmChatRoom(this, roomId, roomType, inviteList)
         }
+    }
+
+    private fun conFirmChatRoom(context: Context, roomId: String, roomType: String, inviteList: ArrayList<String>){
+        RetrofitClient.service.confirmChatRoom(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),roomId).enqueue(object: Callback<JsonObject>{
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 채팅방생성 실패",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }else{
+                    when(response.code()){
+                        200->{
+                            response.body()?.let {
+                                Log.d("stomp: 채팅방 새로 개설", "새로 생성")
+                                createChat(context, roomId, roomType, inviteList)
+                            }
+                        }
+                        401 ->{
+                            Log.d("stomp: 채팅방 이미 존재", "이미 생성")
+                            ChatClient.join(context, roomId)
+                            val intent = Intent(context, ChatRoomActivity::class.java)
+                            intent.putExtra("title", viewBinding.name.text.toString())
+                            intent.putExtra("roomId", roomId)
+                            intent.putExtra("people", 1)
+                            intent.putExtra("isRead", 0)
+                            startActivity(intent)
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                Log.d("test: 채팅방생성 실패", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun createChat(context: Context, roomId: String, roomType: String, inviteList: ArrayList<String>){
@@ -338,6 +385,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     viewBinding.heartCount.text = it.result.Complete.co_heartCount.toString()
                                     viewBinding.heart.isChecked = it.result.Complete.co_heart
 
+                                    mainImg = it.result.Complete.co_photos[0].co_fileUrl
                                     process = it.result.Complete.co_process
                                     recruitStatus = it.result.Complete.co_recruitStatus
                                     writer = it.result.Complete.co_email
@@ -396,6 +444,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     viewBinding.heartCount.text = it.result.Complete.co_heartCount.toString()
                                     viewBinding.heart.isChecked = it.result.Complete.co_heart
 
+                                    mainImg = it.result.Complete.co_photos[0].co_fileUrl
                                     process = it.result.Complete.co_process
                                     recruitStatus = it.result.Complete.co_recruitStatus
                                     writer = it.result.Complete.co_email
@@ -412,7 +461,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                         stackList[it.result.Complete.co_languageList[i].co_languageId] = it.result.Complete.co_languageList[i].co_language
                                     }
 
-                                    studyData = EditStudy(it.result.Complete.co_projectId.toString(),it.result.Complete.co_title,it.result.Complete.co_content,it.result.Complete.co_photos,it.result.Complete.co_part, it.result.Complete.co_total,stackList,it.result.Complete.co_location,it.result.Complete.co_deadLine.split(" ")[0])
+                                    studyData = EditStudy(it.result.Complete.co_studyId.toString(),it.result.Complete.co_title,it.result.Complete.co_content,it.result.Complete.co_photos,it.result.Complete.co_part, it.result.Complete.co_total,stackList,it.result.Complete.co_location,it.result.Complete.co_deadLine.split(" ")[0])
                                 }
                             }
                         }

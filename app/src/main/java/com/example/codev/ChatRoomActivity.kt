@@ -2,21 +2,15 @@ package com.example.codev
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
-import android.view.View.OnLayoutChangeListener
-import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.codev.databinding.ActivityChatRoomBinding
-import com.google.android.material.internal.ContextUtils.getActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,9 +23,9 @@ class ChatRoomActivity:AppCompatActivity() {
     private var recyclerViewPosition = 0
 
     override fun onPause() {
+        super.onPause()
         ChatClient.sendMessage("LEAVE", roomId, UserSharedPreferences.getKey(this),"LEAVE")
         ChatClient.exit()
-        super.onPause()
     }
 
     @SuppressLint("CheckResult")
@@ -105,7 +99,8 @@ class ChatRoomActivity:AppCompatActivity() {
 
     fun setAdapter(dataList: ArrayList<ResponseOfGetChatListData>, context: Context, people: Int){
         if (dataList.isNullOrEmpty()){
-            adapter = AdapterChatList(arrayListOf(), context, people){
+            val temp = arrayListOf<ResponseOfGetChatListData>()
+            adapter = AdapterChatList(temp, context, people){
                 Log.d("stomp 추가후 데이터 크기", it.toString())
                 runOnUiThread(Runnable { adapter.notifyItemInserted(it) })
                 //최하단일때 새 메시지(TALK, INVITE, DAY, EXIT 들어오면 추가된 데이터로 스크롤이동
@@ -126,7 +121,7 @@ class ChatRoomActivity:AppCompatActivity() {
                 recyclerViewPosition = (viewBinding.chatList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
             }
         }
-        ChatClient.setAdapter(adapter)
+        ChatClient.setChatListAdapter(adapter)
         viewBinding.chatList.adapter = adapter
         ChatClient.sendMessage("ENTER", roomId, UserSharedPreferences.getKey(context), "ENTER")
     }

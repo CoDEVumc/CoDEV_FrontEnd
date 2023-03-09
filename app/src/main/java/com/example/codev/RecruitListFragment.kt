@@ -2,8 +2,6 @@ package com.example.codev
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,17 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.app.NotificationCompat.getColor
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.codev.addpage.AddNewProjectActivity
-import com.example.codev.databinding.FragmentMyBookmarkBinding
 import com.example.codev.databinding.FragmentRecruitListBinding
-import com.example.codev.databinding.PopupWriteBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -164,7 +156,7 @@ class RecruitListFragment : Fragment() {
             when (it.itemId) {
                 R.id.menu_search ->{
                     Toast.makeText(mainAppActivity, "검색", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(mainAppActivity, SearchActivity::class.java)
+                    val intent = Intent(mainAppActivity, RecruitSearchActivity::class.java)
                     startActivity(intent)
                     true
                 }

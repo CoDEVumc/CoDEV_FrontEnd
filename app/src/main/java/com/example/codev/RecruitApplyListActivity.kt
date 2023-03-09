@@ -27,6 +27,8 @@ class RecruitApplyListActivity: AppCompatActivity() {
     private lateinit var adapter2: AdapterRecruitApplicants2
 
     //private lateinit var studyData: EditStudy
+    private var loadStatus = false
+
     private lateinit var projectData: ApplicantData
     private var applicantList: ArrayList<String> = arrayListOf()
     private var partList: ArrayList<ApplicantData> = arrayListOf()
@@ -35,6 +37,8 @@ class RecruitApplyListActivity: AppCompatActivity() {
     private var limit: Int = -1
     private var peopleNum: Int = -1
     private var part: String = ""
+    private var mainImg = ""
+    private var title = ""
 
     private var partLimitLoadStatus = false
     private var backEnd = 0
@@ -75,6 +79,8 @@ class RecruitApplyListActivity: AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
+        mainImg = intent.getStringExtra("mainImg").toString()
+        title = intent.getStringExtra("title").toString()
         id = intent.getIntExtra("id",-1) //co_projectId로 전달해야함
         type = intent.getStringExtra("type").toString() //PROJECT or STUDY
         limit = intent.getIntExtra("limit",-1)
@@ -165,8 +171,12 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
         //모집완료 버튼
         viewBinding.btnDoneRecruit.setOnClickListener {
+            val roomType = "OTM"
+            val roomId = "${roomType}_${type}_${id}"
+            val inviteList = arrayListOf<String>()
             val selectList = adapter2.getListData()
             for (i in selectList){
+                inviteList.add(i.co_email)
                 when(i.co_part){
                     "기획" -> plan--
                     "디자인" -> design--
@@ -177,10 +187,13 @@ class RecruitApplyListActivity: AppCompatActivity() {
             }
 
             if(plan>=0 && design>=0 && frontEnd>=0 && backEnd>=0 && etc>=0){
+                Log.d("test",roomId)
+                doneRecruit(this, type, id, applicantList)
+                conFirmChatRoom(this, roomId, roomType, inviteList)
                 val intent = Intent(this, RecruitDoneActivity::class.java)
+                intent.putExtra("roomId", roomId)
                 intent.putExtra("selectList", selectList)
                 startActivity(intent)
-                doneRecruit(this, type, id, applicantList)
             }else{
                 Toast.makeText(this, "파트별 제한인원을 다시 확인해주세요", Toast.LENGTH_SHORT).show()
             }
@@ -212,6 +225,96 @@ class RecruitApplyListActivity: AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun conFirmChatRoom(context: Context, roomId: String, roomType: String, inviteList: ArrayList<String>){
+        RetrofitClient.service.confirmChatRoom(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),roomId).enqueue(object: Callback<JsonObject>{
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 채팅방생성 실패",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }else{
+                    when(response.code()){
+                        200->{
+                            response.body()?.let {
+                                Log.d("stomp: 채팅방 새로 개설", "새로 생성")
+                                createChat(context, roomId, roomType, inviteList)
+                            }
+                        }
+                        401 ->{
+                            Log.d("stomp: 채팅방 이미 존재", "이미 생성")
+                            ChatClient.join(context, roomId)
+                            val intent = Intent(context, ChatRoomActivity::class.java)
+                            intent.putExtra("title", title)
+                            intent.putExtra("roomId", roomId)
+                            intent.putExtra("people", 1)
+                            intent.putExtra("isRead", 0)
+                            startActivity(intent)
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                Log.d("test: 채팅방생성 실패", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun createChat(context: Context, roomId: String, roomType: String, inviteList: ArrayList<String>){
+        RetrofitClient.service.createChatRoom(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), ReqCreateChatRoom(roomId, roomType, title, mainImg)).enqueue(object: Callback<JsonObject> {
+            @SuppressLint("UseCompatLoadingForDrawables")
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 채팅방생성 실패",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }else{
+                    when(response.code()){
+                        200->{
+                            response.body()?.let {
+                                Log.d("test: 채팅방생성 성공! ", "\n${it.toString()}")
+                                inviteChat(context, roomId, inviteList)
+                            }
+                        }
+                        401 ->{
+                            Log.d("test: 401", "이미 생성")
+                            Toast.makeText(context, "이미 문의 채팅이 생성되어있습니다", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                Log.d("test: 채팅방생성 실패", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun inviteChat(context: Context, roomId: String, inviteList: ArrayList<String>){
+        RetrofitClient.service.inviteChat(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), ReqInviteChat(roomId, inviteList)).enqueue(object: Callback<JsonObject> {
+            @SuppressLint("UseCompatLoadingForDrawables")
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 채팅방초대 실패",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }else{
+                    when(response.code()){
+                        200->{
+                            response.body()?.let {
+                                Log.d("test: 채팅방초대 성공! ", "\n${it.toString()}")
+                            }
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                Log.d("test: 채팅방초대 실패", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun enableDelete(boolean: Boolean){
@@ -260,7 +363,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
     private fun setAdapter2(dataList: ArrayList<ApplicantInfoData>, context: Context){
         Log.d("test", "어댑터 2")
-        adapter2 = AdapterRecruitApplicants2(context, dataList){
+        adapter2 = AdapterRecruitApplicants2(context, dataList, id, type){
             Log.d("test","리콜받음")
             Log.d("setAdapter2 : returnCount :",it.toString())
             if (it == 1){
@@ -287,18 +390,114 @@ class RecruitApplyListActivity: AppCompatActivity() {
                             200 -> {
                                 response.body()?.let {
                                     Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.toString()}")
-                                    Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.result.message.co_appllicantsInfo}")
+                                    Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.result.message.co_applicantsInfo}")
+
                                     setAdapter1(it.result.message.co_applicantsCount, context, limit)
-                                    setAdapter2(it.result.message.co_appllicantsInfo, context)
+                                    setAdapter2(it.result.message.co_applicantsInfo, context)
 
                                     applicantList= ArrayList()
-                                    for (i in it.result.message.co_appllicantsInfo){
+                                    for (i in it.result.message.co_applicantsInfo){
                                         applicantList.add(i.co_email)
                                     }
 
                                     if (!partLimitLoadStatus){
                                         partLimitLoadStatus = true
                                         for(i in  it.result.message.co_applicantsCount){
+                                            when (i.co_part){
+                                                "기획" ->{
+                                                    plan = i.co_limit
+                                                }
+                                                "디자인" ->{
+                                                    design = i.co_limit
+                                                }
+                                                "프론트엔드" -> {
+                                                    frontEnd = i.co_limit
+                                                }
+                                                "백엔드" -> {
+                                                    backEnd = i.co_limit
+                                                }
+                                                "기타" ->{
+                                                    etc = i.co_limit
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    Log.d("applicantList", applicantList.toString())
+
+                                    part = it.result.message.co_part
+                                    if (part == "TEMP"){
+                                        viewBinding.bottomBtn.isGone = false
+                                        viewBinding.btnSelect1.isGone = true
+                                        viewBinding.btnSelect2.isGone = true
+                                        peopleNum = it.result.message.co_tempSavedApplicantsCount
+                                        viewBinding.applicantNum.text = "현재 선택한 지원자 $peopleNum"
+
+
+                                        if(peopleNum > 0){ //초기화, 모집완료 활성화 (담은 인원이 1명 이상)
+
+                                            enableReset(true)
+                                            enableDone(true)
+                                        }else{
+                                            enableReset(false)
+                                            viewBinding.btnReset.setTextColor(ContextCompat.getColor(context!!,R.color.black_300))
+                                            enableDone(false)
+                                            viewBinding.btnDoneRecruit.setTextColor(ContextCompat.getColor(context!!,R.color.black_500))
+                                        }
+
+
+                                    }
+                                    else{
+                                        viewBinding.bottomBtn.isGone = true
+                                        viewBinding.btnSelect1.isGone = true
+                                        viewBinding.btnSelect2.isGone = true
+                                        peopleNum = it.result.message.co_applicantsInfo.size
+                                        viewBinding.applicantNum.text = "현재 파트 지원자 $peopleNum"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<ResApplyerList>, t: Throwable) {
+                    Log.d("test: 조회실패 - loadData(플젝 지원자 전체조회): ", "[Fail]${t.toString()}")
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+        else if(type == "STUDY") {
+            RetrofitClient.service.getApplyerStudyList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, coPart).enqueue(object : Callback<ResApplyerList> {
+                @SuppressLint("SetTextI18n")
+                override fun onResponse(call: Call<ResApplyerList>, response: Response<ResApplyerList>) {
+                    if (response.isSuccessful.not()) {
+                        Log.d("test: 조회실패", response.toString())
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        when (response.code()) {
+                            200 -> {
+                                response.body()?.let {
+                                    Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.toString()}")
+                                    Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.result.message.co_applicantsInfo}")
+                                    if(!loadStatus){
+                                        setAdapter1(it.result.message.co_applicantsCount, context, limit)
+                                        loadStatus = true
+                                    }
+
+                                    var temp = ArrayList<ApplicantInfoData>()
+                                    if(it.result.message.co_applicantsInfo != null){
+                                        temp = it.result.message.co_applicantsInfo
+                                    }
+                                    setAdapter2(temp, context)
+
+                                    applicantList = ArrayList()
+                                    for (i in temp){
+                                        applicantList.add(i.co_email)
+                                    }
+
+                                    if (!partLimitLoadStatus){
+                                        partLimitLoadStatus = true
+                                        for (i in it.result.message.co_applicantsCount){
                                             when (i.co_part){
                                                 "기획" ->{
                                                     plan = i.co_limit
@@ -346,69 +545,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
                                         viewBinding.bottomBtn.isGone = true
                                         viewBinding.btnSelect1.isGone = true
                                         viewBinding.btnSelect2.isGone = true
-                                        peopleNum = it.result.message.co_appllicantsInfo.size
-                                        viewBinding.applicantNum.text = "현재 파트 지원자 $peopleNum"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<ResApplyerList>, t: Throwable) {
-                    Log.d("test: 조회실패 - loadData(플젝 지원자 전체조회): ", "[Fail]${t.toString()}")
-                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            })
-        }
-        else if(type == "STUDY"){
-            RetrofitClient.service.getApplyerStudyList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, coPart).enqueue(object : Callback<ResApplyerList> {
-                @SuppressLint("SetTextI18n")
-                override fun onResponse(call: Call<ResApplyerList>, response: Response<ResApplyerList>) {
-                    if (response.isSuccessful.not()) {
-                        Log.d("test: 조회실패", response.toString())
-                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                    } else {
-                        when (response.code()) {
-                            200 -> {
-                                response.body()?.let {
-                                    Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.toString()}")
-                                    Log.d("test: 지원자 리스트 불러오기 성공", "\n${it.result.message.co_appllicantsInfo}")
-                                    setAdapter1(it.result.message.co_applicantsCount, context, limit)
-                                    setAdapter2(it.result.message.co_appllicantsInfo, context)
-                                    part = it.result.message.co_part
-                                    if (part == "TEMP"){
-                                        viewBinding.bottomBtn.isGone = false
-                                        viewBinding.btnSelect1.isGone = true
-                                        viewBinding.btnSelect2.isGone = true
-                                        peopleNum = it.result.message.co_tempSavedApplicantsCount
-                                        viewBinding.applicantNum.text = "현재 선택한 지원자 $peopleNum"
-
-                                        if(peopleNum != 0){ //초기화, 모집완료 활성화 (담은 인원이 1명 이상)
-                                            enableReset(true)
-                                            //제한 인원 넘지 않았는지 체크 co_limit >= co_applicantsCount
-                                            for (i in it.result.message.co_applicantsCount){ //선택된 지원자 수 만큼
-                                                if(i.co_limit >= i.co_applicantsCount){
-                                                    enableDone(true)
-                                                    Log.d("여기 오면 성공 ", "onResponse: ")
-                                                }
-                                                else{
-                                                    Log.d("if문 안돌아감", "onResponse: ")
-                                                }
-                                            }
-                                            Log.d("enableResetOrDone 되나? ", "")
-                                        }else{
-                                            enableReset(false)
-                                            viewBinding.btnReset.setTextColor(ContextCompat.getColor(context!!,R.color.black_300))
-                                            enableDone(false)
-                                            viewBinding.btnDoneRecruit.setTextColor(ContextCompat.getColor(context!!,R.color.black_500))
-                                        }
-                                    }
-                                    else{
-                                        viewBinding.bottomBtn.isGone = true
-                                        viewBinding.btnSelect1.isGone = true
-                                        viewBinding.btnSelect2.isGone = true
-                                        peopleNum = it.result.message.co_appllicantsInfo.size
+                                        peopleNum = temp.size
                                         viewBinding.applicantNum.text = "현재 파트 지원자 $peopleNum"
                                     }
                                 }
@@ -450,7 +587,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
             })
         }
         else if(type == "STUDY"){
-            RetrofitClient.service.doneRecruitProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqRecruitedApplicantList(recruitedList)).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.doneRecruitStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqRecruitedApplicantList(recruitedList)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 지원자 편집  실패",response.toString())

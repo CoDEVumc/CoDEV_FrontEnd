@@ -21,8 +21,8 @@ data class ResponseOfGetChatRoomListData(
     val receiverCo_nickName: String,
     val receiverProfileImg: String,
     val people: Int,
-    val latestconv: String,
-    val latestDate: String,
-    val isRead: Int
+    var latestconv: String,
+    var latestDate: String,
+    var isRead: Int
 )
 

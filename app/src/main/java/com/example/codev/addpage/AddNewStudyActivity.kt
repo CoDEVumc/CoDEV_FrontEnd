@@ -60,6 +60,9 @@ class AddNewStudyActivity : AppCompatActivity() {
     private var tempCameraFile = File("")
     private var tempUri = Uri.EMPTY
 
+    //모집 기간을 수정했는지 확인용
+    private var isTimeChanged = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityAddNewStudyBinding.inflate(layoutInflater)
@@ -245,6 +248,7 @@ class AddNewStudyActivity : AppCompatActivity() {
                 var dateShowString = "${year}/${month+1}/${dayOfMonth}"
                 dateJsonString = String.format("%d-%02d-%02d", year, month+1, dayOfMonth)
                 viewBinding.deadlineHead.dropdownTitle.text = dateShowString
+                isTimeChanged = true
             }
             var dpd = DatePickerDialog(this, dateSetListener, cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH))
             dpd.datePicker.minDate = System.currentTimeMillis()
@@ -260,6 +264,7 @@ class AddNewStudyActivity : AppCompatActivity() {
             //checkIsNew
             isOld = true
             oldStudyId = oldStudy.studyId
+            Log.d("oldStudyId", oldStudyId)
             viewBinding.toolbarTitle.toolbarText.text = getString(R.string.edit_new_study)
             viewBinding.submitButton.text = "스터디 수정하기"
 
@@ -427,14 +432,16 @@ class AddNewStudyActivity : AppCompatActivity() {
                                         val imageMultiPartListUsingFile = project2Server.createImageMultiPartListUsingFile(imageFileList)
                                         viewBinding.submitButton.isEnabled = false
                                         viewBinding.submitButton.isSelected = false
-                                        project2Server.updateStudy(this@AddNewStudyActivity, oldStudyId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartListUsingFile, viewBinding.submitButton) {
+                                        var finalProcess = intent.getStringExtra("process")
+                                        if(isTimeChanged) finalProcess = "ING"
+                                        project2Server.updateStudy(this@AddNewStudyActivity, oldStudyId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartListUsingFile, viewBinding.submitButton, finalProcess!!) {
                                             for(deleteFile in imageFileList) deleteFile.delete()
                                             finish()
                                         }
                                     }
                                 }
                                 override fun onLoadCleared(placeholder: Drawable?) {
-                                    Toast.makeText(this@AddNewStudyActivity, "모집글 수정 시 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+//                                    Toast.makeText(this@AddNewStudyActivity, "모집글 수정 시 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                                 }
                             })
                         }
@@ -444,7 +451,9 @@ class AddNewStudyActivity : AppCompatActivity() {
                         val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
                         viewBinding.submitButton.isEnabled = false
                         viewBinding.submitButton.isSelected = false
-                        project2Server.updateStudy(this@AddNewStudyActivity, oldStudyId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartList, viewBinding.submitButton) { finish() }
+                        var finalProcess = intent.getStringExtra("process")
+                        if(isTimeChanged) finalProcess = "ING"
+                        project2Server.updateStudy(this@AddNewStudyActivity, oldStudyId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalStack1Name, finalPartNum, imageMultiPartList, viewBinding.submitButton, finalProcess!!) { finish() }
                     }
 
                     Log.d("deadlineServerJson", dateJsonString)

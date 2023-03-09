@@ -133,7 +133,7 @@
             app:layout_constraintTop_toTopOf="@+id/et_roomname" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_moveto_chat"
+            android:id="@+id/btn_move_to_chat"
             style="@style/Text.Body4.SemiBold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

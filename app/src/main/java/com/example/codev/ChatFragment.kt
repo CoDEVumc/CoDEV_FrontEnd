@@ -1,5 +1,6 @@
 package com.example.codev
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +17,7 @@ import retrofit2.Response
 class ChatFragment:Fragment() {
     private lateinit var viewBinding: FragmentChatBinding
     private lateinit var mainAppActivity: Context
+    private lateinit var adapter: AdapterChatRoomList
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -26,12 +28,15 @@ class ChatFragment:Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Log.d("stomp join 본인 이메일",UserSharedPreferences.getKey(mainAppActivity))
+        ChatClient.join(mainAppActivity, UserSharedPreferences.getKey(mainAppActivity))
         Log.d("test","onResume")
         loadData(mainAppActivity)
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        ChatClient.exit()
         Log.d("test", "다른 탭 이동")
     }
 
@@ -49,7 +54,17 @@ class ChatFragment:Fragment() {
     }
 
     private fun setAdapter(dataList: ArrayList<ResponseOfGetChatRoomListData>, context: Context){
-        val adapter = AdapterChatRoomList(dataList, context)
+        adapter = AdapterChatRoomList(dataList, context){
+            index: Int, itemCount: Int -> if(itemCount != -1) {
+                Log.d("stomp 기존 채팅방 새로운 메세지", "$index, $itemCount")
+                (mainAppActivity as Activity).runOnUiThread(Runnable { adapter.notifyItemRangeChanged(index,itemCount) })
+            }else{
+                Log.d("stomp 새로운 채팅방 새로운 메세지", "$index, $itemCount")
+                (mainAppActivity as Activity).runOnUiThread(Runnable { adapter.notifyItemInserted(index) })
+                viewBinding.chatRoomList.smoothScrollToPosition(index)
+            }
+        }
+        ChatClient.setChatRoomAdapter(adapter)
         viewBinding.chatRoomList.adapter = adapter
     }
 

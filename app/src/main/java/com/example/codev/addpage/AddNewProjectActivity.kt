@@ -64,6 +64,9 @@ class AddNewProjectActivity : AppCompatActivity() {
     private var tempCameraFile = File("")
     private var tempUri = Uri.EMPTY
 
+    //모집 기간을 수정했는지 확인용
+    private var isTimeChanged = false
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -265,6 +268,7 @@ class AddNewProjectActivity : AppCompatActivity() {
                 var dateShowString = "${year}/${month+1}/${dayOfMonth}"
                 dateJsonString = String.format("%d-%02d-%02d", year, month+1, dayOfMonth)
                 viewBinding.deadlineHead.dropdownTitle.text = dateShowString
+                isTimeChanged = true
             }
             var dpd = DatePickerDialog(this, dateSetListener, cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH))
             dpd.datePicker.minDate = System.currentTimeMillis()
@@ -466,14 +470,16 @@ class AddNewProjectActivity : AppCompatActivity() {
                                         val imageMultiPartListUsingFile = project2Server.createImageMultiPartListUsingFile(imageFileList)
                                         viewBinding.submitButton.isEnabled = false
                                         viewBinding.submitButton.isSelected = false
-                                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartListUsingFile, viewBinding.submitButton) {
+                                        var finalProcess = intent.getStringExtra("process")
+                                        if(isTimeChanged) finalProcess = "ING"
+                                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartListUsingFile, viewBinding.submitButton, finalProcess!!) {
 //                                            for(deleteFile in imageFileList) deleteFile.delete()
                                             finish() }
                                     }
                                 }
                                 override fun onLoadCleared(placeholder: Drawable?) {
                                     Log.d("finalDownloadOldImage", "onLoadCleared: $placeholder")
-                                    Toast.makeText(this@AddNewProjectActivity, "사진 수정 시 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+//                                    Toast.makeText(this@AddNewProjectActivity, "사진 수정 시 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                                 }
                             })
                         }
@@ -482,7 +488,9 @@ class AddNewProjectActivity : AppCompatActivity() {
                         val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
                         viewBinding.submitButton.isEnabled = false
                         viewBinding.submitButton.isSelected = false
-                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList, viewBinding.submitButton) { finish() }
+                        var finalProcess = intent.getStringExtra("process")
+                        if(isTimeChanged) finalProcess = "ING"
+                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList, viewBinding.submitButton, finalProcess!!) { finish() }
                     }
 
                 }else{

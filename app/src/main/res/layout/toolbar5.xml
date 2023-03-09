@@ -41,12 +41,11 @@
             android:background="@color/transparent"
             android:maxLines="5"/>
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@+id/et_chat"
+            app:layout_constraintStart_toEndOf="@+id/et_keyword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -61,8 +60,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:background="@drawable/search"
-                android:backgroundTint="@color/black_500"
-                android:enabled="false"/>
+                android:backgroundTint="@color/black_500"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_cancel"
@@ -73,12 +71,9 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:background="@drawable/cancel"
-                android:backgroundTint="@color/black_500"
-                android:enabled="false"
-                android:visibility="invisible"/>
+                android:backgroundTint="@color/black_500"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

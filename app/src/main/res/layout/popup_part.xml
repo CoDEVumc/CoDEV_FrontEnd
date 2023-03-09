@@ -9,12 +9,10 @@
         android:id="@+id/btn_close"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_marginStart="220dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/close_icon"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/logo_part"
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
@@ -35,6 +33,7 @@
             android:layout_height="24dp"
             android:layout_marginBottom="12dp"
             android:button="@drawable/register_chk"
+            android:paddingLeft="6dp"
             android:text="프론트엔드" />
 
         <androidx.appcompat.widget.AppCompatRadioButton
@@ -43,6 +42,7 @@
             android:layout_height="24dp"
             android:layout_marginBottom="12dp"
             android:button="@drawable/register_chk"
+            android:paddingLeft="6dp"
             android:text="백엔드" />
 
         <androidx.appcompat.widget.AppCompatRadioButton
@@ -51,6 +51,7 @@
             android:layout_height="24dp"
             android:layout_marginBottom="12dp"
             android:button="@drawable/register_chk"
+            android:paddingLeft="6dp"
             android:text="디자인" />
 
         <androidx.appcompat.widget.AppCompatRadioButton
@@ -59,6 +60,7 @@
             android:layout_height="24dp"
             android:layout_marginBottom="12dp"
             android:button="@drawable/register_chk"
+            android:paddingLeft="6dp"
             android:text="기획" />
 
         <androidx.appcompat.widget.AppCompatRadioButton
@@ -66,6 +68,7 @@
             android:layout_width="100dp"
             android:layout_height="24dp"
             android:button="@drawable/register_chk"
+            android:paddingLeft="6dp"
             android:text="기타" />
 
     </RadioGroup>
@@ -78,27 +81,11 @@
         android:layout_marginTop="21dp"
         android:layout_marginEnd="308dp"
         android:layout_marginBottom="355dp"
-        android:text="지역"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.052"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.082" />
-
-    <TextView
-        android:id="@+id/logo_part"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="21dp"
-        android:layout_marginEnd="268dp"
-        android:layout_marginBottom="355dp"
         android:text="분야"
         android:textColor="@color/black_900"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.301"
+        app:layout_constraintHorizontal_bias="0.052"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.082" />

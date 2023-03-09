@@ -9,10 +9,10 @@ class MainAppActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityMainAppBinding
 
     override fun onDestroy() {
+        super.onDestroy()
         Log.d("test", "강제종료")
         Log.d("stomp", "연결종료")
         ChatClient.disconnect()
-        super.onDestroy()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,12 +20,8 @@ class MainAppActivity : AppCompatActivity() {
         viewBinding = ActivityMainAppBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
-
         /** DynamicLink 수신확인 */
         initDynamicLink()
-
-        ChatClient
-
 
         supportFragmentManager
             .beginTransaction()

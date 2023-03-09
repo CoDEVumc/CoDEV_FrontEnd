@@ -66,10 +66,10 @@ interface RetrofitService {
         ,@Part files: List<MultipartBody.Part?>
     ): Call<ResCreateNewStudy>
 
-    @PUT("study/update/{id}")
+    @PUT("study/update/{coStudyId}")
     @Multipart
     fun updateStudy(
-        @Path("id") id: String
+        @Path("coStudyId") id: String
         ,@Header("CoDev_Authorization") authToken: String
         ,@Part("study") study: RequestBody
         ,@Part files: List<MultipartBody.Part?>
@@ -175,7 +175,7 @@ interface RetrofitService {
     @PATCH("study/recruitment/pick/{coStudyId}") //스터디 지원자 선택 & 선택취소 (임시저장)
     fun requestStudyApplicant(
         @Header("CoDev_Authorization") header: String,
-        @Path("coProjectId") coProjectId: Int,
+        @Path("coStudyId") coStudyId: Int,
         @Body params: ReqUpdateApplicant
     ): Call<JsonObject>
 
@@ -225,6 +225,15 @@ interface RetrofitService {
         @Body params: ReqRecruitedApplicantList
     ): Call<JsonObject>
 
+    @PATCH("project/recruitment/{coStudyId}")
+    fun doneRecruitStudy(
+        @Header("CoDev_Authorization") header: String,
+        @Path("coStudyId") coStudyId: Int,
+        @Body params: ReqRecruitedApplicantList
+    ): Call<JsonObject>
+
+
+
     @PUT("user/update/profile")
     @Multipart
     fun changeUserInfo(
@@ -237,7 +246,10 @@ interface RetrofitService {
     fun changePassword(@Header("CoDev_Authorization") authToken: String, @Body params: ReqChangeUserPassword): Call<ResChangeUserPassword>
 
     @GET("project/recruitment/portfolio/{coProjectId}/{coPortfolioId}")
-    fun getAppliedDetail(@Header("CoDev_Authorization") header: String, @Path("coProjectId") coProjectId: Int, @Path("coPortfolioId") coPortfolioId: Int) : Call<ResAppliedUserDetail>
+    fun getProjectAppliedDetail(@Header("CoDev_Authorization") header: String, @Path("coProjectId") coProjectId: Int, @Path("coPortfolioId") coPortfolioId: Int) : Call<ResAppliedUserDetail>
+
+    @GET("study/recruitment/portfolio/{coStudyId}/{coPortfolioId}")
+    fun getStudyAppliedDetail(@Header("CoDev_Authorization") header: String, @Path("coStudyId") coStudyId: Int, @Path("coPortfolioId") coPortfolioId: Int) : Call<ResAppliedUserDetail>
 
 
     @GET("chat/rooms")
@@ -251,5 +263,11 @@ interface RetrofitService {
 
     @POST("chat/invite")
     fun inviteChat(@Header("CoDev_Authorization") header: String, @Body params: ReqInviteChat) : Call<JsonObject>
+
+    @POST("chat/update/room_title")
+    fun renameChatRoom(@Header("CoDev_Authorization") header: String, @Body params: ReqRenameChatRoom) : Call<JsonObject>
+
+    @POST("chat/confirm/{roomId}")
+    fun confirmChatRoom(@Header("CoDev_Authorization") header: String, @Path("roomId") roomId: String) : Call<JsonObject>
 
 }

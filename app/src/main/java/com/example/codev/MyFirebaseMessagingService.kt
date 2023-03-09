@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
@@ -74,8 +75,8 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
 
         // 알림에 대한 UI 정보, 작업
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setSmallIcon(android.R.drawable.ic_notification_overlay) // 아이콘 설정
+            .setSmallIcon(android.R.drawable.ic_notification_overlay) // 아이콘 설정 //ic_notification_overlay
+            .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher) )
             .setContentTitle(remoteMessage.notification!!.title.toString()) // 제목
             .setContentText(remoteMessage.notification!!.body.toString()) // 메시지 내용
             .setAutoCancel(true) // 알람클릭시 삭제여부
@@ -87,12 +88,13 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
 
         // 오레오 버전 이후에는 채널이 필요
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId, "Notice", NotificationManager.IMPORTANCE_HIGH)
+            val channel = NotificationChannel(channelId, "Notice", NotificationManager.IMPORTANCE_DEFAULT)
             notificationManager.createNotificationChannel(channel)
 
         }
 
         // 알림 생성
+        // runOnUiThread(Runnable { adapter.notifyItemRangeChanged(index,itemCount) })
         notificationManager.notify(uniId, notificationBuilder.build())
     }
 

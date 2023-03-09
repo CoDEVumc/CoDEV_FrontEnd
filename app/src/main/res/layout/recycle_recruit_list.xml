@@ -84,7 +84,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
-        android:layout_height="14dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="82dp"
         android:layout_marginEnd="24dp"
@@ -99,24 +99,27 @@
             android:layout_width="wrap_content"
             android:layout_height="13dp"
             android:layout_marginTop="1dp"
-            android:layout_marginEnd="200dp"
+            android:layout_marginBottom="1dp"
             android:layout_weight="1"
             android:text="파트"
-            android:textSize="11sp"
+            style="@style/Text.Body6.Medium"
+            android:textColor="@color/black_500"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/num"
             android:layout_width="wrap_content"
             android:layout_height="14dp"
+            android:layout_marginBottom="2dp"
             android:fontFamily="@font/pretendard_regular"
             android:text="n"
             android:textColor="@color/black_900"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:id="@+id/profiles"
@@ -128,7 +131,7 @@
             android:background="@drawable/profiles"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/num"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <View
