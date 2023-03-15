@@ -52,7 +52,7 @@ class Project2Server {
         return fileMultipartList.toList()
     }
 
-    fun postNewProject(context: Context, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>, submitBtn: Button, finishPage: () -> Unit){
+    fun postNewProject(context: Context, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>, callback:(Int)-> Unit){
         AndroidKeyStoreUtil.init(context)
         val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
         Log.d("postAuth", userToken)
@@ -88,23 +88,20 @@ class Project2Server {
                 if(response.isSuccessful.not()){
                     Log.d("Fail",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                    submitBtn.isSelected = true
-                    submitBtn.isEnabled = true
-
+                    callback(0)
+                    return
                 }
                 response.body()?.let { Log.d("Success: testCreateNewProject", "\n${it.result.message}")}
-                finishPage()
+                callback(1)
             }
             override fun onFailure(call: Call<ResCreateNewProject>, t: Throwable) {
                 Log.d("FAIL", "[Fail]${t.toString()}")
                 Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                submitBtn.isSelected = true
-                submitBtn.isEnabled = true
             }
         })
     }
 
-    fun updateProject(context: Context, projectId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>, submitBtn: Button, nowProcess: String, finishPage: () -> Unit){
+    fun updateProject(context: Context, projectId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>, nowProcess: String, finishPage: (Int) -> Unit){
         AndroidKeyStoreUtil.init(context)
         val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
         Log.d("postAuth", userToken)
@@ -140,17 +137,16 @@ class Project2Server {
                 if(response.isSuccessful.not()){
                     Log.d("Fail",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                    submitBtn.isSelected = true
-                    submitBtn.isEnabled = true
+                    finishPage(0)
+                    return
                 }
                 response.body()?.let { Log.d("Success: testCreateNewProject", "\n${it.result.message}")}
-                finishPage()
+                finishPage(1)
             }
 
             override fun onFailure(call: Call<ResCreateNewProject>, t: Throwable) {
                 Log.d("FAIL", "[Fail]${t.toString()}")
-                submitBtn.isSelected = true
-                submitBtn.isEnabled = true
+                finishPage(0)
             }
         })
     }

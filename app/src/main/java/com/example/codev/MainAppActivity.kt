@@ -1,8 +1,10 @@
 package com.example.codev
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.example.codev.addpage.AddPostActivity
 import com.example.codev.databinding.ActivityMainAppBinding
 
 class MainAppActivity : AppCompatActivity() {
@@ -42,8 +44,8 @@ class MainAppActivity : AppCompatActivity() {
                             .beginTransaction()
                             .replace(viewBinding.content.id, CommunityFragment())
                             .commitAllowingStateLoss()
-//                        val intent = Intent(this@MainAppActivity, RecruitDoneActivity::class.java)
-//                        startActivity(intent)
+                        val intent = Intent(this@MainAppActivity, AddPostActivity::class.java)
+                        startActivity(intent)
                     }
                     R.id.menu_home->{
                         supportFragmentManager
