@@ -70,7 +70,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/pretendard_semibold"
             android:maxLines="1"
-            android:text="주체 기관명"
+            android:text="주최 기관명"
             android:textColor="@color/black_500"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
