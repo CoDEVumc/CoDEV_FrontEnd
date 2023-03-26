@@ -14,6 +14,7 @@ data class ResponseOfGetList(
 data class QIData(
     val co_qnaId: Int,
     val co_infoId: Int,
+    val co_nickname: String,
     val co_email: String,
     val co_viewer: String, //상세화면에서 String으로 받아야 됨 (이메일 받아옴)
     val profileImg: String,

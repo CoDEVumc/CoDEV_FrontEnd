@@ -25,7 +25,7 @@ class CommunityQuestionFragment :Fragment(){
 
     private var qdataList: ArrayList<QIData> = ArrayList()
 
-    private var coMyBoard:Boolean = false //초기값 false
+    private var coMyBoard:Boolean = false //초기값 false, true면 내가 쓴 글
 
     private var downpage: Int = 0
     private var lastPage: Boolean = false
@@ -70,8 +70,49 @@ class CommunityQuestionFragment :Fragment(){
             }
         })
 
+
+        //내가 쓴 글만 보기 버튼
+        viewBinding.recruitingQuestionBtn.setOnClickListener {
+            //필터링 다른거 적용이 이중으로 안돼
+            downpage = 0
+            lastPage = false
+            coMyBoard = viewBinding.recruitingQuestionBtn.isChecked
+            //아래 코드 압축한게 coMyBoard = viewBinding.recruitingQuestionBtn.isChecked
+//            if(viewBinding.recruitingQuestionBtn.isChecked){
+//                coMyBoard = true
+//            }
+//            else{
+//                coMyBoard = false
+//            }
+
+            qdataList = ArrayList()
+            loadData(mainAppActivity, downpage, coMyBoard)
+        }
+
+        //정렬 누르고 최신순or추천순 선택하면
+//        val bottomSheetSort = BottomSheetSort(){
+//            downpage = 0
+//            lastPage = false
+//            coSortingTag = it // ""이거나 populaRity
+//            if(coSortingTag != "") { //populaRity : 추천순
+//                viewBinding.sort.text = "추천순"
+//            }
+//            else{ //아무것도 없 : 최신순
+//                viewBinding.sort.text = "최신순"
+//            }
+//
+//            qdataList = ArrayList()
+//            loadData(mainAppActivity, downpage, coMyBoard)
+//
+//            Log.d("coSortingTag: ",coSortingTag)
+//        }
+
+
+
         return viewBinding.root
     }
+
+
 
     //전체 질문글 조회
     private fun loadData(context: Context, int: Int, coMyBoard:Boolean) {
