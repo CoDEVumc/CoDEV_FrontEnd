@@ -88,6 +88,22 @@ interface RetrofitService {
         ,@Body params: ReqUpdatePF
     ): Call<ResCreateNewPF>
 
+    @POST("infoBoard")
+    @Multipart
+    fun createNewInfo(
+        @Header("CoDev_Authorization") authToken: String
+        ,@Part("InfoBoard") InfoBoard: RequestBody
+        ,@Part files: List<MultipartBody.Part?>
+    ): Call<ResCreateNewPost>
+
+    @POST("qnaBoard")
+    @Multipart
+    fun createNewQNA(
+        @Header("CoDev_Authorization") authToken: String
+        ,@Part("qnaBoard") InfoBoard: RequestBody
+        ,@Part files: List<MultipartBody.Part?>
+    ): Call<ResCreateNewPost>
+
     @GET("project/projects/{page}")
     fun requestPDataList(
         @Header("CoDev_Authorization") header: String,

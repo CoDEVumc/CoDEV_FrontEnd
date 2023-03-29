@@ -110,18 +110,20 @@ class AddImage {
     fun getCachePathUseUri(context: Context, uri: Uri, quality: Int, sizeLimit: Double): String{
         val cR: ContentResolver = context.contentResolver
         val mime: MimeTypeMap = MimeTypeMap.getSingleton()
-        val type: String? = cR.getType(uri)
-        return if(type == "image/png" || type == "image/jpg" || type == "image/jpeg"){
-//            val imageSizeLimitByte = 2e+7
+        var type: String? = cR.getType(uri)
+
+        return if(type == "image/png" || type == "image/jpeg"){
             val bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
             if(bitmap.byteCount <= sizeLimit){
                 createImageCachePath(context, bitmap, quality)
             }else {
                 Toast.makeText(context, "사진 사이즈가 너무 큽니다.", Toast.LENGTH_SHORT).show()
+                Log.d("TestImagePath", "getCachePathUseUri: 사진 사이즈가 너무 큽니다.")
                 ""
             }
         }else{
             Toast.makeText(context, "png 및 jpg(jpeg)형식의 사진만 지원합니다.", Toast.LENGTH_SHORT).show()
+            Log.d("TestImagePath", "getCachePathUseUri: png 및 jpg(jpeg)형식의 사진만 지원합니다" + type)
             ""
         }
     }

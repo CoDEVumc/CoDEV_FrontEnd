@@ -32,9 +32,14 @@ import java.io.File
 import java.util.ArrayList
 
 //Intent로 이 페이지를 호출할 때 다음과 같은 데이터를 추가하고 호출하세요
-//1. postType: String -> 작성할 글의 유형: "info"==정보글, "question"==질문글
+//1. postType: String -> 작성할 글의 유형: "info"==정보글, "qna"==질문글
 //2. isOld: Boolean -> "게시글 새로 작성" or "기존 게시글 수정" 모드 선택
 //isOld가 false일 때(게시글 새로 작성 모드) 2번까지만 보내주시면 됩니다!
+//아래는 예시:
+//val intent = Intent(this@MainAppActivity, AddPostActivity::class.java)
+//intent.putExtra("postType", "qna")
+//intent.putExtra("isOld", false)
+//startActivity(intent)
 //------------------------------------------------------------------
 //isOld가 true일 경우(기존 게시글 수정 모드)에는 아래 3, 4, 5, 6번 정보도 같이 넘겨줘야 합니다.
 //3. postId: Int -> 기존 게시글의 id를 알려주세요
@@ -84,7 +89,6 @@ class AddPostActivity : AppCompatActivity() {
         viewBinding.submitButton.setOnClickListener {
             submitPost()
         }
-
     }
 
     // setBackButton
@@ -113,7 +117,7 @@ class AddPostActivity : AppCompatActivity() {
         //1. get post type
         postType = intent.getStringExtra("postType").toString()
         isOld = intent.getBooleanExtra("isOld", false)
-        initActivity()
+//        initActivity()
         //2. getInfo
         val returnList = mutableListOf<String>()
         if(isOld){
@@ -127,7 +131,11 @@ class AddPostActivity : AppCompatActivity() {
 
     private fun initActivity(){
         //가운데 정렬 글 작성 예시
-        val postTypeString = if(postType == "info") "정보글" else "질문글";
+        var postTypeString = "정보글"
+        if(postType != "info"){
+            postTypeString = "질문글"
+            viewBinding.inputOfTitleLayout.hint = "Q. 질문"
+        }
         val postModeString = if(isOld) "수정" else "작성";
         viewBinding.toolbarTitle.toolbarAddPageToolbar.title = ""
         viewBinding.toolbarTitle.toolbarText.text = "${postTypeString} ${postModeString}"
@@ -226,12 +234,11 @@ class AddPostActivity : AppCompatActivity() {
     private fun submitPost(){
         changeButtonStatus(false)
         if(isTitleOk && isContentOk){
+            //업로드 가능인 상태임
             val finalTitle = viewBinding.inputOfTitle.text.toString()
             Log.d("finalTitle", finalTitle)
             val finalDes = viewBinding.inputOfContent.text.toString()
             Log.d("finalDes", finalDes)
-
-            //업로드 가능인 상태임
 
             if(isOld){
                 val imageFileList = ArrayList<File>()
@@ -240,11 +247,15 @@ class AddPostActivity : AppCompatActivity() {
                 var loadedImageNumber = 0
 
                 for(i in imageItemList){
-                    if(i.imageUrl != "") allUrlNumber+=1
+                    if(i.imageCopyPath == "") allUrlNumber+=1
                 }
                 for(i in imageItemList){
                     val nowIdx = imageItemList.indexOf(i)
-                    imageFileList.add(File(i.imageCopyPath))
+                    if(i.imageCopyPath != "") imageFileList.add(File(i.imageCopyPath))
+                    else{
+                        //TODO: 옛날 사진을 파일 형식으로 다운로드하고, 모든 옛날 사진들이 다운로드했으면
+                        // -> {그 파일들을 가지고 멀티파트로 바꾸고 올리자} -> {}는 하나의 함수로 콜백 형식으로 glide안에 실행하자
+                    }
                 }
 
             }else{
@@ -252,6 +263,12 @@ class AddPostActivity : AppCompatActivity() {
                 val finalImagePathList = ArrayList<String>()
                 for(i in imageItemList) finalImagePathList.add(i.imageCopyPath)
                 imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
+                if(postType == "info"){
+                    uploadInfo(this, "0", finalTitle, finalDes, imageMultiPartList)
+                }
+                else{
+                    uploadQNA(this, "0", finalTitle, finalDes, imageMultiPartList)
+                }
             }
 
 //            project2Server.postNewProject(this, finalTitle, finalDes, imageMultiPartList, viewBinding.submitButton) { finish() }
@@ -289,6 +306,15 @@ class AddPostActivity : AppCompatActivity() {
     }
 
     //imageSection - Start
+
+    private val getImageFromFile = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        if(uri != null){
+            val copyImagePath = AddImage().getCachePathUseUri(this, uri, 50, 2e+7)
+            if(copyImagePath != "") addImage2List(uri, copyImagePath)
+            else Toast.makeText(this, "20MB이하 크기의 PNG, JPEG파일만 지원됩니다. ", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun addImage2List(imageUri: Uri, copyImagePath: String){
         Log.d("test", "newPath: $copyImagePath")
         val nowImageItem = ImageItem(imageUri, copyImagePath)
@@ -296,14 +322,6 @@ class AddPostActivity : AppCompatActivity() {
         viewBinding.addImageSection.adapter!!.notifyItemInserted(imageItemList.lastIndex)
         //subImageCounter
         viewBinding.addImageNum.text = "${imageItemList.size}/${imageLimit}"
-    }
-
-    private val getImageFromFile = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        if(uri != null){
-            val copyImagePath = AddImage().getCachePathUseUri(this, uri, 50, 2e+7)
-            if(copyImagePath != "") addImage2List(uri, copyImagePath)
-            else Toast.makeText(this, "사진을 추가하는데 알 수 없는 이유로 실패했습니다.", Toast.LENGTH_SHORT).show()
-        }
     }
     //imageSection - End
 
@@ -371,18 +389,44 @@ class AddPostActivity : AppCompatActivity() {
     }
     //Bottom DiaLog - End
 
-    //infoList's Content => List: [oldProjectId: StringNumber(default=="0"), postTitle: String, postContent: String]
-    private fun uploadWithContentAndMultiPart(context: Context, infoList: List<String>, ImgMultiPartList: List<MultipartBody.Part>){
-        if(infoList[0] == "0"){ // 게시글 수정이 아니면
+    private fun uploadInfo(context: Context, OLD_PROJECT_ID: String, POST_TITLE: String, POST_CONTENT: String, IMAGE_MULTIPART_LIST: List<MultipartBody.Part>){
+        if(OLD_PROJECT_ID == "0"){ // 게시글 수정이 아니면
+            project2Server.postNewInfo(this, POST_TITLE, POST_CONTENT, IMAGE_MULTIPART_LIST,
+                { isPostSuccess() }, { isPostFail() })
             Log.d("testAddPostMode", "새로운 게시글 작성")
-            Log.d("testAddPostString", infoList.toString())
-            Log.d("testAddPostImage", ImgMultiPartList.toString())
+            Log.d("testAddPostString", POST_TITLE + POST_CONTENT)
+            Log.d("testAddPostImage", IMAGE_MULTIPART_LIST.toString())
         }else{
             Log.d("testUpdatePostMode", "기존 게시글 수정")
-            Log.d("testUpdatePostString", infoList.toString())
-            Log.d("testUpdatePostImage", ImgMultiPartList.toString())
+            Log.d("testUpdatePostString", POST_TITLE + POST_CONTENT)
+            Log.d("testUpdatePostImage", IMAGE_MULTIPART_LIST.toString())
         }
     }
+
+    private fun uploadQNA(context: Context, OLD_PROJECT_ID: String, POST_TITLE: String, POST_CONTENT: String, IMAGE_MULTIPART_LIST: List<MultipartBody.Part>){
+        if(OLD_PROJECT_ID == "0"){ // 게시글 수정이 아니면
+            project2Server.postNewQNA(this, POST_TITLE, POST_CONTENT, IMAGE_MULTIPART_LIST,
+                { isPostSuccess() }, { isPostFail() })
+            Log.d("testAddPostMode", "새로운 게시글 작성")
+            Log.d("testAddPostString", POST_TITLE + POST_CONTENT)
+            Log.d("testAddPostImage", IMAGE_MULTIPART_LIST.toString())
+        }else{
+            Log.d("testUpdatePostMode", "기존 게시글 수정")
+            Log.d("testUpdatePostString", POST_TITLE + POST_CONTENT)
+            Log.d("testUpdatePostImage", IMAGE_MULTIPART_LIST.toString())
+        }
+    }
+
+    private fun isPostSuccess(){
+        finish()
+    }
+
+    private fun isPostFail(){
+        Toast.makeText(this, "서버와 연결하는데 실패했습니다. 잠시 후 다시 한 번 시도해보세요.", Toast.LENGTH_SHORT).show()
+        changeButtonStatus(true)
+    }
+
+
 
     private fun changeButtonStatus(nowStatus: Boolean){
         viewBinding.submitButton.isEnabled = nowStatus

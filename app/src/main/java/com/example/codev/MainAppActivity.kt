@@ -44,8 +44,6 @@ class MainAppActivity : AppCompatActivity() {
                             .beginTransaction()
                             .replace(viewBinding.content.id, CommunityFragment())
                             .commitAllowingStateLoss()
-                        val intent = Intent(this@MainAppActivity, AddPostActivity::class.java)
-                        startActivity(intent)
                     }
                     R.id.menu_home->{
                         supportFragmentManager
