@@ -27,6 +27,7 @@ class CommunityInfoFragment :Fragment(){
 
     private var downpage: Int = 0
     private var lastPage: Boolean = false
+    private var sortingTag: String = "" //정렬버튼
 
     private lateinit var mainAppActivity: Context
     override fun onAttach(context: Context) {
@@ -41,7 +42,7 @@ class CommunityInfoFragment :Fragment(){
 
         idataList = ArrayList() //초기화
 
-        loadData(mainAppActivity, downpage, coMyBoard) //기본으로 0page PData 가져오기
+        loadData(mainAppActivity, downpage, coMyBoard, sortingTag) //기본으로 0page PData 가져오기
 
     }
 
@@ -51,7 +52,6 @@ class CommunityInfoFragment :Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         viewBinding = FragmentCommunityInfoBinding.inflate(layoutInflater)
-
 
         //자동페이징 처리 부분
         viewBinding.listviewInfo.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -63,7 +63,7 @@ class CommunityInfoFragment :Fragment(){
 
                 if((lastVisibleItemPosition == lastPosition) && !lastPage){ //처음에 false
                     downpage += 1
-                    loadData(mainAppActivity, downpage, coMyBoard)
+                    loadData(mainAppActivity, downpage, coMyBoard, sortingTag)
                 }
             }
         })
@@ -83,34 +83,43 @@ class CommunityInfoFragment :Fragment(){
 //            }
 
             idataList = ArrayList()
-            loadData(mainAppActivity, downpage, coMyBoard)
+            loadData(mainAppActivity, downpage, coMyBoard, sortingTag)
         }
 
         //정렬 누르고 최신순or추천순 선택하면
-//        val bottomSheetSort = BottomSheetSort(){
-//            downpage = 0
-//            lastPage = false
-//            coSortingTag = it // ""이거나 populaRity
-//            if(coSortingTag != "") { //populaRity : 추천순
-//                viewBinding.sort.text = "추천순"
-//            }
-//            else{ //아무것도 없 : 최신순
-//                viewBinding.sort.text = "최신순"
-//            }
-//
-//            qdataList = ArrayList()
-//            loadData(mainAppActivity, downpage, coMyBoard)
-//
-//            Log.d("coSortingTag: ",coSortingTag)
-//        }
+        val bottomSheetSort = BottomSheetSort(){
+            downpage = 0
+            lastPage = false
+            sortingTag = it // ""이거나 populaRity
+            if(sortingTag != "") { //populaRity : 추천순
+                viewBinding.sort.text = "추천순"
+                sortingTag = "POPULARITY"
+            }
+            else{ //아무것도 없 : 최신순
+                viewBinding.sort.text = "최신순"
+            }
+
+            idataList = ArrayList()
+            loadData(mainAppActivity, downpage, coMyBoard, sortingTag)
+
+            Log.d("coSortingTag: ",sortingTag)
+        }
+
+        //정렬 버튼
+        viewBinding.sort.setOnClickListener {
+            bottomSheetSort.show(childFragmentManager, bottomSheetSort.tag)
+        }
+        viewBinding.filterSort.setOnClickListener {
+            bottomSheetSort.show(childFragmentManager, bottomSheetSort.tag)
+        }
 
         return viewBinding.root
     }
 
     //전체 정보글 조회
-    private fun loadData(context: Context, int: Int, coMyBoard:Boolean) {
+    private fun loadData(context: Context, int: Int, coMyBoard: Boolean, sortingTag: String) {
         RetrofitClient.service.requestIDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
-            int, coMyBoard).enqueue(object: Callback<ResGetCommunityList1>{
+            int, coMyBoard, sortingTag).enqueue(object: Callback<ResGetCommunityList1>{
             override fun onResponse(call: Call<ResGetCommunityList1>, response: Response<ResGetCommunityList1>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 조회실패",response.toString())
@@ -121,7 +130,8 @@ class CommunityInfoFragment :Fragment(){
                             response.body()?.let {
                                 Log.d("test: 정보글 조회 성공! ", "\n${it.toString()}")
                                 Log.d("test: 정보글 데이터 : ", "\n${it.result.success}")
-                                Log.d("test: 매개변수: ",coMyBoard.toString())
+                                Log.d("test: 매개변수: ",coMyBoard.toString()+sortingTag)
+
                                 //페이지가 비어있으면
                                 if(it.result.success.toString() == "[]") {
                                     //Log.d("test: success: ", "[] 라서 비어있어용")

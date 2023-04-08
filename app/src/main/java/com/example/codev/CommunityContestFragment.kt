@@ -17,6 +17,7 @@ import com.example.codev.databinding.FragmentMyBookmarkProjectBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.http.Query
 import java.util.ArrayList
 
 class CommunityContestFragment :Fragment(){
@@ -24,12 +25,13 @@ class CommunityContestFragment :Fragment(){
 
     private lateinit var adapterCData: AdapterCommunityInfoList
 
-    private var idataList: ArrayList<QIData> = ArrayList()
+    private var cdataList: ArrayList<CData> = ArrayList()
 
     private var coMyBoard:Boolean = false //초기값 false
 
     private var downpage: Int = 0
     private var lastPage: Boolean = false
+    private var sortingTag: String = ""
 
     private lateinit var mainAppActivity: Context
     override fun onAttach(context: Context) {
@@ -42,9 +44,9 @@ class CommunityContestFragment :Fragment(){
     override fun onResume() {
         super.onResume()
 
-        idataList = ArrayList() //초기화
+        cdataList = ArrayList() //초기화
 
-        //loadData(mainAppActivity, downpage, coMyBoard) //기본으로 0page PData 가져오기
+        loadData(mainAppActivity, downpage, coMyBoard, sortingTag) //기본으로 0page PData 가져오기
 
     }
 
@@ -71,63 +73,111 @@ class CommunityContestFragment :Fragment(){
             }
         })
 
+
+        //내가 쓴 글만 보기 버튼
+        viewBinding.recruitingBtn.setOnClickListener {
+            //필터링 다른거 적용이 이중으로 안돼
+            downpage = 0
+            lastPage = false
+            coMyBoard = viewBinding.recruitingBtn.isChecked
+            //아래 코드 압축한게 coMyBoard = viewBinding.recruitingQuestionBtn.isChecked
+//            if(viewBinding.recruitingQuestionBtn.isChecked){
+//                coMyBoard = true
+//            }
+//            else{
+//                coMyBoard = false
+//            }
+
+            cdataList = ArrayList()
+            //loadData(mainAppActivity, downpage, coMyBoard, sortingTag)
+        }
+
+
+        //정렬 누르고 최신순or추천순 선택하면 <- 이거 api랑 일단은 아다리 안맞음
+        val bottomSheetSort = BottomSheetSort(){
+            downpage = 0
+            lastPage = false
+            sortingTag = it // ""이거나 populaRity
+            if(sortingTag != "") { //populaRity : 추천순
+                viewBinding.sort.text = "추천순"
+                sortingTag = "POPULARITY"
+            }
+            else{ //아무것도 없 : 최신순
+                viewBinding.sort.text = "최신순"
+            }
+
+            cdataList = ArrayList()
+            loadData(mainAppActivity, downpage, coMyBoard, sortingTag)
+
+            Log.d("coSortingTag: ",sortingTag)
+        }
+
+        //정렬 버튼
+        viewBinding.sort.setOnClickListener {
+            bottomSheetSort.show(childFragmentManager, bottomSheetSort.tag)
+        }
+        viewBinding.filterSort.setOnClickListener {
+            bottomSheetSort.show(childFragmentManager, bottomSheetSort.tag)
+        }
+
         return viewBinding.root
     }
 
     //전체 공모전글 조회
-//    private fun loadData(context: Context, int: Int, coMyBoard:Boolean) {
-//        RetrofitClient.service.requestCDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
-//            int, coMyBoard).enqueue(object: Callback<ResGetCommunityList1>{
-//            override fun onResponse(call: Call<ResGetCommunityList1>, response: Response<ResGetCommunityList1>) {
-//                if(response.isSuccessful.not()){
-//                    Log.d("test: 조회실패",response.toString())
-//                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-//                }else{
-//                    when(response.code()){
-//                        200->{
-//                            response.body()?.let {
-//                                Log.d("test: 정보글 조회 성공! ", "\n${it.toString()}")
-//                                Log.d("test: 정보글 데이터 : ", "\n${it.result.success}")
-//                                Log.d("test: 매개변수: ",coMyBoard.toString())
-//                                //페이지가 비어있으면
-//                                if(it.result.success.toString() == "[]") {
-//                                    //Log.d("test: success: ", "[] 라서 비어있어용")
-//                                    Toast.makeText(context,"이 글의 끝입니다.",Toast.LENGTH_SHORT).show()
-//                                    lastPage = true
-//                                    if(int == 0) { //0page
-//                                        // 1.페이지가 끝이라서 그 다음페이지 결과가 []인거 --> int != 0
-//                                        // 2.필터링 결과가 아무것도 없는거 --> int == 0
-//                                        setQAdapter(idataList) //projectAdapter
-//                                    }
-//                                }
-//                                //페이지에 내용이 있으면
-//                                else {
-//                                    idataList.addAll(it.result.success)
-//                                    if(int == 0) { //0page
-//                                        setQAdapter(idataList) //projectAdapter
-//                                    }
-//                                    else{
-//                                        viewBinding.listviewInfo.adapter!!.notifyDataSetChanged()
-//                                        //viewBinding.listviewMain.adapter!!.notifyItemRangeInserted(downpage*10-1,10)
-//                                    }
-//                                }
-//                            }
-//
-//                        }
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ResGetCommunityList1>, t: Throwable) {
-//                Log.d("test: 조회실패 - RPF > loadData_q(질문글 전체조회): ", "[Fail]${t.toString()}")
-//                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-//            }
-//        })
-//    }
-//
-//    private fun setQAdapter(infoList: ArrayList<QIData>){
-//        val adapter = AdapterCommunityInfoList(mainAppActivity,infoList)
-//        viewBinding.listviewInfo.adapter = adapter
-//    }
+    private fun loadData(context: Context, int: Int, coMyBoard:Boolean, sortingTag: String) {
+        RetrofitClient.service.requestCDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
+            int, coMyBoard, sortingTag).enqueue(object: Callback<ResGetCommunityList2>{
+            override fun onResponse(call: Call<ResGetCommunityList2>, response: Response<ResGetCommunityList2>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 조회실패",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }else{
+                    when(response.code()){
+                        200->{
+                            response.body()?.let {
+                                Log.d("test: 공모전 조회 성공! ", "\n${it.toString()}")
+                                Log.d("test: 공모전 데이터 : ", "\n${it.result.success}")
+                                Log.d("test: 매개변수: ",coMyBoard.toString()+sortingTag)
+
+                                //페이지가 비어있으면
+                                if(it.result.success.toString() == "[]") {
+                                    //Log.d("test: success: ", "[] 라서 비어있어용")
+                                    Toast.makeText(context,"이 글의 끝입니다.",Toast.LENGTH_SHORT).show()
+                                    lastPage = true
+                                    if(int == 0) { //0page
+                                        // 1.페이지가 끝이라서 그 다음페이지 결과가 []인거 --> int != 0
+                                        // 2.필터링 결과가 아무것도 없는거 --> int == 0
+                                        setCAdapter(cdataList) //projectAdapter
+                                    }
+                                }
+                                //페이지에 내용이 있으면
+                                else {
+                                    cdataList.addAll(it.result.success)
+                                    if(int == 0) { //0page
+                                        setCAdapter(cdataList) //projectAdapter
+                                    }
+                                    else{
+                                        viewBinding.listviewContest.adapter!!.notifyDataSetChanged()
+                                        //viewBinding.listviewMain.adapter!!.notifyItemRangeInserted(downpage*10-1,10)
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResGetCommunityList2>, t: Throwable) {
+                Log.d("test: 조회실패 - RPF > loadData_q(공모전 전체조회): ", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun setCAdapter(contestList: ArrayList<CData>){
+        val adapter = AdapterCommunityContestList(mainAppActivity, contestList)
+        viewBinding.listviewContest.adapter = adapter
+    }
 
 }

@@ -91,23 +91,26 @@ interface RetrofitService {
     @GET("qnaBoard/qnaBoards/{page}")
     fun requestQDataList( //커뮤니티 - 질문글 리스트 전체조회
         @Header("CoDev_Authorization") header: String,
-        @Path("page") page: Int, @Query("coMyBoard") coMyBoard: Boolean
+        @Path("page") page: Int,
+        @Query("coMyBoard") coMyBoard: Boolean,
+        @Query("sortingTag") sortingTag: String
     ): Call<ResGetCommunityList1>
 
     @GET("infoBoard/infoBoards/{page}")
     fun requestIDataList( //커뮤니티 - 정보글 리스트 전체조회
         @Header("CoDev_Authorization") header: String,
-        @Path("page") page: Int, @Query("coMyBoard") coMyBoard: Boolean
+        @Path("page") page: Int,
+        @Query("coMyBoard") coMyBoard: Boolean,
+        @Query("sortingTag") sortingTag: String
     ): Call<ResGetCommunityList1>
 
-    @GET("project/projects/{page}")
+    @GET("infoBoard/infoBoards/{page}")
     fun requestCDataList( //커뮤니티 - 공모전글 리스트 전체조회
         @Header("CoDev_Authorization") header: String,
-        @Path("page") page: Int, @Query("coLocationTag") coLocationTag: String,
-        @Query("coPartTag") coPartTag: String, @Query("coKeyword") coKeyword: String,
-        @Query("coProcessTag") coProcessTag: String,
-        @Query("coSortingTag") coSortingTag: String
-    ): Call<ResGetProjectList>
+        @Path("page") page: Int,
+        @Query("coMyBoard") coMyBoard: Boolean,
+        @Query("sortingTag") sortingTag: String
+    ): Call<ResGetCommunityList2>
 
     @GET("project/projects/{page}")
     fun requestPDataList(
@@ -142,10 +145,20 @@ interface RetrofitService {
     @GET("my-page/portfolioList")
     fun getPortFolio(@Header("CoDev_Authorization") header: String) : Call<ResPortFolioList>
 
+    //내정보 > 북마크
     @GET("my-page/hearts/projects")
     fun getHeartedProject(@Header("CoDev_Authorization") header: String) : Call<ResBookMarkProjectList>
     @GET("my-page/hearts/studies")
     fun getHeartedStudy(@Header("CoDev_Authorization") header: String) : Call<ResBookMarkStudyList>
+    @GET("qnaBoard/mark/list")
+    fun getHeartedQustion(@Header("CoDev_Authorization") header: String) : Call<ResBookMarkQuestionAndInfoList>
+    @GET("infoBoard/mark/list")
+    fun getHeartedInfo(@Header("CoDev_Authorization") header: String) : Call<ResBookMarkQuestionAndInfoList>
+    @GET("my-page/hearts/projects")
+    fun getHeartedQustionAndInfo(@Header("CoDev_Authorization") header: String) : Call<ResBookMarkQuestionAndInfoList>
+    @GET("my-page/hearts/studies")
+    fun getHeartedContest(@Header("CoDev_Authorization") header: String) : Call<ResBookMarkContestList>
+
 
     @GET("my-page/recruitment")
     fun getApplyList(

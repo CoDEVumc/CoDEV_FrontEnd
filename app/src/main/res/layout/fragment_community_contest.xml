@@ -11,7 +11,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/recruiting_project_btn2"
+        app:layout_constraintBottom_toTopOf="@+id/recruiting_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -71,16 +71,16 @@
     </HorizontalScrollView>
 
     <View
-        android:id="@+id/filter_sort2"
+        android:id="@+id/filter_sort"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_marginTop="68dp"
         android:background="@drawable/swap"
-        app:layout_constraintEnd_toStartOf="@+id/sort2"
+        app:layout_constraintEnd_toStartOf="@+id/sort"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/sort2"
+        android:id="@+id/sort"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="68dp"
@@ -90,7 +90,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_fitering3"
+        android:id="@+id/tv_fiteringC"
         android:layout_width="wrap_content"
         android:layout_height="16dp"
         android:layout_marginStart="44dp"
@@ -104,7 +104,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/recruiting_project_btn2"
+        android:id="@+id/recruiting_btn"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_marginStart="24dp"

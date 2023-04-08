@@ -47,7 +47,7 @@ class AdapterCommunityQuestionList(private val context: Context, private val lis
                 .into(binding.image)
 
             //작성자 닉네임
-            binding.writer.text = data.co_email //이거 이메일이 아니라 닉네임으로 api 수정 요청 해야돼 수진아
+            binding.writer.text = data.co_nickname
 
             //작성 일자
             //binding.writenDate.text = data.createdAt
