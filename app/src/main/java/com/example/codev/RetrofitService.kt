@@ -88,6 +88,27 @@ interface RetrofitService {
         ,@Body params: ReqUpdatePF
     ): Call<ResCreateNewPF>
 
+    @GET("qnaBoard/qnaBoards/{page}")
+    fun requestQDataList( //커뮤니티 - 질문글 리스트 전체조회
+        @Header("CoDev_Authorization") header: String,
+        @Path("page") page: Int, @Query("coMyBoard") coMyBoard: Boolean
+    ): Call<ResGetCommunityList1>
+
+    @GET("infoBoard/infoBoards/{page}")
+    fun requestIDataList( //커뮤니티 - 정보글 리스트 전체조회
+        @Header("CoDev_Authorization") header: String,
+        @Path("page") page: Int, @Query("coMyBoard") coMyBoard: Boolean
+    ): Call<ResGetCommunityList1>
+
+    @GET("project/projects/{page}")
+    fun requestCDataList( //커뮤니티 - 공모전글 리스트 전체조회
+        @Header("CoDev_Authorization") header: String,
+        @Path("page") page: Int, @Query("coLocationTag") coLocationTag: String,
+        @Query("coPartTag") coPartTag: String, @Query("coKeyword") coKeyword: String,
+        @Query("coProcessTag") coProcessTag: String,
+        @Query("coSortingTag") coSortingTag: String
+    ): Call<ResGetProjectList>
+
     @GET("project/projects/{page}")
     fun requestPDataList(
         @Header("CoDev_Authorization") header: String,

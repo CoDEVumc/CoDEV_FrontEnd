@@ -80,6 +80,7 @@ class AdapterRecruitApplicants2(private val context: Context, private val listDa
     inner class ApplicantItemViewHolder(private val binding: RecycleApplicantItem1Binding): RecyclerView.ViewHolder(binding.root){
         @SuppressLint("SetTextI18n")
         fun bind(data: ApplicantInfoData, position: Int){
+
             Glide.with(itemView.context)
                 .load(data.profileImg).circleCrop()
                 .into(binding.applyerProfile)

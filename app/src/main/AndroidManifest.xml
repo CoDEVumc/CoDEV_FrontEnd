@@ -80,6 +80,13 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".MyWriteActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".addpage.AddPfPageActivity"
             android:exported="false" />
         <activity

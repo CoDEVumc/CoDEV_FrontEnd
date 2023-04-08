@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/filter_sort"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/swap"
+        app:layout_constraintEnd_toStartOf="@+id/sort"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/sort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        android:text="정렬"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_fiteringI"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:lineSpacingExtra="12sp"
+        android:text="내가 쓴 글만 보기"
+        android:textColor="#666666"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/recruiting_info_btn"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="320dp"
+        android:button="@drawable/recruit_check"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listview_info"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="40dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/recycle_community_question_and_info_list" />
+
+    <!-- rippleColor : 눌렀을 때 바뀌는 색 -->
+</androidx.constraintlayout.widget.ConstraintLayout>

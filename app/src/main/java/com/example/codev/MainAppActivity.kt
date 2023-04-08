@@ -38,12 +38,16 @@ class MainAppActivity : AppCompatActivity() {
                             .commitAllowingStateLoss()
                     }
                     R.id.menu_community->{
+                        val now = intent.getIntExtra("now", -1)
+                        val bundle = Bundle()
+                        bundle.putInt("now", now)
+                        val fragment = CommunityFragment()
+                        fragment.arguments = bundle
+
                         supportFragmentManager
                             .beginTransaction()
-                            .replace(viewBinding.content.id, CommunityFragment())
+                            .replace(viewBinding.content.id,fragment)
                             .commitAllowingStateLoss()
-//                        val intent = Intent(this@MainAppActivity, RecruitDoneActivity::class.java)
-//                        startActivity(intent)
                     }
                     R.id.menu_home->{
                         supportFragmentManager
