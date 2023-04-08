@@ -78,14 +78,11 @@ class AdapterCommunityInfoList(private val context: Context, private val listDat
                 .into(binding.img)
 
 
-
             binding.item.setOnClickListener { //상세조회 연결
-//                val intent = Intent(binding.item.context, RecruitDetailActivity::class.java)
-//                intent.putExtra("id",data.co_projectId)
-//                intent.putExtra("type","PROJECT")
-//                intent.putExtra("dday",binding.dday.text)
-//                Log.d("test : 선택한 질문글 아이디", data.co_qnaId.toString())
-//                startActivity(binding.item.context,intent,null)
+                val intent = Intent(binding.item.context, InfoDetailActivity::class.java)
+                intent.putExtra("id", data.co_infoId)
+                Log.d("test : 선택한 정보글 아이디", data.co_infoId.toString())
+                startActivity(binding.item.context,intent,null)
             }
         }
     }
