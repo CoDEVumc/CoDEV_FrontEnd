@@ -1,6 +1,7 @@
 package com.example.codev
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -29,6 +30,7 @@ class CommunityQuestionFragment :Fragment(){
 
     private var downpage: Int = 0
     private var lastPage: Boolean = false
+    private var sortingTag: String = "" //정렬버튼
 
     private lateinit var mainAppActivity: Context
     override fun onAttach(context: Context) {
@@ -43,7 +45,7 @@ class CommunityQuestionFragment :Fragment(){
 
         qdataList = ArrayList() //초기화
 
-        loadData(mainAppActivity, downpage, coMyBoard) //기본으로 0page PData 가져오기
+        loadData(mainAppActivity, downpage, coMyBoard, sortingTag) //기본으로 0page PData 가져오기
 
     }
 
@@ -53,7 +55,6 @@ class CommunityQuestionFragment :Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         viewBinding = FragmentCommunityQuestionBinding.inflate(layoutInflater)
-
 
         //자동페이징 처리 부분
         viewBinding.listviewQuestion.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -65,7 +66,7 @@ class CommunityQuestionFragment :Fragment(){
 
                 if((lastVisibleItemPosition == lastPosition) && !lastPage){ //처음에 false
                     downpage += 1
-                    loadData(mainAppActivity, downpage, coMyBoard)
+                    loadData(mainAppActivity, downpage, coMyBoard, sortingTag)
                 }
             }
         })
@@ -86,26 +87,35 @@ class CommunityQuestionFragment :Fragment(){
 //            }
 
             qdataList = ArrayList()
-            loadData(mainAppActivity, downpage, coMyBoard)
+            loadData(mainAppActivity, downpage, coMyBoard, sortingTag)
         }
 
-        //정렬 누르고 최신순or추천순 선택하면
-//        val bottomSheetSort = BottomSheetSort(){
-//            downpage = 0
-//            lastPage = false
-//            coSortingTag = it // ""이거나 populaRity
-//            if(coSortingTag != "") { //populaRity : 추천순
-//                viewBinding.sort.text = "추천순"
-//            }
-//            else{ //아무것도 없 : 최신순
-//                viewBinding.sort.text = "최신순"
-//            }
-//
-//            qdataList = ArrayList()
-//            loadData(mainAppActivity, downpage, coMyBoard)
-//
-//            Log.d("coSortingTag: ",coSortingTag)
-//        }
+        //정렬 누르고 최신순or추천순 선택하면 <- 이거 api랑 일단은 아다리 안맞음
+        val bottomSheetSort = BottomSheetSort(){
+            downpage = 0
+            lastPage = false
+            sortingTag = it // ""이거나 populaRity
+            if(sortingTag != "") { //populaRity : 추천순
+                viewBinding.sort.text = "추천순"
+                sortingTag = "POPULARITY"
+            }
+            else{ //아무것도 없 : 최신순
+                viewBinding.sort.text = "최신순"
+            }
+
+            qdataList = ArrayList()
+            loadData(mainAppActivity, downpage, coMyBoard, sortingTag)
+
+            Log.d("coSortingTag: ",sortingTag)
+        }
+
+        //정렬 버튼
+        viewBinding.sort.setOnClickListener {
+            bottomSheetSort.show(childFragmentManager, bottomSheetSort.tag)
+        }
+        viewBinding.filterSort.setOnClickListener {
+            bottomSheetSort.show(childFragmentManager, bottomSheetSort.tag)
+        }
 
 
 
@@ -115,9 +125,9 @@ class CommunityQuestionFragment :Fragment(){
 
 
     //전체 질문글 조회
-    private fun loadData(context: Context, int: Int, coMyBoard:Boolean) {
+    private fun loadData(context: Context, int: Int, coMyBoard: Boolean, sortingTag: String) {
         RetrofitClient.service.requestQDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
-            int, coMyBoard).enqueue(object: Callback<ResGetCommunityList1>{
+            int, coMyBoard, sortingTag).enqueue(object: Callback<ResGetCommunityList1>{
             override fun onResponse(call: Call<ResGetCommunityList1>, response: Response<ResGetCommunityList1>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 조회실패",response.toString())
@@ -128,7 +138,27 @@ class CommunityQuestionFragment :Fragment(){
                             response.body()?.let {
                                 Log.d("test: 질문글 조회 성공! ", "\n${it.toString()}")
                                 Log.d("test: 질문글 데이터 : ", "\n${it.result.success}")
-                                Log.d("test: 매개변수: ",coMyBoard.toString())
+                                Log.d("test: 매개변수: ",coMyBoard.toString()+sortingTag)
+
+                                /*var page = 2 //이걸 CommunityFragment로 전달
+                                Log.d("CommunityQuesitonFragment | page : ",page.toString())
+                                //page값 전달 부분
+                                val bundle = Bundle()
+                                bundle.putInt("page", page)
+                                val fragment = CommunityFragment()
+                                fragment.arguments = bundle*/
+
+
+
+                                //[ 아닌거 같음 ] MainAppActivity으로 page 전달 -> MainAppActivity에서 CommunityFragment로 page 다시 전달 하는 걸로
+//                                //여기 주석 해제해서 해봐 임마
+//                                val intent = Intent(context,MainAppActivity::class.java)
+//                                intent.apply {
+//                                    this.putExtra("page",page) // 데이터 넣기
+//                                }
+
+
+
                                 //페이지가 비어있으면
                                 if(it.result.success.toString() == "[]") {
                                     //Log.d("test: success: ", "[] 라서 비어있어용")

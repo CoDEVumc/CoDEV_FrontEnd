@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.codev.databinding.RecycleCommunityContestListBinding
 
 import com.example.codev.databinding.RecycleRecruitListBinding
 import com.google.gson.JsonObject
@@ -18,17 +20,17 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AdapterCommunityContestList(private val context: Context, private val listData: ArrayList<ApplyData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class AdapterCommunityContestList(private val context: Context, private val listData: ArrayList<CData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return  ProjectItemViewHolder(context, RecycleRecruitListBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return  ContestItemViewHolder(context, RecycleCommunityContestListBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     //뷰 홀더에 데이터 바인딩
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
-            is ProjectItemViewHolder -> {
+            is ContestItemViewHolder -> {
                 holder.bind(listData[position],position)
             }
         }
@@ -38,49 +40,28 @@ class AdapterCommunityContestList(private val context: Context, private val list
     override fun getItemCount(): Int = listData.size
 
     //Item의 ViewHolder 객체
-    inner class ProjectItemViewHolder(val context: Context, private val binding: RecycleRecruitListBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: ApplyData, position: Int){
-            //프로젝트 제목
-            binding.title.text = data.co_title
+    inner class ContestItemViewHolder(val context: Context, private val binding: RecycleCommunityContestListBinding): RecyclerView.ViewHolder(binding.root){
+        fun bind(data: CData, position: Int){
+            //디데이
+            //binding.dday.text = data.???
 
-            //프로젝트 디데이
-            if(data.co_deadLine.toInt() == 0) {
-                binding.dday.text = "D-Day"
-            }else if(data.co_process == "TEST"){
-                binding.dday.text = "심사중"
-            }else if(data.co_process == "FIN"){
-                binding.dday.text = "모집 완료"
-            } else {
-                binding.dday.text = "D-" + data.co_deadLine
-            }
+            //타입 (ex. 기획/아이디어)
+            //binding.type.text = data.??
 
-            //프로젝트 총 인원
-            binding.num.text = data.co_total.toString()
+            //공모전 제목
+            //binding.title.text = data.??
 
-            //기술 스택
-            if (!data.co_languages.isNullOrBlank()){
-                val languages = data.co_languages
-                binding.stack.adapter = AdapterRecruitStack(context,languages.split(","))
-            }
+            //주최 기관명
+            //binding.content.text = data.???
 
-            //프로젝트 모집 파트
-            binding.partlist.text = data.co_parts
+            //북마크 수
+            //binding.bnum.text = data.??.toString()
 
-            //북마크 : co_heart : Boolean <-- true면 채운 하트 / false면 안채운 하트 && 하트 하트 자체는 Selector로 바꾸기
-            binding.heart.isChecked = listData[position].co_heart
-            binding.heart.setOnClickListener {
-                listData[position].co_heart = binding.heart.isChecked
-                request(data.co_projectId)
-            }
+            //대표사진
+//            Glide.with(context)
+//                .load(data.???)
+//                .into(binding.contestImg)
 
-            binding.item.setOnClickListener {
-                val intent = Intent(binding.item.context, RecruitDetailActivity::class.java)
-                intent.putExtra("id",data.co_projectId)
-                intent.putExtra("type","PROJECT")
-                intent.putExtra("dday",binding.dday.text)
-                Log.d("test : 선택한 프로젝트 아이디", data.co_projectId.toString())
-                startActivity(binding.item.context,intent,null)
-            }
         }
     }
 

@@ -13,23 +13,23 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-import com.example.codev.databinding.RecycleCommunityQuestionAndInfoListBinding
+import com.example.codev.databinding.RecycleCommunityContestListBinding
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AdapterCommunityInfoList(private val context: Context, private val listData: ArrayList<QIData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class AdapterMyBookmarkContestList(private val context: Context, private val listData: ArrayList<BookmarkCData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return  InfoItemViewHolder(context, RecycleCommunityQuestionAndInfoListBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return  ContestViewHolder(context, RecycleCommunityContestListBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     //뷰 홀더에 데이터 바인딩
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
-            is InfoItemViewHolder -> {
+            is ContestViewHolder -> {
                 holder.bind(listData[position],position)
             }
         }
@@ -39,43 +39,27 @@ class AdapterCommunityInfoList(private val context: Context, private val listDat
     override fun getItemCount(): Int = listData.size
 
     //Item의 ViewHolder 객체
-    inner class InfoItemViewHolder(val context: Context, private val binding: RecycleCommunityQuestionAndInfoListBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: QIData, position: Int){
-            //작성자 프로필 사진
-            //binding.image.text = data.profileImg
-            Glide.with(context)
-                .load(data.profileImg)
-                .into(binding.image)
+    inner class ContestViewHolder(val context: Context, private val binding: RecycleCommunityContestListBinding): RecyclerView.ViewHolder(binding.root){
+        fun bind(data: BookmarkCData, position: Int){
+            //디데이
+            //binding.dday.text = data.???
 
-            //작성자 닉네임
-            binding.writer.text = data.co_nickname
+            //타입 (ex. 기획/아이디어)
+            //binding.type.text = data.??
 
-            //작성 일자
-            //binding.writenDate.text = data.createdAt
-            val date = data.createdAt
-            val finWritenDate: String = changeToDateForm(date)
-            binding.writenDate.text = finWritenDate
+            //공모전 제목
+            //binding.title.text = data.??
 
-            //정보글 제목
-            binding.title.text = data.co_title
-
-            //정보글 내용
-            binding.content.text = data.content
-
-            //스마일 수
-            binding.snum.text = data.co_likeCount.toString()
-
-            //댓글 수
-            binding.cnum.text = data.co_commentCount.toString()
+            //주최 기관명
+            //binding.content.text = data.???
 
             //북마크 수
-            binding.bnum.text = data.co_markCount.toString()
+            //binding.bnum.text = data.??.toString()
 
-            //정보글 이미지
-            //binding.img.text = data.co_mainImg
-            Glide.with(context)
-                .load(data.co_mainImg)
-                .into(binding.img)
+            //대표사진
+//            Glide.with(context)
+//                .load(data.???)
+//                .into(binding.contestImg)
 
 
 

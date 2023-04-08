@@ -50,6 +50,8 @@ dependencies {
 
 
     //popup menu
+    implementation 'com.google.android.material:material:<version>' //BottomSheet 오류 나서
+
     implementation "com.google.android.material:material:1.2.0-alpha01"
 
     implementation 'androidx.core:core-ktx:1.7.0'

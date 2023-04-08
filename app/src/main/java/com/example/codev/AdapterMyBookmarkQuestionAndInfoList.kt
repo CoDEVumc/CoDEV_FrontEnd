@@ -19,17 +19,17 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AdapterCommunityInfoList(private val context: Context, private val listData: ArrayList<QIData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class AdapterMyBookmarkQuestionAndInfoList(private val context: Context, private val listData: ArrayList<BookmarkQIData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return  InfoItemViewHolder(context, RecycleCommunityQuestionAndInfoListBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return  QuestionItemViewHolder(context, RecycleCommunityQuestionAndInfoListBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     //뷰 홀더에 데이터 바인딩
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
-            is InfoItemViewHolder -> {
+            is QuestionItemViewHolder -> {
                 holder.bind(listData[position],position)
             }
         }
@@ -39,10 +39,9 @@ class AdapterCommunityInfoList(private val context: Context, private val listDat
     override fun getItemCount(): Int = listData.size
 
     //Item의 ViewHolder 객체
-    inner class InfoItemViewHolder(val context: Context, private val binding: RecycleCommunityQuestionAndInfoListBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: QIData, position: Int){
+    inner class QuestionItemViewHolder(val context: Context, private val binding: RecycleCommunityQuestionAndInfoListBinding): RecyclerView.ViewHolder(binding.root){
+        fun bind(data: BookmarkQIData, position: Int){
             //작성자 프로필 사진
-            //binding.image.text = data.profileImg
             Glide.with(context)
                 .load(data.profileImg)
                 .into(binding.image)
@@ -56,10 +55,10 @@ class AdapterCommunityInfoList(private val context: Context, private val listDat
             val finWritenDate: String = changeToDateForm(date)
             binding.writenDate.text = finWritenDate
 
-            //정보글 제목
+            //질문글 제목
             binding.title.text = data.co_title
 
-            //정보글 내용
+            //질문글 내용
             binding.content.text = data.content
 
             //스마일 수
@@ -71,7 +70,7 @@ class AdapterCommunityInfoList(private val context: Context, private val listDat
             //북마크 수
             binding.bnum.text = data.co_markCount.toString()
 
-            //정보글 이미지
+            //질문글 이미지
             //binding.img.text = data.co_mainImg
             Glide.with(context)
                 .load(data.co_mainImg)
