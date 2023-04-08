@@ -270,4 +270,6 @@ interface RetrofitService {
     @POST("chat/confirm/{roomId}")
     fun confirmChatRoom(@Header("CoDev_Authorization") header: String, @Path("roomId") roomId: String) : Call<JsonObject>
 
+    @GET("infoBoard/{coInfoId}")
+    fun getInfoDetail(@Header("CoDev_Authorization") header: String, @Path("coInfoId") coInfoId: Int) : Call<ResGetInfoDetail>
 }

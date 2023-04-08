@@ -57,6 +57,7 @@
                     android:background="@color/black_900"/>
 
                 <TextView
+                    android:id="@+id/writer_nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toEndOf="@+id/writer_profile_img"
@@ -67,6 +68,7 @@
                     android:text="코딩해요"/>
 
                 <TextView
+                    android:id="@+id/writeDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toEndOf="@+id/writer_profile_img"
@@ -107,7 +109,7 @@
                     style="@style/Text.Body4.Regular"
                     android:textColor="@color/black_900"
                     android:text="같이 프로젝트를 처음부터 시작해보실 분들 구합니다!\n개발자들이 프로젝트 경험과 지식을 쌓으며 성장을 이룰 수 있는, 좋은 아이디어가 있어도 팀을 꾸리기 어려웠던 분들이 팀원을 찾을 수 있는 플랫폼 CODEV ~ "/>
-                
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_img"
                     android:layout_width="match_parent"
