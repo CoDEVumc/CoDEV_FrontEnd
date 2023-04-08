@@ -140,25 +140,6 @@ class CommunityQuestionFragment :Fragment(){
                                 Log.d("test: 질문글 데이터 : ", "\n${it.result.success}")
                                 Log.d("test: 매개변수: ",coMyBoard.toString()+sortingTag)
 
-                                /*var page = 2 //이걸 CommunityFragment로 전달
-                                Log.d("CommunityQuesitonFragment | page : ",page.toString())
-                                //page값 전달 부분
-                                val bundle = Bundle()
-                                bundle.putInt("page", page)
-                                val fragment = CommunityFragment()
-                                fragment.arguments = bundle*/
-
-
-
-                                //[ 아닌거 같음 ] MainAppActivity으로 page 전달 -> MainAppActivity에서 CommunityFragment로 page 다시 전달 하는 걸로
-//                                //여기 주석 해제해서 해봐 임마
-//                                val intent = Intent(context,MainAppActivity::class.java)
-//                                intent.apply {
-//                                    this.putExtra("page",page) // 데이터 넣기
-//                                }
-
-
-
                                 //페이지가 비어있으면
                                 if(it.result.success.toString() == "[]") {
                                     //Log.d("test: success: ", "[] 라서 비어있어용")

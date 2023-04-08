@@ -139,14 +139,6 @@ class CommunityContestFragment :Fragment(){
                                 Log.d("test: 공모전 데이터 : ", "\n${it.result.success}")
                                 Log.d("test: 매개변수: ",coMyBoard.toString()+sortingTag)
 
-                                /*var page = 3 //이걸 CommunityFragment로 전달
-                                Log.d("CommunityContestFragent | page : ",page.toString())
-                                //page값 전달 부분
-                                val bundle = Bundle()
-                                bundle.putInt("page", page)
-                                val fragment = CommunityFragment()
-                                fragment.arguments = bundle*/
-
                                 //페이지가 비어있으면
                                 if(it.result.success.toString() == "[]") {
                                     //Log.d("test: success: ", "[] 라서 비어있어용")
