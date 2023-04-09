@@ -104,6 +104,24 @@ interface RetrofitService {
         ,@Part files: List<MultipartBody.Part?>
     ): Call<ResCreateNewPost>
 
+    @PUT("infoBoard/update/{coInfoId}")
+    @Multipart
+    fun updateInfo(
+        @Path("coInfoId") id: String,
+        @Header("CoDev_Authorization") authToken: String
+        ,@Part("infoBoard") infoBoard: RequestBody
+        ,@Part files: List<MultipartBody.Part?>
+    ): Call<ResUpdatePost>
+
+    @PUT("qnaBoard/update/{coqnaId}")
+    @Multipart
+    fun updateQNA(
+        @Path("coqnaId") id: String,
+        @Header("CoDev_Authorization") authToken: String
+        ,@Part("qnaBoard") qnaBoard: RequestBody
+        ,@Part files: List<MultipartBody.Part?>
+    ): Call<ResUpdatePost>
+
     @GET("project/projects/{page}")
     fun requestPDataList(
         @Header("CoDev_Authorization") header: String,

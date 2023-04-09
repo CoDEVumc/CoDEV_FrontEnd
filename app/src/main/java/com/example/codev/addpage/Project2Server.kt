@@ -424,4 +424,94 @@ class Project2Server {
             }
         })
     }
+
+    fun updateInfo(context: Context, oldPostId: String, title: String, content: String, imagePartList: List<MultipartBody.Part>, isSuccess: () -> Unit, isFail: () -> Unit){
+        AndroidKeyStoreUtil.init(context)
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        Log.d("postAuth", userToken)
+        val REQ_NEW_POST = ReqUpdatePost(
+            title,
+            content,
+        )
+        val jsonObject = Gson().toJson(REQ_NEW_POST)
+        var requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject)
+        Log.d("postJson", jsonObject.toString())
+
+        var emptyList = ArrayList<MultipartBody.Part>()
+        var emptyFileBody = RequestBody.create(MediaType.parse("application/octet-stream"), "")
+        val emptyFilePart = MultipartBody.Part.createFormData("files", null, emptyFileBody)
+        emptyList.add(emptyFilePart)
+
+        var finalArray: List<MultipartBody.Part> = emptyList.toList()
+        if(imagePartList.isNotEmpty()) {
+            finalArray = imagePartList
+        }
+
+        RetrofitClient.service.updateInfo(oldPostId, userToken, requestBody, finalArray).enqueue(object:
+            Callback<ResUpdatePost> {
+            override fun onResponse(
+                call: Call<ResUpdatePost>,
+                response: Response<ResUpdatePost>
+            ) {
+                if(response.isSuccessful.not()){
+                    Log.d("FailOnResponse",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    isFail()
+                }
+                Toast.makeText(context, "업로드 성공!!!", Toast.LENGTH_SHORT).show()
+                response.body()?.let { Log.d("Success: testCreateNewStudy", "\n${it.result.message}")}
+                isSuccess()
+            }
+
+            override fun onFailure(call: Call<ResUpdatePost>, t: Throwable) {
+                Log.d("OnFailure", "[Fail]${t.toString()}")
+                isFail()
+            }
+        })
+    }
+
+    fun updateQNA(context: Context, oldPostId: String, title: String, content: String, imagePartList: List<MultipartBody.Part>, isSuccess: () -> Unit, isFail: () -> Unit){
+        AndroidKeyStoreUtil.init(context)
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        Log.d("postAuth", userToken)
+        val REQ_NEW_POST = ReqUpdatePost(
+            title,
+            content,
+        )
+        val jsonObject = Gson().toJson(REQ_NEW_POST)
+        var requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject)
+        Log.d("postJson", jsonObject.toString())
+
+        var emptyList = ArrayList<MultipartBody.Part>()
+        var emptyFileBody = RequestBody.create(MediaType.parse("application/octet-stream"), "")
+        val emptyFilePart = MultipartBody.Part.createFormData("files", null, emptyFileBody)
+        emptyList.add(emptyFilePart)
+
+        var finalArray: List<MultipartBody.Part> = emptyList.toList()
+        if(imagePartList.isNotEmpty()) {
+            finalArray = imagePartList
+        }
+
+        RetrofitClient.service.updateQNA(oldPostId, userToken, requestBody, finalArray).enqueue(object:
+            Callback<ResUpdatePost> {
+            override fun onResponse(
+                call: Call<ResUpdatePost>,
+                response: Response<ResUpdatePost>
+            ) {
+                if(response.isSuccessful.not()){
+                    Log.d("FailOnResponse",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    isFail()
+                }
+                Toast.makeText(context, "업로드 성공!!!", Toast.LENGTH_SHORT).show()
+                response.body()?.let { Log.d("Success: testCreateNewStudy", "\n${it.result.message}")}
+                isSuccess()
+            }
+
+            override fun onFailure(call: Call<ResUpdatePost>, t: Throwable) {
+                Log.d("OnFailure", "[Fail]${t.toString()}")
+                isFail()
+            }
+        })
+    }
 }

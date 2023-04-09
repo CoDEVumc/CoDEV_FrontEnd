@@ -5,7 +5,9 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -22,6 +24,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.codev.BuildConfig
 import com.example.codev.R
 import com.example.codev.databinding.ActivityAddPostBinding
@@ -46,6 +51,16 @@ import java.util.ArrayList
 //4. postTitle: String -> 기존 게시글의 제목
 //5. postContent: String -> 기존 게시글의 내용
 //6. postImageUrlsString: String -> 기존 게시글의 사진Url들을 콤마(,)로 구분된 String으로 보내주세요
+//6-1 => 사진이 없으면 ""만 보내주새요 => 예시: intent.putExtra("postImageUrlsString", "")
+//아래는 예시:
+//val intent = Intent(this@MainAppActivity, AddPostActivity::class.java)
+//intent.putExtra("postType", "info")
+//intent.putExtra("isOld", true)
+//intent.putExtra("postId", 9)
+//intent.putExtra("postTitle", "이것이 수정된 정보글의 긴 제목입니다. 생각보다 길게")
+//intent.putExtra("postContent", "여기는 수정된 정보글의 내용입니다. 이 내용이 매우매우매우 길기 때문에 테스트하기 좋습니다. 여기는 수정된 정보글의 내용입니다. 이 내용이 매우매우매우 길기 때문에 테스트하기 좋습니다. 여기는 수정된 정보글의 내용입니다. 이 내용이 매우매우매우 길기 때문에 테스트하기 좋습니다. 여기는 수정된 정보글의 내용입니다. 이 내용이 매우매우매우 길기 때문에 테스트하기 좋습니다. ")
+//intent.putExtra("postImageUrlsString", "http://semtle.catholic.ac.kr:8080/image?name=633400420230410014714.png,http://semtle.catholic.ac.kr:8080/image?name=642900220230410014714.png")
+//startActivity(intent)
 
 class AddPostActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityAddPostBinding
@@ -217,17 +232,19 @@ class AddPostActivity : AppCompatActivity() {
         //setTitle
         viewBinding.inputOfTitle.setText(oldTitle)
         //setDes
-        viewBinding.inputOfContent.setText(oldTitle)
+        viewBinding.inputOfContent.setText(oldContent)
 
         //setOldImage
         //TODO: 기존 이미지를 표시만 하고, 업로드 버튼이 누르면 그때 다시 다운로드하고 업로드하는 방식으로 하자
-        val imageUrl = ImageUrlListString.split(",")
-        for(nowUrl in imageUrl){
-            val nowImageItem = ImageItem(Uri.EMPTY, "", nowUrl)
-            imageItemList.add(nowImageItem)
-            viewBinding.addImageSection.adapter!!.notifyItemInserted(imageItemList.lastIndex)
-            //subImageCounter
-            viewBinding.addImageNum.text = "${imageItemList.size}/${imageLimit}"
+        if(ImageUrlListString != ""){
+            val imageUrl = ImageUrlListString.split(",")
+            for(nowUrl in imageUrl){
+                val nowImageItem = ImageItem(Uri.EMPTY, "", nowUrl)
+                imageItemList.add(nowImageItem)
+                viewBinding.addImageSection.adapter!!.notifyItemInserted(imageItemList.lastIndex)
+                //subImageCounter
+                viewBinding.addImageNum.text = "${imageItemList.size}/${imageLimit}"
+            }
         }
     }
 
@@ -241,7 +258,7 @@ class AddPostActivity : AppCompatActivity() {
             Log.d("finalDes", finalDes)
 
             if(isOld){
-                val imageFileList = ArrayList<File>()
+                val imageFilePathList = ArrayList<String>()
                 //getOldImageNumber
                 var allUrlNumber = 0
                 var loadedImageNumber = 0
@@ -249,15 +266,48 @@ class AddPostActivity : AppCompatActivity() {
                 for(i in imageItemList){
                     if(i.imageCopyPath == "") allUrlNumber+=1
                 }
+
                 for(i in imageItemList){
                     val nowIdx = imageItemList.indexOf(i)
-                    if(i.imageCopyPath != "") imageFileList.add(File(i.imageCopyPath))
+                    if(i.imageCopyPath != "") imageFilePathList.add(i.imageCopyPath)
                     else{
+                        Glide.with(this).asBitmap().load(i.imageUrl).into(object : CustomTarget<Bitmap>(){
+                            override fun onResourceReady(
+                                resource: Bitmap,
+                                transition: Transition<in Bitmap>?
+                            ) {
+                                imageFilePathList.add(AddImage().createImageCachePath(this@AddPostActivity, resource, 50))
+                                loadedImageNumber += 1
+                                if(loadedImageNumber == allUrlNumber){
+                                    val imageMultiPartList = project2Server.createImageMultiPartList(imageFilePathList)
+                                    if(postType == "info"){
+                                        uploadInfo(this@AddPostActivity, oldPostId.toString(), finalTitle, finalDes, imageMultiPartList)
+                                    }
+                                    else{
+                                        uploadQNA(this@AddPostActivity, oldPostId.toString(), finalTitle, finalDes, imageMultiPartList)
+                                    }
+                                }
+                            }
+
+                            override fun onLoadCleared(placeholder: Drawable?) {
+                                Log.e("oldtestimage", "onLoadCleared: ")
+                            }
+                        })
+
                         //TODO: 옛날 사진을 파일 형식으로 다운로드하고, 모든 옛날 사진들이 다운로드했으면
                         // -> {그 파일들을 가지고 멀티파트로 바꾸고 올리자} -> {}는 하나의 함수로 콜백 형식으로 glide안에 실행하자
                     }
                 }
 
+                if(allUrlNumber == 0){
+                    val imageMultiPartList = project2Server.createImageMultiPartList(imageFilePathList)
+                    if(postType == "info"){
+                        uploadInfo(this@AddPostActivity, oldPostId.toString(), finalTitle, finalDes, imageMultiPartList)
+                    }
+                    else{
+                        uploadQNA(this@AddPostActivity, oldPostId.toString(), finalTitle, finalDes, imageMultiPartList)
+                    }
+                }
             }else{
                 var imageMultiPartList = listOf<MultipartBody.Part>()
                 val finalImagePathList = ArrayList<String>()
@@ -270,8 +320,6 @@ class AddPostActivity : AppCompatActivity() {
                     uploadQNA(this, "0", finalTitle, finalDes, imageMultiPartList)
                 }
             }
-
-//            project2Server.postNewProject(this, finalTitle, finalDes, imageMultiPartList, viewBinding.submitButton) { finish() }
 
         }else{
             //업로드 불가, 사용자에게 알리고 버튼 해제
@@ -397,6 +445,8 @@ class AddPostActivity : AppCompatActivity() {
             Log.d("testAddPostString", POST_TITLE + POST_CONTENT)
             Log.d("testAddPostImage", IMAGE_MULTIPART_LIST.toString())
         }else{
+            project2Server.updateInfo(this, OLD_PROJECT_ID, POST_TITLE, POST_CONTENT, IMAGE_MULTIPART_LIST,
+                { isPostSuccess() }, { isPostFail() })
             Log.d("testUpdatePostMode", "기존 게시글 수정")
             Log.d("testUpdatePostString", POST_TITLE + POST_CONTENT)
             Log.d("testUpdatePostImage", IMAGE_MULTIPART_LIST.toString())
@@ -411,6 +461,8 @@ class AddPostActivity : AppCompatActivity() {
             Log.d("testAddPostString", POST_TITLE + POST_CONTENT)
             Log.d("testAddPostImage", IMAGE_MULTIPART_LIST.toString())
         }else{
+            project2Server.updateQNA(this, OLD_PROJECT_ID, POST_TITLE, POST_CONTENT, IMAGE_MULTIPART_LIST,
+                { isPostSuccess() }, { isPostFail() })
             Log.d("testUpdatePostMode", "기존 게시글 수정")
             Log.d("testUpdatePostString", POST_TITLE + POST_CONTENT)
             Log.d("testUpdatePostImage", IMAGE_MULTIPART_LIST.toString())
