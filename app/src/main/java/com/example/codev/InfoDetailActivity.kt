@@ -3,6 +3,8 @@ package com.example.codev
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
@@ -42,6 +44,27 @@ class InfoDetailActivity:AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.left2)
         }
 
+        //좋아요 기능
+        viewBinding.smile.setOnClickListener {
+            viewBinding.smile.isSelected = !viewBinding.smile.isSelected
+        }
+
+        //댓글 기능
+        viewBinding.etChat.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(p0: Editable?) {
+                if (!p0.isNullOrEmpty()) {
+                    enableSend(true)
+                }else{
+                    enableSend(false)
+                }
+            }
+        })
+
+        viewBinding.btnSend.setOnClickListener {
+            viewBinding.etChat.text.clear()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -61,6 +84,13 @@ class InfoDetailActivity:AppCompatActivity() {
         }else{
             //뷰어와 작성자 다를 때 : 뷰어
             Log.d("test","뷰어 모드")
+        }
+    }
+
+    private fun enableSend(boolean: Boolean){
+        if (viewBinding.btnSend.isEnabled != boolean){
+            viewBinding.btnSend.isEnabled = boolean
+            viewBinding.btnSend.isSelected = boolean
         }
     }
 
@@ -90,6 +120,7 @@ class InfoDetailActivity:AppCompatActivity() {
                                 viewBinding.smileCounter.text = "${it.result.Complete.co_likeCount}명이 공감해요"
                                 viewBinding.commentCounter.text = "댓글 ${it.result.Complete.co_commentCount}"
 
+                                viewBinding.smile.isSelected = it.result.Complete.co_like
                                 setViewMode(it.result.Complete.co_email == it.result.Complete.co_viewer)
 
                                 //content
