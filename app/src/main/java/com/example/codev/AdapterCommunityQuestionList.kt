@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
@@ -72,9 +73,21 @@ class AdapterCommunityQuestionList(private val context: Context, private val lis
 
             //질문글 이미지
             //binding.img.text = data.co_mainImg
-            Glide.with(context)
-                .load(data.co_mainImg)
-                .into(binding.img)
+            /*
+            * if(!post.imgUrl.isNullOrBlank()){
+                postBinding.photo.visibility = View.VISIBLE
+                postBinding.photo.clipToOutline = true
+                Glide.with(mainAppActivity).load(post.imgUrl).into(postBinding.photo)
+            }
+            * */
+
+            if(!data.co_mainImg.isNullOrBlank()){
+                binding.img.visibility = View.VISIBLE
+                Glide.with(context)
+                    .load(data.co_mainImg)
+                    .into(binding.img)
+            }
+
 
 
 
