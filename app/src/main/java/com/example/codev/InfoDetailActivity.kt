@@ -2,6 +2,7 @@ package com.example.codev
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,11 +11,20 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.codev.addpage.*
 import com.example.codev.databinding.ActivityCommunityDetailBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.ArrayList
 
 
@@ -111,10 +121,37 @@ class InfoDetailActivity:AppCompatActivity() {
                                 //header
                                 viewBinding.title.text = it.result.Complete.co_title
                                 viewBinding.writerNickname.text = it.result.Complete.co_nickname
+                                viewBinding.writeDate.text = stringToTime(it.result.Complete.updatedAt.toString())
                                 Glide.with(context)
                                     .load(it.result.Complete.profileImg).circleCrop()
+                                    .listener(object : RequestListener<Drawable> {
+                                        override fun onLoadFailed(
+                                            e: GlideException?,
+                                            model: Any?,
+                                            target: Target<Drawable>?,
+                                            isFirstResource: Boolean
+                                        ): Boolean {
+                                            CoroutineScope(Dispatchers.Main).launch {
+                                                Glide.with(context)
+                                                    .load("http://semtle.catholic.ac.kr:8080/image?name=Profile_Basic20230130012110.png")
+                                                    .circleCrop()
+                                                    .into(viewBinding.writerProfileImg)
+                                            }
+                                            return false
+                                        }
+
+                                        override fun onResourceReady(
+                                            resource: Drawable?,
+                                            model: Any?,
+                                            target: Target<Drawable>?,
+                                            dataSource: DataSource?,
+                                            isFirstResource: Boolean
+                                        ): Boolean {
+                                            return false
+                                        }
+
+                                    })
                                     .into(viewBinding.writerProfileImg)
-                                viewBinding.writeDate.text = it.result.Complete.updatedAt.toString()
 
                                 //footer
                                 viewBinding.smileCounter.text = "${it.result.Complete.co_likeCount}명이 공감해요"
@@ -127,6 +164,38 @@ class InfoDetailActivity:AppCompatActivity() {
                                 viewBinding.contentText.text = it.result.Complete.content
                                 setPhotoAdapter(it.result.Complete.co_photos)
                                 setCommentAdapter(it.result.Complete.co_comment)
+
+                                //bottom
+                                Glide.with(context)
+                                    .load(it.result.Complete.viewerImg).circleCrop()
+                                    .listener(object : RequestListener<Drawable> {
+                                        override fun onLoadFailed(
+                                            e: GlideException?,
+                                            model: Any?,
+                                            target: Target<Drawable>?,
+                                            isFirstResource: Boolean
+                                        ): Boolean {
+                                            CoroutineScope(Dispatchers.Main).launch {
+                                                Glide.with(context)
+                                                    .load("http://semtle.catholic.ac.kr:8080/image?name=Profile_Basic20230130012110.png")
+                                                    .circleCrop()
+                                                    .into(viewBinding.viewerProfileImg)
+                                            }
+                                            return false
+                                        }
+
+                                        override fun onResourceReady(
+                                            resource: Drawable?,
+                                            model: Any?,
+                                            target: Target<Drawable>?,
+                                            dataSource: DataSource?,
+                                            isFirstResource: Boolean
+                                        ): Boolean {
+                                            return false
+                                        }
+
+                                    })
+                                    .into(viewBinding.viewerProfileImg)
                             }
                         }
                     }
@@ -148,5 +217,11 @@ class InfoDetailActivity:AppCompatActivity() {
     private fun setCommentAdapter(dataList: ArrayList<InfoDetailComment>){
         val adapter = AdapterCommunityInfoParentCommentList(this,dataList)
         viewBinding.rvComment.adapter = adapter
+    }
+
+    private fun stringToTime(string: String) : String{
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S")
+        val convertTime = LocalDateTime.parse(string, formatter)
+        return convertTime.format(DateTimeFormatter.ofPattern("MM/dd HH:mm"))
     }
 }

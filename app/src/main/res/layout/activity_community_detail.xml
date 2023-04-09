@@ -234,8 +234,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="24dp"
-            android:background="@color/black_300"/>
+            android:layout_marginStart="24dp"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/chat_bar"

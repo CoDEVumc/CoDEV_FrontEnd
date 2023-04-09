@@ -16,6 +16,7 @@ data class InfotDetail(
     val co_infoId: Int,
     val co_email: String,
     val profileImg: String,
+    val viewerImg: String,
     val co_viewer: String,
     val co_nickname: String,
     val co_title: String,
@@ -49,6 +50,7 @@ data class InfoDetailComment(
     val co_coib: Int,
     val co_email:String,
     val co_nickname:String,
+    val profileImg: String,
     val co_infoId:Int,
     val content:String,
     val createdAt: Timestamp,
@@ -58,6 +60,7 @@ data class InfoDetailComment(
 data class InfoDetailChildComment(
     val co_rcoib:Int,
     val co_email:String,
+    val profileImg: String,
     val co_nickname: String,
     val co_coib: Int,
     val content: String,
