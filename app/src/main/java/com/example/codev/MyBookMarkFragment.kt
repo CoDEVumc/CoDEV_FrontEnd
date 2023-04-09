@@ -25,12 +25,15 @@ class MyBookMarkFragment: Fragment() {
     ): View? {
         viewBinding = FragmentMyBookmarkBinding.inflate(layoutInflater)
 
-        val now = arguments?.getInt("now")
+        val now = arguments?.getInt("now") //프,스
+
 
         viewBinding.viewpager.adapter = AdapterMyBookMark(this)
         val tabTitleArray = arrayOf(
             "프로젝트",
-            "스터디"
+            "스터디",
+            "글",
+            "공모전"
         )
 
         TabLayoutMediator(viewBinding.tabLayout, viewBinding.viewpager){tab, position ->

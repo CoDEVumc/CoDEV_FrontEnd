@@ -42,7 +42,7 @@ class MainAppActivity : AppCompatActivity() {
                     R.id.menu_community->{
                         supportFragmentManager
                             .beginTransaction()
-                            .replace(viewBinding.content.id, CommunityFragment())
+                            .replace(viewBinding.content.id,CommunityFragment())
                             .commitAllowingStateLoss()
                     }
                     R.id.menu_home->{

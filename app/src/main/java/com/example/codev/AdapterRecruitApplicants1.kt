@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -29,6 +30,7 @@ class AdapterRecruitApplicants1(private val context: Context, private val listDa
 
     private val isSelectedList : Array<Boolean> = Array(listData.size + 1){false}
     private var colored: Boolean = false
+
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -89,15 +91,23 @@ class AdapterRecruitApplicants1(private val context: Context, private val listDa
             binding.partToggle.setOnClickListener {
                 Log.d("ApaterRecruitApplyList: ","분야 토글 클릭 $position")
                 returnData("TEMP") //토글헤더 클릭 시 TEMP 넘겨줌
+
+                //클릭된 아이템의 상태 저장
                 isSelectedList[0] = true
-                binding.partToggle.isSelected = true
                 colored = true
+
+                binding.root.isSelected = true
+                val backgroundDrawable = ContextCompat.getDrawable(context, R.drawable.recruit_apply_partbox)
+                binding.root.background = backgroundDrawable
+
+                //리사이클러뷰 아이템 변경 알림
                 notifyItemChanged(0)
                 Log.d("(OnClickListener안)partTogle 의 상태 : ", binding.partToggle.isSelected.toString()) //여기서 true주면 안돼
+
             }
-            binding.partToggle.isSelected = isSelectedList[0]
-            binding.partToggle.isSelected = colored
-            Log.d("partTogle 의 상태 : ", binding.partToggle.isSelected.toString())
+
+            //두번돌아
+            Log.d("(OnClick밖 log)partTogle 의 상태 : ", binding.root.isSelected.toString())
 
         }
     }
