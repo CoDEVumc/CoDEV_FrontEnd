@@ -110,7 +110,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginEnd="2dp"
-                android:background="@drawable/community_icon_smile"
+                android:background="@drawable/community_icon_smile_unselected"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/snum"
                 app:layout_constraintStart_toStartOf="parent"
