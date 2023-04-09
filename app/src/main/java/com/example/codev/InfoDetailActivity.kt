@@ -15,6 +15,8 @@ import com.example.codev.databinding.ActivityCommunityDetailBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.ArrayList
 
 
@@ -114,7 +116,7 @@ class InfoDetailActivity:AppCompatActivity() {
                                 Glide.with(context)
                                     .load(it.result.Complete.profileImg).circleCrop()
                                     .into(viewBinding.writerProfileImg)
-                                viewBinding.writeDate.text = it.result.Complete.updatedAt.toString()
+                                viewBinding.writeDate.text = stringToTime(it.result.Complete.updatedAt.toString())
 
                                 //footer
                                 viewBinding.smileCounter.text = "${it.result.Complete.co_likeCount}명이 공감해요"
@@ -148,5 +150,11 @@ class InfoDetailActivity:AppCompatActivity() {
     private fun setCommentAdapter(dataList: ArrayList<InfoDetailComment>){
         val adapter = AdapterCommunityInfoParentCommentList(this,dataList)
         viewBinding.rvComment.adapter = adapter
+    }
+
+    private fun stringToTime(string: String) : String{
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S")
+        val convertTime = LocalDateTime.parse(string, formatter)
+        return convertTime.format(DateTimeFormatter.ofPattern("MM/dd HH:mm"))
     }
 }

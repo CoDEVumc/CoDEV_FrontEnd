@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.codev.databinding.RecycleCommunityCommentBinding
 import com.example.codev.databinding.RecycleCommunityCommentReplyBinding
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class AdapterCommunityInfoChildCommentList(private val context: Context, private val listData: ArrayList<InfoDetailChildComment>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
@@ -32,7 +34,7 @@ class AdapterCommunityInfoChildCommentList(private val context: Context, private
         fun bind(data: InfoDetailChildComment, position: Int){
             binding.nickname.text = data.co_nickname
             binding.content.text = data.content
-            binding.date.text = data.createdAt.toString()
+            binding.date.text = stringToTime(data.createdAt.toString())
         }
     }
 
@@ -44,5 +46,11 @@ class AdapterCommunityInfoChildCommentList(private val context: Context, private
             //뷰어와 댓글 작성자 다를 때 : 뷰어
             Log.d("test","뷰어 모드")
         }
+    }
+
+    private fun stringToTime(string: String) : String{
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S")
+        val convertTime = LocalDateTime.parse(string, formatter)
+        return convertTime.format(DateTimeFormatter.ofPattern("MM/dd HH:mm"))
     }
 }
