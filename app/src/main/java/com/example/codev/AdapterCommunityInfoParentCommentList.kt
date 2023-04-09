@@ -1,11 +1,20 @@
 package com.example.codev
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.codev.databinding.RecycleCommunityCommentBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.sql.Timestamp
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -38,6 +47,36 @@ class AdapterCommunityInfoParentCommentList(private val context: Context, privat
             binding.nickname.text = data.co_nickname
             binding.content.text = data.content
             binding.date.text = stringToTime(data.createdAt.toString())
+            Glide.with(itemView.context)
+                .load(data.profileImg).circleCrop()
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            Glide.with(itemView.context)
+                                .load("http://semtle.catholic.ac.kr:8080/image?name=Profile_Basic20230130012110.png")
+                                .circleCrop()
+                                .into(binding.profileImg)
+                        }
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        return false
+                    }
+
+                })
+                .into(binding.profileImg)
         }
     }
 
