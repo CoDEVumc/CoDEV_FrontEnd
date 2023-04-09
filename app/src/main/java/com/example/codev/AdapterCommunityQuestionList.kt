@@ -72,15 +72,6 @@ class AdapterCommunityQuestionList(private val context: Context, private val lis
             binding.bnum.text = data.co_markCount.toString()
 
             //질문글 이미지
-            //binding.img.text = data.co_mainImg
-            /*
-            * if(!post.imgUrl.isNullOrBlank()){
-                postBinding.photo.visibility = View.VISIBLE
-                postBinding.photo.clipToOutline = true
-                Glide.with(mainAppActivity).load(post.imgUrl).into(postBinding.photo)
-            }
-            * */
-
             if(!data.co_mainImg.isNullOrBlank()){
                 binding.img.visibility = View.VISIBLE
                 Glide.with(context)

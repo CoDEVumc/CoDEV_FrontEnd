@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
@@ -72,10 +73,12 @@ class AdapterCommunityInfoList(private val context: Context, private val listDat
             binding.bnum.text = data.co_markCount.toString()
 
             //정보글 이미지
-            //binding.img.text = data.co_mainImg
-            Glide.with(context)
-                .load(data.co_mainImg)
-                .into(binding.img)
+            if(!data.co_mainImg.isNullOrBlank()){
+                binding.img.visibility = View.VISIBLE
+                Glide.with(context)
+                    .load(data.co_mainImg)
+                    .into(binding.img)
+            }
 
 
 
