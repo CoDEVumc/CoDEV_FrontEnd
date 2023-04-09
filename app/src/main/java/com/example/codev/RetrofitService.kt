@@ -154,7 +154,7 @@ interface RetrofitService {
     fun getHeartedQustion(@Header("CoDev_Authorization") header: String) : Call<ResBookMarkQuestionAndInfoList>
     @GET("infoBoard/mark/list")
     fun getHeartedInfo(@Header("CoDev_Authorization") header: String) : Call<ResBookMarkQuestionAndInfoList>
-    @GET("my-page/hearts/projects")
+    @GET("infoBoard/mark/list")
     fun getHeartedQustionAndInfo(@Header("CoDev_Authorization") header: String) : Call<ResBookMarkQuestionAndInfoList>
     @GET("my-page/hearts/studies")
     fun getHeartedContest(@Header("CoDev_Authorization") header: String) : Call<ResBookMarkContestList>

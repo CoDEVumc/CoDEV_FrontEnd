@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
@@ -70,22 +71,22 @@ class AdapterMyBookmarkQuestionAndInfoList(private val context: Context, private
             //북마크 수
             binding.bnum.text = data.co_markCount.toString()
 
-            //질문글 이미지
-            //binding.img.text = data.co_mainImg
-            Glide.with(context)
-                .load(data.co_mainImg)
-                .into(binding.img)
-
+            //정보글, 질문글 이미지
+            if(!data.co_mainImg.isNullOrBlank()){
+                binding.img.visibility = View.VISIBLE
+                Glide.with(context)
+                    .load(data.co_mainImg)
+                    .into(binding.img)
+            }
 
 
             binding.item.setOnClickListener { //상세조회 연결
-//                val intent = Intent(binding.item.context, RecruitDetailActivity::class.java)
-//                intent.putExtra("id",data.co_projectId)
-//                intent.putExtra("type","PROJECT")
-//                intent.putExtra("dday",binding.dday.text)
-//                Log.d("test : 선택한 질문글 아이디", data.co_qnaId.toString())
-//                startActivity(binding.item.context,intent,null)
+                val intent = Intent(binding.item.context, InfoDetailActivity::class.java)
+                intent.putExtra("id", data.co_infoId)
+                Log.d("test : 선택한 정보글 아이디", data.co_infoId.toString())
+                startActivity(binding.item.context,intent,null)
             }
+
         }
     }
 
