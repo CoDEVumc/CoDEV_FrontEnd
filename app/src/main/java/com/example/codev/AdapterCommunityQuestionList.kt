@@ -44,7 +44,7 @@ class AdapterCommunityQuestionList(private val context: Context, private val lis
         fun bind(data: QIData, position: Int){
             //작성자 프로필 사진
             Glide.with(context)
-                .load(data.profileImg)
+                .load(data.profileImg).circleCrop()
                 .into(binding.image)
 
             //작성자 닉네임

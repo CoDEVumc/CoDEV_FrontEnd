@@ -21,6 +21,7 @@ import androidx.annotation.GravityInt
 import androidx.fragment.app.DialogFragment
 import com.example.codev.addpage.AddNewProjectActivity
 import com.example.codev.addpage.AddNewStudyActivity
+import com.example.codev.addpage.AddPostActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.example.codev.databinding.PopupWrite2Binding
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -30,7 +31,7 @@ class BottomSheetWrite2(private val returnWrite: (String) -> Unit) : DialogFragm
     //private lateinit var dlg : BottomSheetDialog
 
 
-    var write: String=""
+    var postType: String=""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,24 +52,28 @@ class BottomSheetWrite2(private val returnWrite: (String) -> Unit) : DialogFragm
         popupWriteBinding.radioGroupWrite.setOnCheckedChangeListener { radioGroup, checkID ->
             when(checkID) {
                 R.id.btn_write_question -> {
-                    write = "question"
+                    postType = "qna"
                     //Log.d("test: ","최신순")
                     Toast.makeText(this.context, "질문 버튼 클릭!", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(getActivity(), AddNewProjectActivity::class.java)
+                    val intent = Intent(getActivity(), AddPostActivity::class.java)
+                    intent.putExtra("postType", "qna")
+                    intent.putExtra("isOld", false)
                     startActivity(intent)
                     popupWriteBinding.radioGroupWrite.clearCheck()
                 }
                 R.id.btn_write_info -> {
-                    write = "info"
+                    postType = "info"
                     //Log.d("test: ","추천순")
                     Toast.makeText(this.context, "정보 버튼 클릭!", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(getActivity(), AddNewStudyActivity::class.java)
+                    val intent = Intent(getActivity(), AddPostActivity::class.java)
+                    intent.putExtra("postType", "info")
+                    intent.putExtra("isOld", false)
                     startActivity(intent)
                     popupWriteBinding.radioGroupWrite.clearCheck()
                 }
             }
 
-            returnWrite(write)
+            returnWrite(postType)
         }
 
 

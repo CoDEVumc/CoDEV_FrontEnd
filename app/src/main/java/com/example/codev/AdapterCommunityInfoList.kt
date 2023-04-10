@@ -45,7 +45,7 @@ class AdapterCommunityInfoList(private val context: Context, private val listDat
             //작성자 프로필 사진
             //binding.image.text = data.profileImg
             Glide.with(context)
-                .load(data.profileImg)
+                .load(data.profileImg).circleCrop()
                 .into(binding.image)
 
             //작성자 닉네임
@@ -80,8 +80,11 @@ class AdapterCommunityInfoList(private val context: Context, private val listDat
                     .into(binding.img)
             }
 
+            //정보글은 Q. 글자 안보이게
+            binding.q.visibility = View.GONE
 
-            binding.item.setOnClickListener { //상세조회 연결
+            //상세조회 연결
+            binding.item.setOnClickListener {
                 val intent = Intent(binding.item.context, InfoDetailActivity::class.java)
                 intent.putExtra("id", data.co_infoId)
                 Log.d("test : 선택한 정보글 아이디", data.co_infoId.toString())
