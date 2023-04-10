@@ -74,7 +74,8 @@ class AdapterRecruitApplicants1(private val context: Context, private val listDa
             binding.num.text = data.co_limit.toString() + "명"
 
             binding.partToggle.setOnClickListener{
-                Log.d("AdapterRecruitApplyList: ", "분야 토글 클릭 $position")
+                Log.d("AdapterRecruitApplyList: ", "분야 토글 클릭 $adapterPosition")
+
                 colored = true
                 returnData(binding.part.text.toString()) //토글아이템 클릭 시 "프론트엔드, 백엔드, 기획, 디자인, 기타" 넘겨줌
             }

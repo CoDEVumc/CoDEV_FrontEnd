@@ -231,18 +231,20 @@ class AppliedDetailActivity : AppCompatActivity() {
                     when (response.code()) {
                         200 -> {
                             response.body()?.let {
-                                Log.d("test: 포트폴리오 불러오기 성공", response.toString())
-                                nowPageType = "PROJECT"
-                                setDataOnPage(this@AppliedDetailActivity, it.result.message)
-                                isLoaded = true
+                                if(it.code == 400){
+                                    Toast.makeText(this@AppliedDetailActivity, "지원자가 해당 포트폴리오를 삭제했습니다.", Toast.LENGTH_SHORT).show()
+                                    setEmptyPage(this@AppliedDetailActivity)
+                                    //isLoaded 처리 필요
+                                    isLoaded = true
+
+                                }else if(it.code == 200){
+                                    Log.d("test: 포트폴리오 불러오기 성공", response.toString())
+                                    nowPageType = "PROJECT"
+                                    setDataOnPage(this@AppliedDetailActivity, it.result.message)
+                                    isLoaded = true
+                                }
                             }
                         }
-                        400 -> {
-                            Toast.makeText(this@AppliedDetailActivity, "지원자가 해당 포트폴리오를 삭제했습니다.", Toast.LENGTH_SHORT).show()
-                            setEmptyPage(this@AppliedDetailActivity)
-                            //isLoaded 처리 필요
-                        }
-
                     }
 
                 }
@@ -269,21 +271,21 @@ class AppliedDetailActivity : AppCompatActivity() {
                     when (response.code()) {
                         200 -> {
                             response.body()?.let {
-                                Log.d("test: 포트폴리오 불러오기 성공", response.toString())
-                                nowPageType = "STUDY"
-                                setDataOnPage(this@AppliedDetailActivity, it.result.message)
-                                isLoaded = true
+                                if(it.code == 200){
+                                    Log.d("test: 포트폴리오 불러오기 성공", response.toString())
+                                    nowPageType = "STUDY"
+                                    setDataOnPage(this@AppliedDetailActivity, it.result.message)
+                                    isLoaded = true
+                                }else if(it.code == 400) {
+                                    Toast.makeText(this@AppliedDetailActivity, "지원자가 해당 포트폴리오를 삭제했습니다.", Toast.LENGTH_SHORT).show()
+                                    setEmptyPage(this@AppliedDetailActivity)
+                                    //isLoaded 처리 필요
+                                    isLoaded = true
+
+                                }
                             }
                         }
-                        400 -> {
-                            Toast.makeText(this@AppliedDetailActivity, "지원자가 해당 포트폴리오를 삭제했습니다.", Toast.LENGTH_SHORT).show()
-                            setEmptyPage(this@AppliedDetailActivity)
-                            //isLoaded 처리 필요
-
-                        }
-
                     }
-
                 }
 
                 override fun onFailure(call: Call<ResAppliedUserDetail>, t: Throwable) {

@@ -119,5 +119,7 @@
     <string name="user_email_text">이메일</string>
     <string name="user_password_text">비밀번호</string>
 
+    <string name="server_client_id">242179001869-snj41p9nfda06ves81efofk8b0g6q9t2.apps.googleusercontent.com</string>
+
 
 </resources>
