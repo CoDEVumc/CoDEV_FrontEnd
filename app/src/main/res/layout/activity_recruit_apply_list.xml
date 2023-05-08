@@ -143,6 +143,8 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <!-- 스크롤이 가능한 라디오 그룹을 감싸는 ScrollView -->
+
+
         <ScrollView
             android:id="@+id/parts"
             android:layout_width="match_parent"
@@ -151,8 +153,10 @@
             android:layout_marginBottom="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
 
             <RadioGroup
                 android:id="@+id/radioGroup"
@@ -163,7 +167,7 @@
 
                 <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/btn_selected"
-                    android:layout_width="wrap_content"
+                    android:layout_width="76dp"
                     android:layout_height="36dp"
                     android:layout_marginEnd="12dp"
                     android:background="@drawable/recruit_apply_partbox"
@@ -172,17 +176,16 @@
 
                 <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/btn_frontend"
-                    android:layout_width="wrap_content"
+                    android:layout_width="110dp"
                     android:layout_height="36dp"
                     android:layout_marginEnd="12dp"
-                    android:layout_weight="1"
                     android:background="@drawable/recruit_apply_partbox"
                     android:button="@null"
                     android:text="프론트엔드" />
 
                 <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/btn_backend"
-                    android:layout_width="wrap_content"
+                    android:layout_width="90dp"
                     android:layout_height="36dp"
                     android:layout_marginEnd="12dp"
                     android:background="@drawable/recruit_apply_partbox"
@@ -191,7 +194,7 @@
 
                 <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/btn_design"
-                    android:layout_width="wrap_content"
+                    android:layout_width="88dp"
                     android:layout_height="36dp"
                     android:layout_marginEnd="12dp"
                     android:background="@drawable/recruit_apply_partbox"
@@ -200,7 +203,7 @@
 
                 <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/btn_plan"
-                    android:layout_width="wrap_content"
+                    android:layout_width="77dp"
                     android:layout_height="36dp"
                     android:layout_marginEnd="12dp"
                     android:background="@drawable/recruit_apply_partbox"
@@ -209,7 +212,7 @@
 
                 <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/btn_etc"
-                    android:layout_width="wrap_content"
+                    android:layout_width="77dp"
                     android:layout_height="36dp"
                     android:layout_marginEnd="12dp"
                     android:background="@drawable/recruit_apply_partbox"
@@ -219,8 +222,6 @@
             </RadioGroup>
 
         </ScrollView>
-
-
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/part"

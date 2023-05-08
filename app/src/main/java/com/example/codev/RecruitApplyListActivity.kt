@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -368,7 +369,35 @@ class RecruitApplyListActivity: AppCompatActivity() {
     private fun setAdapter1(dataList: ArrayList<ApplicantData>, context: Context, limit: Int){
         Log.d("test", "어댑터 1")
 
+        viewBinding.radioGroup.setOnCheckedChangeListener { radioGroup, checkID ->
+            when(checkID) {
+                R.id.btn_selected -> {
+                    loadData(context,type,id,"TEMP")
+                }
+                R.id.btn_frontend -> {
+                    loadData(context,type,id,"프론트엔드")
+                    Log.d("RecruitApplyListActivity", "379줄: 프론트엔드 클릭")
+                    Log.d("RecruitApplyListActivity: 프론트엔드버튼 isChecked=", viewBinding.btnFrontend.isChecked.toString())
+                }
+                R.id.btn_backend -> {
+                    loadData(context,type,id,"백엔드")
+                }
+                R.id.btn_design -> {
+                    loadData(context,type,id,"디자인")
+                }
+                R.id.btn_plan -> {
+                    loadData(context,type,id,"기획")
+                }
+                R.id.btn_etc -> {
+                    loadData(context,type,id,"기타")
+                }
+            }
+            //returnSort(sort)
+        }
+
+        /*//여기!!!!!!!!!!!!!!!!!!
         viewBinding.btnSelected.setOnClickListener{
+
             loadData(context,type,id,"TEMP")
         }
         viewBinding.btnFrontend.setOnClickListener{
@@ -385,7 +414,8 @@ class RecruitApplyListActivity: AppCompatActivity() {
         }
         viewBinding.btnEtc.setOnClickListener {
             loadData(context,type,id,"기타")
-        }
+        }*/
+
         viewBinding.btnEdit.isChecked = false
         viewBinding.btnEdit.text = "선택하기"
 
