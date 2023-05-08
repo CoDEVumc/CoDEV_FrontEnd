@@ -16,7 +16,10 @@ import com.example.codev.addpage.AddNewStudyActivity
 import com.example.codev.addpage.EditProject
 import com.example.codev.addpage.EditStudy
 import com.example.codev.databinding.ActivityRecruitApplyListBinding
+import com.example.codev.databinding.RecycleRecruitApplyPartHeaderBinding
+import com.example.codev.databinding.RecycleRecruitApplyPartItemBinding
 import com.google.gson.JsonObject
+import com.tbuonomo.viewpagerdotsindicator.setBackgroundCompat
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -348,7 +351,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
         }
     }
 
-    private fun setAdapter1(dataList: ArrayList<ApplicantData>, context: Context, limit: Int){
+    /*private fun setAdapter1(dataList: ArrayList<ApplicantData>, context: Context, limit: Int){
         Log.d("test", "어댑터 1")
         adapter1 = AdapterRecruitApplicants1(context, dataList, limit){
             Log.d("test","리콜받음 $it")
@@ -359,6 +362,42 @@ class RecruitApplyListActivity: AppCompatActivity() {
         val currentPosition = (viewBinding.part.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
         viewBinding.part.adapter = adapter1
         viewBinding.part.scrollToPosition(currentPosition)
+    }*/
+    private lateinit var hbinding: RecycleRecruitApplyPartHeaderBinding
+    private lateinit var ibinding: RecycleRecruitApplyPartItemBinding
+    private fun setAdapter1(dataList: ArrayList<ApplicantData>, context: Context, limit: Int){
+        Log.d("test", "어댑터 1")
+
+        viewBinding.btnSelected.setOnClickListener{
+            loadData(context,type,id,"TEMP")
+        }
+        viewBinding.btnFrontend.setOnClickListener{
+            loadData(context,type,id,"프론트엔드")
+        }
+        viewBinding.btnBackend.setOnClickListener {
+            loadData(context,type,id,"백엔드")
+        }
+        viewBinding.btnDesign.setOnClickListener {
+            loadData(context,type,id,"디자인")
+        }
+        viewBinding.btnPlan.setOnClickListener {
+            loadData(context,type,id,"기획")
+        }
+        viewBinding.btnEtc.setOnClickListener {
+            loadData(context,type,id,"기타")
+        }
+        viewBinding.btnEdit.isChecked = false
+        viewBinding.btnEdit.text = "선택하기"
+
+        //AdapterRecruitApplicants1(context, dataList, limit) //어댑터에서 data.어쩌구ㄱ
+
+        /*adapter1 = AdapterRecruitApplicants1(context, dataList, limit){
+            Log.d("test","리콜받음 $it")
+            loadData(context, type, id, it)
+            viewBinding.btnEdit.isChecked = false
+            viewBinding.btnEdit.text = "선택하기"
+        }*/
+        //viewBinding.part.adapter = adapter1
     }
 
     private fun setAdapter2(dataList: ArrayList<ApplicantInfoData>, context: Context){

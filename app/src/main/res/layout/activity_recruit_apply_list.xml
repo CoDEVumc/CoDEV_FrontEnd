@@ -142,6 +142,86 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar_apply"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!-- 스크롤이 가능한 라디오 그룹을 감싸는 ScrollView -->
+        <ScrollView
+            android:id="@+id/parts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/btn_selected"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/recruit_apply_partbox"
+                    android:button="@null"
+                    android:text="선택됨" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/btn_frontend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/recruit_apply_partbox"
+                    android:button="@null"
+                    android:text="프론트엔드" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/btn_backend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/recruit_apply_partbox"
+                    android:button="@null"
+                    android:text="백엔드" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/btn_design"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/recruit_apply_partbox"
+                    android:button="@null"
+                    android:text="디자인" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/btn_plan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/recruit_apply_partbox"
+                    android:button="@null"
+                    android:text="기획" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/btn_etc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/recruit_apply_partbox"
+                    android:button="@null"
+                    android:text="기타" />
+
+            </RadioGroup>
+
+        </ScrollView>
+
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/part"
             android:layout_width="match_parent"
@@ -150,6 +230,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
             android:orientation="horizontal"
+            android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

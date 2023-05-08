@@ -80,12 +80,26 @@ class AdapterMyBookmarkQuestionAndInfoList(private val context: Context, private
             }
 
 
+            //정보글, 질문글 분리 해서 상세조회랑 연결!!!!!!
             binding.item.setOnClickListener { //상세조회 연결
+                val intent = Intent(binding.item.context, InfoDetailActivity::class.java)
+                if(data.co_infoId!=null) {
+                    intent.putExtra("id", data.co_infoId)
+                    Log.d("test : 선택한 정보글 아이디", data.co_infoId.toString())
+                    startActivity(binding.item.context, intent, null)
+                }
+                else if(data.co_qnaId!=null){
+                    intent.putExtra("id", data.co_qnaId)
+                    Log.d("test : 선택한 정보글 아이디", data.co_qnaId.toString())
+                    startActivity(binding.item.context, intent, null)
+                }
+            }
+            /*binding.item.setOnClickListener { //상세조회 연결
                 val intent = Intent(binding.item.context, InfoDetailActivity::class.java)
                 intent.putExtra("id", data.co_infoId)
                 Log.d("test : 선택한 정보글 아이디", data.co_infoId.toString())
                 startActivity(binding.item.context,intent,null)
-            }
+            }*/
 
         }
     }
