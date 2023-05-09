@@ -1,6 +1,5 @@
 package com.example.codev
 
-import android.R
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -10,7 +9,6 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.isGone
 import com.example.codev.databinding.ActivityRecruitApplyListBinding
 import com.example.codev.databinding.RecycleRecruitApplyPartHeaderBinding
 import com.example.codev.databinding.RecycleRecruitApplyPartItemBinding
@@ -18,6 +16,7 @@ import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import androidx.core.view.isGone as isGone1
 
 
 class RecruitApplyListActivity: AppCompatActivity() {
@@ -96,10 +95,10 @@ class RecruitApplyListActivity: AppCompatActivity() {
             }
             Log.d("test",part)
             if (part == "TEMP"){
-                viewBinding.bottomBtn.isGone = viewBinding.btnEdit.isChecked
-                viewBinding.btnSelect1.isGone = !viewBinding.btnEdit.isChecked
+                viewBinding.bottomBtn.isGone1 = viewBinding.btnEdit.isChecked
+                viewBinding.btnSelect1.isGone1 = !viewBinding.btnEdit.isChecked
             }else{
-                viewBinding.btnSelect2.isGone = !viewBinding.btnEdit.isChecked
+                viewBinding.btnSelect2.isGone1 = !viewBinding.btnEdit.isChecked
             }
             //토글헤더에서 눌렸을 때 vs 토글아이템에서 눌렸을 때 나눠야 함
             adapter2.setEdit(viewBinding.btnEdit.isChecked)
@@ -131,7 +130,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
             loadData(this, type, id, part)
 
             viewBinding.btnEdit.isChecked = !viewBinding.btnEdit.isChecked
-            viewBinding.btnSelect1.isGone = !viewBinding.btnEdit.isChecked
+            viewBinding.btnSelect1.isGone1 = !viewBinding.btnEdit.isChecked
             viewBinding.btnEdit.text = "선택하기"
             adapter2.setEdit(viewBinding.btnEdit.isChecked)
             adapter2.setCount(0)
@@ -155,7 +154,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
             loadData(this, type, id, part)
 
             viewBinding.btnEdit.isChecked = !viewBinding.btnEdit.isChecked
-            viewBinding.btnSelect2.isGone = !viewBinding.btnEdit.isChecked
+            viewBinding.btnSelect2.isGone1 = !viewBinding.btnEdit.isChecked
             viewBinding.btnEdit.text = "선택하기"
             adapter2.setEdit(viewBinding.btnEdit.isChecked)
             adapter2.setCount(0)
@@ -474,9 +473,9 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
                                     part = it.result.message.co_part
                                     if (part == "TEMP"){
-                                        viewBinding.bottomBtn.isGone = false
-                                        viewBinding.btnSelect1.isGone = true
-                                        viewBinding.btnSelect2.isGone = true
+                                        viewBinding.bottomBtn.isGone1 = false
+                                        viewBinding.btnSelect1.isGone1 = true
+                                        viewBinding.btnSelect2.isGone1 = true
                                         peopleNum = it.result.message.co_tempSavedApplicantsCount
                                         viewBinding.applicantNum.text = "현재 선택한 지원자 $peopleNum"
 
@@ -497,9 +496,9 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
                                     }
                                     else{
-                                        viewBinding.bottomBtn.isGone = true
-                                        viewBinding.btnSelect1.isGone = true
-                                        viewBinding.btnSelect2.isGone = true
+                                        viewBinding.bottomBtn.isGone1 = true
+                                        viewBinding.btnSelect1.isGone1 = true
+                                        viewBinding.btnSelect2.isGone1 = true
                                         peopleNum = it.result.message.co_applicantsInfo.size
                                         viewBinding.applicantNum.text = "현재 파트 지원자 $peopleNum"
                                     }
@@ -571,9 +570,9 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
                                     part = it.result.message.co_part
                                     if (part == "TEMP"){
-                                        viewBinding.bottomBtn.isGone = false
-                                        viewBinding.btnSelect1.isGone = true
-                                        viewBinding.btnSelect2.isGone = true
+                                        viewBinding.bottomBtn.isGone1 = false
+                                        viewBinding.btnSelect1.isGone1 = true
+                                        viewBinding.btnSelect2.isGone1 = true
                                         peopleNum = it.result.message.co_tempSavedApplicantsCount
                                         viewBinding.applicantNum.text = "현재 선택한 지원자 $peopleNum"
 
@@ -591,9 +590,9 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
                                     }
                                     else{
-                                        viewBinding.bottomBtn.isGone = true
-                                        viewBinding.btnSelect1.isGone = true
-                                        viewBinding.btnSelect2.isGone = true
+                                        viewBinding.bottomBtn.isGone1 = true
+                                        viewBinding.btnSelect1.isGone1 = true
+                                        viewBinding.btnSelect2.isGone1 = true
                                         peopleNum = temp.size
                                         viewBinding.applicantNum.text = "현재 파트 지원자 $peopleNum"
                                     }

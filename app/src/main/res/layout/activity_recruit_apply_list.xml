@@ -221,6 +221,7 @@
                     android:background="@drawable/recruit_apply_partbox"
                     android:button="@null"
                     android:text="  기타" />
+
             </RadioGroup>
 
         </HorizontalScrollView>
