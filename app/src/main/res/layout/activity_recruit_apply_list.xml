@@ -145,12 +145,14 @@
         <!-- 스크롤이 가능한 라디오 그룹을 감싸는 ScrollView -->
 
 
-        <ScrollView
+        <HorizontalScrollView
             android:id="@+id/parts"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
+            android:layout_marginStart="24dp"
+            android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -160,9 +162,9 @@
 
             <RadioGroup
                 android:id="@+id/radioGroup"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatRadioButton
@@ -172,6 +174,7 @@
                     android:layout_marginEnd="12dp"
                     android:background="@drawable/recruit_apply_partbox"
                     android:button="@null"
+                    android:checked="true"
                     android:text="선택됨" />
 
                 <androidx.appcompat.widget.AppCompatRadioButton
@@ -218,10 +221,9 @@
                     android:background="@drawable/recruit_apply_partbox"
                     android:button="@null"
                     android:text="기타" />
-
             </RadioGroup>
 
-        </ScrollView>
+        </HorizontalScrollView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/part"

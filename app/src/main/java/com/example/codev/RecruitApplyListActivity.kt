@@ -366,6 +366,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
     }*/
     private lateinit var hbinding: RecycleRecruitApplyPartHeaderBinding
     private lateinit var ibinding: RecycleRecruitApplyPartItemBinding
+
     private fun setAdapter1(dataList: ArrayList<ApplicantData>, context: Context, limit: Int){
         Log.d("test", "어댑터 1")
 
@@ -376,8 +377,6 @@ class RecruitApplyListActivity: AppCompatActivity() {
                 }
                 R.id.btn_frontend -> {
                     loadData(context,type,id,"프론트엔드")
-                    Log.d("RecruitApplyListActivity", "379줄: 프론트엔드 클릭")
-                    Log.d("RecruitApplyListActivity: 프론트엔드버튼 isChecked=", viewBinding.btnFrontend.isChecked.toString())
                 }
                 R.id.btn_backend -> {
                     loadData(context,type,id,"백엔드")
