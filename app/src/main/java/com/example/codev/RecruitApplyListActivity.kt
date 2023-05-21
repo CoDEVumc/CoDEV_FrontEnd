@@ -192,7 +192,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
             if(plan>=0 && design>=0 && frontEnd>=0 && backEnd>=0 && etc>=0){
                 Log.d("test",roomId)
                 doneRecruit(this, type, id, applicantList)
-                conFirmChatRoom(this, roomId, roomType, inviteList)
+                ChatClient.createChatRoom(this, title, mainImg, inviteList, roomType, type, id, optionMove = false)
                 val intent = Intent(this, RecruitDoneActivity::class.java)
                 intent.putExtra("roomId", roomId)
                 intent.putExtra("selectList", selectList)
@@ -200,9 +200,6 @@ class RecruitApplyListActivity: AppCompatActivity() {
             }else{
                 Toast.makeText(this, "파트별 제한인원을 다시 확인해주세요", Toast.LENGTH_SHORT).show()
             }
-
-
-
         }
 
         //초기화 버튼
@@ -228,96 +225,6 @@ class RecruitApplyListActivity: AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun conFirmChatRoom(context: Context, roomId: String, roomType: String, inviteList: ArrayList<String>){
-        RetrofitClient.service.confirmChatRoom(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),roomId).enqueue(object: Callback<JsonObject>{
-            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                if(response.isSuccessful.not()){
-                    Log.d("test: 채팅방생성 실패",response.toString())
-                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }else{
-                    when(response.code()){
-                        200->{
-                            response.body()?.let {
-                                Log.d("stomp: 채팅방 새로 개설", "새로 생성")
-                                createChat(context, roomId, roomType, inviteList)
-                            }
-                        }
-                        401 ->{
-                            Log.d("stomp: 채팅방 이미 존재", "이미 생성")
-                            ChatClient.join(context, roomId)
-                            val intent = Intent(context, ChatRoomActivity::class.java)
-                            intent.putExtra("title", title)
-                            intent.putExtra("roomId", roomId)
-                            intent.putExtra("people", 1)
-                            intent.putExtra("isRead", 0)
-                            startActivity(intent)
-                        }
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Log.d("test: 채팅방생성 실패", "[Fail]${t.toString()}")
-                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun createChat(context: Context, roomId: String, roomType: String, inviteList: ArrayList<String>){
-        RetrofitClient.service.createChatRoom(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), ReqCreateChatRoom(roomId, roomType, title, mainImg)).enqueue(object: Callback<JsonObject> {
-            @SuppressLint("UseCompatLoadingForDrawables")
-            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                if(response.isSuccessful.not()){
-                    Log.d("test: 채팅방생성 실패",response.toString())
-                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }else{
-                    when(response.code()){
-                        200->{
-                            response.body()?.let {
-                                Log.d("test: 채팅방생성 성공! ", "\n${it.toString()}")
-                                inviteChat(context, roomId, inviteList)
-                            }
-                        }
-                        401 ->{
-                            Log.d("test: 401", "이미 생성")
-                            Toast.makeText(context, "이미 문의 채팅이 생성되어있습니다", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Log.d("test: 채팅방생성 실패", "[Fail]${t.toString()}")
-                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun inviteChat(context: Context, roomId: String, inviteList: ArrayList<String>){
-        RetrofitClient.service.inviteChat(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), ReqInviteChat(roomId, inviteList)).enqueue(object: Callback<JsonObject> {
-            @SuppressLint("UseCompatLoadingForDrawables")
-            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                if(response.isSuccessful.not()){
-                    Log.d("test: 채팅방초대 실패",response.toString())
-                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }else{
-                    when(response.code()){
-                        200->{
-                            response.body()?.let {
-                                Log.d("test: 채팅방초대 성공! ", "\n${it.toString()}")
-                            }
-                        }
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Log.d("test: 채팅방초대 실패", "[Fail]${t.toString()}")
-                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 
     private fun enableDelete(boolean: Boolean){

@@ -25,7 +25,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.collections.ArrayList
 
-class AdapterChatList(private val listData: ArrayList<ResponseOfGetChatListData>, private val context: Context, private val people: Int, private val returnDataListSize: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterChatList(private val context: Context, private val listData: ArrayList<ResponseOfGetChatListData>, private val returnDataListSize: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val MY = 1
     private val MY_CONTINUE = 2
     private val OTHER = 3
