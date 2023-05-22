@@ -1,29 +1,24 @@
 package com.example.codev
 
+import android.R
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.codev.addpage.AddNewProjectActivity
-import com.example.codev.addpage.AddNewStudyActivity
-import com.example.codev.addpage.EditProject
-import com.example.codev.addpage.EditStudy
 import com.example.codev.databinding.ActivityRecruitApplyListBinding
 import com.example.codev.databinding.RecycleRecruitApplyPartHeaderBinding
 import com.example.codev.databinding.RecycleRecruitApplyPartItemBinding
 import com.google.gson.JsonObject
-import com.tbuonomo.viewpagerdotsindicator.setBackgroundCompat
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class RecruitApplyListActivity: AppCompatActivity() {
     private lateinit var viewBinding: ActivityRecruitApplyListBinding
@@ -368,7 +363,21 @@ class RecruitApplyListActivity: AppCompatActivity() {
     private lateinit var ibinding: RecycleRecruitApplyPartItemBinding
 
     private fun setAdapter1(dataList: ArrayList<ApplicantData>, context: Context, limit: Int){
+        //dataList: ArrayList<ApplicantData>였음
         Log.d("test", "어댑터 1")
+
+        // Drawable 리소스 가져오기
+        val drawable = resources.getDrawable(R.drawable.recruit_apply_allpartbox)
+        // 텍스트와 Drawable 함께 설정
+        viewBinding.btnSelected.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
+        viewBinding.btnSelected.setText(" | "+limit.toString()+"명")
+        //viewBinding.btnSelected.text = R.drawable.recruit_apply_allpartbox+" | "+limit+"명"
+
+        viewBinding.btnPlan.text = "   기획 | "+dataList[0].co_limit+"명"
+        viewBinding.btnDesign.text = "   디자인 | "+dataList[1].co_limit+"명"
+        viewBinding.btnFrontend.text = "  프론트엔드 | "+dataList[2].co_limit+"명"
+        viewBinding.btnBackend.text = "   백엔드 | "+dataList[3].co_limit+"명"
+        viewBinding.btnEtc.text = "   기타 | "+dataList[4].co_limit+"명"
 
         viewBinding.radioGroup.setOnCheckedChangeListener { radioGroup, checkID ->
             when(checkID) {
@@ -391,42 +400,12 @@ class RecruitApplyListActivity: AppCompatActivity() {
                     loadData(context,type,id,"기타")
                 }
             }
-            //returnSort(sort)
         }
-
-        /*//여기!!!!!!!!!!!!!!!!!!
-        viewBinding.btnSelected.setOnClickListener{
-
-            loadData(context,type,id,"TEMP")
-        }
-        viewBinding.btnFrontend.setOnClickListener{
-            loadData(context,type,id,"프론트엔드")
-        }
-        viewBinding.btnBackend.setOnClickListener {
-            loadData(context,type,id,"백엔드")
-        }
-        viewBinding.btnDesign.setOnClickListener {
-            loadData(context,type,id,"디자인")
-        }
-        viewBinding.btnPlan.setOnClickListener {
-            loadData(context,type,id,"기획")
-        }
-        viewBinding.btnEtc.setOnClickListener {
-            loadData(context,type,id,"기타")
-        }*/
 
         viewBinding.btnEdit.isChecked = false
         viewBinding.btnEdit.text = "선택하기"
 
-        //AdapterRecruitApplicants1(context, dataList, limit) //어댑터에서 data.어쩌구ㄱ
 
-        /*adapter1 = AdapterRecruitApplicants1(context, dataList, limit){
-            Log.d("test","리콜받음 $it")
-            loadData(context, type, id, it)
-            viewBinding.btnEdit.isChecked = false
-            viewBinding.btnEdit.text = "선택하기"
-        }*/
-        //viewBinding.part.adapter = adapter1
     }
 
     private fun setAdapter2(dataList: ArrayList<ApplicantInfoData>, context: Context){
@@ -500,6 +479,8 @@ class RecruitApplyListActivity: AppCompatActivity() {
                                         viewBinding.btnSelect2.isGone = true
                                         peopleNum = it.result.message.co_tempSavedApplicantsCount
                                         viewBinding.applicantNum.text = "현재 선택한 지원자 $peopleNum"
+
+                                        //viewBinding.btnSelected.text = "그림 | $peopleNum"+"명"
 
 
                                         if(peopleNum > 0){ //초기화, 모집완료 활성화 (담은 인원이 1명 이상)
