@@ -37,11 +37,11 @@ object RetrofitClient {
     internal class RequestInterceptor : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             val builder = chain.request().newBuilder()
-            val auth = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
-
-            builder.header("CoDev_Authorization", auth)
-
-            Log.d("인증", auth)
+            if (UserSharedPreferences.getUserAccessToken().isNotEmpty()){
+                val auth = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
+                builder.header("CoDev_Authorization", auth)
+                Log.d("인증", auth)
+            }
 
             return chain.proceed(builder.build())
         }
