@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity() {
         AndroidKeyStoreUtil.init(this)
         UserSharedPreferences.initialize(this)
 
-
         MyFirebaseMessagingService()
 
         /** FCM설정, Token값 가져오기 */
@@ -225,9 +224,6 @@ class MainActivity : AppCompatActivity() {
                 }else{
                     when(response.code()){
                         200->{
-
-
-
                             if(viewBinding.loginAuto.isChecked){
                                 UserSharedPreferences.setAutoLogin("TRUE")
                             }
