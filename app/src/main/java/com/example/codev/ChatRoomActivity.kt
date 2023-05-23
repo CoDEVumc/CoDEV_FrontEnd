@@ -27,7 +27,7 @@ class ChatRoomActivity:AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        ChatClient.sendMessage("LEAVE", roomId, UserSharedPreferences.getKey(this),"LEAVE")
+        ChatClient.sendMessage("LEAVE", roomId, UserSharedPreferences.getKey(),"LEAVE")
         ChatClient.exit()
     }
 
@@ -84,7 +84,7 @@ class ChatRoomActivity:AppCompatActivity() {
         }
 
         viewBinding.btnSend.setOnClickListener {
-            ChatClient.sendMessage("TALK", roomId, UserSharedPreferences.getKey(this), viewBinding.etChat.text.toString())
+            ChatClient.sendMessage("TALK", roomId, UserSharedPreferences.getKey(), viewBinding.etChat.text.toString())
             viewBinding.chatList.scrollToPosition((viewBinding.chatList.adapter?.itemCount ?: 1) - 1)
             viewBinding.etChat.text.clear()
         }
@@ -113,7 +113,7 @@ class ChatRoomActivity:AppCompatActivity() {
 
         ChatClient.setChatListAdapter(adapter)
         viewBinding.chatList.adapter = adapter
-        ChatClient.sendMessage("ENTER", roomId, UserSharedPreferences.getKey(context), "ENTER")
+        ChatClient.sendMessage("ENTER", roomId, UserSharedPreferences.getKey(), "ENTER")
 
         if (dataList.size != 0){
             viewBinding.chatList.scrollToPosition(dataList.size - (isRead + 1))

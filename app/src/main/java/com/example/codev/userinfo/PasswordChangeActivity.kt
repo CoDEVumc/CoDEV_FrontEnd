@@ -112,9 +112,9 @@ class PasswordChangeActivity : AppCompatActivity() {
             Log.d("TestPassword", "옜 비번: $oldPassword")
             Log.d("TestPassword", "새로운 비번: $newPassword")
             Log.d("testChangePasswordToken",
-                AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(this))
+                AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
             )
-            RetrofitClient.service.changePassword(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(this)), ReqChangeUserPassword(oldPassword, newPassword)).enqueue(object:
+            RetrofitClient.service.changePassword(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), ReqChangeUserPassword(oldPassword, newPassword)).enqueue(object:
                 Callback<ResChangeUserPassword> {
                 override fun onResponse(
                     call: Call<ResChangeUserPassword>,

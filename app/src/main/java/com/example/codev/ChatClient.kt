@@ -143,7 +143,7 @@ object ChatClient{
             Log.d("chat","roomId 생성 실패")
             Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
         }else{
-            RetrofitClient.service.createChatRoom(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), ReqCreateChatRoom(roomId, chatType, roomTitle, mainImg)).enqueue(object: Callback<JsonObject> {
+            RetrofitClient.service.createChatRoom(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), ReqCreateChatRoom(roomId, chatType, roomTitle, mainImg)).enqueue(object: Callback<JsonObject> {
                 @SuppressLint("UseCompatLoadingForDrawables")
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if (response.isSuccessful){
@@ -224,7 +224,7 @@ object ChatClient{
     }
 
     fun inviteChatRoom(context: Context, chatType: String, roomId: String, roomTitle: String, inviteList: ArrayList<String>, optionMove: Boolean = true){
-        RetrofitClient.service.inviteChat(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), ReqInviteChat(roomId, inviteList)).enqueue(object: Callback<JsonObject> {
+        RetrofitClient.service.inviteChat(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), ReqInviteChat(roomId, inviteList)).enqueue(object: Callback<JsonObject> {
             @SuppressLint("UseCompatLoadingForDrawables")
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if(response.isSuccessful.not()){
@@ -252,7 +252,7 @@ object ChatClient{
     }
 
     fun renameChatRoom(context: Context, chatType: String, roomId: String, roomTitle: String, people: Int, optionMove: Boolean = true){
-        RetrofitClient.service.renameChatRoom(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), ReqRenameChatRoom(roomId, roomTitle)).enqueue(object:
+        RetrofitClient.service.renameChatRoom(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), ReqRenameChatRoom(roomId, roomTitle)).enqueue(object:
             Callback<JsonObject> {
             @SuppressLint("UseCompatLoadingForDrawables")
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
@@ -285,7 +285,7 @@ object ChatClient{
 
         try {
             // Retrofit의 비동기 호출을 suspend 함수로 래핑하여 사용합니다.
-            val response = RetrofitClient.service.getChatRoomList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).execute()
+            val response = RetrofitClient.service.getChatRoomList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())).execute()
 
             if (response.isSuccessful.not()) {
                 Log.d("chat: 채팅 리스트 불러오기 실패", response.toString())
@@ -312,7 +312,7 @@ object ChatClient{
 
         try {
             // Retrofit의 비동기 호출을 suspend 함수로 래핑하여 사용합니다.
-            val response = RetrofitClient.service.getChatList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), roomId).execute()
+            val response = RetrofitClient.service.getChatList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), roomId).execute()
 
             if (response.isSuccessful.not()) {
                 Log.d("chat: 채팅 목록 불러오기 실패", response.toString())
@@ -339,7 +339,7 @@ object ChatClient{
 
         try {
             // Retrofit의 비동기 호출을 suspend 함수로 래핑하여 사용합니다.
-            val response = RetrofitClient.service.getChatRoomParticipants(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), roomId).execute()
+            val response = RetrofitClient.service.getChatRoomParticipants(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), roomId).execute()
 
             if (response.isSuccessful.not()) {
                 Log.d("chat: 채팅방 참여인원 불러오기 실패", response.toString())

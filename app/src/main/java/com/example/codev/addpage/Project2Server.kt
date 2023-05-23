@@ -54,7 +54,7 @@ class Project2Server {
 
     fun postNewProject(context: Context, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>, callback:(Int)-> Unit){
         AndroidKeyStoreUtil.init(context)
-        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
         Log.d("postAuth", userToken)
         val reqCreateNewProject = ReqCreateNewProject(
             title,
@@ -103,7 +103,7 @@ class Project2Server {
 
     fun updateProject(context: Context, projectId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>, nowProcess: String, finishPage: (Int) -> Unit){
         AndroidKeyStoreUtil.init(context)
-        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
         Log.d("postAuth", userToken)
         val reqUpdateProject = ReqUpdateProject(
             title,
@@ -153,7 +153,7 @@ class Project2Server {
 
     fun postNewStudy(context: Context, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, stack1Name: String, peopleNumber: Int, imagePartList: List<MultipartBody.Part>, submitBtn: Button, finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
-        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
         Log.d("postAuth", userToken)
         val reqCreateNewStudy = ReqCreateNewStudy(
             title,
@@ -207,7 +207,7 @@ class Project2Server {
 
     fun updateStudy(context: Context, studyId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, stack1Name: String, peopleNumber: Int, imagePartList: List<MultipartBody.Part>, submitBtn: Button, nowProcess: String , finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
-        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
         Log.d("postAuth", userToken)
         val reqUpdateStudy = ReqUpdateStudy(
             title,
@@ -262,7 +262,7 @@ class Project2Server {
 
     fun postNewPF(context: Context, title: String, level: String, intro: String, content: String, stackList: List<Int>, linkList: List<String>, submitBtn: Button, finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
-        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
         Log.d("postAuth", userToken)
         val reqCreateNewPF = ReqCreateNewPF(
             title,
@@ -299,7 +299,7 @@ class Project2Server {
 
     fun updatePF(context: Context, pfId: String, title: String, level: String, intro: String, content: String, stackList: List<Int>, linkList: List<String>,submitBtn: Button, finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
-        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
         Log.d("postAuth", userToken)
         val reqUpdatePF = ReqUpdatePF(
             title,
@@ -337,7 +337,7 @@ class Project2Server {
 
     fun postNewInfo(context: Context, title: String, content: String, imagePartList: List<MultipartBody.Part>, isSuccess: () -> Unit, isFail: () -> Unit){
         AndroidKeyStoreUtil.init(context)
-        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
         Log.d("postAuth", userToken)
         val REQ_NEW_POST = ReqCreateNewPost(
             title,
@@ -382,7 +382,7 @@ class Project2Server {
 
     fun postNewQNA(context: Context, title: String, content: String, imagePartList: List<MultipartBody.Part>, isSuccess: () -> Unit, isFail: () -> Unit){
         AndroidKeyStoreUtil.init(context)
-        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
         Log.d("postAuth", userToken)
         val REQ_NEW_POST = ReqCreateNewPost(
             title,
@@ -427,7 +427,7 @@ class Project2Server {
 
     fun updateInfo(context: Context, oldPostId: String, title: String, content: String, imagePartList: List<MultipartBody.Part>, isSuccess: () -> Unit, isFail: () -> Unit){
         AndroidKeyStoreUtil.init(context)
-        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
         Log.d("postAuth", userToken)
         val REQ_NEW_POST = ReqUpdatePost(
             title,
@@ -472,7 +472,7 @@ class Project2Server {
 
     fun updateQNA(context: Context, oldPostId: String, title: String, content: String, imagePartList: List<MultipartBody.Part>, isSuccess: () -> Unit, isFail: () -> Unit){
         AndroidKeyStoreUtil.init(context)
-        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
         Log.d("postAuth", userToken)
         val REQ_NEW_POST = ReqUpdatePost(
             title,

@@ -325,7 +325,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
     private fun loadData(context: Context, type:String, id: Int, coPart: String){
         if(type == "PROJECT") {
-            RetrofitClient.service.getApplyerProjectList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, coPart).enqueue(object : Callback<ResApplyerList> {
+            RetrofitClient.service.getApplyerProjectList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, coPart).enqueue(object : Callback<ResApplyerList> {
                 @SuppressLint("SetTextI18n")
                 override fun onResponse(call: Call<ResApplyerList>, response: Response<ResApplyerList>) {
                     if (response.isSuccessful.not()) {
@@ -413,7 +413,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
             })
         }
         else if(type == "STUDY") {
-            RetrofitClient.service.getApplyerStudyList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, coPart).enqueue(object : Callback<ResApplyerList> {
+            RetrofitClient.service.getApplyerStudyList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, coPart).enqueue(object : Callback<ResApplyerList> {
                 @SuppressLint("SetTextI18n")
                 override fun onResponse(call: Call<ResApplyerList>, response: Response<ResApplyerList>) {
                     if (response.isSuccessful.not()) {
@@ -511,7 +511,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
     //모집완료 function
     private fun doneRecruit(context: Context, type: String, id: Int, recruitedList: ArrayList<String>){
         if (type == "PROJECT"){
-            RetrofitClient.service.doneRecruitProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqRecruitedApplicantList(recruitedList)).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.doneRecruitProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqRecruitedApplicantList(recruitedList)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 모집완료 실패",response.toString())
@@ -533,7 +533,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
             })
         }
         else if(type == "STUDY"){
-            RetrofitClient.service.doneRecruitStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqRecruitedApplicantList(recruitedList)).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.doneRecruitStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqRecruitedApplicantList(recruitedList)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 지원자 편집  실패",response.toString())
@@ -560,7 +560,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
     //지원자 EDIT
     private fun editApplicant(context: Context, type: String, id: Int, editList: List<String>){
         if (type == "PROJECT"){
-            RetrofitClient.service.requestProjectApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqUpdateApplicant(editList)).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.requestProjectApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqUpdateApplicant(editList)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 지원자 편집 실패",response.toString())
@@ -582,7 +582,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
             })
         }
         else if(type == "STUDY"){
-            RetrofitClient.service.requestStudyApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqUpdateApplicant(editList)).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.requestStudyApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqUpdateApplicant(editList)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 지원자 편집  실패",response.toString())

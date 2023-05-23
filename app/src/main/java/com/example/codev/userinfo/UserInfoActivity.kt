@@ -53,7 +53,7 @@ class UserInfoActivity : AppCompatActivity() {
     }
 
     private fun loadData(context: Context){
-        RetrofitClient.service.getPortFolio(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).enqueue(object:
+        RetrofitClient.service.getPortFolio(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())).enqueue(object:
             Callback<ResPortFolioList> {
             @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<ResPortFolioList>, response: Response<ResPortFolioList>) {

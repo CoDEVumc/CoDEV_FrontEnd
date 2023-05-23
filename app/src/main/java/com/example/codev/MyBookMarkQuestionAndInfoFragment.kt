@@ -36,7 +36,7 @@ class MyBookMarkQuestionAndInfoFragment :Fragment(){
     }
 
     private fun loadData(context: Context){
-        RetrofitClient.service.getHeartedQustionAndInfo(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).enqueue(object: Callback<ResBookMarkQuestionAndInfoList> {
+        RetrofitClient.service.getHeartedQustionAndInfo(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())).enqueue(object: Callback<ResBookMarkQuestionAndInfoList> {
             override fun onResponse(call: Call<ResBookMarkQuestionAndInfoList>, response: Response<ResBookMarkQuestionAndInfoList>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 북마크 글 불러오기 실패",response.toString())

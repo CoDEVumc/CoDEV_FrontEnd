@@ -81,7 +81,7 @@ class AppliedDetailActivity : AppCompatActivity() {
             if(isLoaded){
                 Toast.makeText(this, "문의하기", Toast.LENGTH_SHORT).show()
                 val inviteList = arrayListOf<String>(receiver_email)
-                ChatClient.createChatRoom(this, "개인메세지", null, inviteList, "UTU", user1 = receiver_email, user2 = UserSharedPreferences.getKey(this), optionMove = true)
+                ChatClient.createChatRoom(this, "개인메세지", null, inviteList, "UTU", user1 = receiver_email, user2 = UserSharedPreferences.getKey(), optionMove = true)
             }else{
                 Toast.makeText(this, "로딩중입니다. 잠시만 기다려 주세요", Toast.LENGTH_SHORT).show()
             }
@@ -114,7 +114,7 @@ class AppliedDetailActivity : AppCompatActivity() {
     }
     private fun loadData(nowType: String, id: Int, portfolioId: Int){
         if(nowType == "PROJECT"){
-            RetrofitClient.service.getProjectAppliedDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(this)), id, portfolioId).enqueue(object:
+            RetrofitClient.service.getProjectAppliedDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, portfolioId).enqueue(object:
                 Callback<ResAppliedUserDetail> {
                 override fun onResponse(
                     call: Call<ResAppliedUserDetail>,
@@ -154,7 +154,7 @@ class AppliedDetailActivity : AppCompatActivity() {
                 }
             })
         }else if(nowType == "STUDY"){
-            RetrofitClient.service.getStudyAppliedDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(this)), id, portfolioId).enqueue(object:
+            RetrofitClient.service.getStudyAppliedDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, portfolioId).enqueue(object:
                 Callback<ResAppliedUserDetail> {
                 override fun onResponse(
                     call: Call<ResAppliedUserDetail>,
@@ -280,7 +280,7 @@ class AppliedDetailActivity : AppCompatActivity() {
         viewBinding.btnRight.isSelected = false
         viewBinding.btnRight.isEnabled = false
         if(nowPageType == "PROJECT"){
-            RetrofitClient.service.requestProjectApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), nowId, ReqUpdateApplicant(listOf(receiver_email))).enqueue(
+            RetrofitClient.service.requestProjectApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), nowId, ReqUpdateApplicant(listOf(receiver_email))).enqueue(
                 object : Callback<JsonObject>{
                     override fun onResponse(
                         call: Call<JsonObject>,
@@ -310,7 +310,7 @@ class AppliedDetailActivity : AppCompatActivity() {
                     }
                 })
         }else if(nowPageType == "STUDY"){
-            RetrofitClient.service.requestStudyApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), nowId, ReqUpdateApplicant(listOf(receiver_email))).enqueue(
+            RetrofitClient.service.requestStudyApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), nowId, ReqUpdateApplicant(listOf(receiver_email))).enqueue(
                 object : Callback<JsonObject>{
                     override fun onResponse(
                         call: Call<JsonObject>,

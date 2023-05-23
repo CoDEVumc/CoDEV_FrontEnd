@@ -122,7 +122,7 @@ class RecruitApplyActivity:AppCompatActivity() {
     }
 
     private fun loadData(context: Context){
-        RetrofitClient.service.getPortFolio(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).enqueue(object:
+        RetrofitClient.service.getPortFolio(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())).enqueue(object:
             Callback<ResPortFolioList> {
             override fun onResponse(call: Call<ResPortFolioList>, response: Response<ResPortFolioList>) {
                 if(response.isSuccessful.not()){
@@ -177,7 +177,7 @@ class RecruitApplyActivity:AppCompatActivity() {
 
     private fun apply(context: Context, type: String, id:Int, recruitStatus: Boolean, writer: String, process: String){
         if (type == "PROJECT"){
-            RetrofitClient.service.applyProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),id, ReqApplyProject(portfolioId, part, viewBinding.etContent.text.toString(), recruitStatus, writer, process)).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.applyProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()),id, ReqApplyProject(portfolioId, part, viewBinding.etContent.text.toString(), recruitStatus, writer, process)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 지원 실패",response.toString())
@@ -197,7 +197,7 @@ class RecruitApplyActivity:AppCompatActivity() {
                 }
             })
         }else if (type == "STUDY"){
-            RetrofitClient.service.applyStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),id, ReqApplyStudy(portfolioId, viewBinding.etContent.text.toString(), recruitStatus, writer, process)).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.applyStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()),id, ReqApplyStudy(portfolioId, viewBinding.etContent.text.toString(), recruitStatus, writer, process)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 지원 실패",response.toString())

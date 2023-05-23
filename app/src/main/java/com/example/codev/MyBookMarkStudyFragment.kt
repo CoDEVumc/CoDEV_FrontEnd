@@ -36,7 +36,7 @@ class MyBookMarkStudyFragment :Fragment(){
     }
 
     private fun loadSData(context: Context){
-        RetrofitClient.service.getHeartedStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).enqueue(object:
+        RetrofitClient.service.getHeartedStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())).enqueue(object:
             Callback<ResBookMarkStudyList> {
             override fun onResponse(call: Call<ResBookMarkStudyList>, response: Response<ResBookMarkStudyList>) {
                 if(response.isSuccessful.not()){

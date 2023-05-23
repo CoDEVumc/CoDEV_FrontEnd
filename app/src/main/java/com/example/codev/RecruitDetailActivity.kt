@@ -188,7 +188,7 @@ class RecruitDetailActivity:AppCompatActivity() {
         }
         //기본은 문의하기
         viewBinding.btn1.setOnClickListener {
-            ChatClient.createChatRoom(this, "개인메세지", null, arrayListOf<String>(writer), "UTU", type, id, writer, UserSharedPreferences.getKey(this))
+            ChatClient.createChatRoom(this, "개인메세지", null, arrayListOf<String>(writer), "UTU", type, id, writer, UserSharedPreferences.getKey())
         }
     }
 
@@ -201,7 +201,7 @@ class RecruitDetailActivity:AppCompatActivity() {
             .setPositiveButton("확인",
                 DialogInterface.OnClickListener { dialog, _ ->
                     if (type == "PROJECT"){
-                        RetrofitClient.service.deleteProject(id,AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).enqueue(object: Callback<JsonObject>{
+                        RetrofitClient.service.deleteProject(id,AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())).enqueue(object: Callback<JsonObject>{
                             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                                 if(response.isSuccessful.not()){
                                     Log.d("test: 포트폴리오 삭제 실패",response.toString())
@@ -221,7 +221,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                             }
                         })
                     }else if(type == "STUDY"){
-                        RetrofitClient.service.deleteStudy(id,AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).enqueue(object: Callback<JsonObject>{
+                        RetrofitClient.service.deleteStudy(id,AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())).enqueue(object: Callback<JsonObject>{
                             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                                 if(response.isSuccessful.not()){
                                     Log.d("test: 포트폴리오 삭제 실패",response.toString())
@@ -252,7 +252,7 @@ class RecruitDetailActivity:AppCompatActivity() {
 
     private fun loadRecruitDetail(context:Context, type:String, id: Int, dday: String){
         if (type == "PROJECT"){
-            RetrofitClient.service.getProjectDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<ResGetRecruitDetail> {
+            RetrofitClient.service.getProjectDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id).enqueue(object: Callback<ResGetRecruitDetail> {
                 @SuppressLint("UseCompatLoadingForDrawables")
                 override fun onResponse(call: Call<ResGetRecruitDetail>, response: Response<ResGetRecruitDetail>) {
                     if(response.isSuccessful.not()){
@@ -313,7 +313,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                 }
             })
         }else if(type == "STUDY"){
-            RetrofitClient.service.getStudyDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<ResGetRecruitDetail> {
+            RetrofitClient.service.getStudyDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id).enqueue(object: Callback<ResGetRecruitDetail> {
                 override fun onResponse(call: Call<ResGetRecruitDetail>, response: Response<ResGetRecruitDetail>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 조회실패",response.toString())
@@ -395,7 +395,7 @@ class RecruitDetailActivity:AppCompatActivity() {
 
     private fun request(context: Context, type: String, id: Int){
         if(type == "PROJECT"){
-            RetrofitClient.service.requestProjectBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.requestProjectBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 북마크 실패",response.toString())
@@ -420,7 +420,7 @@ class RecruitDetailActivity:AppCompatActivity() {
 
             })
         }else if(type == "STUDY"){
-            RetrofitClient.service.requestStudyBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<JsonObject> {
+            RetrofitClient.service.requestStudyBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id).enqueue(object: Callback<JsonObject> {
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 북마크 실패",response.toString())
@@ -450,7 +450,7 @@ class RecruitDetailActivity:AppCompatActivity() {
     private fun cancel(context: Context, type: String, id: Int){
         Log.d("test",process)
         if (type == "PROJECT"){
-            RetrofitClient.service.cancelProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqCancelRecruit(recruitStatus, writer, process)).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.cancelProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqCancelRecruit(recruitStatus, writer, process)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 취소 실패",response.toString())
@@ -473,7 +473,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                 }
             })
         }else if(type == "STUDY"){
-            RetrofitClient.service.cancelStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqCancelRecruit(recruitStatus, writer, process)).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.cancelStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqCancelRecruit(recruitStatus, writer, process)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 취소 실패",response.toString())
@@ -500,7 +500,7 @@ class RecruitDetailActivity:AppCompatActivity() {
 
     private fun extend(context: Context, type: String, id: Int, deadLine: String){
         if (type == "PROJECT"){
-            RetrofitClient.service.extendProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqExtendProject(deadLine)).enqueue(object: Callback<ResExtendRecruit>{
+            RetrofitClient.service.extendProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqExtendProject(deadLine)).enqueue(object: Callback<ResExtendRecruit>{
                 override fun onResponse(call: Call<ResExtendRecruit>, response: Response<ResExtendRecruit>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 연장 실패",response.toString())
@@ -531,7 +531,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                 }
             })
         }else if(type == "STUDY"){
-            RetrofitClient.service.extendStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqExtendStudy(deadLine)).enqueue(object: Callback<ResExtendRecruit>{
+            RetrofitClient.service.extendStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqExtendStudy(deadLine)).enqueue(object: Callback<ResExtendRecruit>{
                 override fun onResponse(call: Call<ResExtendRecruit>, response: Response<ResExtendRecruit>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 연장 실패",response.toString())

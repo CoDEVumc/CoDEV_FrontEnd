@@ -105,7 +105,7 @@ class AdapterChatList(private val context: Context, private val listData: ArrayL
             return DAY
         }else if(listData[position].type == "INVITE"){
             return INVITE
-        }else if (UserSharedPreferences.getKey(context) == listData[position].sender) {
+        }else if (UserSharedPreferences.getKey() == listData[position].sender) {
             if(position == 0){
                 return MY
             }else if ((listData[position-1].type == "TALK") && (listData[position-1].sender == listData[position].sender) && checkContinue(listData[position-1].createdDate, listData[position].createdDate)){
