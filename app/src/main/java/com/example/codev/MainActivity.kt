@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         AndroidKeyStoreUtil.init(this)
-
+        UserSharedPreferences.initialize(this)
 
         MyFirebaseMessagingService()
 
@@ -147,13 +147,13 @@ class MainActivity : AppCompatActivity() {
                                         startActivity(intent)
                                     }else{
                                         //자동 로그인 설정
-                                        UserSharedPreferences.setAutoLogin(context,"TRUE")
+                                        UserSharedPreferences.setAutoLogin("TRUE")
                                         //기존 로그인 로직
-                                        UserSharedPreferences.setKey(context, it.result.key)
-                                        UserSharedPreferences.setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))
-                                        UserSharedPreferences.setUserRefreshToken(context,AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
-                                        Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)))
-                                        Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken(context)))
+                                        UserSharedPreferences.setKey(it.result.key)
+                                        UserSharedPreferences.setUserAccessToken(AndroidKeyStoreUtil.encrypt(it.result.accessToken))
+                                        UserSharedPreferences.setUserRefreshToken(AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
+                                        Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()))
+                                        Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken()))
                                         val intent = Intent(context,MainAppActivity::class.java)
                                         startActivity(intent)
                                         finish()
@@ -188,13 +188,13 @@ class MainActivity : AppCompatActivity() {
                                         startActivity(intent)
                                     }else{
                                         //자동 로그인 설정
-                                        UserSharedPreferences.setAutoLogin(context,"TRUE")
+                                        UserSharedPreferences.setAutoLogin("TRUE")
                                         //기존 로그인 로직
-                                        UserSharedPreferences.setKey(context, it.result.key)
-                                        UserSharedPreferences.setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))
-                                        UserSharedPreferences.setUserRefreshToken(context,AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
-                                        Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)))
-                                        Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken(context)))
+                                        UserSharedPreferences.setKey(it.result.key)
+                                        UserSharedPreferences.setUserAccessToken(AndroidKeyStoreUtil.encrypt(it.result.accessToken))
+                                        UserSharedPreferences.setUserRefreshToken(AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
+                                        Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()))
+                                        Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken()))
                                         val intent = Intent(context,MainAppActivity::class.java)
                                         startActivity(intent)
                                         finish()
@@ -216,7 +216,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun signIn(context:Context, email:String, pwd:String) {
 
-        RetrofitClient.service.signIn(ReqSignIn(email,pwd,UserSharedPreferences.getFCMToken(context))).enqueue(object: Callback<ResSignIn>{
+        RetrofitClient.service.signIn(ReqSignIn(email,pwd,UserSharedPreferences.getFCMToken())).enqueue(object: Callback<ResSignIn>{
             override fun onResponse(call: Call<ResSignIn>, response: Response<ResSignIn>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 로그인 실패1",response.toString())
@@ -224,20 +224,17 @@ class MainActivity : AppCompatActivity() {
                 }else{
                     when(response.code()){
                         200->{
-
-
-
                             if(viewBinding.loginAuto.isChecked){
-                                UserSharedPreferences.setAutoLogin(context,"TRUE")
+                                UserSharedPreferences.setAutoLogin("TRUE")
                             }
                             // 토큰 암호화
                             response.body()?.let {
-                                UserSharedPreferences.setKey(context, it.result.key)
-                                UserSharedPreferences.setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))
-                                UserSharedPreferences.setUserRefreshToken(context,AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
+                                UserSharedPreferences.setKey(it.result.key)
+                                UserSharedPreferences.setUserAccessToken(AndroidKeyStoreUtil.encrypt(it.result.accessToken))
+                                UserSharedPreferences.setUserRefreshToken(AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
                                 Log.d("test: 로그인 성공", "\n${it.toString()}")
-                                Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)))
-                                Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken(context)))
+                                Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()))
+                                Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken()))
                             }
                             val intent = Intent(context,MainAppActivity::class.java)
                             startActivity(intent)
@@ -256,6 +253,6 @@ class MainActivity : AppCompatActivity() {
 
     // AutoLogin 값이 있다면 true, 없다면 false
     private fun checkAutoLogin(context: Context): Boolean {
-        return !UserSharedPreferences.getAutoLogin(context).isNullOrBlank()
+        return !UserSharedPreferences.getAutoLogin().isNullOrBlank()
     }
 }

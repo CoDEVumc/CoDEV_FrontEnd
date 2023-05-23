@@ -125,7 +125,7 @@ class CommunityContestFragment :Fragment(){
 
     //전체 공모전글 조회
     private fun loadData(context: Context, int: Int, coMyBoard:Boolean, sortingTag: String) {
-        RetrofitClient.service.requestCDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
+        RetrofitClient.service.requestCDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()),
             int, coMyBoard, sortingTag).enqueue(object: Callback<ResGetCommunityList2>{
             override fun onResponse(call: Call<ResGetCommunityList2>, response: Response<ResGetCommunityList2>) {
                 if(response.isSuccessful.not()){

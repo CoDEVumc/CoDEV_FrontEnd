@@ -70,7 +70,7 @@ class PfDetailActivity : AppCompatActivity() {
     }
 
     private fun loadDataUsingPFId(id: String) {
-        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(this))
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
         RetrofitClient.service.getPortFolioDetail(userToken, id)
             .enqueue(object : Callback<ResGetPFDetail> {
                 override fun onResponse(
@@ -208,7 +208,7 @@ private fun confirmDelete(context: Context, pfId: Int, finishPage: () -> Unit){
         .setMessage("포트폴리오를 정말로 삭제하시겠습니까?")
         .setPositiveButton("확인",
             DialogInterface.OnClickListener { dialog, id ->
-                RetrofitClient.service.deletePortFolio(pfId,AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).enqueue(object: Callback<ResDeletePortfolio>{
+                RetrofitClient.service.deletePortFolio(pfId,AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())).enqueue(object: Callback<ResDeletePortfolio>{
                     override fun onResponse(call: Call<ResDeletePortfolio>, response: Response<ResDeletePortfolio>) {
                         if(response.isSuccessful.not()){
                             Log.d("test: 포트폴리오 삭제 실패",response.toString())

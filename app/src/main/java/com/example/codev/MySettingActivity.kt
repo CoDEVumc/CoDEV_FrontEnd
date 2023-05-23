@@ -57,21 +57,21 @@ class MySettingActivity:AppCompatActivity() {
             val mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
             viewBinding.btnLogout.setOnClickListener {
                 mGoogleSignInClient.signOut()
-                UserSharedPreferences.clearUser(this)
+                UserSharedPreferences.clearUser()
                 val intent = Intent(this,MainActivity::class.java)
                 finishAffinity()
                 startActivity(intent)
             }
         }else if(loginType == "GITHUB"){
             viewBinding.btnLogout.setOnClickListener {
-                UserSharedPreferences.clearUser(this)
+                UserSharedPreferences.clearUser()
                 val intent = Intent(this,MainActivity::class.java)
                 finishAffinity()
                 startActivity(intent)
             }
         }else{
             viewBinding.btnLogout.setOnClickListener {
-                UserSharedPreferences.clearUser(this)
+                UserSharedPreferences.clearUser()
                 val intent = Intent(this,MainActivity::class.java)
                 finishAffinity()
                 startActivity(intent)

@@ -105,7 +105,7 @@ class InfoDetailActivity:AppCompatActivity() {
     }
 
     private fun loadInfoDetail(context:Context, id: Int){
-        RetrofitClient.service.getInfoDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),id).enqueue(object : Callback<ResGetInfoDetail>{
+        RetrofitClient.service.getInfoDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()),id).enqueue(object : Callback<ResGetInfoDetail>{
             @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<ResGetInfoDetail>, response: Response<ResGetInfoDetail>) {
                 if(response.isSuccessful.not()){

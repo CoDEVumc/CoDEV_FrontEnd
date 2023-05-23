@@ -25,7 +25,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.collections.ArrayList
 
-class AdapterChatList(private val listData: ArrayList<ResponseOfGetChatListData>, private val context: Context, private val people: Int, private val returnDataListSize: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterChatList(private val context: Context, private val listData: ArrayList<ResponseOfGetChatListData>, private val returnDataListSize: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val MY = 1
     private val MY_CONTINUE = 2
     private val OTHER = 3
@@ -105,7 +105,7 @@ class AdapterChatList(private val listData: ArrayList<ResponseOfGetChatListData>
             return DAY
         }else if(listData[position].type == "INVITE"){
             return INVITE
-        }else if (UserSharedPreferences.getKey(context) == listData[position].sender) {
+        }else if (UserSharedPreferences.getKey() == listData[position].sender) {
             if(position == 0){
                 return MY
             }else if ((listData[position-1].type == "TALK") && (listData[position-1].sender == listData[position].sender) && checkContinue(listData[position-1].createdDate, listData[position].createdDate)){

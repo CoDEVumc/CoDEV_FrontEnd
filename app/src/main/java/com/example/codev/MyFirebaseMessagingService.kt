@@ -103,7 +103,7 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
         //비동기 방식
         FirebaseMessaging.getInstance().token.addOnSuccessListener {
             Log.d(TAG, "token=${it}")
-            UserSharedPreferences.setFCMToken(context, it)
+            UserSharedPreferences.setFCMToken(it)
         }
 
 //		  //동기방식

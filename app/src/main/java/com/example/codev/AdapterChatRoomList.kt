@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AdapterChatRoomList(private val listData: ArrayList<ResponseOfGetChatRoomListData>, private val context: Context, private val returnToActivity: (Int, Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterChatRoomList(private val context: Context, private val listData: ArrayList<ResponseOfGetChatRoomListData>, private val returnToActivity: (Int, Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun findRoomId(data: ResponseOfGetChatRoomListData){
         val index = listData.indexOfFirst {
@@ -65,7 +65,7 @@ class AdapterChatRoomList(private val listData: ArrayList<ResponseOfGetChatRoomL
         fun bind(data: ResponseOfGetChatRoomListData, position: Int){
 
             var title = ""
-            if (data.room_type == "OTM"){
+            if (data.room_type == "UTM"){
                 Glide.with(itemView.context)
                     .load(data.mainImg).circleCrop()
                     .into(binding.oneImg1)
@@ -80,7 +80,7 @@ class AdapterChatRoomList(private val listData: ArrayList<ResponseOfGetChatRoomL
                 title = data.room_title
                 binding.roomTitle.text = title
 
-            }else if (data.room_type == "OTO"){
+            }else if (data.room_type == "UTU"){
                 Glide.with(itemView.context)
                     .load(data.receiverProfileImg).circleCrop()
                     .into(binding.oneImg1)
@@ -117,13 +117,8 @@ class AdapterChatRoomList(private val listData: ArrayList<ResponseOfGetChatRoomL
             }
 
             binding.room.setOnClickListener {
-                ChatClient.join(itemView.context, data.roomId)
-                val intent = Intent(itemView.context, ChatRoomActivity::class.java)
-                intent.putExtra("title", title)
-                intent.putExtra("roomId", data.roomId)
-                intent.putExtra("people", binding.roomMemberNumber.text.toString().toInt())
-                intent.putExtra("isRead", data.isRead)
-                itemView.context.startActivity(intent)
+                ChatClient.exit()
+                ChatClient.moveChatRoom(itemView.context, data.room_type, data.roomId, title, binding.roomMemberNumber.text.toString().toInt(), data.isRead)
             }
         }
     }
