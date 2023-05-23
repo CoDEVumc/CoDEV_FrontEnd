@@ -58,8 +58,12 @@ object RetrofitClient {
                 }
                 401 -> {
                     // todo Control Error
-                    val json = JSONObject(response.body().toString())
-                    val code = json.getInt("code")
+                    val responseBody = response.body()?.string()
+                    val json = responseBody?.let { JSONObject(it) }
+                    val code = json?.getInt("code")
+
+                    Log.d("401에러", responseBody.toString())
+
                     if (code == 444){
                         CoroutineScope(Dispatchers.Main).launch {
                             UserSharedPreferences.refreshAccessToken()
@@ -68,6 +72,8 @@ object RetrofitClient {
                         refreshedRequest.header("CoDev_Authorization", AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()))
                         return chain.proceed(refreshedRequest.build())
                     }
+
+                    return chain.proceed(request)
                 }
                 402 -> {
                     // todo Control Error
