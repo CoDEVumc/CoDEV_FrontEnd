@@ -339,4 +339,34 @@ interface RetrofitService {
 
     @GET("infoBoard/{coInfoId}")
     fun getInfoDetail(@Header("CoDev_Authorization") header: String, @Path("coInfoId") coInfoId: Int) : Call<ResGetInfoDetail>
+
+    @GET("qnaBoard/{coQnaId}")
+    fun getQnaDetail(@Header("CoDev_Authorization") header: String, @Path("coQnaId") coQnaId: Int) : Call<ResGetQnaDetail>
+
+    @PATCH("infoBoard/like/{coInfoId}")
+    fun likeInfo(@Header("CoDev_Authorization") header: String, @Path("coInfoId") coInfoId: Int, @Body params: ReqLikePost) : Call<ResLikePost>
+
+    @PATCH("qnaBoard/like/{coQnaId}")
+    fun likeQna(@Header("CoDev_Authorization") header: String, @Path("coQnaId") coQnaId: Int, @Body params: ReqLikePost) : Call<ResLikePost>
+
+    @DELETE("infoBoard/{coInfoId}")
+    fun deleteInfo(@Header("CoDev_Authorization") header: String, @Path("coInfoId") coInfoId: Int) : Call<ResDeletePost>
+
+    @DELETE("qnaBoard/{coQnaId}")
+    fun deleteQna(@Header("CoDev_Authorization") header: String, @Path("coQnaId") coQnaId: Int) : Call<ResDeletePost>
+
+    @POST("infoBoard/comment/{coInfoId}")
+    fun createInfoParentComment(@Header("CoDev_Authorization") header: String, @Path("coInfoId") coInfoId: Int, @Body params: ReqCreateComment) : Call<ResConfirm>
+
+    @POST("qnaBoard/comment/{coQnaId}")
+    fun createQnaParentComment(@Header("CoDev_Authorization") header: String, @Path("coQnaId") coQnaId: Int, @Body params: ReqCreateComment) : Call<ResConfirm>
+
+    @POST("qnaBoard/recomments/{coCoqb}")
+    fun createQnaChildComment(@Header("CoDev_Authorization") header: String, @Path("coCoqb") coCoqb: Int, @Body params: ReqCreateComment) : Call<ResConfirm>
+
+    @DELETE("infoBoard/out/comment/{coCoIb}")
+    fun deleteInfoParentComment(@Header("CoDev_Authorization") header: String, @Path("coCoIb") coCoIb: Int) : Call<ResConfirm>
+
+    @DELETE("qnaBoard/out/comment/{coCoqb}")
+    fun deleteQnaParentComment(@Header("CoDev_Authorization") header: String, @Path("coCoqb") coCoqb: Int) : Call<ResConfirm>
 }

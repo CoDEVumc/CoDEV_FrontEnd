@@ -1,12 +1,13 @@
 package com.example.codev
 
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -17,23 +18,26 @@ import com.example.codev.databinding.RecycleCommunityCommentBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.sql.Timestamp
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class AdapterCommunityInfoParentCommentList(private val context: Context, private val viewerEmail: String, val listData: ArrayList<InfoDetailComment>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class AdapterCommunityQnaParentCommentList(private val context: Context, private val listData: ArrayList<QnaDetailComment>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return  InfoItemViewHolder(context, RecycleCommunityCommentBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return  QnaItemViewHolder(context, RecycleCommunityCommentBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     //뷰 홀더에 데이터 바인딩
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
-            is InfoItemViewHolder -> {
-                holder.bind(listData[position],position, viewerEmail)
+            is QnaItemViewHolder -> {
+                holder.bind(listData[position],position)
             }
         }
     }
@@ -42,17 +46,15 @@ class AdapterCommunityInfoParentCommentList(private val context: Context, privat
     override fun getItemCount(): Int = listData.size
 
     //Item의 ViewHolder 객체
-    inner class InfoItemViewHolder(val context: Context, private val binding: RecycleCommunityCommentBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: InfoDetailComment, position: Int, viewerEmail: String){
-            val adapter = AdapterCommunityInfoChildCommentList(context, data.coReCommentOfInfoBoardList)
+    inner class QnaItemViewHolder(val context: Context, private val binding: RecycleCommunityCommentBinding): RecyclerView.ViewHolder(binding.root){
+        fun bind(data: QnaDetailComment, position: Int){
+            val adapter = AdapterCommunityQnaChildCommentList(context, data.coReCommentOfQnaBoardList)
             binding.rvComment.adapter = adapter
             binding.nickname.text = data.co_nickname
             binding.content.text = data.content
             binding.date.text = stringToTime(data.createdAt.toString())
-            if (data.co_email == viewerEmail){
-
-            }else{
-                binding.btnMore.visibility = View.GONE
+            binding.btnMore.setOnClickListener {
+                confirmDelete(itemView.context, data.co_coqb)
             }
             Glide.with(itemView.context)
                 .load(data.profileImg).circleCrop()
@@ -85,6 +87,43 @@ class AdapterCommunityInfoParentCommentList(private val context: Context, privat
                 })
                 .into(binding.profileImg)
         }
+
+        private fun confirmDelete(context: Context, id: Int){
+            // 다이얼로그를 생성하기 위해 Builder 클래스 생성자를 이용해 줍니다.
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("댓글 삭제")
+                .setMessage("해당 댓글을 정말로 삭제하시겠습니까?")
+                .setPositiveButton("확인",
+                    DialogInterface.OnClickListener { dialog, _ ->
+                        binding.btnMore.isClickable = false
+                        RetrofitClient.service.deleteQnaParentComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object:
+                            Callback<ResConfirm> {
+                            override fun onResponse(call: Call<ResConfirm>, response: Response<ResConfirm>) {
+                                if(response.isSuccessful.not()){
+                                    Log.d("test: 포트폴리오 삭제 실패",response.toString())
+                                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                                }
+                                when(response.code()){
+                                    200 -> {
+                                        response.body()?.let {
+                                            notifyItemRemoved(adapterPosition)
+                                        }
+                                    }
+                                }
+                            }
+                            override fun onFailure(call: Call<ResConfirm>, t: Throwable) {
+                                Log.d("test", "[Fail]${t.toString()}")
+                                binding.btnMore.isClickable = true
+                            }
+                        })
+                    })
+                .setNegativeButton("취소",
+                    DialogInterface.OnClickListener { dialog, _ ->
+                        Toast.makeText(context, "취소함", Toast.LENGTH_SHORT).show()
+                    })
+            // 다이얼로그를 띄워주기
+            builder.show()
+        }
     }
 
     fun setViewMode(boolean: Boolean){
@@ -102,4 +141,7 @@ class AdapterCommunityInfoParentCommentList(private val context: Context, privat
         val convertTime = LocalDateTime.parse(string, formatter)
         return convertTime.format(DateTimeFormatter.ofPattern("MM/dd HH:mm"))
     }
+
+
+
 }

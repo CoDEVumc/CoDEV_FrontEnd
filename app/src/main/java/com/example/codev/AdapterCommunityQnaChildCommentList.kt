@@ -4,9 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -14,26 +12,25 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.codev.databinding.RecycleCommunityCommentBinding
+import com.example.codev.databinding.RecycleCommunityCommentReplyBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.sql.Timestamp
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class AdapterCommunityInfoParentCommentList(private val context: Context, private val viewerEmail: String, val listData: ArrayList<InfoDetailComment>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class AdapterCommunityQnaChildCommentList(private val context: Context, private val listData: ArrayList<QnaDetailChildComment>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return  InfoItemViewHolder(context, RecycleCommunityCommentBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return  QnaItemViewHolder(context, RecycleCommunityCommentReplyBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     //뷰 홀더에 데이터 바인딩
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
-            is InfoItemViewHolder -> {
-                holder.bind(listData[position],position, viewerEmail)
+            is QnaItemViewHolder -> {
+                holder.bind(listData[position],position)
             }
         }
     }
@@ -42,18 +39,11 @@ class AdapterCommunityInfoParentCommentList(private val context: Context, privat
     override fun getItemCount(): Int = listData.size
 
     //Item의 ViewHolder 객체
-    inner class InfoItemViewHolder(val context: Context, private val binding: RecycleCommunityCommentBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: InfoDetailComment, position: Int, viewerEmail: String){
-            val adapter = AdapterCommunityInfoChildCommentList(context, data.coReCommentOfInfoBoardList)
-            binding.rvComment.adapter = adapter
+    inner class QnaItemViewHolder(val context: Context, private val binding: RecycleCommunityCommentReplyBinding): RecyclerView.ViewHolder(binding.root){
+        fun bind(data: QnaDetailChildComment, position: Int){
             binding.nickname.text = data.co_nickname
             binding.content.text = data.content
             binding.date.text = stringToTime(data.createdAt.toString())
-            if (data.co_email == viewerEmail){
-
-            }else{
-                binding.btnMore.visibility = View.GONE
-            }
             Glide.with(itemView.context)
                 .load(data.profileImg).circleCrop()
                 .listener(object : RequestListener<Drawable> {
