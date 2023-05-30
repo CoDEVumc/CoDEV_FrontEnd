@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.example.codev.databinding.FragmentMyBookmarkBinding
 import com.example.codev.databinding.FragmentMyBookmarkProjectBinding
@@ -44,29 +45,49 @@ class MyWriteFragment: Fragment() {
 
 
         //여기부터
-        /*viewBinding.radioGroup.setOnCheckedChangeListener { radioGroup, checkID ->
+        viewBinding.radioGroup.setOnCheckedChangeListener { radioGroup, checkID ->
+
             when(checkID) {
                 R.id.btn_project -> {
                     //context: Context, int: Int, coMyBoard: Boolean, sortingTag: String
-                    loadData1(context,type,id,"TEMP")
+                    /*now = 0
+                    bundle.putInt("now", now)
+                    val myWritePostedFragment = MyWritePostedFragment()
+                    myWritePostedFragment.arguments = bundle*/
+
+                    val bundle = Bundle()
+                    bundle.putInt("toggle", 0)
+
+                    val receiverFragment = MyWritePostedFragment()
+                    receiverFragment.arguments = bundle
+
+                    //val toggle = "toggle"
+                    //setFragmentResult("requestKey", bundleOf("bundleKey" to toggle))
+
+                    Log.d("MyWritePostedFragment ", "프로젝트 버튼 클릭"+bundle)
                 }
-                R.id.btn_frontend -> {
-                    loadData(context,type,id,"프론트엔드")
+                R.id.btn_study -> {
+                    val bundle = Bundle()
+                    bundle.putInt("toggle", 1)
+                    Log.d("MyWritePostedFragment ", "스터디 버튼 클릭")
                 }
-                R.id.btn_backend -> {
-                    loadData(context,type,id,"백엔드")
+                R.id.btn_question -> {
+                    val bundle = Bundle()
+                    bundle.putInt("toggle", 2)
+                    Log.d("MyWritePostedFragment ", "질문 버튼 클릭")
                 }
-                R.id.btn_design -> {
-                    loadData(context,type,id,"디자인")
+                R.id.btn_info -> {
+                    val bundle = Bundle()
+                    bundle.putInt("toggle", 3)
+                    Log.d("MyWritePostedFragment ", "정보 버튼 클릭")
                 }
-                R.id.btn_plan -> {
-                    loadData(context,type,id,"기획")
-                }
-                R.id.btn_etc -> {
-                    loadData(context,type,id,"기타")
+                R.id.btn_contest -> {
+                    val bundle = Bundle()
+                    bundle.putInt("toggle", 4)
+                    Log.d("MyWritePostedFragment ", "공모전 버튼 클릭")
                 }
             }
-        }*/
+        }
         //여기까지
 
         return viewBinding.root
