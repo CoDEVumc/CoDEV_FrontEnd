@@ -24,7 +24,7 @@ class MyWriteActivity : AppCompatActivity() {
         fragment.arguments = bundle
 
         viewBinding.toolbarMy.toolbar2.title = ""
-        viewBinding.toolbarMy.toolbarText.text = "작성한 글 / 댓글"
+        viewBinding.toolbarMy.toolbarText.text = "작성한 글"
         setSupportActionBar(viewBinding.toolbarMy.toolbar2)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)

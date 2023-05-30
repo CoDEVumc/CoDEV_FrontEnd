@@ -195,7 +195,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="24dp"
                     android:background="@drawable/my_button"
-                    android:text="작성한 글 / 댓글"
+                    android:text="작성한 글"
                     style="@style/Text.Body4.SemiBold"
                     android:textColor="@color/black_700"
                     android:gravity="start"

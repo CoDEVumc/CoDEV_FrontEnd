@@ -31,7 +31,7 @@ class MyWriteFragment: Fragment() {
         viewBinding.viewpager.adapter = AdapterMyWrite(this)
         val tabTitleArray = arrayOf(
             "내가 쓴 글",
-            "댓글 단 글"
+            /*"댓글 단 글"*/
         )
 
         TabLayoutMediator(viewBinding.tabLayout, viewBinding.viewpager){tab, position ->
@@ -43,6 +43,36 @@ class MyWriteFragment: Fragment() {
         }
 
 
+        //여기부터
+        /*viewBinding.radioGroup.setOnCheckedChangeListener { radioGroup, checkID ->
+            when(checkID) {
+                R.id.btn_project -> {
+                    //context: Context, int: Int, coMyBoard: Boolean, sortingTag: String
+                    loadData1(context,type,id,"TEMP")
+                }
+                R.id.btn_frontend -> {
+                    loadData(context,type,id,"프론트엔드")
+                }
+                R.id.btn_backend -> {
+                    loadData(context,type,id,"백엔드")
+                }
+                R.id.btn_design -> {
+                    loadData(context,type,id,"디자인")
+                }
+                R.id.btn_plan -> {
+                    loadData(context,type,id,"기획")
+                }
+                R.id.btn_etc -> {
+                    loadData(context,type,id,"기타")
+                }
+            }
+        }*/
+        //여기까지
+
         return viewBinding.root
     }
+
+
+
+
 }
