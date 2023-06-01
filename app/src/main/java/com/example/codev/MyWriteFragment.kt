@@ -26,8 +26,6 @@ class MyWriteFragment: Fragment() {
     private var lastPage: Boolean = false
     private var sortingTag: String = "" //정렬버튼
 
-    //val now = arguments?.getInt("now") //MyWriteFragment로부터 받은 현재 토글
-
     private var type: String = "project" //플젝or스터디 - 기본 프로젝트
 
     private var qdataList: ArrayList<QIData> = ArrayList()
@@ -57,33 +55,26 @@ class MyWriteFragment: Fragment() {
             when(checkID) {
                 R.id.btn_project -> {
                     Log.d("MyWritePostedFragment ", "프로젝트 버튼 클릭")
-                    viewBinding.listviewMain.isVisible = false
-                    viewBinding.listviewPosted.isVisible = true
                     loadPSData(requireContext(), "project")
                 }
                 R.id.btn_study -> {
                     Log.d("MyWritePostedFragment ", "스터디 버튼 클릭")
-                    viewBinding.listviewMain.isVisible = false
-                    viewBinding.listviewPosted.isVisible = true
                     loadPSData(requireContext(), "study")
                 }
                 R.id.btn_question -> {
                     Log.d("MyWritePostedFragment ", "질문 버튼 클릭")
-                    viewBinding.listviewMain.isVisible = true
-                    viewBinding.listviewPosted.isVisible = false
-                    loadQData(requireContext(), downpage, coMyBoard, sortingTag)
+                    loadQData(requireContext(), downpage, true, sortingTag)
                 }
                 R.id.btn_info -> {
                     Log.d("MyWritePostedFragment ", "정보 버튼 클릭")
-                    viewBinding.listviewMain.isVisible = true
-                    viewBinding.listviewPosted.isVisible = false
-                    loadIData(requireContext(), downpage, coMyBoard, sortingTag)
+                    loadIData(requireContext(), downpage, true, sortingTag)
                 }
                 R.id.btn_contest -> {
                     Log.d("MyWritePostedFragment ", "공모전 버튼 클릭")
                 }
             }
         }
+
 
         return viewBinding.root
     }
@@ -143,6 +134,8 @@ class MyWriteFragment: Fragment() {
     private fun setAdapter1(context: Context, questionList: ArrayList<QIData>){
         val adapter = AdapterCommunityQuestionList(context,questionList)
         viewBinding.listviewPosted.adapter = adapter
+
+
     }
 
     //전체 정보글 조회
@@ -200,6 +193,8 @@ class MyWriteFragment: Fragment() {
     private fun setAdapter2(context: Context, infoList: ArrayList<QIData>){
         val adapter = AdapterCommunityInfoList(context, infoList)
         viewBinding.listviewPosted.adapter = adapter
+
+
     }
 
     //프로젝트, 스터디 조회
@@ -231,6 +226,8 @@ class MyWriteFragment: Fragment() {
     private fun setAdapter3(psList: ArrayList<PSData>, context: Context){
         val adapterPSData = AdapterMyWritePostedList(context, psList)
         viewBinding.listviewPosted.adapter = adapterPSData
+
+
     }
 
 

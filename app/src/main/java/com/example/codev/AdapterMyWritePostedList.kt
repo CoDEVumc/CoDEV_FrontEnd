@@ -58,6 +58,9 @@ class AdapterMyWritePostedList(private val context: Context, private val listDat
                     Log.d("test : 선택한 프로젝트 아이디", data.co_projectId.toString())
                     startActivity(binding.item.context,intent,null)
                 }
+
+                //프로젝트 모집 파트
+                binding.partlist.text = data.co_parts
             }
             else if (data.co_studyId != null){
                 //북마크
@@ -75,6 +78,9 @@ class AdapterMyWritePostedList(private val context: Context, private val listDat
                     Log.d("test : 선택한 스터디 아이디", data.co_studyId.toString())
                     startActivity(binding.item.context, intent, null)
                 }
+
+                //스터디 분야
+                binding.partlist.text = data.co_part
             }
 
             //프로젝트, 스터디 제목
@@ -99,9 +105,6 @@ class AdapterMyWritePostedList(private val context: Context, private val listDat
                 val languages = data.co_languages
                 binding.stack.adapter = AdapterRecruitStack(context,languages.split(","))
             }
-
-            //프로젝트,스터디 모집 파트
-            binding.partlist.text = data.co_parts
 
 
         }

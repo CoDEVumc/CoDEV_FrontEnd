@@ -27,6 +27,7 @@ data class PSData(
     val co_heartCount: Int,
     var co_heart: Boolean,
     val co_parts: String,
+    val co_part: String,
     val co_languages: String,
     val co_photos: String, //null <-- data type???
     val co_partList: String, //null <-- data type???
