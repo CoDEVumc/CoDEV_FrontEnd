@@ -192,6 +192,12 @@ interface RetrofitService {
     @GET("my-page/hearts/studies")
     fun getHeartedContest(@Header("CoDev_Authorization") header: String) : Call<ResBookMarkContestList>
 
+    //내정보 > 내가 작성한 글 여기
+    @GET("my-page/myWrite")
+    fun getWrittenList(
+        @Header("CoDev_Authorization") header: String,
+        @Query("type") type: String
+    ) : Call<ResGetPSList>
 
     @GET("my-page/recruitment")
     fun getApplyList(

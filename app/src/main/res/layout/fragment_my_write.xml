@@ -5,38 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewpager"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/parts"
-        app:layout_constraintVertical_bias="1.0" />
-
     <View
         android:id="@+id/view8"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginTop="36dp"
         android:background="@color/black_100"
-        app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:background="@android:color/transparent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabIndicatorColor="@color/green_900"
-        app:tabSelectedTextColor="@color/green_900"
-        app:tabTextColor="@color/black_500"
-        style="@style/Text.Body4.SemiBold">
-
-    </com.google.android.material.tabs.TabLayout>
+        app:layout_constraintVertical_bias="0.0" />
 
     <HorizontalScrollView
         android:id="@+id/parts"
@@ -45,11 +25,10 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="12dp"
         android:scrollbars="none"
-        app:layout_constraintBottom_toTopOf="@+id/viewpager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabLayout">
+        app:layout_constraintTop_toBottomOf="@+id/view8">
 
         <RadioGroup
             android:id="@+id/radioGroup"
@@ -116,6 +95,28 @@
         </RadioGroup>
 
     </HorizontalScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listview_posted"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/parts"
+        tools:listitem="@layout/recycle_community_question_and_info_list" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listview_main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/parts"
+        tools:listitem="@layout/recycle_recruit_list" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
