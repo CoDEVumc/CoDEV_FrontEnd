@@ -42,7 +42,8 @@ class AdapterMyWritePostedList(private val context: Context, private val listDat
     //Item의 ViewHolder 객체
     inner class ProjectItemViewHolder(val context: Context, private val binding: RecycleRecruitListBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(data: PSData, position: Int){
-            if (data.co_projectId != null){
+            //프로젝트 일땐 co_parts 있고, co_part 없음
+            if (data.co_parts != null){
                 //북마크 : co_heart : Boolean <-- true면 채운 하트 / false면 안채운 하트 && 하트 하트 자체는 Selector로 바꾸기
                 binding.heart.isChecked = listData[position].co_heart
                 binding.heart.setOnClickListener {
@@ -62,7 +63,8 @@ class AdapterMyWritePostedList(private val context: Context, private val listDat
                 //프로젝트 모집 파트
                 binding.partlist.text = data.co_parts
             }
-            else if (data.co_studyId != null){
+            //스터디 일 땐 data.co_part 있고, data.co_parts 없음
+            else if (data.co_part != null){
                 //북마크
                 binding.heart.isChecked = listData[position].co_heart
                 binding.heart.setOnClickListener {

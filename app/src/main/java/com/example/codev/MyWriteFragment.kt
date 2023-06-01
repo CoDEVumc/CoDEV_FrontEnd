@@ -37,7 +37,6 @@ class MyWriteFragment: Fragment() {
 
         //기본은 내가 쓴 프로젝트 글 보이게
         loadPSData(requireContext(), "project")
-
     }
 
 
@@ -134,8 +133,6 @@ class MyWriteFragment: Fragment() {
     private fun setAdapter1(context: Context, questionList: ArrayList<QIData>){
         val adapter = AdapterCommunityQuestionList(context,questionList)
         viewBinding.listviewPosted.adapter = adapter
-
-
     }
 
     //전체 정보글 조회
@@ -193,8 +190,6 @@ class MyWriteFragment: Fragment() {
     private fun setAdapter2(context: Context, infoList: ArrayList<QIData>){
         val adapter = AdapterCommunityInfoList(context, infoList)
         viewBinding.listviewPosted.adapter = adapter
-
-
     }
 
     //프로젝트, 스터디 조회
@@ -226,8 +221,6 @@ class MyWriteFragment: Fragment() {
     private fun setAdapter3(psList: ArrayList<PSData>, context: Context){
         val adapterPSData = AdapterMyWritePostedList(context, psList)
         viewBinding.listviewPosted.adapter = adapterPSData
-
-
     }
 
 
