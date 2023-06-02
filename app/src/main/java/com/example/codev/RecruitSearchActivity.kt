@@ -119,6 +119,7 @@ class RecruitSearchActivity: AppCompatActivity() {
             studyLastPage = false
             setAdapter(pDataList, sDataList, now)
             viewBinding.rvList.adapter!!.notifyDataSetChanged()
+            viewBinding.toolbarSearch.etKeyword.text.clear()
             enableCancelBtn(false)
         }
 

@@ -22,6 +22,12 @@ class MainAppActivity : AppCompatActivity() {
         viewBinding = ActivityMainAppBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
+        AndroidKeyStoreUtil.init(this)
+        UserSharedPreferences.initialize(this)
+
+        /** FCM설정, Token값 가져오기 */
+        MyFirebaseMessagingService.getFirebaseToken(this)
+
         /** DynamicLink 수신확인 */
         initDynamicLink()
 
