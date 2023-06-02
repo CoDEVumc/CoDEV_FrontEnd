@@ -48,10 +48,8 @@ class MainActivity : AppCompatActivity() {
         AndroidKeyStoreUtil.init(this)
         UserSharedPreferences.initialize(this)
 
-        MyFirebaseMessagingService()
-
         /** FCM설정, Token값 가져오기 */
-        MyFirebaseMessagingService().getFirebaseToken(this)
+        MyFirebaseMessagingService.getFirebaseToken(this)
 
         // 자동 로그인 방지
         //UserSharedPreferences.clearUser(this)
