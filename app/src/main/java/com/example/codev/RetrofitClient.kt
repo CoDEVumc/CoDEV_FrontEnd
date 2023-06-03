@@ -8,7 +8,6 @@ import android.util.Base64
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.finishAffinity
-import com.example.codev.MyFirebaseMessagingService.startActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
