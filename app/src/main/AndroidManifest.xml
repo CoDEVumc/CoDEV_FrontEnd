@@ -261,7 +261,7 @@
         <service
             android:name=".MyFirebaseMessagingService"
             android:enabled="true"
-            android:exported="true"
+            android:exported="false"
             android:stopWithTask="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -290,6 +290,14 @@
 
         <activity
             android:name=".InfoDetailActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
+            android:name=".CommunitySearchActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

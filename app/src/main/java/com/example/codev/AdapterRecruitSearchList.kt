@@ -113,7 +113,7 @@ class AdapterRecruitSearchList(private val context: Context, private val listPDa
 
 
     private fun projectBookMark(context: Context, co_projectId: Int){
-        RetrofitClient.service.requestProjectBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),co_projectId).enqueue(object:Callback<JsonObject>{
+        RetrofitClient.service.requestProjectBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()),co_projectId).enqueue(object:Callback<JsonObject>{
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 조회실패",response.toString())
@@ -186,7 +186,7 @@ class AdapterRecruitSearchList(private val context: Context, private val listPDa
     }
 
     private fun studyBookMark(context: Context, co_studyId: Int){
-        RetrofitClient.service.requestStudyBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),co_studyId).enqueue(object:
+        RetrofitClient.service.requestStudyBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()),co_studyId).enqueue(object:
             Callback<JsonObject> {
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if(response.isSuccessful.not()){

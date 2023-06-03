@@ -1,9 +1,14 @@
 package com.example.codev
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import com.example.codev.addpage.AddPostActivity
 import com.example.codev.databinding.ActivityMainAppBinding
 
@@ -21,6 +26,13 @@ class MainAppActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMainAppBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
+
+        AndroidKeyStoreUtil.init(this)
+        UserSharedPreferences.initialize(this)
+        RetrofitClient.initialize(this)
+
+        /** FCM설정, Token값 가져오기 */
+        MyFirebaseMessagingService().getFirebaseToken(this)
 
         /** DynamicLink 수신확인 */
         initDynamicLink()
@@ -81,7 +93,7 @@ class MainAppActivity : AppCompatActivity() {
             for (key in dynamicLinkData.keySet()) {
                 dataStr += "key: $key / value: ${dynamicLinkData.getString(key)}\n"
             }
-
+            Log.d("test",dataStr)
         }
     }
 }

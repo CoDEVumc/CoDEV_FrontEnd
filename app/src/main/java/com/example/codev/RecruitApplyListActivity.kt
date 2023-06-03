@@ -9,20 +9,15 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.isGone
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.codev.addpage.AddNewProjectActivity
-import com.example.codev.addpage.AddNewStudyActivity
-import com.example.codev.addpage.EditProject
-import com.example.codev.addpage.EditStudy
 import com.example.codev.databinding.ActivityRecruitApplyListBinding
 import com.example.codev.databinding.RecycleRecruitApplyPartHeaderBinding
 import com.example.codev.databinding.RecycleRecruitApplyPartItemBinding
 import com.google.gson.JsonObject
-import com.tbuonomo.viewpagerdotsindicator.setBackgroundCompat
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import androidx.core.view.isGone as isGone1
+
 
 class RecruitApplyListActivity: AppCompatActivity() {
     private lateinit var viewBinding: ActivityRecruitApplyListBinding
@@ -100,10 +95,10 @@ class RecruitApplyListActivity: AppCompatActivity() {
             }
             Log.d("test",part)
             if (part == "TEMP"){
-                viewBinding.bottomBtn.isGone = viewBinding.btnEdit.isChecked
-                viewBinding.btnSelect1.isGone = !viewBinding.btnEdit.isChecked
+                viewBinding.bottomBtn.isGone1 = viewBinding.btnEdit.isChecked
+                viewBinding.btnSelect1.isGone1 = !viewBinding.btnEdit.isChecked
             }else{
-                viewBinding.btnSelect2.isGone = !viewBinding.btnEdit.isChecked
+                viewBinding.btnSelect2.isGone1 = !viewBinding.btnEdit.isChecked
             }
             //토글헤더에서 눌렸을 때 vs 토글아이템에서 눌렸을 때 나눠야 함
             adapter2.setEdit(viewBinding.btnEdit.isChecked)
@@ -135,7 +130,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
             loadData(this, type, id, part)
 
             viewBinding.btnEdit.isChecked = !viewBinding.btnEdit.isChecked
-            viewBinding.btnSelect1.isGone = !viewBinding.btnEdit.isChecked
+            viewBinding.btnSelect1.isGone1 = !viewBinding.btnEdit.isChecked
             viewBinding.btnEdit.text = "선택하기"
             adapter2.setEdit(viewBinding.btnEdit.isChecked)
             adapter2.setCount(0)
@@ -159,7 +154,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
             loadData(this, type, id, part)
 
             viewBinding.btnEdit.isChecked = !viewBinding.btnEdit.isChecked
-            viewBinding.btnSelect2.isGone = !viewBinding.btnEdit.isChecked
+            viewBinding.btnSelect2.isGone1 = !viewBinding.btnEdit.isChecked
             viewBinding.btnEdit.text = "선택하기"
             adapter2.setEdit(viewBinding.btnEdit.isChecked)
             adapter2.setCount(0)
@@ -192,7 +187,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
             if(plan>=0 && design>=0 && frontEnd>=0 && backEnd>=0 && etc>=0){
                 Log.d("test",roomId)
                 doneRecruit(this, type, id, applicantList)
-                conFirmChatRoom(this, roomId, roomType, inviteList)
+                ChatClient.createChatRoom(this, title, mainImg, inviteList, roomType, type, id, optionMove = false)
                 val intent = Intent(this, RecruitDoneActivity::class.java)
                 intent.putExtra("roomId", roomId)
                 intent.putExtra("selectList", selectList)
@@ -200,9 +195,6 @@ class RecruitApplyListActivity: AppCompatActivity() {
             }else{
                 Toast.makeText(this, "파트별 제한인원을 다시 확인해주세요", Toast.LENGTH_SHORT).show()
             }
-
-
-
         }
 
         //초기화 버튼
@@ -228,96 +220,6 @@ class RecruitApplyListActivity: AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun conFirmChatRoom(context: Context, roomId: String, roomType: String, inviteList: ArrayList<String>){
-        RetrofitClient.service.confirmChatRoom(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),roomId).enqueue(object: Callback<JsonObject>{
-            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                if(response.isSuccessful.not()){
-                    Log.d("test: 채팅방생성 실패",response.toString())
-                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }else{
-                    when(response.code()){
-                        200->{
-                            response.body()?.let {
-                                Log.d("stomp: 채팅방 새로 개설", "새로 생성")
-                                createChat(context, roomId, roomType, inviteList)
-                            }
-                        }
-                        401 ->{
-                            Log.d("stomp: 채팅방 이미 존재", "이미 생성")
-                            ChatClient.join(context, roomId)
-                            val intent = Intent(context, ChatRoomActivity::class.java)
-                            intent.putExtra("title", title)
-                            intent.putExtra("roomId", roomId)
-                            intent.putExtra("people", 1)
-                            intent.putExtra("isRead", 0)
-                            startActivity(intent)
-                        }
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Log.d("test: 채팅방생성 실패", "[Fail]${t.toString()}")
-                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun createChat(context: Context, roomId: String, roomType: String, inviteList: ArrayList<String>){
-        RetrofitClient.service.createChatRoom(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), ReqCreateChatRoom(roomId, roomType, title, mainImg)).enqueue(object: Callback<JsonObject> {
-            @SuppressLint("UseCompatLoadingForDrawables")
-            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                if(response.isSuccessful.not()){
-                    Log.d("test: 채팅방생성 실패",response.toString())
-                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }else{
-                    when(response.code()){
-                        200->{
-                            response.body()?.let {
-                                Log.d("test: 채팅방생성 성공! ", "\n${it.toString()}")
-                                inviteChat(context, roomId, inviteList)
-                            }
-                        }
-                        401 ->{
-                            Log.d("test: 401", "이미 생성")
-                            Toast.makeText(context, "이미 문의 채팅이 생성되어있습니다", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Log.d("test: 채팅방생성 실패", "[Fail]${t.toString()}")
-                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun inviteChat(context: Context, roomId: String, inviteList: ArrayList<String>){
-        RetrofitClient.service.inviteChat(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), ReqInviteChat(roomId, inviteList)).enqueue(object: Callback<JsonObject> {
-            @SuppressLint("UseCompatLoadingForDrawables")
-            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                if(response.isSuccessful.not()){
-                    Log.d("test: 채팅방초대 실패",response.toString())
-                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }else{
-                    when(response.code()){
-                        200->{
-                            response.body()?.let {
-                                Log.d("test: 채팅방초대 성공! ", "\n${it.toString()}")
-                            }
-                        }
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Log.d("test: 채팅방초대 실패", "[Fail]${t.toString()}")
-                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 
     private fun enableDelete(boolean: Boolean){
@@ -365,39 +267,51 @@ class RecruitApplyListActivity: AppCompatActivity() {
     }*/
     private lateinit var hbinding: RecycleRecruitApplyPartHeaderBinding
     private lateinit var ibinding: RecycleRecruitApplyPartItemBinding
+
     private fun setAdapter1(dataList: ArrayList<ApplicantData>, context: Context, limit: Int){
+        //dataList: ArrayList<ApplicantData>였음
         Log.d("test", "어댑터 1")
 
-        viewBinding.btnSelected.setOnClickListener{
-            loadData(context,type,id,"TEMP")
+        // Drawable 리소스 가져오기
+        val drawable = resources.getDrawable(R.drawable.recruit_apply_allpartbox)
+        // 텍스트와 Drawable 함께 설정
+        viewBinding.btnSelected.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
+        viewBinding.btnSelected.setText(" | "+limit.toString()+"명")
+        //viewBinding.btnSelected.text = R.drawable.recruit_apply_allpartbox+" | "+limit+"명"
+
+        viewBinding.btnPlan.text = "   기획 | "+dataList[0].co_limit+"명"
+        viewBinding.btnDesign.text = "   디자인 | "+dataList[1].co_limit+"명"
+        viewBinding.btnFrontend.text = "  프론트엔드 | "+dataList[2].co_limit+"명"
+        viewBinding.btnBackend.text = "   백엔드 | "+dataList[3].co_limit+"명"
+        viewBinding.btnEtc.text = "   기타 | "+dataList[4].co_limit+"명"
+
+        viewBinding.radioGroup.setOnCheckedChangeListener { radioGroup, checkID ->
+            when(checkID) {
+                R.id.btn_selected -> {
+                    loadData(context,type,id,"TEMP")
+                }
+                R.id.btn_frontend -> {
+                    loadData(context,type,id,"프론트엔드")
+                }
+                R.id.btn_backend -> {
+                    loadData(context,type,id,"백엔드")
+                }
+                R.id.btn_design -> {
+                    loadData(context,type,id,"디자인")
+                }
+                R.id.btn_plan -> {
+                    loadData(context,type,id,"기획")
+                }
+                R.id.btn_etc -> {
+                    loadData(context,type,id,"기타")
+                }
+            }
         }
-        viewBinding.btnFrontend.setOnClickListener{
-            loadData(context,type,id,"프론트엔드")
-        }
-        viewBinding.btnBackend.setOnClickListener {
-            loadData(context,type,id,"백엔드")
-        }
-        viewBinding.btnDesign.setOnClickListener {
-            loadData(context,type,id,"디자인")
-        }
-        viewBinding.btnPlan.setOnClickListener {
-            loadData(context,type,id,"기획")
-        }
-        viewBinding.btnEtc.setOnClickListener {
-            loadData(context,type,id,"기타")
-        }
+
         viewBinding.btnEdit.isChecked = false
         viewBinding.btnEdit.text = "선택하기"
 
-        //AdapterRecruitApplicants1(context, dataList, limit) //어댑터에서 data.어쩌구ㄱ
 
-        /*adapter1 = AdapterRecruitApplicants1(context, dataList, limit){
-            Log.d("test","리콜받음 $it")
-            loadData(context, type, id, it)
-            viewBinding.btnEdit.isChecked = false
-            viewBinding.btnEdit.text = "선택하기"
-        }*/
-        //viewBinding.part.adapter = adapter1
     }
 
     private fun setAdapter2(dataList: ArrayList<ApplicantInfoData>, context: Context){
@@ -418,7 +332,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
     private fun loadData(context: Context, type:String, id: Int, coPart: String){
         if(type == "PROJECT") {
-            RetrofitClient.service.getApplyerProjectList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, coPart).enqueue(object : Callback<ResApplyerList> {
+            RetrofitClient.service.getApplyerProjectList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, coPart).enqueue(object : Callback<ResApplyerList> {
                 @SuppressLint("SetTextI18n")
                 override fun onResponse(call: Call<ResApplyerList>, response: Response<ResApplyerList>) {
                     if (response.isSuccessful.not()) {
@@ -466,11 +380,13 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
                                     part = it.result.message.co_part
                                     if (part == "TEMP"){
-                                        viewBinding.bottomBtn.isGone = false
-                                        viewBinding.btnSelect1.isGone = true
-                                        viewBinding.btnSelect2.isGone = true
+                                        viewBinding.bottomBtn.isGone1 = false
+                                        viewBinding.btnSelect1.isGone1 = true
+                                        viewBinding.btnSelect2.isGone1 = true
                                         peopleNum = it.result.message.co_tempSavedApplicantsCount
                                         viewBinding.applicantNum.text = "현재 선택한 지원자 $peopleNum"
+
+                                        //viewBinding.btnSelected.text = "그림 | $peopleNum"+"명"
 
 
                                         if(peopleNum > 0){ //초기화, 모집완료 활성화 (담은 인원이 1명 이상)
@@ -487,9 +403,9 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
                                     }
                                     else{
-                                        viewBinding.bottomBtn.isGone = true
-                                        viewBinding.btnSelect1.isGone = true
-                                        viewBinding.btnSelect2.isGone = true
+                                        viewBinding.bottomBtn.isGone1 = true
+                                        viewBinding.btnSelect1.isGone1 = true
+                                        viewBinding.btnSelect2.isGone1 = true
                                         peopleNum = it.result.message.co_applicantsInfo.size
                                         viewBinding.applicantNum.text = "현재 파트 지원자 $peopleNum"
                                     }
@@ -506,7 +422,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
             })
         }
         else if(type == "STUDY") {
-            RetrofitClient.service.getApplyerStudyList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, coPart).enqueue(object : Callback<ResApplyerList> {
+            RetrofitClient.service.getApplyerStudyList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, coPart).enqueue(object : Callback<ResApplyerList> {
                 @SuppressLint("SetTextI18n")
                 override fun onResponse(call: Call<ResApplyerList>, response: Response<ResApplyerList>) {
                     if (response.isSuccessful.not()) {
@@ -561,9 +477,9 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
                                     part = it.result.message.co_part
                                     if (part == "TEMP"){
-                                        viewBinding.bottomBtn.isGone = false
-                                        viewBinding.btnSelect1.isGone = true
-                                        viewBinding.btnSelect2.isGone = true
+                                        viewBinding.bottomBtn.isGone1 = false
+                                        viewBinding.btnSelect1.isGone1 = true
+                                        viewBinding.btnSelect2.isGone1 = true
                                         peopleNum = it.result.message.co_tempSavedApplicantsCount
                                         viewBinding.applicantNum.text = "현재 선택한 지원자 $peopleNum"
 
@@ -581,9 +497,9 @@ class RecruitApplyListActivity: AppCompatActivity() {
 
                                     }
                                     else{
-                                        viewBinding.bottomBtn.isGone = true
-                                        viewBinding.btnSelect1.isGone = true
-                                        viewBinding.btnSelect2.isGone = true
+                                        viewBinding.bottomBtn.isGone1 = true
+                                        viewBinding.btnSelect1.isGone1 = true
+                                        viewBinding.btnSelect2.isGone1 = true
                                         peopleNum = temp.size
                                         viewBinding.applicantNum.text = "현재 파트 지원자 $peopleNum"
                                     }
@@ -604,7 +520,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
     //모집완료 function
     private fun doneRecruit(context: Context, type: String, id: Int, recruitedList: ArrayList<String>){
         if (type == "PROJECT"){
-            RetrofitClient.service.doneRecruitProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqRecruitedApplicantList(recruitedList)).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.doneRecruitProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqRecruitedApplicantList(recruitedList)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 모집완료 실패",response.toString())
@@ -626,7 +542,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
             })
         }
         else if(type == "STUDY"){
-            RetrofitClient.service.doneRecruitStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqRecruitedApplicantList(recruitedList)).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.doneRecruitStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqRecruitedApplicantList(recruitedList)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 지원자 편집  실패",response.toString())
@@ -653,7 +569,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
     //지원자 EDIT
     private fun editApplicant(context: Context, type: String, id: Int, editList: List<String>){
         if (type == "PROJECT"){
-            RetrofitClient.service.requestProjectApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqUpdateApplicant(editList)).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.requestProjectApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqUpdateApplicant(editList)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 지원자 편집 실패",response.toString())
@@ -675,7 +591,7 @@ class RecruitApplyListActivity: AppCompatActivity() {
             })
         }
         else if(type == "STUDY"){
-            RetrofitClient.service.requestStudyApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqUpdateApplicant(editList)).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.requestStudyApplicant(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqUpdateApplicant(editList)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 지원자 편집  실패",response.toString())

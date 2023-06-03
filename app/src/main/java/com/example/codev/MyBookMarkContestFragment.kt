@@ -36,7 +36,7 @@ class MyBookMarkContestFragment :Fragment(){
     }
 
     private fun loadData(context: Context){
-        RetrofitClient.service.getHeartedContest(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).enqueue(object: Callback<ResBookMarkContestList> {
+        RetrofitClient.service.getHeartedContest(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())).enqueue(object: Callback<ResBookMarkContestList> {
             override fun onResponse(call: Call<ResBookMarkContestList>, response: Response<ResBookMarkContestList>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 북마크 프로젝트 불러오기 실패",response.toString())

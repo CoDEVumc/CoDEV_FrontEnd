@@ -189,7 +189,7 @@ class MyProfileActivity:AppCompatActivity() {
 
     private fun uploadUserInfo(context: Context){
         //토큰 가져오기
-        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
         Log.d("postAuth", userToken)
 
         val finalName = viewBinding.etName.text.toString()

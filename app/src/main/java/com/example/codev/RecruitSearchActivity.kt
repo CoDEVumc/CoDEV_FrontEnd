@@ -119,6 +119,7 @@ class RecruitSearchActivity: AppCompatActivity() {
             studyLastPage = false
             setAdapter(pDataList, sDataList, now)
             viewBinding.rvList.adapter!!.notifyDataSetChanged()
+            viewBinding.toolbarSearch.etKeyword.text.clear()
             enableCancelBtn(false)
         }
 
@@ -189,7 +190,7 @@ class RecruitSearchActivity: AppCompatActivity() {
 
     private fun loadProjectData(context: Context, downPage: Int, coKeyword:String, coProcessTag:String, coSortingTag: String, now: Int) {
         Log.d("test","프로젝트")
-        RetrofitClient.service.requestPDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(this)),
+        RetrofitClient.service.requestPDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()),
             downPage, "", "", coKeyword, coProcessTag, coSortingTag).enqueue(object: Callback<ResGetProjectList> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<ResGetProjectList>, response: Response<ResGetProjectList>) {
@@ -235,7 +236,7 @@ class RecruitSearchActivity: AppCompatActivity() {
 
     private fun loadStudyData(context: Context, downPage: Int, coKeyword:String, coProcessTag: String,coSortingTag: String, now: Int) {
         Log.d("test","스터디")
-        RetrofitClient.service.requestSDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(this)),
+        RetrofitClient.service.requestSDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()),
             downPage, "", "", coKeyword, coProcessTag, coSortingTag).enqueue(object: Callback<ResGetStudyList> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<ResGetStudyList>, response: Response<ResGetStudyList>) {

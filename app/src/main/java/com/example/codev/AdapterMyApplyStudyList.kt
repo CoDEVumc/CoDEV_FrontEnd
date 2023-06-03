@@ -83,7 +83,7 @@ class AdapterMyApplyStudyList(private val context: Context, private val listData
     }
 
     private fun request(co_studyId: Int){
-        RetrofitClient.service.requestStudyBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),co_studyId).enqueue(object:
+        RetrofitClient.service.requestStudyBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()),co_studyId).enqueue(object:
             Callback<JsonObject> {
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if(response.isSuccessful.not()){

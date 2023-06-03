@@ -79,7 +79,7 @@ class CommunityFragment: Fragment() { //검색, 북마크, 알림 여기서 활�
             when (it.itemId) {
                 R.id.menu_search ->{
                     Toast.makeText(mainAppActivity, "검색", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(mainAppActivity, RecruitSearchActivity::class.java)
+                    val intent = Intent(mainAppActivity, CommunitySearchActivity::class.java)
                     startActivity(intent)
                     true
                 }

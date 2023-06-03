@@ -118,7 +118,7 @@ class CommunityInfoFragment :Fragment(){
 
     //전체 정보글 조회
     private fun loadData(context: Context, int: Int, coMyBoard: Boolean, sortingTag: String) {
-        RetrofitClient.service.requestIDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
+        RetrofitClient.service.requestIDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()),
             int, coMyBoard, sortingTag).enqueue(object: Callback<ResGetCommunityList1>{
             override fun onResponse(call: Call<ResGetCommunityList1>, response: Response<ResGetCommunityList1>) {
                 if(response.isSuccessful.not()){

@@ -137,6 +137,16 @@ interface RetrofitService {
         @Query("sortingTag") sortingTag: String
     ): Call<ResGetCommunityList1>
 
+    @GET("board/search/{page}")
+    fun searchCommunityDataList( //커뮤니티 - 정보글 리스트 검색
+        @Path("page") page: Int,
+        @Query("searchTag") searchTag: String,
+        @Query("sortingTag") sortingTag: String,
+        @Query("coMyBoard") coMyBoard: Boolean,
+        @Query("type") type: String
+    ): Call<ResGetSearchCommunity>
+
+
     @GET("infoBoard/infoBoards/{page}")
     fun requestCDataList( //커뮤니티 - 공모전글 리스트 전체조회
         @Header("CoDev_Authorization") header: String,
@@ -192,6 +202,12 @@ interface RetrofitService {
     @GET("my-page/hearts/studies")
     fun getHeartedContest(@Header("CoDev_Authorization") header: String) : Call<ResBookMarkContestList>
 
+    //내정보 > 내가 작성한 글 여기
+    @GET("my-page/myWrite")
+    fun getWrittenList(
+        @Header("CoDev_Authorization") header: String,
+        @Query("type") type: String
+    ) : Call<ResGetPSList>
 
     @GET("my-page/recruitment")
     fun getApplyList(
@@ -336,6 +352,9 @@ interface RetrofitService {
 
     @POST("chat/confirm/{roomId}")
     fun confirmChatRoom(@Header("CoDev_Authorization") header: String, @Path("roomId") roomId: String) : Call<JsonObject>
+
+    @GET("chat/participants/{roomId}")
+    fun getChatRoomParticipants(@Header("CoDev_Authorization") header: String, @Path("roomId") roomId: String) : Call<ResGetChatRoomParticipants>
 
     @GET("infoBoard/{coInfoId}")
     fun getInfoDetail(@Header("CoDev_Authorization") header: String, @Path("coInfoId") coInfoId: Int) : Call<ResGetInfoDetail>

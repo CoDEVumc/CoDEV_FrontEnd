@@ -127,7 +127,7 @@ class HomeFragment():Fragment() {
     }
 
     private fun setProjectAdapter(){
-        RetrofitClient.service.requestPDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
+        RetrofitClient.service.requestPDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()),
             0, "", "", "", "ING", "populaRity").enqueue(object: Callback<ResGetProjectList> {
                 override fun onResponse(call: Call<ResGetProjectList>, response: Response<ResGetProjectList>) {
                     if(response.isSuccessful.not()){
@@ -167,7 +167,7 @@ class HomeFragment():Fragment() {
     }
 
     private fun setStudyAdapter(){
-        RetrofitClient.service.requestSDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
+        RetrofitClient.service.requestSDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()),
             0, "", "", "", "ING", "populaRity").enqueue(object: Callback<ResGetStudyList> {
             override fun onResponse(call: Call<ResGetStudyList>, response: Response<ResGetStudyList>) {
                 if(response.isSuccessful.not()){

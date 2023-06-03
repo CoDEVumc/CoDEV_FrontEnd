@@ -94,12 +94,6 @@ class AdapterMyBookmarkQuestionAndInfoList(private val context: Context, private
                     startActivity(binding.item.context, intent, null)
                 }
             }
-            /*binding.item.setOnClickListener { //상세조회 연결
-                val intent = Intent(binding.item.context, InfoDetailActivity::class.java)
-                intent.putExtra("id", data.co_infoId)
-                Log.d("test : 선택한 정보글 아이디", data.co_infoId.toString())
-                startActivity(binding.item.context,intent,null)
-            }*/
 
         }
     }
