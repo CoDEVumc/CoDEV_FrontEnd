@@ -24,6 +24,7 @@ class MainAppActivity : AppCompatActivity() {
 
         AndroidKeyStoreUtil.init(this)
         UserSharedPreferences.initialize(this)
+        RetrofitClient.initialize(this)
 
         /** FCM설정, Token값 가져오기 */
         MyFirebaseMessagingService.getFirebaseToken(this)

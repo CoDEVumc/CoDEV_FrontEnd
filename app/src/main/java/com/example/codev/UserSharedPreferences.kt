@@ -18,6 +18,16 @@ object UserSharedPreferences {
         sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
     }
 
+    fun setLoginType(input: String){
+        val editor : SharedPreferences.Editor = sharedPreferences.edit()
+        editor.putString("loginType", input)
+        editor.apply()
+    }
+
+    fun getLoginType(): String{
+        return sharedPreferences.getString("loginType", "").toString()
+    }
+
     fun setFCMToken(input: String) {
         val editor : SharedPreferences.Editor = sharedPreferences.edit()
         editor.putString("token", input)

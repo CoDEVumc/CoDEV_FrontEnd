@@ -45,8 +45,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
+
         AndroidKeyStoreUtil.init(this)
         UserSharedPreferences.initialize(this)
+        RetrofitClient.initialize(this)
 
         /** FCM설정, Token값 가져오기 */
         MyFirebaseMessagingService.getFirebaseToken(this)
@@ -150,6 +152,7 @@ class MainActivity : AppCompatActivity() {
                                         UserSharedPreferences.setKey(it.result.key)
                                         UserSharedPreferences.setUserAccessToken(AndroidKeyStoreUtil.encrypt(it.result.accessToken))
                                         UserSharedPreferences.setUserRefreshToken(AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
+                                        UserSharedPreferences.setLoginType("GOOGLE")
                                         Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()))
                                         Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken()))
                                         val intent = Intent(context,MainAppActivity::class.java)
@@ -191,6 +194,7 @@ class MainActivity : AppCompatActivity() {
                                         UserSharedPreferences.setKey(it.result.key)
                                         UserSharedPreferences.setUserAccessToken(AndroidKeyStoreUtil.encrypt(it.result.accessToken))
                                         UserSharedPreferences.setUserRefreshToken(AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
+                                        UserSharedPreferences.setLoginType("GITHUB")
                                         Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()))
                                         Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken()))
                                         val intent = Intent(context,MainAppActivity::class.java)
@@ -230,6 +234,7 @@ class MainActivity : AppCompatActivity() {
                                 UserSharedPreferences.setKey(it.result.key)
                                 UserSharedPreferences.setUserAccessToken(AndroidKeyStoreUtil.encrypt(it.result.accessToken))
                                 UserSharedPreferences.setUserRefreshToken(AndroidKeyStoreUtil.encrypt(it.result.refreshToken))
+                                UserSharedPreferences.setLoginType("CODEV")
                                 Log.d("test: 로그인 성공", "\n${it.toString()}")
                                 Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()))
                                 Log.d("test: 로그인 성공",AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserRefreshToken()))
