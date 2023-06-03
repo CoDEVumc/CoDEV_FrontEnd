@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace 'com.example.codev'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.codev"
         minSdk 28
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
