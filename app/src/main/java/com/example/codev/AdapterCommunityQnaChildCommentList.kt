@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -19,7 +20,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class AdapterCommunityQnaChildCommentList(private val context: Context, private val listData: ArrayList<QnaDetailChildComment>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class AdapterCommunityQnaChildCommentList(private val context: Context, private val listData: ArrayList<QnaDetailChildComment>, private val viewerEmail: String, private val sendChildId: (id: Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -44,6 +45,9 @@ class AdapterCommunityQnaChildCommentList(private val context: Context, private 
             binding.nickname.text = data.co_nickname
             binding.content.text = data.content
             binding.date.text = stringToTime(data.createdAt.toString())
+            if (data.co_email != viewerEmail){
+                binding.btnMore.visibility = View.GONE
+            }
             Glide.with(itemView.context)
                 .load(data.profileImg).circleCrop()
                 .listener(object : RequestListener<Drawable> {
@@ -74,6 +78,9 @@ class AdapterCommunityQnaChildCommentList(private val context: Context, private 
 
                 })
                 .into(binding.profileImg)
+            binding.btnMore.setOnClickListener {
+                sendChildId(data.co_rcoqb)
+            }
         }
     }
 

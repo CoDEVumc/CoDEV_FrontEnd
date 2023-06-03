@@ -26,7 +26,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class AdapterCommunityQnaParentCommentList(private val context: Context, private val listData: ArrayList<QnaDetailComment>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class AdapterCommunityQnaParentCommentList(private val context: Context, private val listData: ArrayList<QnaDetailComment>, private val viewerEmail: String, private val sendParentId: (id: Int, nickname: String, type: String) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -48,7 +48,9 @@ class AdapterCommunityQnaParentCommentList(private val context: Context, private
     //Item의 ViewHolder 객체
     inner class QnaItemViewHolder(val context: Context, private val binding: RecycleCommunityCommentBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(data: QnaDetailComment, position: Int){
-            val adapter = AdapterCommunityQnaChildCommentList(context, data.coReCommentOfQnaBoardList)
+            val adapter = AdapterCommunityQnaChildCommentList(context, data.coReCommentOfQnaBoardList, viewerEmail) {
+                sendParentId(it, "none", "child delete")
+            }
             binding.rvComment.adapter = adapter
             binding.nickname.text = data.co_nickname
             binding.content.text = data.content
@@ -86,6 +88,14 @@ class AdapterCommunityQnaParentCommentList(private val context: Context, private
 
                 })
                 .into(binding.profileImg)
+
+                binding.btnComment.setOnClickListener {
+                    sendParentId(data.co_coqb, data.co_nickname, "none")
+                }
+
+            binding.btnMore.setOnClickListener {
+                sendParentId(data.co_coqb, data.co_nickname, "parent delete")
+            }
         }
 
         private fun confirmDelete(context: Context, id: Int){

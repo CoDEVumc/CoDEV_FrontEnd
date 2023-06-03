@@ -361,6 +361,8 @@ interface RetrofitService {
     @POST("qnaBoard/comment/{coQnaId}")
     fun createQnaParentComment(@Header("CoDev_Authorization") header: String, @Path("coQnaId") coQnaId: Int, @Body params: ReqCreateComment) : Call<ResConfirm>
 
+    @POST("infoBoard/recomments/{coCoib}")
+    fun createInfoChildComment(@Header("CoDev_Authorization") header: String, @Path("coCoib") coCoib: Int, @Body params: ReqCreateComment) : Call<ResConfirm>
     @POST("qnaBoard/recomments/{coCoqb}")
     fun createQnaChildComment(@Header("CoDev_Authorization") header: String, @Path("coCoqb") coCoqb: Int, @Body params: ReqCreateComment) : Call<ResConfirm>
 
@@ -369,6 +371,12 @@ interface RetrofitService {
 
     @DELETE("qnaBoard/out/comment/{coCoqb}")
     fun deleteQnaParentComment(@Header("CoDev_Authorization") header: String, @Path("coCoqb") coCoqb: Int) : Call<ResConfirm>
+
+    @DELETE("infoBoard/out/recomment/{coRcoIb}")
+    fun deleteInfoChildComment(@Header("CoDev_Authorization") header: String, @Path("coRcoIb") coRcoIb: Int) : Call<ResConfirm>
+
+    @DELETE("qnaBoard/out/recomment/{coRcoqb}")
+    fun deleteQnaChildComment(@Header("CoDev_Authorization") header: String, @Path("coRcoqb") coRcoqb: Int) : Call<ResConfirm>
 
     @PATCH("infoBoard/mark/{coInfoId}")
     fun markInfo(@Header("CoDev_Authorization") header: String, @Path("coInfoId") coInfoId: Int) : Call<ResLikePost>

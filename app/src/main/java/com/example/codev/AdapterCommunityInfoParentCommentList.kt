@@ -22,7 +22,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class AdapterCommunityInfoParentCommentList(private val context: Context, private val viewerEmail: String, val listData: ArrayList<InfoDetailComment>, private val sendParentId: (id: Int, nickname: String) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class AdapterCommunityInfoParentCommentList(private val context: Context, private val viewerEmail: String, val listData: ArrayList<InfoDetailComment>, private val sendParentId: (id: Int, nickname: String, type: String) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -44,15 +44,19 @@ class AdapterCommunityInfoParentCommentList(private val context: Context, privat
     //Item의 ViewHolder 객체
     inner class InfoItemViewHolder(val context: Context, private val binding: RecycleCommunityCommentBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(data: InfoDetailComment, position: Int, viewerEmail: String){
-            val adapter = AdapterCommunityInfoChildCommentList(context, data.coReCommentOfInfoBoardList)
+            val adapter = AdapterCommunityInfoChildCommentList(context, data.coReCommentOfInfoBoardList, viewerEmail) {
+                sendParentId(it, "none", "child delete")
+            }
             binding.rvComment.adapter = adapter
             binding.nickname.text = data.co_nickname
             binding.content.text = data.content
             binding.date.text = stringToTime(data.createdAt.toString())
-            if (data.co_email == viewerEmail){
-
-            }else{
+            if (data.co_email != viewerEmail){
                 binding.btnMore.visibility = View.GONE
+            }
+
+            binding.btnMore.setOnClickListener {
+
             }
 
             Glide.with(itemView.context)
@@ -87,7 +91,11 @@ class AdapterCommunityInfoParentCommentList(private val context: Context, privat
                 .into(binding.profileImg)
 
             binding.btnComment.setOnClickListener {
-                sendParentId(data.co_coib, data.co_nickname)
+                sendParentId(data.co_coib, data.co_nickname, "comment")
+            }
+
+            binding.btnMore.setOnClickListener {
+                sendParentId(data.co_coib, data.co_nickname, "parent delete")
             }
         }
     }

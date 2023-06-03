@@ -5,14 +5,17 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -23,7 +26,9 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.codev.addpage.*
 import com.example.codev.databinding.ActivityCommunityDetailBinding
-import com.google.gson.JsonObject
+import com.example.codev.databinding.CommunityDeleteCommentLayoutBinding
+import com.example.codev.databinding.ProfileAddImageLayoutBinding
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,7 +37,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.ArrayList
 
 
 class InfoDetailActivity:AppCompatActivity() {
@@ -104,15 +108,32 @@ class InfoDetailActivity:AppCompatActivity() {
         })
 
         viewBinding.btnSend.setOnClickListener {
-            sendParentComment(this)
+            if(parentCommentId == -1) sendParentComment(this)
+            else sendChildComment(this)
         }
 
         viewBinding.etChat.setOnFocusChangeListener { v, hasFocus ->
             if(!hasFocus){
                 parentCommentId = -1
-                viewBinding.etChat.hint = ""
+                viewBinding.etChat.hint = "댓글을 작성해주세요."
             }
         }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if(ev!!.action == MotionEvent.ACTION_DOWN){
+            val v:View? = currentFocus
+            if (v is EditText) {
+                val inputAreaOutRect = Rect()
+                viewBinding.chatBar.getGlobalVisibleRect(inputAreaOutRect)
+                if (!inputAreaOutRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
+                    v.clearFocus()
+                    val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0)
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -314,7 +335,7 @@ class InfoDetailActivity:AppCompatActivity() {
                                 //content
                                 viewBinding.contentText.text = it.result.Complete.content
                                 setQnaPhotoAdapter(it.result.Complete.co_photos)
-                                setQnaCommentAdapter(it.result.Complete.co_comment)
+                                setQnaCommentAdapter(it.result.Complete.co_comment, it.result.Complete.co_viewer)
                                 setQnaPhotoUrlList(it.result.Complete.co_photos)
                             }
                         }
@@ -333,7 +354,17 @@ class InfoDetailActivity:AppCompatActivity() {
         viewBinding.rvImg.adapter = adapter
     }
     private fun setInfoCommentAdapter(dataList: ArrayList<InfoDetailComment>, viewerEmail: String){
-        val adapter = AdapterCommunityInfoParentCommentList(this, viewerEmail, dataList) { id, name ->
+        val adapter = AdapterCommunityInfoParentCommentList(this, viewerEmail, dataList) { id, name, type ->
+            if(type == "parent delete"){
+                getBottomMenu(id, "parent")
+            }else if(type == "child delete"){
+                getBottomMenu(id, "child")
+            }else{
+                parentCommentId = id
+                viewBinding.etChat.hint = "${name}에 대한 댓댓글을 작성하세요"
+                showKeyboard(viewBinding.etChat)
+            }
+
         }
         viewBinding.rvComment.adapter = adapter
     }
@@ -347,11 +378,20 @@ class InfoDetailActivity:AppCompatActivity() {
         val adapter = AdapterCommunityQnaPhotoList(this,dataList)
         viewBinding.rvImg.adapter = adapter
     }
-    private fun setQnaCommentAdapter(dataList: ArrayList<QnaDetailComment>){
-        val adapter = AdapterCommunityQnaParentCommentList(this,dataList)
+    private fun setQnaCommentAdapter(dataList: ArrayList<QnaDetailComment>, viewerEmail: String){
+        val adapter = AdapterCommunityQnaParentCommentList(this,dataList, viewerEmail) { id, name, type ->
+            if(type == "parent delete"){
+                getBottomMenu(id, "parent")
+            }else if(type == "child delete"){
+                getBottomMenu(id, "child")
+            }else{
+                parentCommentId = id
+                viewBinding.etChat.hint = "${name}에 대한 댓댓글을 작성중입니다."
+                showKeyboard(viewBinding.etChat)
+            }
+        }
         viewBinding.rvComment.adapter = adapter
     }
-
     private fun setQnaPhotoUrlList(coPhotos: ArrayList<QnaDetailPhoto>) {
         for (i in coPhotos){
             postImgUrlList.add(i.co_fileUrl)
@@ -375,6 +415,13 @@ class InfoDetailActivity:AppCompatActivity() {
                     when (response.code()) {
                         200 -> {
                             viewBinding.smile.isSelected = !viewBinding.smile.isSelected
+                            val likeCount= viewBinding.smileCounter.text.toString().replace(("[^\\d.]").toRegex(), "").toInt()
+                            if(viewBinding.smile.isSelected){ //요청 후 선택됨 -> 좋아요를 함 -> +1
+                                viewBinding.smileCounter.text = "${likeCount + 1}명이 공감해요"
+                            }else{
+                                viewBinding.smileCounter.text = "${likeCount - 1}명이 공감해요"
+                            }
+
                             viewBinding.smile.isClickable = true
                         }
                     }
@@ -399,6 +446,12 @@ class InfoDetailActivity:AppCompatActivity() {
                     when (response.code()) {
                         200 -> {
                             viewBinding.smile.isSelected = !viewBinding.smile.isSelected
+                            val likeCount= viewBinding.smileCounter.text.toString().replace(("[^\\d.]").toRegex(), "").toInt()
+                            if(viewBinding.smile.isSelected){ //요청 후 선택됨 -> 좋아요를 함 -> +1
+                                viewBinding.smileCounter.text = "${likeCount + 1}명이 공감해요"
+                            }else{
+                                viewBinding.smileCounter.text = "${likeCount - 1}명이 공감해요"
+                            }
                             viewBinding.smile.isClickable = true
                         }
                     }
@@ -528,6 +581,121 @@ class InfoDetailActivity:AppCompatActivity() {
         builder.show()
     }
 
+    private fun confirmParentCommentDelete(context: Context, parentCommentId: Int){
+        // 다이얼로그를 생성하기 위해 Builder 클래스 생성자를 이용해 줍니다.
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("댓글 삭제")
+            .setMessage("해당 댓글을 정말로 삭제하시겠습니까?")
+            .setPositiveButton("확인",
+                DialogInterface.OnClickListener { dialog, _ ->
+                    if (communityType == "info"){
+                        RetrofitClient.service.deleteInfoParentComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), parentCommentId).enqueue(object: Callback<ResConfirm>{
+                            override fun onResponse(call: Call<ResConfirm>, response: Response<ResConfirm>) {
+                                if(response.isSuccessful.not()){
+                                    Log.d("test: 댓글 삭제 실패",response.toString())
+                                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                                }
+                                when(response.code()){
+                                    200 -> {
+                                        response.body()?.let {
+                                            Log.d("test: 댓글 삭제 성공", "\n${it}")
+                                            onResume()
+                                        }
+                                    }
+                                }
+                            }
+                            override fun onFailure(call: Call<ResConfirm>, t: Throwable) {
+                                Log.d("test", "[Fail]${t.toString()}")
+                            }
+                        })
+                    }else if(communityType == "qna"){
+                        RetrofitClient.service.deleteQnaParentComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), parentCommentId).enqueue(object: Callback<ResConfirm>{
+                            override fun onResponse(call: Call<ResConfirm>, response: Response<ResConfirm>) {
+                                if(response.isSuccessful.not()){
+                                    Log.d("test: 댓글 삭제 실패",response.toString())
+                                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                                }
+                                when(response.code()){
+                                    200 -> {
+                                        response.body()?.let {
+                                            Log.d("test: 댓글 삭제 성공", "\n${it}")
+                                            onResume()
+                                        }
+                                    }
+                                }
+                            }
+                            override fun onFailure(call: Call<ResConfirm>, t: Throwable) {
+                                Log.d("test", "[Fail]${t.toString()}")
+                            }
+                        })
+                    }
+                })
+            .setNegativeButton("취소",
+                DialogInterface.OnClickListener { dialog, _ ->
+                    Toast.makeText(context, "취소함", Toast.LENGTH_SHORT).show()
+                })
+        // 다이얼로그를 띄워주기
+        builder.show()
+    }
+
+    private fun confirmChildCommentDelete(context: Context, childCommentId: Int){
+        // 다이얼로그를 생성하기 위해 Builder 클래스 생성자를 이용해 줍니다.
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("댓댓글 삭제")
+            .setMessage("해당 댓댓글을 정말로 삭제하시겠습니까?")
+            .setPositiveButton("확인",
+                DialogInterface.OnClickListener { dialog, _ ->
+                    Log.d("child comment id", "confirmChildCommentDelete: ${childCommentId}")
+                    if (communityType == "info"){
+                        RetrofitClient.service.deleteInfoChildComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), childCommentId).enqueue(object: Callback<ResConfirm>{
+                            override fun onResponse(call: Call<ResConfirm>, response: Response<ResConfirm>) {
+                                if(response.isSuccessful.not()){
+                                    Log.d("test: 댓댓글 삭제 실패",response.toString())
+                                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                                }
+                                when(response.code()){
+                                    200 -> {
+                                        response.body()?.let {
+                                            Log.d("test: 댓댓글 삭제 성공", "\n${it}")
+                                            onResume()
+                                        }
+                                    }
+                                }
+                            }
+                            override fun onFailure(call: Call<ResConfirm>, t: Throwable) {
+                                Log.d("test", "[Fail]${t.toString()}")
+                            }
+                        })
+                    }else if(communityType == "qna"){
+                        RetrofitClient.service.deleteQnaChildComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), childCommentId).enqueue(object: Callback<ResConfirm>{
+                            override fun onResponse(call: Call<ResConfirm>, response: Response<ResConfirm>) {
+                                if(response.isSuccessful.not()){
+                                    Log.d("test: 댓댓글 삭제 실패",response.toString())
+                                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                                }
+                                when(response.code()){
+                                    200 -> {
+                                        response.body()?.let {
+                                            Log.d("test: 댓댓글 삭제 성공", "\n${it}")
+                                            onResume()
+                                        }
+                                    }
+                                }
+                            }
+                            override fun onFailure(call: Call<ResConfirm>, t: Throwable) {
+                                Log.d("test", "[Fail]${t.toString()}")
+                            }
+                        })
+                    }
+                })
+            .setNegativeButton("취소",
+                DialogInterface.OnClickListener { dialog, _ ->
+                    Toast.makeText(context, "취소함", Toast.LENGTH_SHORT).show()
+                })
+        // 다이얼로그를 띄워주기
+        builder.show()
+    }
+
     private fun sendParentComment(context: Context){
         viewBinding.btnSend.isClickable = false
         if(communityType == "info"){
@@ -565,6 +733,61 @@ class InfoDetailActivity:AppCompatActivity() {
                             200 -> {
                                 viewBinding.etChat.text.clear()
                                 viewBinding.btnSend.isClickable = true
+                                hideKeyboard(viewBinding.etChat)
+                                onResume()
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<ResConfirm>, t: Throwable) {
+                    viewBinding.btnSend.isClickable = true
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+    }
+
+    private fun sendChildComment(context: Context){
+        viewBinding.btnSend.isClickable = false
+        if(parentCommentId == -1) return
+        Log.d("child comment", "sendChildComment: $parentCommentId")
+        if(communityType == "info"){
+            RetrofitClient.service.createInfoChildComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), parentCommentId, ReqCreateComment(viewBinding.etChat.text.toString())).enqueue(object: Callback<ResConfirm>{
+                override fun onResponse(call: Call<ResConfirm>, response: Response<ResConfirm>) {
+                    if(response.isSuccessful.not()){
+                        Log.d("test: 조회실패",response.toString())
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }else {
+                        when (response.code()) {
+                            200 -> {
+                                viewBinding.etChat.text.clear()
+                                viewBinding.btnSend.isClickable = true
+                                hideKeyboard(viewBinding.etChat)
+                                onResume()
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<ResConfirm>, t: Throwable) {
+                    viewBinding.btnSend.isClickable = true
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+        else if(communityType == "qna"){
+            RetrofitClient.service.createQnaChildComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), parentCommentId, ReqCreateComment(viewBinding.etChat.text.toString())).enqueue(object: Callback<ResConfirm>{
+                override fun onResponse(call: Call<ResConfirm>, response: Response<ResConfirm>) {
+                    if(response.isSuccessful.not()){
+                        Log.d("test: 조회실패",response.toString())
+                        Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }else {
+                        when (response.code()) {
+                            200 -> {
+                                viewBinding.etChat.text.clear()
+                                viewBinding.btnSend.isClickable = true
+                                hideKeyboard(viewBinding.etChat)
                                 onResume()
                             }
                         }
@@ -584,9 +807,31 @@ class InfoDetailActivity:AppCompatActivity() {
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
     fun Context.showKeyboard(view: View) {
+        view.requestFocus()
         val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.showSoftInput(view, 0)
+        inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
     }
+
+    private fun getBottomMenu(id: Int, type: String){
+        // BottomSheetDialog 객체 생성. param : Context
+        val dialog = BottomSheetDialog(this)
+        val dialogLayout = CommunityDeleteCommentLayoutBinding.inflate(layoutInflater)
+        if(type == "child") dialogLayout.defaultText.text = "댓댓글 삭제"
+        dialogLayout.defaultSection.setOnClickListener {
+            if(type == "parent") confirmParentCommentDelete(this, id)
+            else if(type == "child") confirmChildCommentDelete(this, id)
+            dialog.cancel()
+        }
+        dialogLayout.cancelButton.setOnClickListener {
+            dialog.cancel()
+        }
+        dialog.setContentView(dialogLayout.root)
+        dialog.setCanceledOnTouchOutside(true)  // BottomSheetdialog 외부 화면(회색) 터치 시 종료 여부 boolean(false : ㄴㄴ, true : 종료하자!)
+        dialog.create() // create()와 show()를 통해 출력!
+        dialog.show()
+    }
+
+
 
 
 }
