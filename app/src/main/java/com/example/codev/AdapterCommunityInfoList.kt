@@ -86,6 +86,7 @@ class AdapterCommunityInfoList(private val context: Context, private val listDat
             //상세조회 연결
             binding.item.setOnClickListener {
                 val intent = Intent(binding.item.context, InfoDetailActivity::class.java)
+                intent.putExtra("type", "info")
                 intent.putExtra("id", data.co_infoId)
                 Log.d("test : 선택한 정보글 아이디", data.co_infoId.toString())
                 startActivity(binding.item.context,intent,null)

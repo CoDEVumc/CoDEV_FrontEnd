@@ -20,17 +20,17 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class AdapterCommunityInfoChildCommentList(private val context: Context, private val listData: ArrayList<InfoDetailChildComment>, private val viewerEmail: String, private val sendChildId: (id: Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class AdapterCommunityQnaChildCommentList(private val context: Context, private val listData: ArrayList<QnaDetailChildComment>, private val viewerEmail: String, private val sendChildId: (id: Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return  InfoItemViewHolder(context, RecycleCommunityCommentReplyBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return  QnaItemViewHolder(context, RecycleCommunityCommentReplyBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     //뷰 홀더에 데이터 바인딩
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
-            is InfoItemViewHolder -> {
+            is QnaItemViewHolder -> {
                 holder.bind(listData[position],position)
             }
         }
@@ -40,8 +40,8 @@ class AdapterCommunityInfoChildCommentList(private val context: Context, private
     override fun getItemCount(): Int = listData.size
 
     //Item의 ViewHolder 객체
-    inner class InfoItemViewHolder(val context: Context, private val binding: RecycleCommunityCommentReplyBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: InfoDetailChildComment, position: Int){
+    inner class QnaItemViewHolder(val context: Context, private val binding: RecycleCommunityCommentReplyBinding): RecyclerView.ViewHolder(binding.root){
+        fun bind(data: QnaDetailChildComment, position: Int){
             binding.nickname.text = data.co_nickname
             binding.content.text = data.content
             binding.date.text = stringToTime(data.createdAt.toString())
@@ -78,9 +78,8 @@ class AdapterCommunityInfoChildCommentList(private val context: Context, private
 
                 })
                 .into(binding.profileImg)
-
             binding.btnMore.setOnClickListener {
-                sendChildId(data.co_rcoib)
+                sendChildId(data.co_rcoqb)
             }
         }
     }

@@ -227,25 +227,47 @@
         android:elevation="16dp"
         android:background="@drawable/nav_bottom_background">
 
-        <ImageView
-            android:id="@+id/viewer_profile_img"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/book_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="24dp"/>
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="9dp"
+            >
+
+            <ImageView
+                android:id="@+id/book_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/community_icon_mark"/>
+
+            <TextView
+                android:id="@+id/book_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/book_icon"
+                app:layout_constraintEnd_toEndOf="@id/book_icon"
+                app:layout_constraintTop_toBottomOf="@+id/book_icon"
+                style="@style/Text.Body5.SemiBold"
+                android:textColor="@color/black_700"
+                android:text="6"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/chat_bar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/chat_et_background"
-            app:layout_constraintStart_toEndOf="@id/viewer_profile_img"
+            app:layout_constraintStart_toEndOf="@id/book_area"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="18dp"
             android:layout_marginEnd="24dp"
             android:layout_marginTop="9dp"
             android:layout_marginBottom="9dp">
