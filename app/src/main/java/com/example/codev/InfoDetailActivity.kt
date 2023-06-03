@@ -273,7 +273,7 @@ class InfoDetailActivity:AppCompatActivity() {
         })
     }
     private fun loadQnaDetail(context: Context, id: Int){
-        RetrofitClient.service.getQnaDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),id).enqueue(object : Callback<ResGetQnaDetail>{
+        RetrofitClient.service.getQnaDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()),id).enqueue(object : Callback<ResGetQnaDetail>{
             @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<ResGetQnaDetail>, response: Response<ResGetQnaDetail>) {
                 if(response.isSuccessful.not()){
@@ -406,7 +406,7 @@ class InfoDetailActivity:AppCompatActivity() {
 
     private fun likeInfoPost(context: Context){
         viewBinding.smile.isClickable = false
-        RetrofitClient.service.likeInfo(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqLikePost(co_like = viewBinding.smile.isSelected)).enqueue(object: Callback<ResLikePost>{
+        RetrofitClient.service.likeInfo(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqLikePost(co_like = viewBinding.smile.isSelected)).enqueue(object: Callback<ResLikePost>{
             override fun onResponse(call: Call<ResLikePost>, response: Response<ResLikePost>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 조회실패",response.toString())
@@ -437,7 +437,7 @@ class InfoDetailActivity:AppCompatActivity() {
 
     private fun likeQnaPost(context: Context){
         viewBinding.smile.isClickable = false
-        RetrofitClient.service.likeQna(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqLikePost(co_like = viewBinding.smile.isSelected)).enqueue(object: Callback<ResLikePost>{
+        RetrofitClient.service.likeQna(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqLikePost(co_like = viewBinding.smile.isSelected)).enqueue(object: Callback<ResLikePost>{
             override fun onResponse(call: Call<ResLikePost>, response: Response<ResLikePost>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 조회실패",response.toString())
@@ -467,7 +467,7 @@ class InfoDetailActivity:AppCompatActivity() {
 
     private fun bookInfoPost(context: Context){
         viewBinding.bookIcon.isClickable = false
-        RetrofitClient.service.markInfo(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<ResLikePost>{
+        RetrofitClient.service.markInfo(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id).enqueue(object: Callback<ResLikePost>{
             override fun onResponse(call: Call<ResLikePost>, response: Response<ResLikePost>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 조회실패",response.toString())
@@ -496,7 +496,7 @@ class InfoDetailActivity:AppCompatActivity() {
 
     private fun bookQnaPost(context: Context){
         viewBinding.bookIcon.isClickable = false
-        RetrofitClient.service.markQna(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<ResLikePost>{
+        RetrofitClient.service.markQna(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id).enqueue(object: Callback<ResLikePost>{
             override fun onResponse(call: Call<ResLikePost>, response: Response<ResLikePost>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 조회실패",response.toString())
@@ -532,7 +532,7 @@ class InfoDetailActivity:AppCompatActivity() {
             .setPositiveButton("확인",
                 DialogInterface.OnClickListener { dialog, _ ->
                     if (communityType == "info"){
-                        RetrofitClient.service.deleteInfo(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<ResDeletePost>{
+                        RetrofitClient.service.deleteInfo(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id).enqueue(object: Callback<ResDeletePost>{
                             override fun onResponse(call: Call<ResDeletePost>, response: Response<ResDeletePost>) {
                                 if(response.isSuccessful.not()){
                                     Log.d("test: 포트폴리오 삭제 실패",response.toString())
@@ -552,7 +552,7 @@ class InfoDetailActivity:AppCompatActivity() {
                             }
                         })
                     }else if(communityType == "qna"){
-                        RetrofitClient.service.deleteQna(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<ResDeletePost>{
+                        RetrofitClient.service.deleteQna(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id).enqueue(object: Callback<ResDeletePost>{
                             override fun onResponse(call: Call<ResDeletePost>, response: Response<ResDeletePost>) {
                                 if(response.isSuccessful.not()){
                                     Log.d("test: 포트폴리오 삭제 실패",response.toString())
@@ -589,7 +589,7 @@ class InfoDetailActivity:AppCompatActivity() {
             .setPositiveButton("확인",
                 DialogInterface.OnClickListener { dialog, _ ->
                     if (communityType == "info"){
-                        RetrofitClient.service.deleteInfoParentComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), parentCommentId).enqueue(object: Callback<ResConfirm>{
+                        RetrofitClient.service.deleteInfoParentComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), parentCommentId).enqueue(object: Callback<ResConfirm>{
                             override fun onResponse(call: Call<ResConfirm>, response: Response<ResConfirm>) {
                                 if(response.isSuccessful.not()){
                                     Log.d("test: 댓글 삭제 실패",response.toString())
@@ -609,7 +609,7 @@ class InfoDetailActivity:AppCompatActivity() {
                             }
                         })
                     }else if(communityType == "qna"){
-                        RetrofitClient.service.deleteQnaParentComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), parentCommentId).enqueue(object: Callback<ResConfirm>{
+                        RetrofitClient.service.deleteQnaParentComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), parentCommentId).enqueue(object: Callback<ResConfirm>{
                             override fun onResponse(call: Call<ResConfirm>, response: Response<ResConfirm>) {
                                 if(response.isSuccessful.not()){
                                     Log.d("test: 댓글 삭제 실패",response.toString())
@@ -647,7 +647,7 @@ class InfoDetailActivity:AppCompatActivity() {
                 DialogInterface.OnClickListener { dialog, _ ->
                     Log.d("child comment id", "confirmChildCommentDelete: ${childCommentId}")
                     if (communityType == "info"){
-                        RetrofitClient.service.deleteInfoChildComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), childCommentId).enqueue(object: Callback<ResConfirm>{
+                        RetrofitClient.service.deleteInfoChildComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), childCommentId).enqueue(object: Callback<ResConfirm>{
                             override fun onResponse(call: Call<ResConfirm>, response: Response<ResConfirm>) {
                                 if(response.isSuccessful.not()){
                                     Log.d("test: 댓댓글 삭제 실패",response.toString())
@@ -667,7 +667,7 @@ class InfoDetailActivity:AppCompatActivity() {
                             }
                         })
                     }else if(communityType == "qna"){
-                        RetrofitClient.service.deleteQnaChildComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), childCommentId).enqueue(object: Callback<ResConfirm>{
+                        RetrofitClient.service.deleteQnaChildComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), childCommentId).enqueue(object: Callback<ResConfirm>{
                             override fun onResponse(call: Call<ResConfirm>, response: Response<ResConfirm>) {
                                 if(response.isSuccessful.not()){
                                     Log.d("test: 댓댓글 삭제 실패",response.toString())
@@ -699,7 +699,7 @@ class InfoDetailActivity:AppCompatActivity() {
     private fun sendParentComment(context: Context){
         viewBinding.btnSend.isClickable = false
         if(communityType == "info"){
-            RetrofitClient.service.createInfoParentComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqCreateComment(viewBinding.etChat.text.toString())).enqueue(object: Callback<ResConfirm>{
+            RetrofitClient.service.createInfoParentComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqCreateComment(viewBinding.etChat.text.toString())).enqueue(object: Callback<ResConfirm>{
                 override fun onResponse(call: Call<ResConfirm>, response: Response<ResConfirm>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 조회실패",response.toString())
@@ -723,7 +723,7 @@ class InfoDetailActivity:AppCompatActivity() {
             })
         }
         else if(communityType == "qna"){
-            RetrofitClient.service.createQnaParentComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqCreateComment(viewBinding.etChat.text.toString())).enqueue(object: Callback<ResConfirm>{
+            RetrofitClient.service.createQnaParentComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqCreateComment(viewBinding.etChat.text.toString())).enqueue(object: Callback<ResConfirm>{
                 override fun onResponse(call: Call<ResConfirm>, response: Response<ResConfirm>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 조회실패",response.toString())
@@ -753,7 +753,7 @@ class InfoDetailActivity:AppCompatActivity() {
         if(parentCommentId == -1) return
         Log.d("child comment", "sendChildComment: $parentCommentId")
         if(communityType == "info"){
-            RetrofitClient.service.createInfoChildComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), parentCommentId, ReqCreateComment(viewBinding.etChat.text.toString())).enqueue(object: Callback<ResConfirm>{
+            RetrofitClient.service.createInfoChildComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), parentCommentId, ReqCreateComment(viewBinding.etChat.text.toString())).enqueue(object: Callback<ResConfirm>{
                 override fun onResponse(call: Call<ResConfirm>, response: Response<ResConfirm>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 조회실패",response.toString())
@@ -777,7 +777,7 @@ class InfoDetailActivity:AppCompatActivity() {
             })
         }
         else if(communityType == "qna"){
-            RetrofitClient.service.createQnaChildComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), parentCommentId, ReqCreateComment(viewBinding.etChat.text.toString())).enqueue(object: Callback<ResConfirm>{
+            RetrofitClient.service.createQnaChildComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), parentCommentId, ReqCreateComment(viewBinding.etChat.text.toString())).enqueue(object: Callback<ResConfirm>{
                 override fun onResponse(call: Call<ResConfirm>, response: Response<ResConfirm>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 조회실패",response.toString())

@@ -106,7 +106,7 @@ class AdapterCommunityQnaParentCommentList(private val context: Context, private
                 .setPositiveButton("확인",
                     DialogInterface.OnClickListener { dialog, _ ->
                         binding.btnMore.isClickable = false
-                        RetrofitClient.service.deleteQnaParentComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object:
+                        RetrofitClient.service.deleteQnaParentComment(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id).enqueue(object:
                             Callback<ResConfirm> {
                             override fun onResponse(call: Call<ResConfirm>, response: Response<ResConfirm>) {
                                 if(response.isSuccessful.not()){
