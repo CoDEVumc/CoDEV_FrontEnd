@@ -55,18 +55,38 @@ class MyWriteFragment: Fragment() {
                 R.id.btn_project -> {
                     Log.d("MyWritePostedFragment ", "프로젝트 버튼 클릭")
                     loadPSData(requireContext(), "project")
+
+                    val psList = ArrayList<PSData>()
+                    val adapterPSData = AdapterMyWritePostedList(requireContext(), psList)
+                    viewBinding.listviewPosted.adapter = adapterPSData
+                    viewBinding.listviewMain.scrollToPosition(0) // 스크롤 초기화
                 }
                 R.id.btn_study -> {
                     Log.d("MyWritePostedFragment ", "스터디 버튼 클릭")
                     loadPSData(requireContext(), "study")
+
+                    val psList = ArrayList<PSData>()
+                    val adapterPSData = AdapterMyWritePostedList(requireContext(), psList)
+                    viewBinding.listviewPosted.adapter = adapterPSData
+                    viewBinding.listviewMain.scrollToPosition(0) // 스크롤 초기화
                 }
                 R.id.btn_question -> {
                     Log.d("MyWritePostedFragment ", "질문 버튼 클릭")
                     loadQData(requireContext(), downpage, true, sortingTag)
+
+                    val psList = ArrayList<PSData>()
+                    val adapterPSData = AdapterMyWritePostedList(requireContext(), psList)
+                    viewBinding.listviewPosted.adapter = adapterPSData
+                    viewBinding.listviewMain.scrollToPosition(0) // 스크롤 초기화
                 }
                 R.id.btn_info -> {
                     Log.d("MyWritePostedFragment ", "정보 버튼 클릭")
                     loadIData(requireContext(), downpage, true, sortingTag)
+
+                    val psList = ArrayList<PSData>()
+                    val adapterPSData = AdapterMyWritePostedList(requireContext(), psList)
+                    viewBinding.listviewPosted.adapter = adapterPSData
+                    viewBinding.listviewMain.scrollToPosition(0) // 스크롤 초기화
                 }
                 R.id.btn_contest -> {
                     Log.d("MyWritePostedFragment ", "공모전 버튼 클릭")
@@ -133,6 +153,7 @@ class MyWriteFragment: Fragment() {
     private fun setAdapter1(context: Context, questionList: ArrayList<QIData>){
         val adapter = AdapterCommunityQuestionList(context,questionList)
         viewBinding.listviewPosted.adapter = adapter
+
     }
 
     //전체 정보글 조회
