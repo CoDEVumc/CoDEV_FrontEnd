@@ -237,14 +237,13 @@
             android:layout_marginTop="9dp"
             >
 
-            <androidx.appcompat.widget.AppCompatCheckBox
+            <ImageView
                 android:id="@+id/book_icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-
-                android:button="@drawable/recruit_bookmark"/>
+                android:src="@drawable/community_icon_mark"/>
 
             <TextView
                 android:id="@+id/book_count"

@@ -1,6 +1,7 @@
 package com.example.codev
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -10,6 +11,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -37,6 +40,7 @@ class InfoDetailActivity:AppCompatActivity() {
     private var id: Int = -1
     private var communityType: String = "None"
     private var postImgUrlList = ArrayList<String>()
+    private var parentCommentId: Int = -1
 
     override fun onResume() {
         super.onResume()
@@ -78,6 +82,14 @@ class InfoDetailActivity:AppCompatActivity() {
                 likeQnaPost(this)
         }
 
+        //북마크 기능
+        viewBinding.bookIcon.setOnClickListener {
+            if(communityType == "info")
+                bookInfoPost(this)
+            else if (communityType == "qna")
+                bookQnaPost(this)
+        }
+
         //댓글 기능
         viewBinding.etChat.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -93,6 +105,13 @@ class InfoDetailActivity:AppCompatActivity() {
 
         viewBinding.btnSend.setOnClickListener {
             sendParentComment(this)
+        }
+
+        viewBinding.etChat.setOnFocusChangeListener { v, hasFocus ->
+            if(!hasFocus){
+                parentCommentId = -1
+                viewBinding.etChat.hint = ""
+            }
         }
     }
 
@@ -204,9 +223,16 @@ class InfoDetailActivity:AppCompatActivity() {
                                 //footer
                                 viewBinding.smileCounter.text = "${it.result.Complete.co_likeCount}명이 공감해요"
                                 viewBinding.commentCounter.text = "댓글 ${it.result.Complete.co_commentCount}"
+                                viewBinding.bookCount.text = it.result.Complete.co_markCount.toString()
+
 
                                 viewBinding.smile.isSelected = it.result.Complete.co_like
+                                viewBinding.bookIcon.isSelected = it.result.Complete.co_mark
+
                                 setViewMode(it.result.Complete.co_email == it.result.Complete.co_viewer)
+
+                                Log.d("bookinfo", "onResponse: ${it.result.Complete.co_markCount.toString()}")
+                                Log.d("bookinfo", "onResponse: ${it.result.Complete.co_mark.toString()}")
 
                                 //content
                                 viewBinding.contentText.text = it.result.Complete.content
@@ -277,9 +303,13 @@ class InfoDetailActivity:AppCompatActivity() {
                                 //footer
                                 viewBinding.smileCounter.text = "${it.result.Complete.co_likeCount}명이 공감해요"
                                 viewBinding.commentCounter.text = "댓글 ${it.result.Complete.co_commentCount}"
+                                viewBinding.bookCount.text = it.result.Complete.co_markCount.toString()
+                                Log.d("bookqna", "onResponse: ${it.result.Complete.co_markCount.toString()}")
 
                                 viewBinding.smile.isSelected = it.result.Complete.co_like
                                 setViewMode(it.result.Complete.co_email == it.result.Complete.co_viewer)
+                                viewBinding.bookIcon.isSelected = it.result.Complete.co_mark
+                                Log.d("bookqna", "onResponse: ${it.result.Complete.co_mark.toString()}")
 
                                 //content
                                 viewBinding.contentText.text = it.result.Complete.content
@@ -303,7 +333,8 @@ class InfoDetailActivity:AppCompatActivity() {
         viewBinding.rvImg.adapter = adapter
     }
     private fun setInfoCommentAdapter(dataList: ArrayList<InfoDetailComment>, viewerEmail: String){
-        val adapter = AdapterCommunityInfoParentCommentList(this, viewerEmail, dataList)
+        val adapter = AdapterCommunityInfoParentCommentList(this, viewerEmail, dataList) { id, name ->
+        }
         viewBinding.rvComment.adapter = adapter
     }
     private fun setInfoPhotoUrlList(coPhotos: ArrayList<InfoDetailPhoto>) {
@@ -381,6 +412,64 @@ class InfoDetailActivity:AppCompatActivity() {
         })
     }
 
+    private fun bookInfoPost(context: Context){
+        viewBinding.bookIcon.isClickable = false
+        RetrofitClient.service.markInfo(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<ResLikePost>{
+            override fun onResponse(call: Call<ResLikePost>, response: Response<ResLikePost>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 조회실패",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }else {
+                    when (response.code()) {
+                        200 -> {
+                            viewBinding.bookIcon.isSelected = !viewBinding.bookIcon.isSelected
+                            viewBinding.bookIcon.isClickable = true
+                            if(viewBinding.bookIcon.isSelected){ //요청 후 선택되었다 -> 숫자+1
+                                viewBinding.bookCount.text = (viewBinding.bookCount.text.toString().toInt() + 1).toString()
+                            }else{
+                                viewBinding.bookCount.text = (viewBinding.bookCount.text.toString().toInt() - 1).toString()
+                            }
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResLikePost>, t: Throwable) {
+                viewBinding.bookIcon.isClickable = true
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun bookQnaPost(context: Context){
+        viewBinding.bookIcon.isClickable = false
+        RetrofitClient.service.markQna(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<ResLikePost>{
+            override fun onResponse(call: Call<ResLikePost>, response: Response<ResLikePost>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 조회실패",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }else {
+                    when (response.code()) {
+                        200 -> {
+                            viewBinding.bookIcon.isSelected = !viewBinding.bookIcon.isSelected
+                            viewBinding.bookIcon.isClickable = true
+                            if(viewBinding.bookIcon.isSelected){ //요청 후 선택되었다 -> 숫자+1
+                                viewBinding.bookCount.text = (viewBinding.bookCount.text.toString().toInt() + 1).toString()
+                            }else{
+                                viewBinding.bookCount.text = (viewBinding.bookCount.text.toString().toInt() - 1).toString()
+                            }
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResLikePost>, t: Throwable) {
+                viewBinding.bookIcon.isClickable = true
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
     private fun confirmDelete(context: Context, id: Int, finishPage: () -> Unit){
         // 다이얼로그를 생성하기 위해 Builder 클래스 생성자를 이용해 줍니다.
         val builder = AlertDialog.Builder(context)
@@ -452,6 +541,8 @@ class InfoDetailActivity:AppCompatActivity() {
                             200 -> {
                                 viewBinding.etChat.text.clear()
                                 viewBinding.btnSend.isClickable = true
+                                hideKeyboard(viewBinding.etChat)
+                                onResume()
                             }
                         }
                     }
@@ -474,6 +565,7 @@ class InfoDetailActivity:AppCompatActivity() {
                             200 -> {
                                 viewBinding.etChat.text.clear()
                                 viewBinding.btnSend.isClickable = true
+                                onResume()
                             }
                         }
                     }
@@ -486,4 +578,15 @@ class InfoDetailActivity:AppCompatActivity() {
             })
         }
     }
+
+    fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+    fun Context.showKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.showSoftInput(view, 0)
+    }
+
+
 }

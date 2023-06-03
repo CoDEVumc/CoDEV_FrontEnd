@@ -369,4 +369,10 @@ interface RetrofitService {
 
     @DELETE("qnaBoard/out/comment/{coCoqb}")
     fun deleteQnaParentComment(@Header("CoDev_Authorization") header: String, @Path("coCoqb") coCoqb: Int) : Call<ResConfirm>
+
+    @PATCH("infoBoard/mark/{coInfoId}")
+    fun markInfo(@Header("CoDev_Authorization") header: String, @Path("coInfoId") coInfoId: Int) : Call<ResLikePost>
+
+    @PATCH("qnaBoard/mark/{coQnaId}")
+    fun markQna(@Header("CoDev_Authorization") header: String, @Path("coQnaId") coQnaId: Int) : Call<ResLikePost>
 }

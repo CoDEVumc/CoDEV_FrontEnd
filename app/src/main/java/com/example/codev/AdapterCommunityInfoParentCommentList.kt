@@ -22,7 +22,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class AdapterCommunityInfoParentCommentList(private val context: Context, private val viewerEmail: String, val listData: ArrayList<InfoDetailComment>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class AdapterCommunityInfoParentCommentList(private val context: Context, private val viewerEmail: String, val listData: ArrayList<InfoDetailComment>, private val sendParentId: (id: Int, nickname: String) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -54,6 +54,7 @@ class AdapterCommunityInfoParentCommentList(private val context: Context, privat
             }else{
                 binding.btnMore.visibility = View.GONE
             }
+
             Glide.with(itemView.context)
                 .load(data.profileImg).circleCrop()
                 .listener(object : RequestListener<Drawable> {
@@ -84,6 +85,10 @@ class AdapterCommunityInfoParentCommentList(private val context: Context, privat
 
                 })
                 .into(binding.profileImg)
+
+            binding.btnComment.setOnClickListener {
+                sendParentId(data.co_coib, data.co_nickname)
+            }
         }
     }
 
