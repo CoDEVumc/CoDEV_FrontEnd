@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.example.codev",
+  "applicationId": "com.codev.android",
   "variantName": "release",
   "elements": [
     {

@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.codev'
+    namespace 'com.codev.android'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.codev"
+        applicationId "com.codev.android"
         minSdk 28
         targetSdk 33
         versionCode 1
