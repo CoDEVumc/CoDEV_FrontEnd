@@ -135,8 +135,8 @@ class CommunityFragment: Fragment() { //검색, 북마크, 알림 여기서 활�
         viewBinding.viewpager.adapter = AdapterCommunity(this)
         val tabTitleArray = arrayOf(
             "질문",
-            "정보",
-            "공모전"
+            "정보"
+//            "공모전"
         )
 
         TabLayoutMediator(viewBinding.tabLayout, viewBinding.viewpager){tab, position ->

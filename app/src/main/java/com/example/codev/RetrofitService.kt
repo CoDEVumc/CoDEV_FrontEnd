@@ -121,6 +121,7 @@ interface RetrofitService {
         ,@Part("qnaBoard") qnaBoard: RequestBody
         ,@Part files: List<MultipartBody.Part?>
     ): Call<ResUpdatePost>
+
     @GET("qnaBoard/qnaBoards/{page}")
     fun requestQDataList( //커뮤니티 - 질문글 리스트 전체조회
         @Header("CoDev_Authorization") header: String,
