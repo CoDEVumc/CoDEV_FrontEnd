@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/windows,macos,androidstudio,android
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,macos,androidstudio,android
 
+# key
+information.xml
+
 ### Android ###
 # Gradle files
 .gradle/

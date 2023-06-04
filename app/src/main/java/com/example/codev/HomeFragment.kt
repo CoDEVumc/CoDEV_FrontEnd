@@ -1,12 +1,14 @@
 package com.example.codev
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.bumptech.glide.Glide
@@ -61,26 +63,29 @@ class HomeFragment():Fragment() {
         setProjectAdapter()
         setStudyAdapter()
 
-        val tempPostList = ArrayList<HomeCommunityItem>()
-        tempPostList.add(HomeCommunityItem("현직자가 알려주는 면접 단골 질문 \uD83D\uDC68\uD83C\uDFFB\u200D\uD83D\uDCBB", "http://semtle.catholic.ac.kr:8080/image?name=post120230207155427.jpg", "02/04 20:45", 225, 3, 56))
-        tempPostList.add(HomeCommunityItem("\uD83D\uDD0E 개발자를 위한 정보 검색 팁! ", null, "02/04 21:51", 100, 3, 45))
-        tempPostList.add(HomeCommunityItem("\uD83D\uDD25 UI/UX 디자이너 희망자라면 꼭 봐야 할 꿀팁!", "http://semtle.catholic.ac.kr:8080/image?name=post220230207155427.jpg", "02/04 20:01", 103, 7, 56))
-        tempPostList.add(HomeCommunityItem("2023 블록체인 시리즈 세미나 \uD83C\uDF10", null, "02/04 20:00", 223, 2, 40))
-        setPostView(tempPostList)
+        setPostAdapter()
+        setQnaAdapter()
 
-        val tempQnaList = ArrayList<HomeCommunityItem>()
-        tempQnaList.add(HomeCommunityItem("다들 개발 공부 어떤 식으로 하시나요?", null, "02/04 21:51", 2, 11, 5))
-        tempQnaList.add(HomeCommunityItem("이 에러 어떻게 해결하나요?", "http://semtle.catholic.ac.kr:8080/image?name=post320230207155427.jpg", "02/04 20:45", 1, 10, 5))
-        tempQnaList.add(HomeCommunityItem("개발자 취업 포트폴리오 어떻게 쌓나요?", "http://semtle.catholic.ac.kr:8080/image?name=post420230207155427.jpg", "02/04 20:01", 5, 16, 7))
-        tempQnaList.add(HomeCommunityItem("취업 시 학점 많이 중요한가요?", null, "02/04 20:00", 7, 7, 16))
-        setQnaView(tempQnaList)
+//        val tempPostList = ArrayList<HomeCommunityItem>()
+//        tempPostList.add(HomeCommunityItem("현직자가 알려주는 면접 단골 질문 \uD83D\uDC68\uD83C\uDFFB\u200D\uD83D\uDCBB", "http://semtle.catholic.ac.kr:8080/image?name=post120230207155427.jpg", "02/04 20:45", 225, 3, 56))
+//        tempPostList.add(HomeCommunityItem("\uD83D\uDD0E 개발자를 위한 정보 검색 팁! ", null, "02/04 21:51", 100, 3, 45))
+//        tempPostList.add(HomeCommunityItem("\uD83D\uDD25 UI/UX 디자이너 희망자라면 꼭 봐야 할 꿀팁!", "http://semtle.catholic.ac.kr:8080/image?name=post220230207155427.jpg", "02/04 20:01", 103, 7, 56))
+//        tempPostList.add(HomeCommunityItem("2023 블록체인 시리즈 세미나 \uD83C\uDF10", null, "02/04 20:00", 223, 2, 40))
+//        setPostView(tempPostList)
+//
+//        val tempQnaList = ArrayList<HomeCommunityItem>()
+//        tempQnaList.add(HomeCommunityItem("다들 개발 공부 어떤 식으로 하시나요?", null, "02/04 21:51", 2, 11, 5))
+//        tempQnaList.add(HomeCommunityItem("이 에러 어떻게 해결하나요?", "http://semtle.catholic.ac.kr:8080/image?name=post320230207155427.jpg", "02/04 20:45", 1, 10, 5))
+//        tempQnaList.add(HomeCommunityItem("개발자 취업 포트폴리오 어떻게 쌓나요?", "http://semtle.catholic.ac.kr:8080/image?name=post420230207155427.jpg", "02/04 20:01", 5, 16, 7))
+//        tempQnaList.add(HomeCommunityItem("취업 시 학점 많이 중요한가요?", null, "02/04 20:00", 7, 7, 16))
+//        setQnaView(tempQnaList)
 
-        val tempGameList = ArrayList<HomeGameItem>()
-        tempGameList.add( HomeGameItem("http://semtle.catholic.ac.kr:8080/image?name=120230207155427.jpg", "2023 야간관광 특화도시 숏폼 공모전", "한국관광공사"))
-        tempGameList.add( HomeGameItem("http://semtle.catholic.ac.kr:8080/image?name=220230207155427.png", "2023 미래도서관 정책 아이디어 해커톤 대회", "국가도서관위원회"))
-        tempGameList.add( HomeGameItem("http://semtle.catholic.ac.kr:8080/image?name=320230207155427.jpg", "2023 제 1 회 CCC 커튼콜 마케팅 공모전", "라이브콘테스트"))
-        tempGameList.add( HomeGameItem("http://semtle.catholic.ac.kr:8080/image?name=420230207155427.jpg", "2023 UMC 데모데이", "MakeUs"))
-        setGameAdapter(tempGameList)
+//        val tempGameList = ArrayList<HomeGameItem>()
+//        tempGameList.add( HomeGameItem("http://semtle.catholic.ac.kr:8080/image?name=120230207155427.jpg", "2023 야간관광 특화도시 숏폼 공모전", "한국관광공사"))
+//        tempGameList.add( HomeGameItem("http://semtle.catholic.ac.kr:8080/image?name=220230207155427.png", "2023 미래도서관 정책 아이디어 해커톤 대회", "국가도서관위원회"))
+//        tempGameList.add( HomeGameItem("http://semtle.catholic.ac.kr:8080/image?name=320230207155427.jpg", "2023 제 1 회 CCC 커튼콜 마케팅 공모전", "라이브콘테스트"))
+//        tempGameList.add( HomeGameItem("http://semtle.catholic.ac.kr:8080/image?name=420230207155427.jpg", "2023 UMC 데모데이", "MakeUs"))
+//        setGameAdapter(tempGameList)
     }
     private fun setBannerAdapter(imgList: ArrayList<HomeBannerItem>){
         if(!imgList.isNullOrEmpty()){
@@ -89,45 +94,59 @@ class HomeFragment():Fragment() {
         }
     }
 
-    private fun setPostView(itemList: ArrayList<HomeCommunityItem>){
+    private fun setPostView(itemList: ArrayList<QIData>){
         viewBinding.hotPostList.removeAllViews()
         for(post in itemList){
             var postBinding = HomeHotCommunityBinding.inflate(layoutInflater)
-            postBinding.title.text = post.title
-            if(!post.imgUrl.isNullOrBlank()){
+            postBinding.title.text = post.co_title
+            if(!post.co_mainImg.isNullOrBlank()){
                 postBinding.photo.visibility = View.VISIBLE
                 postBinding.photo.clipToOutline = true
-                Glide.with(mainAppActivity).load(post.imgUrl).into(postBinding.photo)
+                Glide.with(mainAppActivity).load(post.co_mainImg).into(postBinding.photo)
             }
-            postBinding.time.text = post.time
-            postBinding.likeNumber.text = post.likeNumber.toString()
-            postBinding.commentNumber.text = post.commentNumber.toString()
-            postBinding.bookNumber.text = post.bookedNumber.toString()
+            postBinding.time.text = post.updatedAt
+            postBinding.likeNumber.text = post.co_likeCount.toString()
+            postBinding.commentNumber.text = post.co_commentCount.toString()
+            postBinding.bookNumber.text = post.co_markCount.toString()
+            postBinding.item.setOnClickListener {
+                val intent = Intent(postBinding.item.context, InfoDetailActivity::class.java)
+                intent.putExtra("type", "info")
+                intent.putExtra("id", post.co_infoId)
+                Log.d("test : 선택한 정보글 아이디", post.co_infoId.toString())
+                ContextCompat.startActivity(postBinding.item.context, intent, null)
+            }
             viewBinding.hotPostList.addView(postBinding.root)
         }
     }
 
-    private fun setQnaView(itemList: ArrayList<HomeCommunityItem>){
+    private fun setQnaView(itemList: ArrayList<QIData>){
         viewBinding.hotQnaList.removeAllViews()
         for(post in itemList){
             var postBinding = HomeHotCommunityBinding.inflate(layoutInflater)
             postBinding.qText.visibility = View.VISIBLE
-            postBinding.title.text = post.title
-            if(!post.imgUrl.isNullOrBlank()){
+            postBinding.title.text = post.co_title
+            if(!post.co_mainImg.isNullOrBlank()){
                 postBinding.photo.visibility = View.VISIBLE
                 postBinding.photo.clipToOutline = true
-                Glide.with(mainAppActivity).load(post.imgUrl).into(postBinding.photo)
+                Glide.with(mainAppActivity).load(post.co_mainImg).into(postBinding.photo)
             }
-            postBinding.time.text = post.time
-            postBinding.likeNumber.text = post.likeNumber.toString()
-            postBinding.commentNumber.text = post.commentNumber.toString()
-            postBinding.bookNumber.text = post.bookedNumber.toString()
+            postBinding.time.text = post.updatedAt
+            postBinding.likeNumber.text = post.co_likeCount.toString()
+            postBinding.commentNumber.text = post.co_commentCount.toString()
+            postBinding.bookNumber.text = post.co_markCount.toString()
+            postBinding.item.setOnClickListener {
+                val intent = Intent(postBinding.item.context, InfoDetailActivity::class.java)
+                intent.putExtra("type", "qna")
+                intent.putExtra("id", post.co_qnaId)
+                Log.d("test : 선택한 질문글 아이디", post.co_qnaId.toString())
+                ContextCompat.startActivity(postBinding.item.context, intent, null)
+            }
             viewBinding.hotQnaList.addView(postBinding.root)
         }
     }
 
     private fun setProjectAdapter(){
-        RetrofitClient.service.requestPDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
+        RetrofitClient.service.requestPDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()),
             0, "", "", "", "ING", "populaRity").enqueue(object: Callback<ResGetProjectList> {
                 override fun onResponse(call: Call<ResGetProjectList>, response: Response<ResGetProjectList>) {
                     if(response.isSuccessful.not()){
@@ -142,7 +161,7 @@ class HomeFragment():Fragment() {
                                     //페이지가 비어있으면
                                     if(it.result.success.toString() == "[]") {
                                         //Log.d("test: success: ", "[] 라서 비어있어용")
-                                        Toast.makeText(context,"이 글의 끝입니다.", Toast.LENGTH_SHORT).show()
+                                        //Toast.makeText(context,"이 글의 끝입니다.", Toast.LENGTH_SHORT).show()
                                     }
                                     //페이지에 내용이 있으면
                                     else {
@@ -167,7 +186,7 @@ class HomeFragment():Fragment() {
     }
 
     private fun setStudyAdapter(){
-        RetrofitClient.service.requestSDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(mainAppActivity)),
+        RetrofitClient.service.requestSDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()),
             0, "", "", "", "ING", "populaRity").enqueue(object: Callback<ResGetStudyList> {
             override fun onResponse(call: Call<ResGetStudyList>, response: Response<ResGetStudyList>) {
                 if(response.isSuccessful.not()){
@@ -182,7 +201,7 @@ class HomeFragment():Fragment() {
                                 //페이지가 비어있으면
                                 if(it.result.success.toString() == "[]") {
                                     //Log.d("test: success: ", "[] 라서 비어있어용")
-                                    Toast.makeText(context,"이 글의 끝입니다.",Toast.LENGTH_SHORT).show()
+                                    //Toast.makeText(context,"이 글의 끝입니다.",Toast.LENGTH_SHORT).show()
                                 }
                                 //페이지에 내용이 있으면
                                 else {
@@ -206,14 +225,94 @@ class HomeFragment():Fragment() {
         })
     }
 
-    private fun setGameAdapter(tempList: ArrayList<HomeGameItem>){
-        viewBinding.hotGameList.adapter = AdapterHomeGame(mainAppActivity, tempList)
-        val itemListDecoration = HomeListDecoration(AddPageFunction().dpToPx(mainAppActivity, 16f).toInt())
-        if(viewBinding.hotGameList.itemDecorationCount != 0){
-            viewBinding.hotGameList.removeItemDecorationAt(0)
-        }
-        viewBinding.hotGameList.addItemDecoration(itemListDecoration)
+    private fun setPostAdapter(){
+        RetrofitClient.service.requestQDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()),
+            0, false, "POPULARITY").enqueue(object: Callback<ResGetCommunityList1> {
+            override fun onResponse(call: Call<ResGetCommunityList1>, response: Response<ResGetCommunityList1>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 정보글 조회실패",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }else{
+                    when(response.code()){
+                        200->{
+                            response.body()?.let {
+                                Log.d("test: 정보글 조회 성공! ", "\n${it.toString()}")
+                                Log.d("test: 정보글 데이터 :", "\n${it.result.success}")
+                                //페이지가 비어있으면
+                                if(it.result.success.toString() == "[]") {
+                                    //Log.d("test: success: ", "[] 라서 비어있어용")
+                                    //Toast.makeText(context,"이 글의 끝입니다.",Toast.LENGTH_SHORT).show()
+                                }
+                                //페이지에 내용이 있으면
+                                else {
+                                    if (it.result.success.size <= 5){
+                                        setPostView(it.result.success)
+                                    }else{
+                                        val dataList = it.result.success.subList(0,4) as ArrayList<QIData>
+                                        setPostView(dataList)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResGetCommunityList1>, t: Throwable) {
+                Log.d("test: 정보글 조회실패", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
+
+    private fun setQnaAdapter(){
+        RetrofitClient.service.requestQDataList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()),
+            0, false, "POPULARITY").enqueue(object: Callback<ResGetCommunityList1> {
+            override fun onResponse(call: Call<ResGetCommunityList1>, response: Response<ResGetCommunityList1>) {
+                if(response.isSuccessful.not()){
+                    Log.d("test: 질문글 조회실패",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }else{
+                    when(response.code()){
+                        200->{
+                            response.body()?.let {
+                                Log.d("test: 질문글 조회 성공! ", "\n${it.toString()}")
+                                Log.d("test: 질문글 데이터 :", "\n${it.result.success}")
+                                //페이지가 비어있으면
+                                if(it.result.success.toString() == "[]") {
+                                    //Log.d("test: success: ", "[] 라서 비어있어용")
+                                    //Toast.makeText(context,"이 글의 끝입니다.",Toast.LENGTH_SHORT).show()
+                                }
+                                //페이지에 내용이 있으면
+                                else {
+                                    if (it.result.success.size <= 5){
+                                        setQnaView(it.result.success)
+                                    }else{
+                                        val dataList = it.result.success.subList(0,4) as ArrayList<QIData>
+                                        setQnaView(dataList)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResGetCommunityList1>, t: Throwable) {
+                Log.d("test: 질문글 조회 실패", "[Fail]${t.toString()}")
+                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+//    private fun setGameAdapter(tempList: ArrayList<HomeGameItem>){
+//        viewBinding.hotGameList.adapter = AdapterHomeGame(mainAppActivity, tempList)
+//        val itemListDecoration = HomeListDecoration(AddPageFunction().dpToPx(mainAppActivity, 16f).toInt())
+//        if(viewBinding.hotGameList.itemDecorationCount != 0){
+//            viewBinding.hotGameList.removeItemDecorationAt(0)
+//        }
+//        viewBinding.hotGameList.addItemDecoration(itemListDecoration)
+//    }
 
 
 }

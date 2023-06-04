@@ -36,7 +36,7 @@ class MyApplyProjectFragment :Fragment(){
     }
 
     private fun loadPData(context: Context){
-        RetrofitClient.service.getApplyList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        RetrofitClient.service.getApplyList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
             ,"project").enqueue(object: Callback<ResApplyList> {
             override fun onResponse(call: Call<ResApplyList>, response: Response<ResApplyList>) {
                 if(response.isSuccessful.not()){

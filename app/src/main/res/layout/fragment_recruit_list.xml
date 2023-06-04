@@ -137,13 +137,13 @@
             android:id="@+id/listview_main"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="124dp"
+            android:layout_marginTop="136dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            tools:layout_editor_absoluteX="58dp"
-            tools:listitem="@layout/recycle_recruit_list"/>
+            tools:layout_editor_absoluteX="0dp"
+            tools:listitem="@layout/recycle_recruit_list" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButton"

@@ -19,7 +19,28 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AdapterChatRoomList(private val listData: ArrayList<ResponseOfGetChatRoomListData>, private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterChatRoomList(private val context: Context, private val listData: ArrayList<ResponseOfGetChatRoomListData>, private val returnToActivity: (Int, Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    fun findRoomId(data: ResponseOfGetChatRoomListData){
+        val index = listData.indexOfFirst {
+            it.roomId == data.roomId
+        }
+
+        //-1이면 기존에 없던 채팅방, 아니면 기존에 있던 채팅방
+        if (index != -1){
+            val temp = listData[index]
+            temp.latestconv = data.latestconv
+            temp.latestDate = data.latestDate
+            temp.isRead = temp.isRead + 1
+            listData.add(0, temp)
+            listData.removeAt(index+1)
+            returnToActivity(0, index+1)
+        }else{
+            val temp = ResponseOfGetChatRoomListData(data.roomId, data.room_type, data.room_title, data.mainImg, data.status, " ", data.room_title, data.mainImg, data.people, data.latestconv, data.latestDate, data.isRead)
+            listData.add(0, temp)
+            returnToActivity(0, -1)
+        }
+    }
 
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -44,7 +65,7 @@ class AdapterChatRoomList(private val listData: ArrayList<ResponseOfGetChatRoomL
         fun bind(data: ResponseOfGetChatRoomListData, position: Int){
 
             var title = ""
-            if (data.room_type == "OTM"){
+            if (data.room_type == "UTM"){
                 Glide.with(itemView.context)
                     .load(data.mainImg).circleCrop()
                     .into(binding.oneImg1)
@@ -59,7 +80,7 @@ class AdapterChatRoomList(private val listData: ArrayList<ResponseOfGetChatRoomL
                 title = data.room_title
                 binding.roomTitle.text = title
 
-            }else if (data.room_type == "OTO"){
+            }else if (data.room_type == "UTU"){
                 Glide.with(itemView.context)
                     .load(data.receiverProfileImg).circleCrop()
                     .into(binding.oneImg1)
@@ -96,13 +117,8 @@ class AdapterChatRoomList(private val listData: ArrayList<ResponseOfGetChatRoomL
             }
 
             binding.room.setOnClickListener {
-                ChatClient.join(itemView.context, data.roomId)
-                val intent = Intent(itemView.context, ChatRoomActivity::class.java)
-                intent.putExtra("title", title)
-                intent.putExtra("roomId", data.roomId)
-                intent.putExtra("people", binding.roomMemberNumber.text.toString().toInt())
-                intent.putExtra("isRead", data.isRead)
-                itemView.context.startActivity(intent)
+                ChatClient.exit()
+                ChatClient.moveChatRoom(itemView.context, data.room_type, data.roomId, title, binding.roomMemberNumber.text.toString().toInt(), data.isRead)
             }
         }
     }

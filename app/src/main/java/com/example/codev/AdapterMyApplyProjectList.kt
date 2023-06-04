@@ -86,7 +86,7 @@ class AdapterMyApplyProjectList(private val context: Context, private val listDa
 
 
     private fun request(co_projectId: Int){
-        RetrofitClient.service.requestProjectBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),co_projectId).enqueue(object:Callback<JsonObject>{
+        RetrofitClient.service.requestProjectBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()),co_projectId).enqueue(object:Callback<JsonObject>{
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 조회실패",response.toString())

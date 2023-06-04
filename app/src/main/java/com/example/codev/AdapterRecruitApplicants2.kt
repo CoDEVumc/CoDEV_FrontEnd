@@ -12,6 +12,7 @@ import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.codev.addpage.AddPfPageActivity
+import com.example.codev.addpage.AppliedDetailActivity
 import com.example.codev.addpage.DefaultPf
 import com.example.codev.addpage.PfDetailActivity
 import com.example.codev.databinding.*
@@ -22,7 +23,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 //[바디] ITEM(체크 → 선택 & 선택 취소하기) : from 토글헤더 -> 선택취소 / from 토글아이템 -> 선택
-class AdapterRecruitApplicants2(private val context: Context, private val listData: ArrayList<ApplicantInfoData>, private val returnCount: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterRecruitApplicants2(private val context: Context, private val listData: ArrayList<ApplicantInfoData>, private val id: Int, private val type: String, private val returnCount: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var isChecked: Array<Boolean> = Array(listData.size){false}
     private var EDIT: Boolean = false
     private var COUNT: Int = 0
@@ -79,6 +80,7 @@ class AdapterRecruitApplicants2(private val context: Context, private val listDa
     inner class ApplicantItemViewHolder(private val binding: RecycleApplicantItem1Binding): RecyclerView.ViewHolder(binding.root){
         @SuppressLint("SetTextI18n")
         fun bind(data: ApplicantInfoData, position: Int){
+
             Glide.with(itemView.context)
                 .load(data.profileImg).circleCrop()
                 .into(binding.applyerProfile)
@@ -119,9 +121,14 @@ class AdapterRecruitApplicants2(private val context: Context, private val listDa
                     notifyItemChanged(position)
                 }else{
                     //포트폴리오 세부 페이지 이동
-                    val intent = Intent(binding.portfolio.context, PfDetailActivity::class.java)
-                    intent.putExtra("id", data.co_portfolioId.toString())
-                    Log.d("test",data.co_portfolioId.toString())
+                    val intent = Intent(binding.portfolio.context, AppliedDetailActivity::class.java)
+                    intent.putExtra("type",type)
+                    intent.putExtra("id", id)
+                    intent.putExtra("coPortfolioId", data.co_portfolioId)
+                    intent.putExtra("coPart", data.co_part)
+                    intent.putExtra("coTemporaryStorage", data.co_temporaryStorage)
+                    intent.putExtra("name", data.co_name)
+                    intent.putExtra("receiver_email", data.co_email)
                     startActivity(binding.portfolio.context, intent, null)
                 }
             }

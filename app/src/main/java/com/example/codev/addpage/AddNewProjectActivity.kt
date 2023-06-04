@@ -2,9 +2,9 @@ package com.example.codev.addpage
 
 import android.Manifest
 import android.app.DatePickerDialog
-import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -17,13 +17,11 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
-import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
@@ -63,6 +61,9 @@ class AddNewProjectActivity : AppCompatActivity() {
     //Camera
     private var tempCameraFile = File("")
     private var tempUri = Uri.EMPTY
+
+    //모집 기간을 수정했는지 확인용
+    private var isTimeChanged = false
 
 
 
@@ -161,16 +162,7 @@ class AddNewProjectActivity : AppCompatActivity() {
             }else {
                 addPageFunction.checkSelfPermission(this, this)
                 getBottomMenu()
-//                getContent.launch("image/*")
-//                getContent.launch(
-//                    arrayOf(
-//                        "image/png",
-//                        "image/jpg",
-//                        "image/jpeg"
-//                    )
-//                )
             }
-
         }
         //addImageSection - End
 
@@ -265,6 +257,7 @@ class AddNewProjectActivity : AppCompatActivity() {
                 var dateShowString = "${year}/${month+1}/${dayOfMonth}"
                 dateJsonString = String.format("%d-%02d-%02d", year, month+1, dayOfMonth)
                 viewBinding.deadlineHead.dropdownTitle.text = dateShowString
+                isTimeChanged = true
             }
             var dpd = DatePickerDialog(this, dateSetListener, cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH))
             dpd.datePicker.minDate = System.currentTimeMillis()
@@ -433,91 +426,70 @@ class AddNewProjectActivity : AppCompatActivity() {
 //                var imageMultiPartList:  List<MultipartBody.Part> = listOf()
 
                 if(isOld){
-                    val imageFileList = ArrayList<File>()
-
                     //getOldImageNumber
                     var allUrlNumber = 0
                     var loadedImageNumber = 0
-
                     for(i in imageItemList){
                         if(i.imageUrl != "") allUrlNumber+=1
                     }
-                    Log.d("finalOldNumber", "onCreate: $allUrlNumber")
 
+                    if(allUrlNumber == 0){
+                        updateWithFilePathList(oldProjectId, finalTitle, finalDes, finalLocation, finalStackList, finalDeadline, finalNumOfPartList, finalImagePathList)
+                    }else{
+                        for(i in imageItemList){
+                            val nowIdx = imageItemList.indexOf(i)
+                            if(i.imageUrl != ""){
+                                Glide.with(this).asBitmap().load(i.imageUrl).into(object : CustomTarget<Bitmap>(){
 
-                    for(i in imageItemList){
-                        val nowIdx = imageItemList.indexOf(i)
-                        imageFileList.add(File(i.imageCopyPath))
+                                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                                        finalImagePathList[nowIdx] = AddImage().createImageCachePath(this@AddNewProjectActivity, resource, 50)
+                                        loadedImageNumber += 1
 
-                        if(i.imageUrl != ""){
-                            Glide.with(this).asFile().load(i.imageUrl).into(object : CustomTarget<File>(){
-                                override fun onResourceReady(resource: File, transition: Transition<in File>?) {
-                                    val filename = i.imageUrl.split("http://semtle.catholic.ac.kr:8080/image?name=", limit = 2)[1]
-                                    Log.d("filename", "run: filename is: $filename")
-                                    val newNameFile = File(resource.parent!!, filename)
-                                    resource.renameTo(newNameFile)
-
-                                    imageFileList[nowIdx] = newNameFile
-                                    loadedImageNumber += 1
-                                    Log.d("finalLoadedOldNumber", "onCreate: $loadedImageNumber")
-                                    Log.d("finalImage", "onResourceReady: ${imageFileList.toString()}")
-
-                                    if(loadedImageNumber == allUrlNumber){
-                                        val imageMultiPartListUsingFile = project2Server.createImageMultiPartListUsingFile(imageFileList)
-                                        viewBinding.submitButton.isEnabled = false
-                                        viewBinding.submitButton.isSelected = false
-                                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartListUsingFile, viewBinding.submitButton) {
-//                                            for(deleteFile in imageFileList) deleteFile.delete()
-                                            finish() }
+                                        if(loadedImageNumber == allUrlNumber){
+                                            updateWithFilePathList(oldProjectId, finalTitle, finalDes, finalLocation, finalStackList, finalDeadline, finalNumOfPartList, finalImagePathList)
+                                        }
                                     }
-                                }
-                                override fun onLoadCleared(placeholder: Drawable?) {
-                                    Log.d("finalDownloadOldImage", "onLoadCleared: $placeholder")
-                                    Toast.makeText(this@AddNewProjectActivity, "사진 수정 시 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                                }
-                            })
+
+                                    override fun onLoadCleared(placeholder: Drawable?) {
+                                        Log.d("finalDownloadOldImage", "onLoadCleared: $placeholder")
+//                                    Toast.makeText(this@AddNewProjectActivity, "사진 수정 시 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                                    }
+
+                                })
+                            }
                         }
                     }
-                    if(allUrlNumber == 0){
-                        val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
-                        viewBinding.submitButton.isEnabled = false
-                        viewBinding.submitButton.isSelected = false
-                        project2Server.updateProject(this@AddNewProjectActivity, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList, viewBinding.submitButton) { finish() }
-                    }
-
-                }else{
-                    val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
-                    Log.d("finalImageMultiPartList", imageMultiPartList.toString())
-                    Log.d("deadlineServerJson", dateJsonString)
-                    viewBinding.submitButton.isEnabled = false
-                    viewBinding.submitButton.isSelected = false
-                    project2Server.postNewProject(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList, viewBinding.submitButton) { finish() }
                 }
-
-            }else{
+                else{ //isNew
+                    postWithFilePathList(finalTitle, finalDes, finalLocation, finalStackList, finalDeadline, finalNumOfPartList, finalImagePathList)
+                }
+            }else{ //don't ready to upload
                 toastString = toastString.substring(0, toastString.length-2) + "을 확인하세요."
                 Log.d("string", toastString)
                 Toast.makeText(this, toastString, Toast.LENGTH_LONG).show()
-
-//                //TODO: 테스트코드
-//                if(finalPartNumList == listOf(0,1,0,1,0)){
-//                    val finalStackMap = testStackMap(listOf(1, 2, 36 ,37), listOf("JavaScript", "TypeScript", "Blender", "Cinema4D"))
-//                    val testProject = EditProject(
-//                        26.toString(),
-//                        "edit26",
-//                        "please",
-//                        listOf("http://semtle.catholic.ac.kr:8080/image?name=1675165181948-shot2023013120395820230201015713.png", "http://semtle.catholic.ac.kr:8080/image?name=1675184191441-jpgSana20230201015713.jpg"),
-//                        1,0,2,0,3,
-//                        finalStackMap,
-//                        "경기",
-//                        "2022-01-31")
-//                    val intent = Intent(this, AddNewProjectActivity::class.java)
-//                    intent.putExtra("project", testProject)
-//                    startActivity(intent)
-//                    finish()
-//                }
             }
         }
+    }
+
+    private fun postWithFilePathList(finalTitle: String, finalDes: String, finalLocation: String, finalStackList: List<Int>, finalDeadline: String, finalNumOfPartList: List<PartNameAndPeople>, finalImagePathList: ArrayList<String> ){
+        val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
+        Log.d("finalImageMultiPartList", imageMultiPartList.toString())
+        Log.d("deadlineServerJson", dateJsonString)
+        changeButtonStatus(false)
+        project2Server.postNewProject(this, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList, whenPostEnd)
+    }
+
+    private fun updateWithFilePathList(oldProjectId: String, finalTitle: String, finalDes: String, finalLocation: String, finalStackList: List<Int>, finalDeadline: String, finalNumOfPartList: List<PartNameAndPeople>, finalImagePathList: ArrayList<String> ){
+        val imageMultiPartList = project2Server.createImageMultiPartList(finalImagePathList)
+        changeButtonStatus(false)
+        var finalProcess = intent.getStringExtra("process")
+        if(isTimeChanged) finalProcess = "ING"
+        project2Server.updateProject(this, oldProjectId, finalTitle, finalDes, finalLocation, finalStackList.toList(), finalDeadline, finalNumOfPartList, imageMultiPartList, finalProcess!!, whenPostEnd)
+    }
+
+    private val whenPostEnd: (Int) -> Unit = {
+        if(it == 1) finish()
+        else changeButtonStatus(true)
     }
 
     //ImageSection - Start
@@ -540,35 +512,6 @@ class AddNewProjectActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    //imageSection - Start
-    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        if(uri != null){
-            val cR: ContentResolver = this.contentResolver
-            val mime: MimeTypeMap = MimeTypeMap.getSingleton()
-            val type: String? = cR.getType(uri)
-            if(type == "image/png" || type == "image/jpg" || type == "image/jpeg"){
-                val imageInfo = addPageFunction.getInfoFromUri(this, uri)
-                val imageName = imageInfo[0]
-                val imageSize = imageInfo[1].toInt()
-                val imageSizeLimitByte = 2e+7
-                if(imageSize <= imageSizeLimitByte){
-                    val copyImagePath = addPageFunction.createCopyAndReturnPath(this, uri, imageName)
-                    val nowImageItem = ImageItem(uri, copyImagePath)
-                    imageItemList.add(nowImageItem)
-                    viewBinding.addImageSection.adapter!!.notifyItemInserted(imageItemList.lastIndex)
-
-                    //subImageCounter
-                    viewBinding.addImageNum.text = "${imageItemList.size}/${imageLimit}"
-
-                }
-            }else{
-                Toast.makeText(this, "png 및 jpg(jpeg)형식의 사진만 지원합니다.", Toast.LENGTH_SHORT).show()
-            }
-
-        }
-    }
-    //imageSection - End
 
     //SetStack2Function - Start
     private fun getStack2Adapter(itemList: ArrayList<AddListItem>): Stack2RVAdapter{
@@ -604,6 +547,7 @@ class AddNewProjectActivity : AppCompatActivity() {
     }
     //SetStack2Function - End
 
+
     //Bottom DiaLog - Start
     private fun getBottomMenu(){
         // BottomSheetDialog 객체 생성. param : Context
@@ -616,7 +560,7 @@ class AddNewProjectActivity : AppCompatActivity() {
         }
         dialogLayout.imageSection.setOnClickListener {
             addPageFunction.checkSelfPermission(this, this)
-            getContent.launch("image/*")
+            getImageFromFile.launch("image/*")
             dialog.dismiss()
         }
         dialogLayout.cancelButton.setOnClickListener {
@@ -629,8 +573,27 @@ class AddNewProjectActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    //imageSection - Start
+    private fun addImage2List(imageUri: Uri, copyImagePath: String){
+        Log.d("test", "newPath: $copyImagePath")
+        val nowImageItem = ImageItem(imageUri, copyImagePath)
+        imageItemList.add(nowImageItem)
+        viewBinding.addImageSection.adapter!!.notifyItemInserted(imageItemList.lastIndex)
+        //subImageCounter
+        viewBinding.addImageNum.text = "${imageItemList.size}/${imageLimit}"
+    }
+
+    private val getImageFromFile = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        if(uri != null){
+            val copyImagePath = AddImage().getCachePathUseUri(this, uri, 50, 2e+7)
+            if(copyImagePath != "") addImage2List(uri, copyImagePath)
+            else Toast.makeText(this, "사진을 추가하는데 알 수 없는 이유로 실패했습니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+    //imageSection - End
+
     private fun getImageFromCamera(){
-        addPageFunction.checkSelfCameraPermission(this, this) {openCamera()}
+        AddImage().checkCameraPermission(this, this){openCamera()}
     }
 
     override fun onRequestPermissionsResult(
@@ -676,59 +639,18 @@ class AddNewProjectActivity : AppCompatActivity() {
 
     }
 
-    //3. 카메라 OPEN
+    //카메라 OPEN
     private fun openCamera() {
-        //MediaStore.ACTION_IMAGE_CAPTURE
-        //  - 이 Intent filter를 이용하면 camea app을 실행시킬 수 있다.
-        //intent.resolveActivity(packageManager)
-        //  - 현재 폰에 MediaStore.ACTION_IMAGE_CAPTURE  기능이 존재 하는지 한번 더 확인
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-
-
-        //저장소에 저장할 파일을 임시로 만들어준다.
-        //Environment.DIRECTORY_PICTURES: 사진을 저장 할 수 있는 일반 저장소 위치
-        //   - val dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        //externalCacheDir :  캐시 저장소
-        val dir = externalCacheDir
-
-        //File.createTempFile : 파일명생성 (photo_ + random 숫자 + .jpg)
-        val file = File.createTempFile("photo_", ".jpg", dir)
-
-        //photoFile
-        //  - onActivityResult( )인 callback함수에서 사용될 file id
-        tempCameraFile = file
-
-        //FileProvider.getUriForFile : provider에 대한 uri를 얻어 온다.
-        val uri = FileProvider.getUriForFile(this, "$packageName.provider", file)
-        Log.d("testUri", "openCamera: $uri")
-        tempUri = uri
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
-        //startActivityForResult(intent, REQUEST_CODE_FOR_IMAGE_CAPTURE)
-        //getResult.launch()을 호출 하면
-        //  - callback으로 registerForActivityResult( )와 onActivityResult( ) 함수가 호출 된다
-        //  - ActivityResultLauncher class 사용 이후 부터는 requestCode 코드를 넘길 수가 없다. 아니 넘길 필요가 없어 졌다.
-        //    이유는, registerForActivityResult( ) 함수내부에 직접 기술 하는 방식으로 개발 하면 되기 때문이다.
-        //  - requestCode를 지정할 수 없기 때문에 onActivityResult( ) 함수 내부에 소스를 개발 할 수 없게 되었다.
-        //  - 원하는 Activity Request마다 registerForActivityResult를 실행하기 때문에 requestCode가 존재 하지 않는다.
-        getResult.launch(intent)
-
+        tempUri = AddImage().returnEmptyUri(this)
+        getImageFromCameraCallback.launch(tempUri)
     }
 
-    private val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == RESULT_OK) {
-            val uri = tempUri
-            val imageInfo = addPageFunction.getInfoFromUri(this, uri)
-            val imageName = imageInfo[0]
-            val imageSize = imageInfo[1].toInt()
-            val imageSizeLimitByte = 2e+7
-            if(imageSize <= imageSizeLimitByte){
-                val nowImageItem = ImageItem(uri, tempCameraFile.path)
-                imageItemList.add(nowImageItem)
-                viewBinding.addImageSection.adapter!!.notifyItemInserted(imageItemList.lastIndex)
-                //subImageCounter
-                viewBinding.addImageNum.text = "${imageItemList.size}/${imageLimit}"
-            }
-        } else {
+    private val getImageFromCameraCallback = registerForActivityResult(ActivityResultContracts.TakePicture()) {
+        if(it){
+            val copyImagePath = AddImage().getCachePathUseUri(this, tempUri, 50, 2e+7)
+            if(copyImagePath != "") addImage2List(tempUri, copyImagePath)
+            else Toast.makeText(this, "사진을 추가하는데 알 수 없는 이유로 실패했습니다.", Toast.LENGTH_SHORT).show()
+        }else{
             Toast.makeText(this, "취소 되었습니다", Toast.LENGTH_SHORT).show()
         }
     }
@@ -739,14 +661,4 @@ class AddNewProjectActivity : AppCompatActivity() {
         viewBinding.submitButton.isSelected = nowStatus
     }
 
-
-
-//    //TODO: 테스트 코드
-//    private fun testStackMap(numberList: List<Int>, nameList: List<String>): LinkedHashMap<Int, String>{
-//        val returnMap = LinkedHashMap<Int, String>()
-//        for(i in numberList){
-//            returnMap[i] = nameList[numberList.indexOf(i)]
-//        }
-//        return returnMap
-//    }
 }

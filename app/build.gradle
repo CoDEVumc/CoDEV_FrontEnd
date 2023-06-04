@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace 'com.example.codev'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.codev"
         minSdk 28
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -40,6 +40,9 @@ android {
 
 dependencies {
 
+    //fragment간 값 전달할 때
+    // implementation 'androidx.fragment:fragment-ktx:1.3.0'
+
     implementation platform('com.google.firebase:firebase-bom:31.2.1')
 
     // Import the Firebase BoM
@@ -50,6 +53,8 @@ dependencies {
 
 
     //popup menu
+    implementation 'com.google.android.material:material:<version>' //BottomSheet 오류 나서
+
     implementation "com.google.android.material:material:1.2.0-alpha01"
 
     implementation 'androidx.core:core-ktx:1.7.0'

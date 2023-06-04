@@ -52,9 +52,9 @@ class Project2Server {
         return fileMultipartList.toList()
     }
 
-    fun postNewProject(context: Context, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>, submitBtn: Button, finishPage: () -> Unit){
+    fun postNewProject(context: Context, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>, callback:(Int)-> Unit){
         AndroidKeyStoreUtil.init(context)
-        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
         Log.d("postAuth", userToken)
         val reqCreateNewProject = ReqCreateNewProject(
             title,
@@ -88,25 +88,22 @@ class Project2Server {
                 if(response.isSuccessful.not()){
                     Log.d("Fail",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                    submitBtn.isSelected = true
-                    submitBtn.isEnabled = true
-
+                    callback(0)
+                    return
                 }
                 response.body()?.let { Log.d("Success: testCreateNewProject", "\n${it.result.message}")}
-                finishPage()
+                callback(1)
             }
             override fun onFailure(call: Call<ResCreateNewProject>, t: Throwable) {
                 Log.d("FAIL", "[Fail]${t.toString()}")
                 Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                submitBtn.isSelected = true
-                submitBtn.isEnabled = true
             }
         })
     }
 
-    fun updateProject(context: Context, projectId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>, submitBtn: Button, finishPage: () -> Unit){
+    fun updateProject(context: Context, projectId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, numPerPart: List<PartNameAndPeople>, imagePartList: List<MultipartBody.Part>, nowProcess: String, finishPage: (Int) -> Unit){
         AndroidKeyStoreUtil.init(context)
-        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
         Log.d("postAuth", userToken)
         val reqUpdateProject = ReqUpdateProject(
             title,
@@ -115,7 +112,7 @@ class Project2Server {
             stackList,
             deadLine,
             numPerPart,
-            "ING"
+            nowProcess
         )
         val jsonObject = Gson().toJson(reqUpdateProject)
         var requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject)
@@ -140,24 +137,23 @@ class Project2Server {
                 if(response.isSuccessful.not()){
                     Log.d("Fail",response.toString())
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                    submitBtn.isSelected = true
-                    submitBtn.isEnabled = true
+                    finishPage(0)
+                    return
                 }
                 response.body()?.let { Log.d("Success: testCreateNewProject", "\n${it.result.message}")}
-                finishPage()
+                finishPage(1)
             }
 
             override fun onFailure(call: Call<ResCreateNewProject>, t: Throwable) {
                 Log.d("FAIL", "[Fail]${t.toString()}")
-                submitBtn.isSelected = true
-                submitBtn.isEnabled = true
+                finishPage(0)
             }
         })
     }
 
     fun postNewStudy(context: Context, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, stack1Name: String, peopleNumber: Int, imagePartList: List<MultipartBody.Part>, submitBtn: Button, finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
-        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
         Log.d("postAuth", userToken)
         val reqCreateNewStudy = ReqCreateNewStudy(
             title,
@@ -209,9 +205,9 @@ class Project2Server {
         })
     }
 
-    fun updateStudy(context: Context, studyId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, stack1Name: String, peopleNumber: Int, imagePartList: List<MultipartBody.Part>, submitBtn: Button, finishPage: () -> Unit){
+    fun updateStudy(context: Context, studyId: String, title: String, content: String, location: String, stackList: List<Int>, deadLine: String, stack1Name: String, peopleNumber: Int, imagePartList: List<MultipartBody.Part>, submitBtn: Button, nowProcess: String , finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
-        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
         Log.d("postAuth", userToken)
         val reqUpdateStudy = ReqUpdateStudy(
             title,
@@ -221,7 +217,7 @@ class Project2Server {
             deadLine,
             stack1Name,
             peopleNumber,
-            "ING"
+            nowProcess
         )
         val jsonObject = Gson().toJson(reqUpdateStudy)
         var requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject)
@@ -266,7 +262,7 @@ class Project2Server {
 
     fun postNewPF(context: Context, title: String, level: String, intro: String, content: String, stackList: List<Int>, linkList: List<String>, submitBtn: Button, finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
-        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
         Log.d("postAuth", userToken)
         val reqCreateNewPF = ReqCreateNewPF(
             title,
@@ -303,7 +299,7 @@ class Project2Server {
 
     fun updatePF(context: Context, pfId: String, title: String, level: String, intro: String, content: String, stackList: List<Int>, linkList: List<String>,submitBtn: Button, finishPage: () -> Unit){
         AndroidKeyStoreUtil.init(context)
-        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
         Log.d("postAuth", userToken)
         val reqUpdatePF = ReqUpdatePF(
             title,
@@ -335,6 +331,186 @@ class Project2Server {
                 Log.d("OnFailure", "[Fail]${t.toString()}")
                 submitBtn.isSelected = true
                 submitBtn.isEnabled = true
+            }
+        })
+    }
+
+    fun postNewInfo(context: Context, title: String, content: String, imagePartList: List<MultipartBody.Part>, isSuccess: () -> Unit, isFail: () -> Unit){
+        AndroidKeyStoreUtil.init(context)
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
+        Log.d("postAuth", userToken)
+        val REQ_NEW_POST = ReqCreateNewPost(
+            title,
+            content,
+        )
+        val jsonObject = Gson().toJson(REQ_NEW_POST)
+        var requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject)
+        Log.d("postJson", jsonObject.toString())
+
+        var emptyList = ArrayList<MultipartBody.Part>()
+        var emptyFileBody = RequestBody.create(MediaType.parse("application/octet-stream"), "")
+        val emptyFilePart = MultipartBody.Part.createFormData("files", null, emptyFileBody)
+        emptyList.add(emptyFilePart)
+
+        var finalArray: List<MultipartBody.Part> = emptyList.toList()
+        if(imagePartList.isNotEmpty()) {
+            finalArray = imagePartList
+        }
+
+        RetrofitClient.service.createNewInfo(userToken, requestBody, finalArray).enqueue(object:
+            Callback<ResCreateNewPost> {
+            override fun onResponse(
+                call: Call<ResCreateNewPost>,
+                response: Response<ResCreateNewPost>
+            ) {
+                if(response.isSuccessful.not()){
+                    Log.d("FailOnResponse",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    isFail()
+                }
+                Toast.makeText(context, "업로드 성공!!!", Toast.LENGTH_SHORT).show()
+                response.body()?.let { Log.d("Success: testCreateNewStudy", "\n${it.result.message}")}
+                isSuccess()
+            }
+
+            override fun onFailure(call: Call<ResCreateNewPost>, t: Throwable) {
+                Log.d("OnFailure", "[Fail]${t.toString()}")
+                isFail()
+            }
+        })
+    }
+
+    fun postNewQNA(context: Context, title: String, content: String, imagePartList: List<MultipartBody.Part>, isSuccess: () -> Unit, isFail: () -> Unit){
+        AndroidKeyStoreUtil.init(context)
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
+        Log.d("postAuth", userToken)
+        val REQ_NEW_POST = ReqCreateNewPost(
+            title,
+            content,
+        )
+        val jsonObject = Gson().toJson(REQ_NEW_POST)
+        var requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject)
+        Log.d("postJson", jsonObject.toString())
+
+        var emptyList = ArrayList<MultipartBody.Part>()
+        var emptyFileBody = RequestBody.create(MediaType.parse("application/octet-stream"), "")
+        val emptyFilePart = MultipartBody.Part.createFormData("files", null, emptyFileBody)
+        emptyList.add(emptyFilePart)
+
+        var finalArray: List<MultipartBody.Part> = emptyList.toList()
+        if(imagePartList.isNotEmpty()) {
+            finalArray = imagePartList
+        }
+
+        RetrofitClient.service.createNewQNA(userToken, requestBody, finalArray).enqueue(object:
+            Callback<ResCreateNewPost> {
+            override fun onResponse(
+                call: Call<ResCreateNewPost>,
+                response: Response<ResCreateNewPost>
+            ) {
+                if(response.isSuccessful.not()){
+                    Log.d("FailOnResponse",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    isFail()
+                }
+                Toast.makeText(context, "업로드 성공!!!", Toast.LENGTH_SHORT).show()
+                response.body()?.let { Log.d("Success: testCreateNewStudy", "\n${it.result.message}")}
+                isSuccess()
+            }
+
+            override fun onFailure(call: Call<ResCreateNewPost>, t: Throwable) {
+                Log.d("OnFailure", "[Fail]${t.toString()}")
+                isFail()
+            }
+        })
+    }
+
+    fun updateInfo(context: Context, oldPostId: String, title: String, content: String, imagePartList: List<MultipartBody.Part>, isSuccess: () -> Unit, isFail: () -> Unit){
+        AndroidKeyStoreUtil.init(context)
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
+        Log.d("postAuth", userToken)
+        val REQ_NEW_POST = ReqUpdatePost(
+            title,
+            content,
+        )
+        val jsonObject = Gson().toJson(REQ_NEW_POST)
+        var requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject)
+        Log.d("postJson", jsonObject.toString())
+
+        var emptyList = ArrayList<MultipartBody.Part>()
+        var emptyFileBody = RequestBody.create(MediaType.parse("application/octet-stream"), "")
+        val emptyFilePart = MultipartBody.Part.createFormData("files", null, emptyFileBody)
+        emptyList.add(emptyFilePart)
+
+        var finalArray: List<MultipartBody.Part> = emptyList.toList()
+        if(imagePartList.isNotEmpty()) {
+            finalArray = imagePartList
+        }
+
+        RetrofitClient.service.updateInfo(oldPostId, userToken, requestBody, finalArray).enqueue(object:
+            Callback<ResUpdatePost> {
+            override fun onResponse(
+                call: Call<ResUpdatePost>,
+                response: Response<ResUpdatePost>
+            ) {
+                if(response.isSuccessful.not()){
+                    Log.d("FailOnResponse",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    isFail()
+                }
+                Toast.makeText(context, "업로드 성공!!!", Toast.LENGTH_SHORT).show()
+                response.body()?.let { Log.d("Success: testCreateNewStudy", "\n${it.result.message}")}
+                isSuccess()
+            }
+
+            override fun onFailure(call: Call<ResUpdatePost>, t: Throwable) {
+                Log.d("OnFailure", "[Fail]${t.toString()}")
+                isFail()
+            }
+        })
+    }
+
+    fun updateQNA(context: Context, oldPostId: String, title: String, content: String, imagePartList: List<MultipartBody.Part>, isSuccess: () -> Unit, isFail: () -> Unit){
+        AndroidKeyStoreUtil.init(context)
+        val userToken = AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
+        Log.d("postAuth", userToken)
+        val REQ_NEW_POST = ReqUpdatePost(
+            title,
+            content,
+        )
+        val jsonObject = Gson().toJson(REQ_NEW_POST)
+        var requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject)
+        Log.d("postJson", jsonObject.toString())
+
+        var emptyList = ArrayList<MultipartBody.Part>()
+        var emptyFileBody = RequestBody.create(MediaType.parse("application/octet-stream"), "")
+        val emptyFilePart = MultipartBody.Part.createFormData("files", null, emptyFileBody)
+        emptyList.add(emptyFilePart)
+
+        var finalArray: List<MultipartBody.Part> = emptyList.toList()
+        if(imagePartList.isNotEmpty()) {
+            finalArray = imagePartList
+        }
+
+        RetrofitClient.service.updateQNA(oldPostId, userToken, requestBody, finalArray).enqueue(object:
+            Callback<ResUpdatePost> {
+            override fun onResponse(
+                call: Call<ResUpdatePost>,
+                response: Response<ResUpdatePost>
+            ) {
+                if(response.isSuccessful.not()){
+                    Log.d("FailOnResponse",response.toString())
+                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    isFail()
+                }
+                Toast.makeText(context, "업로드 성공!!!", Toast.LENGTH_SHORT).show()
+                response.body()?.let { Log.d("Success: testCreateNewStudy", "\n${it.result.message}")}
+                isSuccess()
+            }
+
+            override fun onFailure(call: Call<ResUpdatePost>, t: Throwable) {
+                Log.d("OnFailure", "[Fail]${t.toString()}")
+                isFail()
             }
         })
     }

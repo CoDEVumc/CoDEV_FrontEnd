@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".addpage.AddPostActivity">
+
+    <!-- Toolbar -->
+    <include
+        android:id="@+id/toolbar_title"
+        layout="@layout/toolbar_add_page"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:animateLayoutChanges="true">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/title_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_of_title_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="20dp"
+                    app:boxBackgroundColor="#FFFFFF">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/input_of_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:hint="@string/add_new_title"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="0dp"
+                        android:inputType="text"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/content_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/title_area"
+                >
+
+                <EditText
+                    android:id="@+id/input_of_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:gravity="top"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textSize="14sp"
+                    android:hint="@string/add_new_des"
+                    android:inputType="textMultiLine"
+                    />
+
+                <TextView
+                    android:id="@+id/content_text_counter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintRight_toRightOf="@id/input_of_content"
+                    android:layout_marginEnd="12dp"
+                    app:layout_constraintTop_toBottomOf="@id/input_of_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="0/500"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/add_photo_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/content_area">
+
+                <TextView
+                    android:id="@+id/add_image_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginStart="6dp"
+                    android:text="@string/add_image_text"
+                    android:textColor="@color/black_900"
+                    style="@style/Text.Body6.Medium"/>
+
+                <ImageButton
+                    android:id="@+id/add_image_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="@+id/add_image_text"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@+id/add_image_text"
+                    android:background="@drawable/add_image_icon"
+                    />
+
+                <TextView
+                    android:id="@+id/add_image_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@id/add_image_button"
+                    android:layout_marginTop="37dp"
+                    app:layout_constraintLeft_toLeftOf="@id/add_image_button"
+                    app:layout_constraintRight_toRightOf="@id/add_image_button"
+                    android:text="0/5"
+                    android:textColor="@color/black_700"
+                    style="@style/Text.Body5.SemiBold"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/add_image_section"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintTop_toTopOf="@id/add_image_button"
+                    app:layout_constraintBottom_toBottomOf="@id/add_image_button"
+                    app:layout_constraintLeft_toRightOf="@id/add_image_button"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_marginStart="8dp"
+                    tools:listitem="@layout/image_item"
+                    android:nestedScrollingEnabled="false"/>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/image_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/add_image_section"
+                    android:layout_marginTop="20dp"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/submit_button"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                app:layout_constraintTop_toBottomOf="@id/add_photo_area"
+                android:layout_marginTop="52dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="12dp"
+                android:text="@string/add_page_submit_text"
+                android:background="@drawable/write_button"
+                style="@style/Text.Body4.SemiBold"
+                android:textColor="#ffffff"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -74,7 +74,6 @@
     <string name="register_done_title">가입이 완료되었습니다!</string>
     <string name="register_birth_title">정보를 입력해 주세요.</string>
 
-    <string name="server_client_id">242179001869-snj41p9nfda06ves81efofk8b0g6q9t2.apps.googleusercontent.com</string>
 
 
     <string name="filter_loc_1_text">서울</string>
@@ -108,6 +107,7 @@
     <string name="hot_game_text">인기 공모전</string>
 
     <string name="popup_txt">여기에 팝업 텍스트를 입력해주시면 됩니당아아아아아아아아아아아아아아아아아</string>
+    <string name="popup_txt_comment">대댓글을 작성하시겠습니까?</string>
 
     <string name="recruit_done1">모집 완료!</string>
     <string name="recruit_done2">CODEV는 당신의 성장을 응원합니다.</string>
@@ -118,6 +118,5 @@
     <string name="user_birth_text">생년월일</string>
     <string name="user_email_text">이메일</string>
     <string name="user_password_text">비밀번호</string>
-
 
 </resources>

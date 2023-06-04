@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +28,10 @@ class AdapterRecruitApplicants1(private val context: Context, private val listDa
     private val HEADER = 0
     private val ITEM = 1
 
+    private val isSelectedList : Array<Boolean> = Array(listData.size + 1){false}
+    private var colored: Boolean = false
+
+
     //뷰 홀더 바인딩
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType){
@@ -42,7 +47,7 @@ class AdapterRecruitApplicants1(private val context: Context, private val listDa
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
             is ApplicantHeaderViewHolder -> {
-                holder.bind()
+                holder.bind(0)
             }
             is ApplicantItemViewHolder -> {
                 holder.bind(listData[position - 1], position -1)
@@ -68,25 +73,68 @@ class AdapterRecruitApplicants1(private val context: Context, private val listDa
             binding.part.text = data.co_part
             binding.num.text = data.co_limit.toString() + "명"
 
-            binding.partToggle.setOnClickListener{
-                Log.d("AdapterRecruitApplyList: ", "분야 토글 클릭 $position")
+            binding.partToggle.isSelected = isSelectedList[position]
+
+            /*binding.partToggle.setOnClickListener{
+                Log.d("AdapterRecruitApplyList: ", "분야 토글 클릭 $adapterPosition")
+
+                colored = true
                 returnData(binding.part.text.toString()) //토글아이템 클릭 시 "프론트엔드, 백엔드, 기획, 디자인, 기타" 넘겨줌
+            }*/
+
+            binding.partToggle.setOnClickListener {
+                //다중선택(position 필요) -> 단일선택()
+                isSelectedList[position] = binding.partToggle.isSelected
+                binding.partToggle.isSelected = true
+                if(binding.partToggle.isSelected){
+                    //몇번째 토글이 눌렸는지
+                    Log.d("ApaterRecruitApplyList: ","분야 토글 클릭 $adapterPosition")
+                }
+                returnData(binding.part.text.toString()) //토글아이템 클릭 시 "프론트엔드, 백엔드, 기획, 디자인, 기타" 넘겨줌
+
+                notifyItemChanged(0)
+                //notifyItemChanged(position)
             }
+
+
+            //binding.partToggle.isSelected = colored
         }
     }
 
     //Header ViewHolder 객체 [토글]
     inner class ApplicantHeaderViewHolder(private val binding: RecycleRecruitApplyPartHeaderBinding) : RecyclerView.ViewHolder(binding.root){
         @SuppressLint("SetTextI18n")
-        fun bind(){
+        fun bind(position: Int){
             binding.num.text = limit.toString() + "명"
-            binding.partToggle.setOnClickListener {
+
+            /*binding.partToggle.setOnClickListener {
                 Log.d("ApaterRecruitApplyList: ","분야 토글 클릭 $position")
                 returnData("TEMP") //토글헤더 클릭 시 TEMP 넘겨줌
-                binding.partToggle.isSelected = true
+
+                //클릭된 아이템의 상태 저장
+                isSelectedList[0] = true
+                colored = true
+
+                binding.root.isSelected = true
+                val backgroundDrawable = ContextCompat.getDrawable(context, R.drawable.recruit_apply_partbox)
+                binding.root.background = backgroundDrawable
+
+                //리사이클러뷰 아이템 변경 알림
+                notifyItemChanged(0)
                 Log.d("(OnClickListener안)partTogle 의 상태 : ", binding.partToggle.isSelected.toString()) //여기서 true주면 안돼
+
+            }*/
+            //retry!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            binding.partToggle.setOnClickListener {
+                //다중선택(position 필요) -> 단일선택()
+                Log.d("ApaterRecruitApplyList: ","분야 토글 클릭 $position")
+                returnData("TEMP") //토글헤더 클릭 시 TEMP 넘겨줌
+                binding.partToggle.isSelected = !binding.partToggle.isSelected
+                notifyItemChanged(0)
             }
-            Log.d("partTogle 의 상태 : ", binding.partToggle.isSelected.toString())
+
+            //왜 이거 두번돌아
+            Log.d("(OnClick밖 log)partTogle 의 상태 : ", binding.partToggle.isSelected.toString())
 
         }
     }

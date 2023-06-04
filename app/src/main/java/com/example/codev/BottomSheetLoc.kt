@@ -301,10 +301,6 @@ class BottomSheetLoc(private val returnLoc: (String) -> Unit) : BottomSheetDialo
             dismiss()
         }
 
-        popupLocBinding.logoPart.setOnClickListener {
-            loc = "change"
-            returnLoc(loc)
-        }
 
         return popupLocBinding.root
     }

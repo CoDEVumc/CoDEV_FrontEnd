@@ -13,7 +13,6 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import com.example.codev.addpage.*
 import com.example.codev.databinding.ActivityRecruitDetailBinding
@@ -37,6 +36,7 @@ class RecruitDetailActivity:AppCompatActivity() {
     private var recruitStatus: Boolean = false
     private var writer: String = ""
     private var process: String = ""
+    private var mainImg = " "
 
     override fun onResume() {
         super.onResume()
@@ -100,18 +100,25 @@ class RecruitDetailActivity:AppCompatActivity() {
                 finish()
             }
             R.id.menu_modify -> {
-                if (type == "PROJECT"){
-                    val intent = Intent(this,AddNewProjectActivity::class.java)
-                    intent.putExtra("project",projectData)
-                    startActivity(intent)
-                }else if(type == "STUDY"){
-                    val intent = Intent(this,AddNewStudyActivity::class.java)
-                    intent.putExtra("study",studyData)
-                    startActivity(intent)
-                }
+                if(process != "FIN"){
+                    if (type == "PROJECT"){
+                        val intent = Intent(this,AddNewProjectActivity::class.java)
+                        intent.putExtra("project",projectData)
+                        intent.putExtra("process",process)
+                        startActivity(intent)
+                    }else if(type == "STUDY"){
+                        val intent = Intent(this,AddNewStudyActivity::class.java)
+                        intent.putExtra("study",studyData)
+                        intent.putExtra("process",process)
+                        startActivity(intent)
+                    }
+                }else Toast.makeText(this, "모집완료인 글은 수정하실 수 없습니다.", Toast.LENGTH_SHORT).show()
+
             }
             R.id.menu_delete -> {
-                confirmDelete(this, id) { finish() }
+                if(process != "FIN"){
+                    confirmDelete(this, id) { finish() }
+                }else Toast.makeText(this, "모집완료인 글은 삭제하실 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -122,6 +129,10 @@ class RecruitDetailActivity:AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_toolbar_detail, viewBinding.toolbarRecruit.toolbar3.menu)
         viewBinding.btn1.text = "연장하기"
         viewBinding.btn2.text = "지원현황"
+        if(process == "FIN"){
+            viewBinding.btn1.isEnabled = false
+            viewBinding.btn1.isSelected = false
+        }
         viewBinding.btn1.setOnClickListener {
             val cal = Calendar.getInstance()    //캘린더뷰 만들기
             val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
@@ -139,6 +150,8 @@ class RecruitDetailActivity:AppCompatActivity() {
         //지현현황 리스트
         viewBinding.btn2.setOnClickListener {
             val intent = Intent(context, RecruitApplyListActivity::class.java)
+            intent.putExtra("mainImg", mainImg)
+            intent.putExtra("title", viewBinding.name.text.toString())
             intent.putExtra("limit", limit)
             intent.putExtra("type", type)
             intent.putExtra("id", id)
@@ -175,76 +188,8 @@ class RecruitDetailActivity:AppCompatActivity() {
         }
         //기본은 문의하기
         viewBinding.btn1.setOnClickListener {
-
-            val roomType = "OTO"
-            val roomId = "${roomType}_${type}_${id}_${UserSharedPreferences.getKey(this)}"
-            val inviteList = arrayListOf<String>(writer)
-            Log.d("test",roomId)
-            ChatClient.join(this, roomId)
-//            createChat(this, roomId, roomType, inviteList)
+            ChatClient.createChatRoom(this, "개인메세지", null, arrayListOf<String>(writer), "UTU", type, id, writer, UserSharedPreferences.getKey())
         }
-    }
-
-    private fun createChat(context: Context, roomId: String, roomType: String, inviteList: ArrayList<String>){
-        RetrofitClient.service.createChatRoom(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), ReqCreateChatRoom(roomId, roomType, viewBinding.title.text.toString(), null)).enqueue(object: Callback<JsonObject> {
-            @SuppressLint("UseCompatLoadingForDrawables")
-            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                if(response.isSuccessful.not()){
-                    Log.d("test: 채팅방생성 실패",response.toString())
-                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }else{
-                    when(response.code()){
-                        200->{
-                            response.body()?.let {
-                                Log.d("test: 채팅방생성 성공! ", "\n${it.toString()}")
-                                inviteChat(context, roomId, inviteList)
-                            }
-                        }
-                        401 ->{
-                            Log.d("test: 401", "이미 생성")
-                            Toast.makeText(context, "이미 문의 채팅이 생성되어있습니다", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Log.d("test: 채팅방생성 실패", "[Fail]${t.toString()}")
-                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun inviteChat(context: Context, roomId: String, inviteList: ArrayList<String>){
-        RetrofitClient.service.inviteChat(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), ReqInviteChat(roomId, inviteList)).enqueue(object: Callback<JsonObject> {
-            @SuppressLint("UseCompatLoadingForDrawables")
-            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                if(response.isSuccessful.not()){
-                    Log.d("test: 채팅방초대 실패",response.toString())
-                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }else{
-                    when(response.code()){
-                        200->{
-                            response.body()?.let {
-                                Log.d("test: 채팅방초대 성공! ", "\n${it.toString()}")
-                                ChatClient.join(context, roomId)
-                                val intent = Intent(context, ChatRoomActivity::class.java)
-                                intent.putExtra("title", viewBinding.name.text.toString())
-                                intent.putExtra("roomId", roomId)
-                                intent.putExtra("people", 1)
-                                intent.putExtra("isRead", 0)
-                                startActivity(intent)
-                            }
-                        }
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Log.d("test: 채팅방초대 실패", "[Fail]${t.toString()}")
-                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 
     //모집글 삭제
@@ -256,7 +201,7 @@ class RecruitDetailActivity:AppCompatActivity() {
             .setPositiveButton("확인",
                 DialogInterface.OnClickListener { dialog, _ ->
                     if (type == "PROJECT"){
-                        RetrofitClient.service.deleteProject(id,AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).enqueue(object: Callback<JsonObject>{
+                        RetrofitClient.service.deleteProject(id,AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())).enqueue(object: Callback<JsonObject>{
                             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                                 if(response.isSuccessful.not()){
                                     Log.d("test: 포트폴리오 삭제 실패",response.toString())
@@ -276,7 +221,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                             }
                         })
                     }else if(type == "STUDY"){
-                        RetrofitClient.service.deleteStudy(id,AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).enqueue(object: Callback<JsonObject>{
+                        RetrofitClient.service.deleteStudy(id,AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())).enqueue(object: Callback<JsonObject>{
                             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                                 if(response.isSuccessful.not()){
                                     Log.d("test: 포트폴리오 삭제 실패",response.toString())
@@ -307,7 +252,7 @@ class RecruitDetailActivity:AppCompatActivity() {
 
     private fun loadRecruitDetail(context:Context, type:String, id: Int, dday: String){
         if (type == "PROJECT"){
-            RetrofitClient.service.getProjectDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<ResGetRecruitDetail> {
+            RetrofitClient.service.getProjectDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id).enqueue(object: Callback<ResGetRecruitDetail> {
                 @SuppressLint("UseCompatLoadingForDrawables")
                 override fun onResponse(call: Call<ResGetRecruitDetail>, response: Response<ResGetRecruitDetail>) {
                     if(response.isSuccessful.not()){
@@ -338,6 +283,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     viewBinding.heartCount.text = it.result.Complete.co_heartCount.toString()
                                     viewBinding.heart.isChecked = it.result.Complete.co_heart
 
+                                    mainImg = it.result.Complete.co_photos[0].co_fileUrl
                                     process = it.result.Complete.co_process
                                     recruitStatus = it.result.Complete.co_recruitStatus
                                     writer = it.result.Complete.co_email
@@ -367,7 +313,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                 }
             })
         }else if(type == "STUDY"){
-            RetrofitClient.service.getStudyDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<ResGetRecruitDetail> {
+            RetrofitClient.service.getStudyDetail(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id).enqueue(object: Callback<ResGetRecruitDetail> {
                 override fun onResponse(call: Call<ResGetRecruitDetail>, response: Response<ResGetRecruitDetail>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 조회실패",response.toString())
@@ -396,6 +342,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                     viewBinding.heartCount.text = it.result.Complete.co_heartCount.toString()
                                     viewBinding.heart.isChecked = it.result.Complete.co_heart
 
+                                    mainImg = it.result.Complete.co_photos[0].co_fileUrl
                                     process = it.result.Complete.co_process
                                     recruitStatus = it.result.Complete.co_recruitStatus
                                     writer = it.result.Complete.co_email
@@ -412,7 +359,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                                         stackList[it.result.Complete.co_languageList[i].co_languageId] = it.result.Complete.co_languageList[i].co_language
                                     }
 
-                                    studyData = EditStudy(it.result.Complete.co_projectId.toString(),it.result.Complete.co_title,it.result.Complete.co_content,it.result.Complete.co_photos,it.result.Complete.co_part, it.result.Complete.co_total,stackList,it.result.Complete.co_location,it.result.Complete.co_deadLine.split(" ")[0])
+                                    studyData = EditStudy(it.result.Complete.co_studyId.toString(),it.result.Complete.co_title,it.result.Complete.co_content,it.result.Complete.co_photos,it.result.Complete.co_part, it.result.Complete.co_total,stackList,it.result.Complete.co_location,it.result.Complete.co_deadLine.split(" ")[0])
                                 }
                             }
                         }
@@ -448,7 +395,7 @@ class RecruitDetailActivity:AppCompatActivity() {
 
     private fun request(context: Context, type: String, id: Int){
         if(type == "PROJECT"){
-            RetrofitClient.service.requestProjectBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.requestProjectBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 북마크 실패",response.toString())
@@ -473,7 +420,7 @@ class RecruitDetailActivity:AppCompatActivity() {
 
             })
         }else if(type == "STUDY"){
-            RetrofitClient.service.requestStudyBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id).enqueue(object: Callback<JsonObject> {
+            RetrofitClient.service.requestStudyBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id).enqueue(object: Callback<JsonObject> {
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 북마크 실패",response.toString())
@@ -503,7 +450,7 @@ class RecruitDetailActivity:AppCompatActivity() {
     private fun cancel(context: Context, type: String, id: Int){
         Log.d("test",process)
         if (type == "PROJECT"){
-            RetrofitClient.service.cancelProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqCancelRecruit(recruitStatus, writer, process)).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.cancelProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqCancelRecruit(recruitStatus, writer, process)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 취소 실패",response.toString())
@@ -526,7 +473,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                 }
             })
         }else if(type == "STUDY"){
-            RetrofitClient.service.cancelStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqCancelRecruit(recruitStatus, writer, process)).enqueue(object: Callback<JsonObject>{
+            RetrofitClient.service.cancelStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqCancelRecruit(recruitStatus, writer, process)).enqueue(object: Callback<JsonObject>{
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 취소 실패",response.toString())
@@ -553,7 +500,7 @@ class RecruitDetailActivity:AppCompatActivity() {
 
     private fun extend(context: Context, type: String, id: Int, deadLine: String){
         if (type == "PROJECT"){
-            RetrofitClient.service.extendProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqExtendProject(deadLine)).enqueue(object: Callback<ResExtendRecruit>{
+            RetrofitClient.service.extendProject(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqExtendProject(deadLine)).enqueue(object: Callback<ResExtendRecruit>{
                 override fun onResponse(call: Call<ResExtendRecruit>, response: Response<ResExtendRecruit>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 연장 실패",response.toString())
@@ -584,7 +531,7 @@ class RecruitDetailActivity:AppCompatActivity() {
                 }
             })
         }else if(type == "STUDY"){
-            RetrofitClient.service.extendStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)), id, ReqExtendStudy(deadLine)).enqueue(object: Callback<ResExtendRecruit>{
+            RetrofitClient.service.extendStudy(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()), id, ReqExtendStudy(deadLine)).enqueue(object: Callback<ResExtendRecruit>{
                 override fun onResponse(call: Call<ResExtendRecruit>, response: Response<ResExtendRecruit>) {
                     if(response.isSuccessful.not()){
                         Log.d("test: 연장 실패",response.toString())

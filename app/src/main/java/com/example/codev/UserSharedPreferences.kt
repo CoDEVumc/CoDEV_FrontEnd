@@ -4,107 +4,111 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 object UserSharedPreferences {
-    private const val ACCOUNT : String = "account"
+    private const val PREFERENCE_NAME : String = "account"
+    private lateinit var sharedPreferences: SharedPreferences
 
-    fun setFCMToken(context: Context, input: String) {
-        val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
-        val editor : SharedPreferences.Editor = prefs.edit()
+    fun initialize(context: Context) {
+        sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
+    }
+
+    fun setLoginType(input: String){
+        val editor : SharedPreferences.Editor = sharedPreferences.edit()
+        editor.putString("loginType", input)
+        editor.apply()
+    }
+
+    fun getLoginType(): String{
+        return sharedPreferences.getString("loginType", "").toString()
+    }
+
+    fun setFCMToken(input: String) {
+        val editor : SharedPreferences.Editor = sharedPreferences.edit()
         editor.putString("token", input)
-        editor.commit()
+        editor.apply()
     }
 
-    fun getFCMToken(context: Context): String {
-        val prefs: SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
-        return prefs.getString("token", "").toString()
+    fun getFCMToken(): String {
+        return sharedPreferences.getString("token", "").toString()
     }
 
-    fun setKey(context: Context, key: String){
-        val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
-        val editor : SharedPreferences.Editor = prefs.edit()
+    fun setKey(key: String){
+        val editor : SharedPreferences.Editor = sharedPreferences.edit()
         editor.putString("key", key)
-        editor.commit()
+        editor.apply()
     }
 
-    fun getKey(context: Context): String {
-        val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
-        return prefs.getString("key", "").toString()
+    fun getKey(): String {
+        return sharedPreferences.getString("key", "").toString()
     }
 
-    fun setAutoLogin(context: Context, input: String) {
-        val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
-        val editor : SharedPreferences.Editor = prefs.edit()
+    fun setAutoLogin(input: String) {
+        val editor : SharedPreferences.Editor = sharedPreferences.edit()
         editor.putString("STATE", input)
-        editor.commit()
+        editor.apply()
     }
 
-    fun getAutoLogin(context: Context): String {
-        val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
-        return prefs.getString("STATE", "").toString()
+    fun getAutoLogin(): String {
+        return sharedPreferences.getString("STATE", "").toString()
     }
 
-    fun setUserAccessToken(context: Context, input: String) {
-        val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
-        val editor : SharedPreferences.Editor = prefs.edit()
+    fun setUserAccessToken(input: String) {
+        val editor : SharedPreferences.Editor = sharedPreferences.edit()
         editor.putString("accessToken", input)
-        editor.commit()
+        editor.apply()
     }
 
-    fun getUserAccessToken(context: Context): String {
-        val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
-        return prefs.getString("accessToken", "").toString()
+    fun getUserAccessToken(): String {
+        return sharedPreferences.getString("accessToken", "").toString()
     }
 
-    fun setUserRefreshToken(context: Context, input: String) {
-        val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
-        val editor : SharedPreferences.Editor = prefs.edit()
+    fun setUserRefreshToken(input: String) {
+        val editor : SharedPreferences.Editor = sharedPreferences.edit()
         editor.putString("refreshToken", input)
-        editor.commit()
+        editor.apply()
     }
 
-    fun getUserRefreshToken(context: Context): String {
-        val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
-        return prefs.getString("refreshToken", "").toString()
+    fun getUserRefreshToken(): String {
+        return sharedPreferences.getString("refreshToken", "").toString()
     }
 
-    fun clearUser(context: Context) {
-        val prefs : SharedPreferences = context.getSharedPreferences(ACCOUNT, Context.MODE_PRIVATE)
-        val editor : SharedPreferences.Editor = prefs.edit()
+    fun clearUser() {
+        val editor : SharedPreferences.Editor = sharedPreferences.edit()
         editor.clear()
-        editor.commit()
+        editor.apply()
     }
 
-    fun refreshAccessToken(context: Context){
-        RetrofitClient.service.refreshToken(ReqRefreshToken(AndroidKeyStoreUtil.decrypt(getUserRefreshToken(context)))).enqueue(object:
-            Callback<ResRefreshToken> {
-            override fun onResponse(call: Call<ResRefreshToken>, response: Response<ResRefreshToken>) {
-                if(response.isSuccessful.not()){
-                    Log.d("test: 토큰재발급 실패1",response.toString())
-                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-                    return
-                }else{
-                    when(response.code()){
-                        200->{
-                            // 토큰 암호화
-                            response.body()?.let {
-                                setUserAccessToken(context,AndroidKeyStoreUtil.encrypt(it.result.accessToken))
-                                Log.d("test: 토큰재발급 성공", "\n${it.toString()}")
-                                Log.d("test: 토큰재발급 성공",AndroidKeyStoreUtil.decrypt(getUserAccessToken(context)))
-                                Log.d("test: 토큰재발급 성공",AndroidKeyStoreUtil.decrypt(getUserRefreshToken(context)))
-                            }
+    suspend fun refreshAccessToken() = withContext(Dispatchers.Default){
+        try {
+            // Retrofit의 비동기 호출을 suspend 함수로 래핑하여 사용합니다.
+            val response = RetrofitClient.service.refreshToken(ReqRefreshToken(AndroidKeyStoreUtil.decrypt(getUserRefreshToken()))).execute()
+
+            if (response.isSuccessful.not()) {
+                Log.d("test: 토큰재발급 실패1",response.toString())
+            } else {
+                when (response.code()) {
+                    200 -> {
+                        response.body()?.let {
+                            setUserAccessToken(AndroidKeyStoreUtil.encrypt(it.result.accessToken))
+                            Log.d("test: 토큰재발급 성공", "\n${it.toString()}")
+                            Log.d("test: 토큰재발급 성공",AndroidKeyStoreUtil.decrypt(getUserAccessToken()))
+                            Log.d("test: 토큰재발급 성공",AndroidKeyStoreUtil.decrypt(getUserRefreshToken()))
                         }
+                    }
+                    else -> {
+
                     }
                 }
             }
 
-            override fun onFailure(call: Call<ResRefreshToken>, t: Throwable) {
-                Log.d("test: 토큰재발급 실패2", "[Fail]${t.toString()}")
-                Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-            }
-        })
+        } catch (t: Throwable) {
+            Log.d("test: 토큰재발급 실패2", "[Fail]${t.toString()}")
+        }
     }
 }

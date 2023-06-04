@@ -126,7 +126,7 @@ class MyPortfolioActivity:AppCompatActivity() {
     }
 
     private fun loadData(context: Context){
-        RetrofitClient.service.getPortFolio(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).enqueue(object: Callback<ResPortFolioList> {
+        RetrofitClient.service.getPortFolio(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())).enqueue(object: Callback<ResPortFolioList> {
             override fun onResponse(call: Call<ResPortFolioList>, response: Response<ResPortFolioList>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 포트폴리오 불러오기 실패",response.toString())
@@ -149,7 +149,7 @@ class MyPortfolioActivity:AppCompatActivity() {
     }
 
     private fun deletePortfolio(context: Context,coPortfolioId: Int){
-        RetrofitClient.service.deletePortFolio(coPortfolioId,AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))).enqueue(object: Callback<ResDeletePortfolio>{
+        RetrofitClient.service.deletePortFolio(coPortfolioId,AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())).enqueue(object: Callback<ResDeletePortfolio>{
             override fun onResponse(call: Call<ResDeletePortfolio>, response: Response<ResDeletePortfolio>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 포트폴리오 삭제 실패",response.toString())

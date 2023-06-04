@@ -3,6 +3,7 @@ package com.example.codev
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,13 +19,18 @@ import com.bumptech.glide.Glide
 import com.example.codev.databinding.ActivityRecruitDoneBinding
 import com.example.codev.databinding.ActivityRegisterProfileBinding
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import okhttp3.MediaType
 import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RecruitDoneActivity: AppCompatActivity() {
     private lateinit var viewBinding: ActivityRecruitDoneBinding
     private lateinit var adapter: AdapterRecruitProfiles
-
+    private lateinit var selectList: ArrayList<ApplicantInfoData>
+    private lateinit var roomId: String
 
     @SuppressLint("ObjectAnimatorBinding")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +41,9 @@ class RecruitDoneActivity: AppCompatActivity() {
 
 
         //채팅방 인원
-        var selectList = intent.getSerializableExtra("selectList") as ArrayList<ApplicantInfoData>
+        selectList = intent.getSerializableExtra("selectList") as ArrayList<ApplicantInfoData>
+        roomId = intent.getStringExtra("roomId").toString()
+
         if(selectList.size > 4){
             viewBinding.recruitedNum.text = "외 ${selectList.size - 4}명"
             val slicedList = selectList.take(4)
@@ -50,6 +58,7 @@ class RecruitDoneActivity: AppCompatActivity() {
 
         //Log.d("From AdapterRecruitProfiles :", selectList.toString())
 
+        splashAnimation() //애니메이션
 
         //채팅방 이름 입력 -> db에 전달 부분 필요
         viewBinding.etRoomname.addTextChangedListener(object: TextWatcher {
@@ -69,13 +78,9 @@ class RecruitDoneActivity: AppCompatActivity() {
             }
         })
 
-
-
-
-        splashAnimation() //애니메이션
-
-
-
+        viewBinding.btnMoveToChat.setOnClickListener {
+            ChatClient.renameChatRoom(this, roomId.split('_')[0], roomId, viewBinding.etRoomname.text.toString(), selectList.size, optionMove = true)
+        }
     }
 
     private fun setAdapter(dataList: ArrayList<ApplicantInfoData>){
@@ -87,13 +92,13 @@ class RecruitDoneActivity: AppCompatActivity() {
 
 
     private fun nextBtnEnable(boolean: Boolean){
-        if (viewBinding.btnMovetoChat.isSelected != boolean){
-            viewBinding.btnMovetoChat.isSelected = boolean
-            viewBinding.btnMovetoChat.isEnabled = boolean
+        if (viewBinding.btnMoveToChat.isSelected != boolean){
+            viewBinding.btnMoveToChat.isSelected = boolean
+            viewBinding.btnMoveToChat.isEnabled = boolean
             if(boolean){
-                viewBinding.btnMovetoChat.setTextColor(getColor(R.color.white))
+                viewBinding.btnMoveToChat.setTextColor(getColor(R.color.white))
             }else{
-                viewBinding.btnMovetoChat.setTextColor(getColor(R.color.black_500))
+                viewBinding.btnMoveToChat.setTextColor(getColor(R.color.black_500))
             }
         }
     }
@@ -105,5 +110,4 @@ class RecruitDoneActivity: AppCompatActivity() {
         val downAnim = AnimationUtils.loadAnimation(this,R.anim.anim_splash_downlayout)
         viewBinding.downlayout.startAnimation(downAnim)
     }
-
 }

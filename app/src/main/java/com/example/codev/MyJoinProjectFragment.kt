@@ -36,7 +36,7 @@ class MyJoinProjectFragment :Fragment(){
     }
 
     private fun loadPData(context: Context){
-        RetrofitClient.service.getJoinList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context))
+        RetrofitClient.service.getJoinList(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken())
             ,"project").enqueue(object: Callback<ResJoinList> {
             override fun onResponse(call: Call<ResJoinList>, response: Response<ResJoinList>) {
                 if(response.isSuccessful.not()){

@@ -129,7 +129,10 @@
                     tools:listitem="@layout/recycle_portfolio_item1"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:nestedScrollingEnabled="false"
-                    android:overScrollMode="never"/>
+                    android:overScrollMode="never"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    tools:ignore="RtlSymmetry" />
 
                 <View
                     android:layout_width="match_parent"
@@ -192,7 +195,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="24dp"
                     android:background="@drawable/my_button"
-                    android:text="작성한 글 / 댓글"
+                    android:text="내가 작성한 글"
                     style="@style/Text.Body4.SemiBold"
                     android:textColor="@color/black_700"
                     android:gravity="start"

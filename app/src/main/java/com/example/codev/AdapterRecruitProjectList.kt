@@ -62,7 +62,10 @@ class AdapterRecruitProjectList(private val context: Context, private val listDa
             }
 
             //프로젝트 모집 파트
-            binding.partlist.text = data.co_parts
+            var before_string = data.co_parts
+            var after_string = before_string.replace(",", "  ")
+            //binding.partlist.text = data.co_parts
+            binding.partlist.text = after_string
 
             //북마크 : co_heart : Boolean <-- true면 채운 하트 / false면 안채운 하트 && 하트 하트 자체는 Selector로 바꾸기
             binding.heart.isChecked = listData[position].co_heart
@@ -84,7 +87,7 @@ class AdapterRecruitProjectList(private val context: Context, private val listDa
 
 
     private fun request(co_projectId: Int){
-        RetrofitClient.service.requestProjectBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken(context)),co_projectId).enqueue(object:Callback<JsonObject>{
+        RetrofitClient.service.requestProjectBookMark(AndroidKeyStoreUtil.decrypt(UserSharedPreferences.getUserAccessToken()),co_projectId).enqueue(object:Callback<JsonObject>{
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if(response.isSuccessful.not()){
                     Log.d("test: 조회실패",response.toString())
