@@ -30,6 +30,11 @@ class MySettingActivity:AppCompatActivity() {
 
         loginTypeBindingToLogOut(userinfo.co_loginType)
 
+        viewBinding.privacy.setOnClickListener {
+            val intent = Intent(this, MySettingPrivacyActivity::class.java)
+            startActivity(intent)
+        }
+
         //회원 정보 수정 연결(김유정)
         viewBinding.btnEditUser.setOnClickListener {
             val intent = Intent(this, UserInfoActivity::class.java)

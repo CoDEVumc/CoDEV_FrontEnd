@@ -258,6 +258,14 @@
                 android:value="" />
         </activity>
 
+        <activity
+            android:name=".MySettingPrivacyActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
         <service
             android:name=".MyFirebaseMessagingService"
             android:enabled="true"
