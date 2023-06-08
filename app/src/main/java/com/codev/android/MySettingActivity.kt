@@ -1,5 +1,6 @@
 package com.codev.android
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -14,6 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 class MySettingActivity:AppCompatActivity() {
     lateinit var viewBinding: ActivityMySettingBinding
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMySettingBinding.inflate(layoutInflater)
@@ -29,6 +31,8 @@ class MySettingActivity:AppCompatActivity() {
         val userinfo = intent.getSerializableExtra("userinfo") as Userinfo
 
         loginTypeBindingToLogOut(userinfo.co_loginType)
+
+        viewBinding.version.text = "ver ${BuildConfig.VERSION_NAME}"
 
         viewBinding.privacy.setOnClickListener {
             val intent = Intent(this, MySettingPrivacyActivity::class.java)
