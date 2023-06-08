@@ -41,6 +41,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onRestart() {
+        if (UserSharedPreferences.getLoginType() != "GOOGLE"){
+            mGoogleSignInClient!!.signOut()
+        }
+        super.onRestart()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
     }
